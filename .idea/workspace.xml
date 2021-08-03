@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="03262acd-da92-447a-942e-4541be82a11c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../build/cocos2d_libs.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../build/cocos2d_libs.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Animation.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Animation.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Animation.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AnimationState.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AnimationState.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/AnimationState.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AnimationStateData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AnimationStateData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/AnimationStateData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Array.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Array.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Atlas.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Atlas.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Atlas.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AtlasAttachmentLoader.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AtlasAttachmentLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/AtlasAttachmentLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Attachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Attachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Attachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentLoader.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentLoader.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentLoader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentVertices.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentVertices.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentVertices.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/AttachmentVertices.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Bone.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Bone.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Bone.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/BoneData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/BoneData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/BoneData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/BoundingBoxAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/BoundingBoxAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/BoundingBoxAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/ClippingAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/ClippingAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/ClippingAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Cocos2dAttachmentLoader.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Cocos2dAttachmentLoader.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Color.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Color.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Color.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Event.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Event.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Event.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/EventData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/EventData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/EventData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/IkConstraint.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/IkConstraint.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/IkConstraint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/IkConstraintData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/IkConstraintData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/IkConstraintData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Json.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Json.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Json.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/MeshAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/MeshAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/MeshAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathConstraint.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathConstraint.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathConstraint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathConstraintData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathConstraintData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/PathConstraintData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PointAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/PointAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/PointAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/RegionAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/RegionAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/RegionAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Skeleton.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Skeleton.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Skeleton.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonAnimation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonAnimation.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonAnimation.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonAnimation.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBatch.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBatch.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBatch.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBatch.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBinary.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBinary.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBinary.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBounds.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBounds.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonBounds.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonClipping.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonClipping.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonClipping.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonJson.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonJson.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonJson.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonRenderer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonRenderer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonRenderer.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonRenderer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonTwoColorBatch.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonTwoColorBatch.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonTwoColorBatch.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SkeletonTwoColorBatch.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Skin.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Skin.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Skin.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Slot.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Slot.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Slot.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SlotData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/SlotData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/SlotData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/TransformConstraint.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/TransformConstraint.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/TransformConstraint.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/TransformConstraintData.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/TransformConstraintData.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/TransformConstraintData.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Triangulator.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/Triangulator.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/Triangulator.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/VertexAttachment.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/VertexAttachment.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/VertexAttachment.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/VertexEffect.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/VertexEffect.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/VertexEffect.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/dll.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/dll.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/extension.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/extension.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/extension.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/kvec.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/proj.win10/libSpine.vcxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/proj.win32/libSpine.vcxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/proj.win32/libSpine.vcxproj.filters" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/spine-cocos2dx.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/spine-cocos2dx.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/spine-cocos2dx.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/spine-cocos2dx.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/editor-support/spine/spine.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/editor-support/spine/spine.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cocos/platform/android/libcocos2dx/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../cocos/platform/android/libcocos2dx/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cocos2dx_files.json" beforeDir="false" afterPath="$PROJECT_DIR$/../cocos2dx_files.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/AppDelegate.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/AppDelegate.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/AppDelegate.h" beforeDir="false" afterPath="$PROJECT_DIR$/Classes/AppDelegate.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/HelloWorldScene.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Classes/HelloWorldScene.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/CloseNormal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/CloseSelected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/HelloWorld.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/fonts/Marker Felt.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/fonts/arial.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Resources/res/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cocos-project-template.json" beforeDir="false" afterPath="$PROJECT_DIR$/cocos-project-template.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/app/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/app/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/app/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/app/proguard-rules.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/app/src/org/cocos2dx/cpp/AppActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/app/src/org/cocos2dx/cpp/AppActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/proj.android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.ios_mac/HelloCpp.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/proj.ios_mac/HelloCpp.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.ios_mac/ios/AppController.mm" beforeDir="false" afterPath="$PROJECT_DIR$/proj.ios_mac/ios/AppController.mm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.ios_mac/ios/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/proj.ios_mac/ios/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.ios_mac/ios/LaunchScreenBackground.png" beforeDir="false" afterPath="$PROJECT_DIR$/proj.ios_mac/ios/LaunchScreenBackground.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proj.ios_mac/ios/RootViewController.mm" beforeDir="false" afterPath="$PROJECT_DIR$/proj.ios_mac/ios/RootViewController.mm" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1uNSRfhfbjtv8hRqCZB0fOYTb2v" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="03262acd-da92-447a-942e-4541be82a11c" name="Default Changelist" comment="" />
+      <created>1624504546562</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1624504546562</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
