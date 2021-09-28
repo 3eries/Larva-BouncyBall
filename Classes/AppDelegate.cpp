@@ -14,8 +14,8 @@
 USING_NS_CC;
 using namespace std;
 
-static cocos2d::Size designResolutionSize       = cocos2d::Size(720, 1280);
-static cocos2d::Size designResolutionSizeIPad   = cocos2d::Size(960, 1280);
+static cocos2d::Size designResolutionSize       = cocos2d::Size(1920, 1080);
+static cocos2d::Size designResolutionSizeIPad   = cocos2d::Size(1920, 1080);
 
 AppDelegate::AppDelegate()
 {
