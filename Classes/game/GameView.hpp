@@ -16,7 +16,12 @@
 
 class StageProgressBar;
 
-class GameView : public cocos2d::Node {
+class GameView: public cocos2d::Node {
+private:
+    enum Tag {
+        DEBUG_DRAW_VIEW = 1000,
+    };
+    
 public:
     CREATE_FUNC(GameView);
     ~GameView();
@@ -29,13 +34,14 @@ private:
     void onEnterTransitionDidFinish() override;
     void cleanup() override;
     
+    void initPhysics();
     void initBg();
     void initGameListener();
     
 private:
-    StageProgressBar *stageProgressBar;
+    CC_SYNTHESIZE_READONLY(b2World*, world, World);
     
-    int clearCount; // 클리어 횟수
+    StageProgressBar *stageProgressBar;
     
 #pragma mark- Game Event
 public:

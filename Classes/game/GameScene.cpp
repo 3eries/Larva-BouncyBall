@@ -22,6 +22,8 @@ USING_NS_SB;
 using namespace cocos2d::ui;
 using namespace std;
 
+#define DEBUG_DRAW_PHYSICS      1
+
 GameScene* GameScene::create() {
     
     auto scene = new GameScene();
@@ -198,11 +200,13 @@ void GameScene::initBg() {
     addChild(LayerColor::create(Color4B(GAME_BG_COLOR)));
     
     // 배너
+    /*
     if( !User::isRemovedAds() ) {
         auto bannerView = BannerView::create();
         bannerView->setTag(Tag::BANNER);
         addChild(bannerView, SBZOrder::TOP);
     }
+     */
 }
 
 /**

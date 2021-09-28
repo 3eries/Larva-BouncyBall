@@ -35,10 +35,13 @@ bool GameManager::isNullInstance() {
     return instance == nullptr;
 }
 
-GameManager::GameManager() {
+GameManager::GameManager():
+physicsManager(new PhysicsManager()) {
 }
 
 GameManager::~GameManager() {
+    
+    CC_SAFE_DELETE(physicsManager);
 }
 
 
@@ -129,6 +132,10 @@ bool GameManager::isContinuable() {
     return instance->getContinueCount() == 0;
 }
 
+PhysicsManager* GameManager::getPhysicsManager() {
+    return instance->physicsManager;
+}
+
 #pragma mark- Game Event
 
 void GameManager::addEventListener(StringList events, GameEventListener gameEventListener,
@@ -143,7 +150,6 @@ void GameManager::addEventListener(StringList events, GameEventListener gameEven
 }
 
 EventDispatcher* GameManager::getEventDispatcher() {
-    
     return Director::getInstance()->getEventDispatcher();
 }
 
@@ -173,6 +179,9 @@ void GameManager::onGameExit() {
     
     onGamePause();
     
+    getPhysicsManager()->stopScheduler();
+    getPhysicsManager()->removeBodies();
+    
     instance->reset();
     instance->setState(GameState::EXITED);
     getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_EXIT);
@@ -184,6 +193,8 @@ void GameManager::onGameExit() {
 void GameManager::onGameReset() {
     
     Log::i("GameManager::onGameReset");
+    
+    getPhysicsManager()->startScheduler();
     
     getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_RESET);
     onStageChanged();
@@ -233,6 +244,8 @@ void GameManager::onGamePause() {
         return;
     }
     
+    getPhysicsManager()->pauseScheduler();
+    
     instance->addState(GameState::PAUSED);
     getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_PAUSE);
 }
@@ -248,6 +261,8 @@ void GameManager::onGameResume() {
         return;
     }
     
+    getPhysicsManager()->resumeScheduler();
+    
     instance->removeState(GameState::PAUSED);
     getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_RESUME);
 }
@@ -260,6 +275,8 @@ void GameManager::onGameOver(bool isTimeout) {
     Log::i("GameManager::onGameOver isTimeout: %d", isTimeout);
     
     CCASSERT(instance->hasState(GameState::STARTED), "GameManager::onGameOver invalid called.");
+    
+    getPhysicsManager()->stopScheduler();
     
     instance->addState(GameState::GAME_OVER);
     getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_OVER);

@@ -16,8 +16,10 @@
 #include "GameConfiguration.hpp"
 #include "ContentManager.hpp"
 #include "GameDefine.h"
+#include "physics/PhysicsManager.hpp"
 
-#define GAME_MANAGER    GameManager::getInstance()
+#define GAME_MANAGER        GameManager::getInstance()
+#define PHYSICS_MANAGER     GameManager::getPhysicsManager()
 
 /** @class GameManager
  * @brief 이 클래스는 게임 공통 데이터를 관리하고 상태 전환을 담당합니다
@@ -65,6 +67,12 @@ private:
     CC_SYNTHESIZE_READONLY(int, score, Score);                    // 스코어
     CC_SYNTHESIZE_READONLY(int, resultCount, ResultCount);        // 결과 노출 횟수
     CC_SYNTHESIZE_READONLY(int, continueCount, ContinueCount);    // 이어하기한 횟수
+    
+// Physics
+public:
+    static PhysicsManager* getPhysicsManager();
+private:
+    PhysicsManager *physicsManager;
     
 // Game Event
 public:

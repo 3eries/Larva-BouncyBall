@@ -116,6 +116,10 @@
 		507BF83626834EF30037F28C /* SplashScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7D626834EF30037F28C /* SplashScene.cpp */; };
 		507BF83726834EF30037F28C /* TestHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7D926834EF30037F28C /* TestHelper.cpp */; };
 		507BF980268364E40037F28C /* StageProgressBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF97F268364E40037F28C /* StageProgressBar.cpp */; };
+		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
+		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
+		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
+		50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736427033665009F3240 /* PhysicsListener.cpp */; };
 		50C1C48A26B8F725003BF8FD /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C1C48926B8F725003BF8FD /* MediaPlayer.framework */; };
 		50C1C48C26B8F72C003BF8FD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C1C48B26B8F72C003BF8FD /* WebKit.framework */; };
 		50C1C4A626B92745003BF8FD /* DebugDrawView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C1C4A326B92745003BF8FD /* DebugDrawView.cpp */; };
@@ -135,20 +139,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1A7533E21F6F75F6007E8E6F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 507B40FD1C31BDD30067B53E;
-			remoteInfo = "libcocos2d tvOS";
-		};
-		1AC6FAF8180E9839004C840B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 1551A33F158F2AB200E66CFE;
-			remoteInfo = "cocos2dx Mac";
-		};
 		1AC6FB06180E9839004C840B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */;
@@ -380,6 +370,14 @@
 		507BF97F268364E40037F28C /* StageProgressBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageProgressBar.cpp; sourceTree = "<group>"; };
 		5087E78817EB974C00C73F5D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
+		50A8E40B2701ECDC002732F8 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
+		50B5735A27032C09009F3240 /* PhysicsManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsManager.cpp; sourceTree = "<group>"; };
+		50B5735B27032C09009F3240 /* PhysicsManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsManager.hpp; sourceTree = "<group>"; };
+		50B5736127033346009F3240 /* GameTile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTile.cpp; sourceTree = "<group>"; };
+		50B5736227033346009F3240 /* GameTile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameTile.hpp; sourceTree = "<group>"; };
+		50B5736427033665009F3240 /* PhysicsListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsListener.cpp; sourceTree = "<group>"; };
+		50B5736527033665009F3240 /* PhysicsListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsListener.hpp; sourceTree = "<group>"; };
 		50C1C48926B8F725003BF8FD /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/System/Library/Frameworks/MediaPlayer.framework; sourceTree = DEVELOPER_DIR; };
 		50C1C48B26B8F72C003BF8FD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		50C1C4A026B92745003BF8FD /* DebugDrawView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DebugDrawView.hpp; sourceTree = "<group>"; };
@@ -443,9 +441,7 @@
 		1AC6FAE6180E9839004C840B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */,
 				1AC6FB07180E9839004C840B /* libcocos2d iOS.a */,
-				1A7533E31F6F75F6007E8E6F /* libcocos2d tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -936,6 +932,7 @@
 				507BF7A626834EF30037F28C /* GameView.cpp */,
 				507BF79F26834EF30037F28C /* GameView.hpp */,
 				507BF7A226834EF30037F28C /* object */,
+				50B5735927032BFE009F3240 /* physics */,
 				507BF79E26834EF30037F28C /* ui */,
 			);
 			path = game;
@@ -951,8 +948,11 @@
 		507BF7A226834EF30037F28C /* object */ = {
 			isa = PBXGroup;
 			children = (
+				50A8E40A2701ECDC002732F8 /* Ball.cpp */,
+				50A8E40B2701ECDC002732F8 /* Ball.hpp */,
 				507BF97F268364E40037F28C /* StageProgressBar.cpp */,
 				507BF97E268364E40037F28C /* StageProgressBar.hpp */,
+				50B5736027033346009F3240 /* tile */,
 			);
 			path = object;
 			sourceTree = "<group>";
@@ -1071,6 +1071,26 @@
 			path = test;
 			sourceTree = "<group>";
 		};
+		50B5735927032BFE009F3240 /* physics */ = {
+			isa = PBXGroup;
+			children = (
+				50B5736427033665009F3240 /* PhysicsListener.cpp */,
+				50B5736527033665009F3240 /* PhysicsListener.hpp */,
+				50B5735A27032C09009F3240 /* PhysicsManager.cpp */,
+				50B5735B27032C09009F3240 /* PhysicsManager.hpp */,
+			);
+			path = physics;
+			sourceTree = "<group>";
+		};
+		50B5736027033346009F3240 /* tile */ = {
+			isa = PBXGroup;
+			children = (
+				50B5736127033346009F3240 /* GameTile.cpp */,
+				50B5736227033346009F3240 /* GameTile.hpp */,
+			);
+			path = tile;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1130,20 +1150,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		1A7533E31F6F75F6007E8E6F /* libcocos2d tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libcocos2d tvOS.a";
-			remoteRef = 1A7533E21F6F75F6007E8E6F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		1AC6FAF9180E9839004C840B /* libcocos2d Mac.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libcocos2d Mac.a";
-			remoteRef = 1AC6FAF8180E9839004C840B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		1AC6FB07180E9839004C840B /* libcocos2d iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1192,6 +1198,7 @@
 				507BF81026834EF30037F28C /* ReviewHelper.cpp in Sources */,
 				507BF83026834EF30037F28C /* TutorialHelper.cpp in Sources */,
 				507BF82326834EF30037F28C /* GameView.cpp in Sources */,
+				50B5736327033346009F3240 /* GameTile.cpp in Sources */,
 				507BF83226834EF30037F28C /* CommonLoadingBar.cpp in Sources */,
 				507BF80026834EF30037F28C /* PluginPlay.cpp in Sources */,
 				507BF81426834EF30037F28C /* ConsentForm-ios.mm in Sources */,
@@ -1211,6 +1218,7 @@
 				507BF81126834EF30037F28C /* SBCollection.cpp in Sources */,
 				507BF81F26834EF30037F28C /* SBTypes.cpp in Sources */,
 				507BF7EC26834EF30037F28C /* NSData+Base64.m in Sources */,
+				50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */,
 				507BF82F26834EF30037F28C /* BaseScene.cpp in Sources */,
 				507BF7E126834EF30037F28C /* User.cpp in Sources */,
 				507BF7DE26834EF30037F28C /* GameConfiguration.cpp in Sources */,
@@ -1232,6 +1240,7 @@
 				507BF7E626834EF30037F28C /* SBToggleButton.cpp in Sources */,
 				507BF81526834EF30037F28C /* ConsentManager.cpp in Sources */,
 				507BF82026834EF30037F28C /* SBEvent.cpp in Sources */,
+				50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */,
 				507BF80226834EF30037F28C /* GameCenterHelper.mm in Sources */,
 				507BF7F526834EF30037F28C /* PluginManager.cpp in Sources */,
 				1AF87B781F6F77F7007BE51C /* AppController.mm in Sources */,
@@ -1274,6 +1283,7 @@
 				507BF80B26834EF30037F28C /* SBTransition.cpp in Sources */,
 				507BF7FB26834EF30037F28C /* FirebaseManager.cpp in Sources */,
 				507BF83526834EF30037F28C /* LogoView.cpp in Sources */,
+				50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */,
 				507BF80526834EF30037F28C /* SBPlatformHelper-ios.mm in Sources */,
 				507BF82426834EF30037F28C /* MainScene.cpp in Sources */,
 			);

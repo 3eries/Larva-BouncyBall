@@ -53,6 +53,7 @@ Scene* SceneManager::createScene(SceneType type) {
     switch( type ) {
         case SceneType::SPLASH:          return SplashScene::create();
         case SceneType::MAIN:            return MainScene::create();
+        case SceneType::WORLD_SELECT:    return nullptr;
         case SceneType::GAME:            return GameScene::create();
         default:
             CCASSERT(false, "SceneManager::createScene error: invalid scene type.");
@@ -107,6 +108,11 @@ void SceneManager::replace(SceneType type, function<Scene*()> createSceneFunc) {
                 trans = TransitionFade::create(REPLACE_DURATION_MAIN, scene);
             }
         } break;
+            
+        case SceneType::WORLD_SELECT: {
+            
+        } break;
+            
         case SceneType::GAME: {
             trans = TransitionSlideInR::create(REPLACE_DURATION_GAME, scene);
             // trans = TransitionFade::create(REPLACE_DURATION_GAME, scene);

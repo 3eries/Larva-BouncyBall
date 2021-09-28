@@ -41,6 +41,7 @@ bool LogoView::init() {
     auto anim = SBSkeletonAnimation::create(ANIM_LOGO);
     anim->setAnchorPoint(Vec2::ZERO);
     anim->setPosition(Vec2(SB_WIN_SIZE*0.5f));
+    anim->setScale(1.5f);
     addChild(anim);
     
     anim->setEndListener([=](spine::TrackEntry *entry) {

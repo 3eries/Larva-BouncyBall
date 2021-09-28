@@ -11,16 +11,22 @@
 #include "ContentManager.hpp"
 #include "SceneManager.h"
 
+#include "object/Ball.hpp"
 #include "object/StageProgressBar.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-GameView::GameView() {
+#define DEBUG_DRAW_PHYSICS      1
+
+GameView::GameView():
+world(nullptr) {
 }
 
 GameView::~GameView() {
+    
+    CC_SAFE_DELETE(world);
 }
 
 bool GameView::init() {
@@ -33,6 +39,7 @@ bool GameView::init() {
     setPosition(Vec2MC(0,0));
     setContentSize(SB_WIN_SIZE);
     
+    initPhysics();
     initBg();
     initGameListener();
      
@@ -55,6 +62,8 @@ void GameView::onEnterTransitionDidFinish() {
     // 튜토리얼
     if( GAME_MANAGER->getStage().stage == 1 ) {
     }
+    
+    scheduleUpdate();
 }
 
 void GameView::cleanup() {
@@ -92,8 +101,6 @@ void GameView::onGameResume() {
  * 스테이지 변경
  */
 void GameView::onStageChanged(const StageData &stage) {
-    
-    clearCount = 0;
 }
 
 /**
@@ -123,6 +130,85 @@ void GameView::onMoveNextStage() {
  * 다음 스테이지로 이동 완료
  */
 void GameView::onMoveNextStageFinished() {
+}
+
+#pragma mark- Initialize
+
+/**
+ * 물리 영역 초기화
+ */
+void GameView::initPhysics() {
+    
+    world = PHYSICS_MANAGER->initWorld();
+    
+    // 물리 객체 초기화
+    auto MAP_POSITION = Vec2MC(0,0);
+    auto MAP_CONTENT_SIZE = SB_WIN_SIZE * 0.9f;
+    
+    b2BodyDef bodyDef;
+    bodyDef.position = PTM(MAP_POSITION);
+    // bodyDef.userData = (SBPhysicsObject*)this;
+    
+    auto body = world->CreateBody(&bodyDef);
+    // setBody(body);
+    
+    float left   = PTM(-MAP_CONTENT_SIZE.width*0.5f);
+    float right  = PTM( MAP_CONTENT_SIZE.width*0.5f);
+    float bottom = PTM(-MAP_CONTENT_SIZE.height*0.5f);
+    float top    = PTM( MAP_CONTENT_SIZE.height*0.5f);
+    
+    b2Vec2 vectors[4][2] = {
+        { b2Vec2(left, bottom), b2Vec2(left, top) },          // left
+        { b2Vec2(right, bottom), b2Vec2(right, top) },        // right
+        { b2Vec2(left, bottom), b2Vec2(right, bottom) },      // bottom
+        { b2Vec2(left, top), b2Vec2(right, top) },            // top
+    };
+    
+    PhysicsCategory categorys[] = {
+        PhysicsCategory::WALL_LEFT,
+        PhysicsCategory::WALL_RIGHT,
+        PhysicsCategory::FLOOR,
+        PhysicsCategory::WALL_TOP,
+    };
+    
+    for( int i = 0; i < 4; ++i ) {
+        b2Vec2 v1 = vectors[i][0];
+        b2Vec2 v2 = vectors[i][1];
+        
+        b2EdgeShape shape;
+        shape.Set(v1, v2);
+        
+        b2Filter filter;
+        filter.categoryBits = categorys[i];
+        filter.maskBits = PHYSICS_MASK_BITS_WALL;
+        
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &shape;
+        fixtureDef.density = 0.1f;      // 밀도
+        fixtureDef.restitution = 1;     // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
+        fixtureDef.friction = 0;        // 마찰력
+        fixtureDef.filter = filter;
+        body->CreateFixture(&fixtureDef);
+    }
+    
+    // Ball
+    auto ball = Ball::create(world);
+    addChild(ball);
+    
+#if DEBUG_DRAW_PHYSICS
+    // DebugDrawView
+    auto view = DebugDrawView::create(world);
+    view->setTag(Tag::DEBUG_DRAW_VIEW);
+    addChild(view, SBZOrder::MIDDLE);
+
+    uint32 flags = 0;
+    flags += b2Draw::e_shapeBit;
+//        flags += b2Draw::e_jointBit;
+//        flags += b2Draw::e_aabbBit;
+//        flags += b2Draw::e_pairBit;
+//        flags += b2Draw::e_centerOfMassBit;
+    view->getDebugDraw()->SetFlags(flags);
+#endif
 }
 
 /**

@@ -79,30 +79,34 @@ enum GameState {
 #define                 LEVEL_REFRESH_DURATION          1.7f
 #define                 MOVE_NEXT_LEVEL_DURATION        0.5f
 
-//////////// Tile
-static const std::vector<cocos2d::Color3B> TILE_COLORS({
-    cocos2d::Color3B(239, 255, 233),
-    cocos2d::Color3B(46, 196, 182),
-    cocos2d::Color3B(231, 40, 59),
-    cocos2d::Color3B(246, 234, 140),
-    cocos2d::Color3B(188, 205, 244),
-    cocos2d::Color3B(252,145, 58),
-    cocos2d::Color3B(136, 219, 163),
-    cocos2d::Color3B(37, 128, 228),
-    cocos2d::Color3B(225, 59, 106),
-    cocos2d::Color3B(110, 107, 107),
-    cocos2d::Color3B(25, 144, 144),
-    cocos2d::Color3B(188, 255, 255),
-    cocos2d::Color3B(131, 87, 208),
-});
+// Physics
+#define                PHYSICS_FPS                        (1 / 60.0f)
+#define                PHYSICS_GRAVITY                    b2Vec2(0, -30)
 
-#define                 TILE_MAP_CONTENT_SIZE               cocos2d::Size(648,1024)
-#define                 TILE_CONTENT_SIZE                   cocos2d::Size(84,84)
-#define                 TILE_PADDING                        10
+// velocityIterations : 바디들을 정상적으로 이동시키기 위해서 필요한 충돌들을 반복적으로 계산
+// positionIterations : 조인트 분리와, 겹침현상을 줄이기 위해서 바디의 위치를 반복적으로 적용
+// 값이 클수록 정확한 연산이 가능하지만 성능이 떨어진다.
+// 매뉴얼상의 권장값 (VELOCITY_ITERATIONS=8, POSITION_ITERATIONS=3)
+#define                VELOCITY_ITERATIONS                8
+#define                POSITION_ITERATIONS                4
 
-#define                 TILE_SELECTED_LINE_SIZE             6
-#define                 TILE_SELECTED_LINE_COLOR            cocos2d::Color3B(0, 255, 36)
-#define                 TILE_HINT_LINE_COLOR                cocos2d::Color3B(255, 0, 25)
+enum PhysicsCategory {
+    WALL_LEFT   = (1 << 0),     // 왼쪽 벽
+    WALL_RIGHT  = (1 << 1),     // 오른쪽 벽
+    WALL_TOP    = (1 << 2),     // 천장
+    FLOOR       = (1 << 3),
+    BALL        = (1 << 4),
+    BLOCK       = (1 << 5),
+    ITEM        = (1 << 6),
+};
+
+static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
+static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP |
+                                              PhysicsCategory::FLOOR | PhysicsCategory::BLOCK | PhysicsCategory::ITEM);
+
+#define                 BALL_RADIUS                         60
+#define                 BALL_SIZE                           cocos2d::Size(BALL_RADIUS*2, BALL_RADIUS*2)
+#define                 BALL_POSITION                       Vec2MC(0,0)
 
 #define                 TILE_NUMBER_NORMAL_COLOR            cocos2d::Color4B(0,0,0,255)
 #define                 TILE_NUMBER_SELECTED_COLOR          cocos2d::Color4B(255,255,255,255)
@@ -114,34 +118,53 @@ static const std::vector<cocos2d::Color3B> TILE_COLORS({
 #define                 TILE_NUMBER_ENTER_DURATION          0.3f
 #define                 TILE_NUMBER_EXIT_DURATION           0.3f
 
-static inline cocos2d::Size getTileContentSize(int rows, int columns) {
-    
-    cocos2d::Size size;
-    size.width += TILE_CONTENT_SIZE.width * columns;
-    size.width += TILE_PADDING * (columns-1);
-    size.height += TILE_CONTENT_SIZE.height * rows;
-    size.height += TILE_PADDING * (rows-1);
-    
-    return size;
-}
+#define                 TILE_ORIGIN                        (cocos2d::Vec2(60, 104) - (TILE_CONTENT_SIZE*0.5f))
+#define                 INVALID_TILE_POSITION              cocos2d::Vec2(-1,-1)
 
-static inline cocos2d::Vec2 convertTilePosition(int x, int y) {
+#define                 TILE_PADDING_X                     4
+#define                 TILE_PADDING_Y                     4
+
+#define                 TILE_CONTENT_WIDTH                 116
+#define                 TILE_CONTENT_HEIGHT                112
+#define                 TILE_CONTENT_SIZE                  cocos2d::Size(TILE_CONTENT_WIDTH, TILE_CONTENT_HEIGHT)
+
+typedef cocos2d::Vec2 TilePosition;
+typedef std::vector<TilePosition> TilePositions;
+
+#define MEASURE_TILE_SIZE(__rows__, __columns__) \
+cocos2d::Size((TILE_CONTENT_SIZE.width*__rows__) + (TILE_PADDING_X*(__rows__-1)), (TILE_CONTENT_SIZE.height*__columns__) + (TILE_PADDING_Y*(__columns__-1)))
+
+//static inline cocos2d::Size getTileContentSize(int rows, int columns) {
+//
+//    cocos2d::Size size;
+//    size.width += TILE_CONTENT_SIZE.width * columns;
+//    size.width += TILE_PADDING * (columns-1);
+//    size.height += TILE_CONTENT_SIZE.height * rows;
+//    size.height += TILE_PADDING * (rows-1);
+//
+//    return size;
+//}
+
+static inline cocos2d::Vec2 convertToTilePosition(int x, int y, int w, int h) {
     
-    cocos2d::Vec2 pos;
-    pos.x += TILE_CONTENT_SIZE.width * x;
-    pos.y += TILE_CONTENT_SIZE.height * y;
-    if( x > 0 ) pos.x += TILE_PADDING * x;
-    if( y > 0 ) pos.y += TILE_PADDING * y;
+    cocos2d::Vec2 pos(TILE_ORIGIN);
     
-    // 타일 중점
-    pos.x += TILE_CONTENT_SIZE.width * 0.5f;
-    pos.y += TILE_CONTENT_SIZE.height * 0.5f;
+    // content size
+    pos.x += x * TILE_CONTENT_WIDTH;
+    pos.y += y * TILE_CONTENT_HEIGHT;
+    // padding
+    pos.x += x * TILE_PADDING_X;
+    pos.y += y * TILE_PADDING_Y;
+    // anchor middle
+    cocos2d::Size SIZE = MEASURE_TILE_SIZE(w,h);
+    pos.x += SIZE.width * 0.5f;
+    pos.y += SIZE.height * 0.5f;
     
     return pos;
 }
 
-static inline cocos2d::Vec2 convertTilePosition(const cocos2d::Vec2 &p) {
-    return convertTilePosition((int)p.x, (int)p.y);
+static inline cocos2d::Vec2 convertToTilePosition(const TilePosition &p, int w, int h) {
+    return convertToTilePosition((int)p.x, (int)p.y, w, h);
 }
 
 #endif /* GameDefine_h */
