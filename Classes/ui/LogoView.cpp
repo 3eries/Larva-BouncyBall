@@ -39,6 +39,7 @@ bool LogoView::init() {
     
     // 스파인 애니메이션 생성
     auto anim = SBSkeletonAnimation::create(ANIM_LOGO);
+    anim->setVisible(false);
     anim->setAnchorPoint(Vec2::ZERO);
     anim->setPosition(Vec2(SB_WIN_SIZE*0.5f));
     anim->setScale(1.5f);
@@ -89,5 +90,5 @@ void LogoView::run() {
     // scheduler
     scheduleOnce([=](float dt) {
         this->logoFinished();
-    }, 3.5f/*ANIM_DURATION*/, FINISHED_SCHEDULER);
+    }, 1.5f/*ANIM_DURATION*/, FINISHED_SCHEDULER);
 }
