@@ -74,12 +74,12 @@ void Ball::cleanup() {
 void Ball::initImage() {
     
     image = Sprite::create();
-    image->setAnchorPoint(ANCHOR_M);
-    image->setPosition(Vec2MC(BALL_SIZE, 0, 0));
+    image->setAnchorPoint(ANCHOR_MB);
+    image->setPosition(Vec2BC(BALL_SIZE, 0, -10));
     addChild(image);
     
     auto updateImage = [=]() {
-        image->setTexture(DIR_IMG_COMMON + "common_btn_more_game.png");
+        image->setTexture(DIR_IMG_GAME + "hero.png");
     };
     
     updateImage();
@@ -131,7 +131,7 @@ b2Body* Ball::createBody(b2World *world, SBPhysicsObject *userData) {
     b2FixtureDef fixtureDef;
     fixtureDef.shape = &circle;
     fixtureDef.density = 0.1f;      // 밀도
-    fixtureDef.restitution = 1;     // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
+    fixtureDef.restitution = 1.0f;  // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
     fixtureDef.friction = 0;        // 마찰력
     fixtureDef.filter = filter;
     body->CreateFixture(&fixtureDef);
@@ -160,13 +160,27 @@ bool Ball::afterStep() {
     }
     
     // 바디 값 동기화
+    auto beforePos = getPositionX();
     syncBodyToNode();
     
+    // 이미지 좌우반전
+    if( getPositionX() != beforePos ) {
+        bool isLeft = (getPositionX() < beforePos);
+        image->setFlippedX(isLeft);
+    }
+    
     if( !isSyncLocked() ) {
-        setRotation(getBodyVelocityAngle());
+        // setRotation(getBodyVelocityAngle());
     }
     
     return true;
+}
+
+void Ball::setDirection(bool isLeft) {
+    
+    image->setFlippedX(isLeft);
+    
+    // TODO: Physics
 }
 
 /**

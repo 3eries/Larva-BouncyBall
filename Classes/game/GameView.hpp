@@ -14,6 +14,7 @@
 
 #include "../content/data/model/StageData.h"
 
+class Ball;
 class StageProgressBar;
 
 class GameView: public cocos2d::Node {
@@ -37,15 +38,12 @@ private:
     void initPhysics();
     void initBg();
     void initGameListener();
-    
-private:
-    CC_SYNTHESIZE_READONLY(b2World*, world, World);
-    
-    StageProgressBar *stageProgressBar;
+    void initTouchListener();
     
 #pragma mark- Game Event
 public:
     void onGameReset();
+    void onGameExit();
     void onGamePause();
     void onGameResume();
     
@@ -55,6 +53,20 @@ public:
     
     void onMoveNextStage();
     void onMoveNextStageFinished();
+
+#pragma mark- Touch Event
+private:
+    void onTouchBegan(cocos2d::Touch *touch);
+    void onTouchEnded(cocos2d::Touch *touch);
+    
+private:
+    bool isTouchEnabled;
+    
+private:
+    CC_SYNTHESIZE_READONLY(b2World*, world, World);
+    Ball *ball;
+    
+    StageProgressBar *stageProgressBar;
 };
 
 #endif /* GameView_hpp */

@@ -19,6 +19,7 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		294D0D641D0D56D500F7F5D4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 294D0D631D0D56D500F7F5D4 /* CoreText.framework */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
+		50617DA327144C58005CE3EF /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50617DA227144C58005CE3EF /* Block.cpp */; };
 		507BF6ED26834A0B0037F28C /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 507BF6E726834A0A0037F28C /* fonts */; };
 		507BF6EE26834A0B0037F28C /* content in Resources */ = {isa = PBXBuildFile; fileRef = 507BF6E826834A0A0037F28C /* content */; };
 		507BF6EF26834A0B0037F28C /* config in Resources */ = {isa = PBXBuildFile; fileRef = 507BF6E926834A0B0037F28C /* config */; };
@@ -181,6 +182,8 @@
 		503AE10417EB98FF00D1A890 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prefix.pch; path = mac/Prefix.pch; sourceTree = "<group>"; };
 		503AE11117EB99EE00D1A890 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		503AE11A17EB9C5A00D1A890 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		50617DA127144C58005CE3EF /* Block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Block.hpp; sourceTree = "<group>"; };
+		50617DA227144C58005CE3EF /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
 		507BF6E726834A0A0037F28C /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		507BF6E826834A0A0037F28C /* content */ = {isa = PBXFileReference; lastKnownFileType = folder; path = content; sourceTree = "<group>"; };
 		507BF6E926834A0B0037F28C /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; path = config; sourceTree = "<group>"; };
@@ -1085,6 +1088,8 @@
 		50B5736027033346009F3240 /* tile */ = {
 			isa = PBXGroup;
 			children = (
+				50617DA227144C58005CE3EF /* Block.cpp */,
+				50617DA127144C58005CE3EF /* Block.hpp */,
 				50B5736127033346009F3240 /* GameTile.cpp */,
 				50B5736227033346009F3240 /* GameTile.hpp */,
 			);
@@ -1185,6 +1190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				507BF7F626834EF30037F28C /* IAPListener.cpp in Sources */,
+				50617DA327144C58005CE3EF /* Block.cpp in Sources */,
 				507BF7ED26834EF30037F28C /* SBSecurity-ios.mm in Sources */,
 				507BF80A26834EF30037F28C /* SBActionHelper.cpp in Sources */,
 				50C1C4A726B92745003BF8FD /* SBPhysics.cpp in Sources */,

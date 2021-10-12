@@ -33,6 +33,8 @@ public:
     virtual bool    beforeStep() override;
     virtual bool    afterStep() override;
     
+    void            setDirection(bool isLeft);
+    
     virtual void    shoot(b2Vec2 velocity);
     
     static  b2Vec2  getShootingVelocity(const cocos2d::Vec2 &start, const cocos2d::Vec2 &end,
