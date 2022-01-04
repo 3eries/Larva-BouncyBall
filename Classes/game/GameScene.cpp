@@ -183,6 +183,8 @@ void GameScene::onClick(Node *sender) {
     
     switch( sender->getTag() ) {
         case Tag::BTN_SETTING: {
+            GameManager::onGamePause();
+            
             auto popup = SettingPopup::create();
             popup->setOnHomeListener([=]() {
                 this->replaceScene(SceneType::MAIN);

@@ -12,8 +12,9 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
+#include "../GameDefine.h"
 
-class Ball : public cocos2d::Node, public SBPhysicsObject {
+class Ball: public cocos2d::Node, public SBPhysicsObject {
 public:
     static Ball* create(b2World *world);
     virtual ~Ball();
@@ -33,7 +34,7 @@ public:
     virtual bool    beforeStep() override;
     virtual bool    afterStep() override;
     
-    void            setDirection(bool isLeft);
+    void            setDirection(BallDirection direction);
     
     virtual void    shoot(b2Vec2 velocity);
     
@@ -58,6 +59,7 @@ public:
 protected:
     CC_SYNTHESIZE_READONLY(b2World*, world, World);
     cocos2d::Sprite *image;
+    CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
     
     SB_SYNTHESIZE_BOOL(fall, Fall);   // 추락 여부
     

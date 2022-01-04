@@ -62,6 +62,12 @@ void GameView::onEnterTransitionDidFinish() {
     // 튜토리얼
     if( GAME_MANAGER->getStage().stage == 1 ) {
     }
+    
+    //
+    schedule([=](float dt) {
+        auto body = ball->getBody();
+        CCLOG("velocity: %f, %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y);
+    }, 0.1f, "TEST");
 }
 
 void GameView::cleanup() {
@@ -94,7 +100,7 @@ void GameView::onGameExit() {
  */
 void GameView::onGamePause() {
     
-    // SBNodeUtils::recursivePause(this);
+    SBNodeUtils::recursivePause(this);
 }
 
 /**
@@ -102,7 +108,7 @@ void GameView::onGamePause() {
  */
 void GameView::onGameResume() {
     
-    // SBNodeUtils::recursiveResume(this);
+    SBNodeUtils::recursiveResume(this);
 }
 
 /**
@@ -144,14 +150,16 @@ void GameView::onMoveNextStageFinished() {
 
 #pragma mark- Touch Event
 
+#define     SCHEDULER_BALL_DIRECTION                "SCHEDULER_BALL_DIRECTION"
 #define     SCHEDULER_END_VELOCITY                  "SCHEDULER_END_VELOCITY"
 
 void GameView::onTouchBegan(Touch *touch) {
     
+    unschedule(SCHEDULER_BALL_DIRECTION);
     unschedule(SCHEDULER_END_VELOCITY);
     
     bool isLeft = (touch->getLocation().x < SB_WIN_SIZE.width*0.5f);
-    ball->setDirection(isLeft);
+    ball->setDirection(isLeft ? BallDirection::LEFT : BallDirection::RIGHT);
     
     b2Vec2 force = b2Vec2(5, 0);
     
@@ -159,9 +167,17 @@ void GameView::onTouchBegan(Touch *touch) {
     // body->ApplyLinearImpulse(force, body->GetPosition(), false);
     // body->ApplyForceToCenter(b2Vec2(100, 0), false);
     body->SetLinearVelocity(b2Vec2(isLeft ? -10 : 10, body->GetLinearVelocity().y));
+    
+    // 방향에 따른 가속도 스케줄러 실행
+    schedule([=](float dt) {
+        auto body = ball->getBody();
+        body->SetLinearVelocity(b2Vec2(isLeft ? -10 : 10, body->GetLinearVelocity().y));
+    }, 0.01f, SCHEDULER_BALL_DIRECTION);
 }
 
 void GameView::onTouchEnded(Touch *touch) {
+    
+    unschedule(SCHEDULER_BALL_DIRECTION);
     
     scheduleOnce([=](float dt) {
         auto body = ball->getBody();

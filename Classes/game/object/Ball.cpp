@@ -8,7 +8,6 @@
 #include "Ball.hpp"
 
 #include "Define.h"
-#include "../GameDefine.h"
 #include "../GameManager.hpp"
 #include "../GameView.hpp"
 
@@ -33,6 +32,7 @@ Ball* Ball::create(b2World *world) {
 
 Ball::Ball(b2World *world) : SBPhysicsObject(this),
 world(world),
+direction(BallDirection::NONE),
 fall(false) {
 }
 
@@ -176,9 +176,11 @@ bool Ball::afterStep() {
     return true;
 }
 
-void Ball::setDirection(bool isLeft) {
+void Ball::setDirection(BallDirection direction) {
     
-    image->setFlippedX(isLeft);
+    this->direction = direction;
+    
+    image->setFlippedX(direction == BallDirection::LEFT);
     
     // TODO: Physics
 }
