@@ -164,17 +164,6 @@ void GameScene::replaceScene(SceneType type) {
 }
 
 /**
- * 리뷰 체크
- * 조건 충족 시 리뷰 작성 알림 팝업 노출
- */
-void GameScene::checkReview() {
-    
-    if( /*리뷰 노출 조건*/ false ) {
-        User::checkReview(0.5f);
-    }
-}
-
-/**
  * 버튼 클릭
  */
 void GameScene::onClick(Node *sender) {

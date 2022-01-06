@@ -9,6 +9,7 @@
 #include "Define.h"
 
 #include "../splash/SplashScene.hpp"
+#include "../main/WelcomeScene.hpp"
 #include "../main/MainScene.hpp"
 #include "../game/GameScene.hpp"
 
@@ -52,6 +53,7 @@ Scene* SceneManager::createScene(SceneType type) {
     
     switch( type ) {
         case SceneType::SPLASH:          return SplashScene::create();
+        case SceneType::WELCOME:         return WelcomeScene::create();
         case SceneType::MAIN:            return MainScene::create();
         case SceneType::WORLD_SELECT:    return nullptr;
         case SceneType::GAME:            return GameScene::create();
@@ -90,8 +92,8 @@ void SceneManager::replace(SceneType type, function<Scene*()> createSceneFunc) {
     // Scene 전환 효과
     switch( type ) {
         case SceneType::SPLASH:          break;
-        case SceneType::MAIN: {
-            // Splash -> Main
+        case SceneType::WELCOME: {
+            // Splash -> Welcome
             if( prevSceneType == SceneType::SPLASH ) {
                 /*
                  auto splashScene = dynamic_cast<SplashScene*>(prevScene);
@@ -107,6 +109,9 @@ void SceneManager::replace(SceneType type, function<Scene*()> createSceneFunc) {
             else {
                 trans = TransitionFade::create(REPLACE_DURATION_MAIN, scene);
             }
+        } break;
+            
+        case SceneType::MAIN: {
         } break;
             
         case SceneType::WORLD_SELECT: {

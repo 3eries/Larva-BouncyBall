@@ -55,8 +55,6 @@ private:
 public:
     void replaceScene(SceneType type) override;
     
-    void checkReview();
-    
     void onClick(cocos2d::Node *sender) override;
     
 private:

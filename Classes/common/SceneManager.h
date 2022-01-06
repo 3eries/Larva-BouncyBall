@@ -16,6 +16,7 @@ enum class SceneType {
     NONE,
     TEST,
     SPLASH,
+    WELCOME,
     MAIN,
     WORLD_SELECT,
     GAME,
@@ -25,6 +26,7 @@ static inline std::string getSceneName(SceneType type) {
     switch( type ) {
         case SceneType::TEST:            return "TEST";
         case SceneType::SPLASH:          return "SPLASH";
+        case SceneType::WELCOME:         return "WELCOME";
         case SceneType::MAIN:            return "MAIN";
         case SceneType::WORLD_SELECT:    return "WORLD_SELECT";
         case SceneType::GAME:            return "GAME";

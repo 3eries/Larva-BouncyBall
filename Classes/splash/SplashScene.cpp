@@ -90,7 +90,7 @@ void SplashScene::replaceMainScene() {
     }
     
     isReplacedMainScene = true;
-    replaceScene(SceneType::MAIN);
+    replaceScene(SceneType::WELCOME);
 }
 
 /**

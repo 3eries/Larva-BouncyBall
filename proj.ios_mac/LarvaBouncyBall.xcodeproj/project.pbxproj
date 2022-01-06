@@ -14,6 +14,7 @@
 		1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1AF87B5A1F6F77D6007BE51C /* LaunchScreenBackground.png */; };
 		1AF87B8A1F6F7822007BE51C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5B1F6F77D6007BE51C /* main.m */; };
 		1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */; };
+		1D53A5CB27857D0200A8B792 /* WelcomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
@@ -170,6 +171,8 @@
 		1AF87B5D1F6F77D6007BE51C /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RootViewController.mm; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WelcomeScene.cpp; sourceTree = "<group>"; };
+		1D53A5CA27857D0200A8B792 /* WelcomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WelcomeScene.hpp; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* LarvaBouncyBall-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LarvaBouncyBall-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -465,6 +468,13 @@
 				1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */,
 			);
 			path = ios;
+			sourceTree = "<group>";
+		};
+		1DB3BC0F2786CFB6005B41FC /* ui */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ui;
 			sourceTree = "<group>";
 		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
@@ -936,16 +946,9 @@
 				507BF79F26834EF30037F28C /* GameView.hpp */,
 				507BF7A226834EF30037F28C /* object */,
 				50B5735927032BFE009F3240 /* physics */,
-				507BF79E26834EF30037F28C /* ui */,
+				1DB3BC0F2786CFB6005B41FC /* ui */,
 			);
 			path = game;
-			sourceTree = "<group>";
-		};
-		507BF79E26834EF30037F28C /* ui */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ui;
 			sourceTree = "<group>";
 		};
 		507BF7A226834EF30037F28C /* object */ = {
@@ -967,6 +970,8 @@
 				507BF7AB26834EF30037F28C /* CreditPopup.hpp */,
 				507BF7A826834EF30037F28C /* MainScene.cpp */,
 				507BF7AA26834EF30037F28C /* MainScene.hpp */,
+				1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */,
+				1D53A5CA27857D0200A8B792 /* WelcomeScene.hpp */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -1248,6 +1253,7 @@
 				507BF82026834EF30037F28C /* SBEvent.cpp in Sources */,
 				50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */,
 				507BF80226834EF30037F28C /* GameCenterHelper.mm in Sources */,
+				1D53A5CB27857D0200A8B792 /* WelcomeScene.cpp in Sources */,
 				507BF7F526834EF30037F28C /* PluginManager.cpp in Sources */,
 				1AF87B781F6F77F7007BE51C /* AppController.mm in Sources */,
 				507BF82B26834EF30037F28C /* PopupManager.cpp in Sources */,

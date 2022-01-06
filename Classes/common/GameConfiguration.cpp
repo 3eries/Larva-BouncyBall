@@ -58,6 +58,7 @@ void GameConfiguration::parse(const string &json) {
     moreGamesUrl         = platformObj["more_games"].GetString();
     
     // game value
+    worldCount           = doc["world_count"].GetInt();
     firstCoin            = doc["first_coin"].GetInt();
     firstHint            = doc["first_hint"].GetInt();
     adRewardHint         = doc["ad_reward_hint"].GetInt();
@@ -65,6 +66,7 @@ void GameConfiguration::parse(const string &json) {
     
     CCLOG("\tstoreUrl: %s", storeUrl.c_str());
     CCLOG("\tmoreGamesUrl: %s", moreGamesUrl.c_str());
+    CCLOG("\tworldCount: %d", worldCount);
     CCLOG("\tfirstHint: %d", firstHint);
     CCLOG("========== PARSE END (game_config.json)  ==========");
 }

@@ -29,7 +29,7 @@ static const std::string INTERNAL_GAME_CONFIG_FILE              = "config/" + GA
 
 static const std::string INTERNAL_GAME_CONFIG_FILE_VERSION      = "1.0.0";
 
-#define                  ENCRYPT_GAME_CONFIG_FILE                 1
+#define                  ENCRYPT_GAME_CONFIG_FILE                 0
 #define                  ENCRYPT_PLUGIN_CONFIG_FILE               1
 #define                  ENCRYPT_STAGE_FILE                       0
 
@@ -38,6 +38,7 @@ static const std::string PLUGIN_CONFIG_FILE                     = "config/plugin
 
 // Analytics
 static const std::string ANALYTICS_SCREEN_SPLASH                    = "splash";
+static const std::string ANALYTICS_SCREEN_WELCOME                   = "welcome";
 static const std::string ANALYTICS_SCREEN_MAIN                      = "main";
 static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 

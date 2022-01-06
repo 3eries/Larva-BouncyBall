@@ -1,1 +1,15 @@
-FKKKCbOiZH3RcG9EtIvZBqDYHTh5TY8YbPozBWltTQ4Gkq7xDo/KhHOmI+p0XTLtd4Re4EfPeIEJ178xb5/O+2o84Sg4wQ0lcZTb2dTsNIeU2b0z8r6Ccyk27N3QWn+/mDR9KzLeOpY0Zjea6t5xGf2jxH/beCZ5e+PqCspdSRaC3q5RoCiCpZuUCMuSAFiPhakzVbddmhujHIOpx5fHTyMfAVq1bh8Gez0gLxh0enHhqlkyZIxssZBWg7oR3PMdEgEqtwMufPThTIcd9s0kWxRFGdF7PGqGHCbjVQxoeCfTemnewFbjx+jyQgL1lWIAIEzaTLdEw/l2XX6ewobz0RJIxM5Gw16fN4c4Izhqp3tYVaPC5Bl979ZYG69pUx/8Q5L1RdxAv+jqiBmjaOyGtjt4IuKSj7ocMimBLorAEGwWph7DyCNWtRTajslmtOe+8EtUoz3Vzgvg/ZpktOsELPU9PFD9LLfhcn/CGmQIc7DLZuMwgd8VO8FD4huAIYkugqiZPbTdgMgxS1My+RGNAOwEptMcpg/rkUHcbaiczdnDAH3jiXgJRgTiYZIYo78hAeVe7F1S2X9Ev2ZLmxglUU+OOA8Dw7vXcf9HbV8h8Ower+7tJGaUy4kZD9I3Mw+y
+{
+    "android": {
+        "store": "https://play.google.com/store/apps/details?id=com.superbomb.series.rps",
+        "more_games": "https://play.google.com/store/apps/dev?id=5304294506734337771"
+    },
+    "ios": {
+        "store": "https://itunes.apple.com/app/id1410764042",
+        "more_games": "https://itunes.apple.com/developer/seong-min-hwang/id1392753835"
+    },
+    "world_count": 5,
+    "first_coin": 30,
+    "first_hint": 2,
+    "ad_reward_hint": 2,
+    "max_score": 9999
+}
