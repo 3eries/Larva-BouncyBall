@@ -100,7 +100,7 @@ enum PhysicsCategory {
     WALL_LEFT   = (1 << 0),     // 왼쪽 벽
     WALL_RIGHT  = (1 << 1),     // 오른쪽 벽
     WALL_TOP    = (1 << 2),     // 천장
-    FLOOR       = (1 << 3),
+    FLOOR       = (1 << 3),     // 바닥
     BALL        = (1 << 4),
     BLOCK       = (1 << 5),
     ITEM        = (1 << 6),
