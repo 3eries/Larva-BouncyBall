@@ -52,10 +52,6 @@ public:
     // Data
     void            setStage(int stage);
     
-    // Score
-    void            setScore(int score);
-    void            addScore(int score);
-    
     // Getter
     static int      getPlayCount();
     bool            isContinuable();
@@ -64,7 +60,7 @@ private:
     CC_SYNTHESIZE_READONLY(GameState, state, State);              // 게임 상태
     
     CC_SYNTHESIZE_READONLY(StageData, stage, Stage);              // 스테이지
-    CC_SYNTHESIZE_READONLY(int, score, Score);                    // 스코어
+
     CC_SYNTHESIZE_READONLY(int, resultCount, ResultCount);        // 결과 노출 횟수
     CC_SYNTHESIZE_READONLY(int, continueCount, ContinueCount);    // 이어하기한 횟수
     
@@ -99,8 +95,6 @@ public:
     
     static void onMoveNextStage();
     static void onMoveNextStageFinished();
-    
-    static void onScoreChanged();
 };
 
 #endif /* GameManager_hpp */

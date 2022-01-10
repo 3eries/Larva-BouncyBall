@@ -17,7 +17,7 @@
 class Ball;
 class StageProgressBar;
 
-class GameView: public cocos2d::Node {
+class GameView: public cocos2d::Node, public SBPhysicsObject {
 private:
     enum Tag {
         DEBUG_DRAW_VIEW = 1000,
@@ -35,7 +35,7 @@ private:
     void onEnterTransitionDidFinish() override;
     void cleanup() override;
     
-    void initPhysics();
+    void initPhysics() override;
     void initBg();
     void initGameListener();
     void initTouchListener();

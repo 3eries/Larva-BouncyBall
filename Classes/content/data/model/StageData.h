@@ -155,7 +155,7 @@ struct StageData {
     
     std::string toString() {
         std::string str = "LevelData {\n";
-        str += STR_FORMAT("\tlevel: %d, clearCondition: %d\n", stage, clearCondition);
+        str += STR_FORMAT("\tstage: %d, clearCondition: %d\n", stage, clearCondition);
         str += STR_FORMAT("\ttileSize: %dx%d\n", tileColumns, tileRows);
         
         str += "\tnumbers: ";

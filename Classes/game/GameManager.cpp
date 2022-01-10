@@ -55,7 +55,6 @@ void GameManager::reset() {
     CCLOG("GameManager::reset");
     
     state = GameState::NONE;
-    score = 0;
     resultCount = 0;
     continueCount = 0;
     
@@ -106,22 +105,6 @@ bool GameManager::isPaused() {
 void GameManager::setStage(int stage) {
     
     this->stage = Database::getStage(stage);
-}
-
-/**
- * 스코어를 설정합니다
- */
-void GameManager::setScore(int score) {
-    
-    score = MIN(GAME_CONFIG->getMaxScore(), score);
-    instance->score = score;
-    
-    onScoreChanged();
-}
-
-void GameManager::addScore(int score) {
-    
-    setScore(instance->score + score);
 }
 
 int GameManager::getPlayCount() {
@@ -189,6 +172,7 @@ void GameManager::onGameExit() {
 
 /**
  * 게임 리셋
+ * onGameStart(게임 시작), onGameContinue(이어하기)에서 호출됨
  */
 void GameManager::onGameReset() {
     
@@ -408,12 +392,3 @@ void GameManager::onMoveNextStageFinished() {
     getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_MOVE_NEXT_STAGE_FINISHED, &instance->stage);
     onStageChanged();
 }
-
-/**
- * 스코어 변경
- */
-void GameManager::onScoreChanged() {
-    
-    // getEventDispatcher()->dispatchOnScoreChanged(instance->score);
-}
-

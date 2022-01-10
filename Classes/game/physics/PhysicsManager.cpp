@@ -45,7 +45,6 @@ void PhysicsManager::removeBodies() {
     SBPhysics::loopObjects(world, [=](SBPhysicsObject *obj) {
         obj->removeBody();
     });
-    
     SBPhysics::removeBodies(world);
 }
 

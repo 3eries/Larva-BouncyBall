@@ -60,22 +60,10 @@ bool GameScene::init() {
     // 멀티 터치 방지
     addChild(SBNodeUtils::createSwallowMultiTouchNode(), INT_MAX);
     
-    // 개발 버전 표기
-    /*
-    auto versionLabel = Label::createWithTTF(DEV_VERSION, FONT_ROBOTO_BLACK, 30, Size::ZERO,
-                                             TextHAlignment::RIGHT, TextVAlignment::BOTTOM);
-    versionLabel->setTextColor(Color4B::WHITE);
-    versionLabel->setAnchorPoint(ANCHOR_BR);
-    versionLabel->setPosition(Vec2BR(0,120));
-    addChild(versionLabel, INT_MAX);
-     */
-    
     return true;
 }
 
 void GameScene::onEnter() {
-    
-    GAME_MANAGER->setStage(User::getClearStage()+1);
     
     BaseScene::onEnter();
 }

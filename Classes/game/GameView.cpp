@@ -21,7 +21,7 @@ using namespace std;
 
 #define DEBUG_DRAW_PHYSICS      1
 
-GameView::GameView():
+GameView::GameView(): SBPhysicsObject(this),
 isTouchEnabled(false) {
 }
 
@@ -192,18 +192,20 @@ void GameView::onTouchEnded(Touch *touch) {
  */
 void GameView::initPhysics() {
     
+    setSyncLocked(true);
+    
     auto world = PHYSICS_MANAGER->initWorld();
     
-    // 물리 객체 초기화
+    // Wall & Floor
     auto MAP_POSITION = Vec2MC(0,0);
     auto MAP_CONTENT_SIZE = SB_WIN_SIZE * 0.95f;
     
     b2BodyDef bodyDef;
     bodyDef.position = PTM(MAP_POSITION);
-    // bodyDef.userData = (SBPhysicsObject*)this;
+    bodyDef.userData = (SBPhysicsObject*)this;
     
     auto body = world->CreateBody(&bodyDef);
-    // setBody(body);
+    setBody(body);
     
     float left   = PTM(-MAP_CONTENT_SIZE.width*0.5f);
     float right  = PTM( MAP_CONTENT_SIZE.width*0.5f);
@@ -278,40 +280,6 @@ void GameView::initPhysics() {
         
         block->syncNodeToBody();
     }
-    
-    /*
-    auto blockPos = Vec2MC(-200, -250);
-    
-    for( int i = 0; i < 1; ++i ) {
-        auto p1 = blockPos;
-        auto p2 = p1 + Vec2(BLOCK_SIZE.width, 0);
-        
-        b2BodyDef bodyDef;
-        bodyDef.position = PTM(p1);
-        // bodyDef.userData = (SBPhysicsObject*)this;
-        
-        auto body = world->CreateBody(&bodyDef);
-        
-        b2PolygonShape shape;
-        // shape.Set(PTM(p1), PTM(p2));
-        shape.SetAsBox(PTM(BLOCK_SIZE.width*0.5f), PTM(BLOCK_SIZE.height*0.5f));
-        
-        b2Filter filter;
-        filter.categoryBits = PhysicsCategory::WALL_TOP;
-        filter.maskBits = PHYSICS_MASK_BITS_WALL;
-        
-        b2FixtureDef fixtureDef;
-        fixtureDef.shape = &shape;
-        fixtureDef.density = 0.1f;      // 밀도
-        fixtureDef.restitution = 1;     // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
-        fixtureDef.friction = 0;        // 마찰력
-        fixtureDef.filter = filter;
-        body->CreateFixture(&fixtureDef);
-        
-        blockPos.x += BLOCK_SIZE.width;
-        blockPos.y += BLOCK_SIZE.height + 10;
-    }
-     */
     
 #if DEBUG_DRAW_PHYSICS
     // DebugDrawView

@@ -59,6 +59,7 @@ void GameConfiguration::parse(const string &json) {
     
     // game value
     worldCount           = doc["world_count"].GetInt();
+    stagePerWorld        = doc["stage_per_world"].GetInt();
     firstCoin            = doc["first_coin"].GetInt();
     firstHint            = doc["first_hint"].GetInt();
     adRewardHint         = doc["ad_reward_hint"].GetInt();
@@ -69,4 +70,9 @@ void GameConfiguration::parse(const string &json) {
     CCLOG("\tworldCount: %d", worldCount);
     CCLOG("\tfirstHint: %d", firstHint);
     CCLOG("========== PARSE END (game_config.json)  ==========");
+}
+
+int GameConfiguration::getWorldAtStage(int stage) {
+    
+    return ((stage-1) / stagePerWorld) + 1;
 }

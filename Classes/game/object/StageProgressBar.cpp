@@ -163,7 +163,7 @@ void StageProgressBar::onStageChanged(const StageData &stage) {
     setPercentage(0);
     setClearCount(0, stage.clearCondition);
     
-    levelLabel->setString(STR_FORMAT("LEVEL %d", stage.stage));
+    levelLabel->setString(STR_FORMAT("STAGE %d", stage.stage));
     startToggleGageTextScheduler();
 }
 

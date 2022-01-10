@@ -176,8 +176,8 @@ void WelcomeScene::initBg() {
     
     // 배너
     if( !User::isRemovedAds() ) {
-        auto bannerView = BannerView::create();
-        addChild(bannerView, SBZOrder::TOP);
+//        auto bannerView = BannerView::create();
+//        addChild(bannerView, SBZOrder::TOP);
     }
     
     // 크레딧

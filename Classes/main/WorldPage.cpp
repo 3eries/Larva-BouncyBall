@@ -8,11 +8,11 @@
 #include "WorldPage.hpp"
 
 #include "Define.h"
+#include "GameConfiguration.hpp"
 
 USING_NS_CC;
 using namespace std;
 
-#define STAGE_COUNT     18
 #define CELL_SIZE       Size(200, 180)
 
 #pragma mark- WorldPage
@@ -61,6 +61,8 @@ bool WorldPage::init() {
     Vec2 origin(300, 650);
     Vec2 padding(50, 50);
     Vec2 pos = origin;
+    
+    const int STAGE_COUNT = GAME_CONFIG->getStagePerWorld();
     
     for( int i = 0; i < STAGE_COUNT; ++i ) {
         int stage = ((world-1) * STAGE_COUNT) + (i + 1);
