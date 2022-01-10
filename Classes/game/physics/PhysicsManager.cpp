@@ -484,15 +484,15 @@ void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 co
     auto copyListeners = listeners;
     
     for( auto listener : copyListeners ) {
-        if( listener->onContactBrick ) {
+        if( listener->onContactBlock ) {
             auto contactTarget = listener->getContactTarget();
             
             if( contactTarget ) {
                 if( contactTarget == ball || contactTarget == block ) {
-                    listener->onContactBrick(ball, block, contactPoint);
+                    listener->onContactBlock(ball, block, contactPoint);
                 }
             } else {
-                listener->onContactBrick(ball, block, contactPoint);
+                listener->onContactBlock(ball, block, contactPoint);
             }
         }
     }
