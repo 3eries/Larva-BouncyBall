@@ -1361,7 +1361,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tuban.LarvaBouncyBall;
+				PRODUCT_BUNDLE_IDENTIFIER = com.3eries.LarvaBouncyBall;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1400,7 +1400,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.tuban.LarvaBouncyBall;
+				PRODUCT_BUNDLE_IDENTIFIER = com.3eries.LarvaBouncyBall;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
