@@ -16,6 +16,7 @@
 #include "../game/GameManager.hpp"
 #include "../game/GameDefine.h"
 
+#include "WorldPage.hpp"
 #include "CommonLoadingBar.hpp"
 #include "ExitAlertPopup.hpp"
 #include "SettingPopup.hpp"
@@ -44,18 +45,8 @@ bool MainScene::init() {
     SBAnalytics::setCurrentScreen(ANALYTICS_SCREEN_MAIN);
     
     initBg();
-    initTitle();
     initMenu();
-    
-    // 개발 버전 표기
-    /*
-    auto versionLabel = Label::createWithTTF(DEV_VERSION, FONT_ROBOTO_BLACK, 30, Size::ZERO,
-                                             TextHAlignment::RIGHT, TextVAlignment::BOTTOM);
-    versionLabel->setTextColor(Color4B::WHITE);
-    versionLabel->setAnchorPoint(ANCHOR_BR);
-    versionLabel->setPosition(Vec2BR(0,120));
-    addChild(versionLabel, INT_MAX);
-    */
+    initWorlds();
     
     return true;
 }
@@ -109,21 +100,6 @@ void MainScene::onClick(Node *sender) {
     SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
     
     switch( sender->getTag() ) {
-        // 크레딧
-        case Tag::BTN_CREDIT: {
-            SBAnalytics::logEvent(ANALYTICS_EVENT_CREDIT);
-            
-            auto popup = PopupManager::show(PopupType::CREDIT);
-            popup->setLocalZOrder(ZOrder::POPUP_TOP);
-            popup->setOnDismissListener([=](Node*) {
-            });
-        } break;
-            
-        // 게임 시작
-        case Tag::BTN_START: {
-            replaceGameScene();
-        } break;
-
         // 리더 보드
         case Tag::BTN_LEADER_BOARD: {
             if( superbomb::PluginPlay::isSignedIn() ) {
@@ -138,10 +114,6 @@ void MainScene::onClick(Node *sender) {
             showSettingPopup();
         } break;
             
-        // test
-        case Tag::BTN_TEST: {
-        } break;
-            
         default:
             break;
     }
@@ -150,12 +122,14 @@ void MainScene::onClick(Node *sender) {
 /**
  * 게임씬으로 전환
  */
-void MainScene::replaceGameScene() {
+void MainScene::replaceGameScene(int stage) {
     
     SB_SAFE_HIDE(getChildByTag(Tag::BTN_SETTING));
     
     auto onAdClosed = [=]() {
         GAME_MANAGER->init();
+        GAME_MANAGER->setStage(stage);
+        
         replaceScene(SceneType::GAME);
     };
     
@@ -186,62 +160,12 @@ void MainScene::showSettingPopup() {
 void MainScene::initBg() {
     
     addChild(LayerColor::create(Color4B(GAME_BG_COLOR)));
-    
-    // 배너
-    if( !User::isRemovedAds() ) {
-        auto bannerView = BannerView::create();
-        addChild(bannerView, SBZOrder::TOP);
-    }
-    
-    // 크레딧
-    auto creditBtn = SBNodeUtils::createTouchNode();
-    creditBtn->setTag(Tag::BTN_CREDIT);
-    creditBtn->setAnchorPoint(ANCHOR_M);
-    creditBtn->setPosition(Vec2MC(0, 200));
-    creditBtn->setContentSize(Size(SB_WIN_SIZE.width*0.6f, 200));
-    addChild(creditBtn, SBZOrder::MIDDLE);
-    
-    creditBtn->addClickEventListener([=](Ref*) {
-        this->onClick(creditBtn);
-    });
-}
-
-void MainScene::initTitle() {
 }
 
 /**
  * 메뉴 초기화
  */
 void MainScene::initMenu() {
-    
-    // 탭하여 시작
-    auto tapToStart = Label::createWithTTF("TAP TO START", FONT_ROBOTO_BLACK, 40, Size::ZERO,
-                                           TextHAlignment::CENTER, TextVAlignment::CENTER);
-    tapToStart->setTextColor(Color4B(239, 255, 233, 255));
-    tapToStart->setAnchorPoint(ANCHOR_M);
-    tapToStart->setPosition(Vec2BC(0, 250));
-    addChild(tapToStart);
-    
-    auto btn = SBNodeUtils::createTouchNode();
-    btn->setTag(Tag::BTN_START);
-    btn->setAnchorPoint(ANCHOR_MB);
-    btn->setPosition(Vec2BC(0, 80));
-    btn->setContentSize(Size(SB_WIN_SIZE.width*0.85f, SB_WIN_SIZE.height*0.40f));
-    addChild(btn);
-    
-    btn->addClickEventListener([=](Ref*) {
-        this->onClick(btn);
-    });
-    
-    // blink
-    {
-        auto delay = DelayTime::create(0.5f);
-        auto callFunc = CallFunc::create([=]() {
-            auto blink = RepeatForever::create(Blink::create(1.0f, 1));
-            tapToStart->runAction(blink);
-        });
-        tapToStart->runAction(Sequence::create(delay, callFunc, nullptr));
-    }
     
     // 메인 화면 전용 메뉴
 //    auto settingBtn = Button::create(DIR_IMG_COMMON + "common_btn_more.png");
@@ -269,5 +193,28 @@ void MainScene::initMenu() {
         addChild(btn);
         
         btn->setOnClickListener(CC_CALLBACK_1(MainScene::onClick, this));
+    }
+}
+
+/**
+ * 월드 페이지 초기화
+ */
+void MainScene::initWorlds() {
+    
+    auto pageView = PageView::create();
+    pageView->setDirection(PageView::Direction::HORIZONTAL);
+    pageView->setIndicatorEnabled(true);
+    pageView->setAnchorPoint(ANCHOR_M);
+    pageView->setPosition(Vec2MC(0, 0));
+    pageView->setContentSize(SB_WIN_SIZE);
+    addChild(pageView);
+    
+    // 월드 페이지 생성
+    for( int i = 0; i < GAME_CONFIG->getWorldCount(); ++i ) {
+        auto page = WorldPage::create(i+1);
+        page->setOnClickListener([=](StageCell *cell) {
+            this->replaceGameScene(cell->getStage());
+        });
+        pageView->insertCustomItem(page, i);
     }
 }

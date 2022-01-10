@@ -18,11 +18,8 @@
 class MainScene : public BaseScene {
 private:
     enum Tag {
-        BTN_CREDIT           = 100,
-        BTN_START,
-        BTN_LEADER_BOARD,
+        BTN_LEADER_BOARD = 100,
         BTN_SETTING,
-        BTN_TEST,
     };
     
 public:
@@ -39,13 +36,13 @@ private:
     bool onBackKeyReleased() override;
     
     void initBg();
-    void initTitle();
     void initMenu();
+    void initWorlds();
     
 private:
     void onClick(cocos2d::Node *sender) override;
     
-    void replaceGameScene();
+    void replaceGameScene(int stage);
     void showSettingPopup();
     
 private:

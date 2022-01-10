@@ -16,6 +16,7 @@
 		1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */; };
 		1D53A5CB27857D0200A8B792 /* WelcomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1D803689278BCA270083E400 /* WorldPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D803687278BCA260083E400 /* WorldPage.cpp */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		294D0D641D0D56D500F7F5D4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 294D0D631D0D56D500F7F5D4 /* CoreText.framework */; };
@@ -174,6 +175,8 @@
 		1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WelcomeScene.cpp; sourceTree = "<group>"; };
 		1D53A5CA27857D0200A8B792 /* WelcomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WelcomeScene.hpp; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* LarvaBouncyBall-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LarvaBouncyBall-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D803687278BCA260083E400 /* WorldPage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WorldPage.cpp; sourceTree = "<group>"; };
+		1D803688278BCA270083E400 /* WorldPage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WorldPage.hpp; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		294D0D631D0D56D500F7F5D4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
@@ -972,6 +975,8 @@
 				507BF7AA26834EF30037F28C /* MainScene.hpp */,
 				1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */,
 				1D53A5CA27857D0200A8B792 /* WelcomeScene.hpp */,
+				1D803687278BCA260083E400 /* WorldPage.cpp */,
+				1D803688278BCA270083E400 /* WorldPage.hpp */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -1266,6 +1271,7 @@
 				507BF7DB26834EF30037F28C /* PatchManager.cpp in Sources */,
 				507BF7EF26834EF30037F28C /* AdsHelper-android.cpp in Sources */,
 				507BF82C26834EF30037F28C /* ExitAlertPopup.cpp in Sources */,
+				1D803689278BCA270083E400 /* WorldPage.cpp in Sources */,
 				507BF80726834EF30037F28C /* SBHttp.cpp in Sources */,
 				507BF7DF26834EF30037F28C /* SceneManager.cpp in Sources */,
 				507BF81326834EF30037F28C /* SBJSON.cpp in Sources */,
