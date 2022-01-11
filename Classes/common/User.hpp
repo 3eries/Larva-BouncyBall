@@ -47,15 +47,17 @@ public:
     static void             setTutorialCompleted(bool isCompleted);
     static bool             isTutorialCompleted();
     
-    static void             setClearStage(int stage);
-    static int              getClearStage();
-    static void             resetClearStage();
-    
     static int              getStageStarCount(int stage);
     static void             setStageStarCount(int stage, int star);
     
     static void             unlockStage(int stage);
     static bool             isStageLocked(int stage);
+    
+    static int              getLatestPlayStage();
+    static void             setLatestPlayStage(int stage);
+    
+    static int              getTopUnlockedStage();
+    static void             setTopUnlockedStage(int stage);
 };
 
 #endif /* User_hpp */

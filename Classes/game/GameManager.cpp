@@ -105,6 +105,7 @@ bool GameManager::isPaused() {
 void GameManager::setStage(int stage) {
     
     this->stage = Database::getStage(stage);
+    User::setLatestPlayStage(stage);
 }
 
 int GameManager::getPlayCount() {
@@ -355,7 +356,7 @@ void GameManager::onStageClear(bool isSkipped) {
     
     // 클리어한 스테이지 저장
     if( stage.stage <= Database::getLastStage().stage ) {
-        User::setClearStage(stage.stage);
+        // User::setClearStage(stage.stage);
     }
     
     if( !isSkipped ) {
