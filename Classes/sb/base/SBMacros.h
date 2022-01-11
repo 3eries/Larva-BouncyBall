@@ -30,6 +30,8 @@
 #define TO_STRING(__var__)                      SBStringUtils::toString(__var__)
 #define TO_INTEGER(__var__)                     SBStringUtils::toNumber<int>(__var__)
 
+#define USER_DEFAULT                            cocos2d::UserDefault::getInstance()
+
 #define SB_WIN_SIZE                             cocos2d::Director::getInstance()->getWinSize()
 #define SB_RUNNING_SCENE                        cocos2d::Director::getInstance()->getRunningScene()
 #define SB_BOUNDING_BOX_IN_WORLD(__node__)      SBNodeUtils::getBoundingBoxInWorld(__node__)
