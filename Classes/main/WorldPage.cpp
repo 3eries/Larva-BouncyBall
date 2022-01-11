@@ -134,6 +134,12 @@ bool StageCell::init() {
     stageLabel->setPosition(Vec2MC(CELL_SIZE, 0, 0));
     addChild(stageLabel);
     
+    // 잠금 체크
+    if( User::isStageLocked(stage) ) {
+        // TODO: 잠금 UI
+        return true;
+    }
+    
     int star = User::getStageStarCount(stage);
     
     // onClick

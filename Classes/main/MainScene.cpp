@@ -217,4 +217,8 @@ void MainScene::initWorlds() {
         });
         pageView->insertCustomItem(page, i);
     }
+    
+    // 마지막으로 플레이한 월드로 포커스
+    int latestPlayWorld = GAME_CONFIG->getWorldAtStage(User::getLatestPlayStage());
+    pageView->setCurrentPageIndex(latestPlayWorld-1);
 }
