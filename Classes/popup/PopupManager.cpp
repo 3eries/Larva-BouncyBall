@@ -89,7 +89,7 @@ void PopupManager::addPopup(BasePopup *popup) {
     
     popups.pushBack(popup);
     
-    CCLOG("PopupManager::addPopup type: %d count: %d", (int)popup->getType(), (int)getPopupCount());
+    // CCLOG("PopupManager::addPopup type: %d count: %d", (int)popup->getType(), (int)getPopupCount());
 }
 
 /**
@@ -102,7 +102,7 @@ void PopupManager::removePopup(BasePopup *popup) {
     if( popups.contains(popup) ) {
         popups.eraseObject(popup);
         
-        CCLOG("PopupManager::removePopup type: %d count: %d", (int)popup->getType(), (int)getPopupCount());
+        // CCLOG("PopupManager::removePopup type: %d count: %d", (int)popup->getType(), (int)getPopupCount());
     }
 }
 
@@ -327,7 +327,7 @@ void PopupManager::addListener(PopupListener *listener) {
         listeners.pushBack(listener);
     }
     
-    CCLOG("PopupManager::addListener count: %d", (int)listeners.size());
+    // CCLOG("PopupManager::addListener count: %d", (int)listeners.size());
 }
 
 void PopupManager::addListener(Node *target, PopupListener *listener) {

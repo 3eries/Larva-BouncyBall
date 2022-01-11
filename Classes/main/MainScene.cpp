@@ -190,7 +190,7 @@ void MainScene::initMenu() {
         auto btn = SBButton::create(info.file);
         btn->setZoomScale(ButtonZoomScale::NORMAL);
         info.apply(btn);
-        addChild(btn);
+        addChild(btn, ZOrder::COMMON_MENU_BOTTOM);
         
         btn->setOnClickListener(CC_CALLBACK_1(MainScene::onClick, this));
     }

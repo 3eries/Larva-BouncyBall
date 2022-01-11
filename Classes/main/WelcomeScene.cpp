@@ -184,13 +184,17 @@ void WelcomeScene::initBg() {
     auto creditBtn = SBNodeUtils::createTouchNode();
     creditBtn->setTag(Tag::BTN_CREDIT);
     creditBtn->setAnchorPoint(ANCHOR_M);
-    creditBtn->setPosition(Vec2MC(0, 200));
-    creditBtn->setContentSize(Size(SB_WIN_SIZE.width*0.6f, 200));
+    creditBtn->setPosition(Vec2MC(0, 100));
+    creditBtn->setContentSize(Size(SB_WIN_SIZE.width*0.3f, 250));
     addChild(creditBtn, SBZOrder::MIDDLE);
     
     creditBtn->addClickEventListener([=](Ref*) {
         this->onClick(creditBtn);
     });
+    
+    // 크레딧 영역 확인용
+    creditBtn->addChild(SBNodeUtils::createBackgroundNode(creditBtn, Color4B(255,0,0,255*0.5f)));
+    //
 }
 
 void WelcomeScene::initTitle() {
