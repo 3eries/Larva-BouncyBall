@@ -43,6 +43,17 @@ bool GameView::init() {
     initGameListener();
     initTouchListener();
      
+    // Debug Value
+    infoLabel = Label::createWithTTF("", FONT_ROBOTO_BLACK, 60, Size::ZERO,
+                                     TextHAlignment::RIGHT, TextVAlignment::BOTTOM);
+    infoLabel->setTextColor(Color4B::WHITE);
+    infoLabel->setAnchorPoint(ANCHOR_BR);
+    infoLabel->setPosition(Vec2BR(-50, 10));
+    addChild(infoLabel);
+    
+    maxVelocity = Vec2(INT_MIN, INT_MIN);
+    minVelocity = Vec2(INT_MAX, INT_MAX);
+    
     return true;
 }
 
@@ -66,7 +77,24 @@ void GameView::onEnterTransitionDidFinish() {
     //
     schedule([=](float dt) {
         auto body = ball->getBody();
-        CCLOG("velocity: %f, %f", body->GetLinearVelocity().x, body->GetLinearVelocity().y);
+        auto velocity = body->GetLinearVelocity();
+        
+        // CCLOG("velocity: %f, %f", velocity.x, velocity.y);
+        this->maxVelocity.x = MAX(velocity.x, this->maxVelocity.x);
+        this->maxVelocity.y = MAX(velocity.y, this->maxVelocity.y);
+        this->minVelocity.x = MIN(velocity.x, this->minVelocity.x);
+        this->minVelocity.y = MIN(velocity.y, this->minVelocity.y);
+        
+        string msg = "";
+        msg += STR_FORMAT("x: %d", (int)velocity.x) + "\n";
+        msg += STR_FORMAT("y: %d", (int)velocity.y) + "\n";
+        msg += STR_FORMAT("maxX: %d", (int)maxVelocity.x) + "\n";
+        msg += STR_FORMAT("maxY: %d", (int)maxVelocity.y) + "\n";
+        msg += STR_FORMAT("minX: %d", (int)minVelocity.x) + "\n";
+        msg += STR_FORMAT("minY: %d", (int)minVelocity.y) + "\n";
+        
+        infoLabel->setString(msg);
+        
     }, 0.1f, "TEST");
 }
 

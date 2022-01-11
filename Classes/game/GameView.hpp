@@ -67,6 +67,12 @@ private:
     Ball *ball;
     
     StageProgressBar *stageProgressBar;
+    
+    // for debug
+    cocos2d::Label *infoLabel;
+    
+    cocos2d::Vec2 maxVelocity;
+    cocos2d::Vec2 minVelocity;
 };
 
 #endif /* GameView_hpp */
