@@ -23,6 +23,10 @@ using namespace std;
 #define USER_DEFAULT_KEY_TUTORIAL_COMPLETED             "USER_TUTORIAL_COMPLETED"
 #define USER_DEFAULT_KEY_CLEAR_STAGE                    "USER_CLEAR_STAGE"
 
+// #define USER_DEFAULT_KEY_STAGE_STAR                     "USER_STAGE_STAR"
+#define USER_DEFAULT_KEY_STAGE_STAR(__STAGE__) \
+STR_FORMAT("USER_STAGE_%d_STAR", __STAGE__).c_str()
+
 static User *instance = nullptr;
 User* User::getInstance() {
     
@@ -47,6 +51,9 @@ User::~User() {
 }
 
 void User::init() {
+    
+    // 1스테이지 잠금 해제
+    unlockStage(1);
     
     CCLOG("User {");
     CCLOG("\tcoin: %d, clear stage: %d", getCoin(), getClearStage());
@@ -81,8 +88,8 @@ void User::init() {
  */
 void User::setRemoveAds(bool isRemoveAds) {
     
-    UserDefault::getInstance()->setBoolForKey(USER_DEFAULT_KEY_REMOVE_ADS, isRemoveAds);
-    UserDefault::getInstance()->flush();
+    USER_DEFAULT->setBoolForKey(USER_DEFAULT_KEY_REMOVE_ADS, isRemoveAds);
+    USER_DEFAULT->flush();
     
     AdsHelper::getInstance()->setBannerEnabled(!isRemoveAds);
     AdsHelper::getInstance()->setInterstitialEnabled(!isRemoveAds);
@@ -106,7 +113,7 @@ void User::removeAds() {
  */
 bool User::isRemovedAds() {
     
-    return UserDefault::getInstance()->getBoolForKey(USER_DEFAULT_KEY_REMOVE_ADS, false);
+    return USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_REMOVE_ADS, false);
 }
 
 /**
@@ -114,8 +121,8 @@ bool User::isRemovedAds() {
  */
 void User::setHintCount(int i) {
     
-    UserDefault::getInstance()->setIntegerForKey(USER_DEFAULT_KEY_HINT, i);
-    UserDefault::getInstance()->flush();
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_HINT, i);
+    USER_DEFAULT->flush();
     
     Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(DIRECTOR_EVENT_UPDATE_HINT_COUNT);
 }
@@ -125,7 +132,7 @@ void User::setHintCount(int i) {
  */
 int User::getHintCount() {
     
-    return UserDefault::getInstance()->getIntegerForKey(USER_DEFAULT_KEY_HINT, GAME_CONFIG->getFirstHint());
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_HINT, GAME_CONFIG->getFirstHint());
 }
 
 /**
@@ -155,8 +162,8 @@ bool User::useHint() {
  */
 void User::setCoin(int i) {
     
-    UserDefault::getInstance()->setIntegerForKey(USER_DEFAULT_KEY_COIN, i);
-    UserDefault::getInstance()->flush();
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_COIN, i);
+    USER_DEFAULT->flush();
     
     Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(DIRECTOR_EVENT_UPDATE_USER_COIN);
 }
@@ -190,7 +197,7 @@ bool User::spendCoin(int i) {
  */
 int User::getCoin() {
     
-    return UserDefault::getInstance()->getIntegerForKey(USER_DEFAULT_KEY_COIN, GAME_CONFIG->getFirstCoin());
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_COIN, GAME_CONFIG->getFirstCoin());
 }
 
 /**
@@ -206,8 +213,8 @@ bool User::isEnoughCoin(int i) {
  */
 void User::setTutorialCompleted(bool isCompleted) {
     
-    UserDefault::getInstance()->setBoolForKey(USER_DEFAULT_KEY_TUTORIAL_COMPLETED, isCompleted);
-    UserDefault::getInstance()->flush();
+    USER_DEFAULT->setBoolForKey(USER_DEFAULT_KEY_TUTORIAL_COMPLETED, isCompleted);
+    USER_DEFAULT->flush();
 }
 
 /**
@@ -215,7 +222,7 @@ void User::setTutorialCompleted(bool isCompleted) {
  */
 bool User::isTutorialCompleted() {
     
-    return UserDefault::getInstance()->getBoolForKey(USER_DEFAULT_KEY_TUTORIAL_COMPLETED, false);
+    return USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_TUTORIAL_COMPLETED, false);
 }
 
 /**
@@ -227,8 +234,8 @@ void User::setClearStage(int stage) {
         return;
     }
     
-    UserDefault::getInstance()->setIntegerForKey(USER_DEFAULT_KEY_CLEAR_STAGE, stage);
-    UserDefault::getInstance()->flush();
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_CLEAR_STAGE, stage);
+    USER_DEFAULT->flush();
 }
 
 /**
@@ -236,48 +243,53 @@ void User::setClearStage(int stage) {
  */
 int User::getClearStage() {
     
-    return UserDefault::getInstance()->getIntegerForKey(USER_DEFAULT_KEY_CLEAR_STAGE, 0);
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_CLEAR_STAGE, 0);
 }
 
 void User::resetClearStage() {
     
-    UserDefault::getInstance()->setIntegerForKey(USER_DEFAULT_KEY_CLEAR_STAGE, 0);
-    UserDefault::getInstance()->flush();
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_CLEAR_STAGE, 0);
+    USER_DEFAULT->flush();
 }
 
 /**
- * 리뷰 체크
+ * 스테이지 별 개수를 반환합니다
  */
-bool User::checkReview(float popupDelay) {
+#define INVALID_STAR_COUNT      -1
+
+int User::getStageStarCount(int stage) {
+ 
+    // use json
+    /*
+    auto json = USER_DEFAULT->getStringForKey(USER_DEFAULT_KEY_STAGE_STAR, "");
     
-    if( !ReviewHelper::isReviewAlertEnabled() ) {
-        return false;
+    if( json == "" ) {
+        return INVALID_STAR_COUNT;
     }
     
-    auto showPopup = [=]() {
-        SBAnalytics::logEvent(ANALYTICS_EVENT_REVIEW_POPUP);
-        
-        ReviewHelper::showReviewPopup([=]() {
-            
-            // 커스텀 팝업
-            auto popup = ReviewPopup::create();
-            popup->setOnGoListener([=]() {
-                
-                ReviewHelper::setReviewWrite(true);
-                Application::getInstance()->openURL(GameConfiguration::getInstance()->getStoreUrl());
-                
-                popup->dismissWithAction();
-            });
-            SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
-        });
-    };
+    auto doc = SBJSON::parse(json);
+    auto stageKey = TO_STRING(stage);
     
-    if( popupDelay == 0 ) {
-        showPopup();
-    } else {
-        SBDirector::postDelayed(SceneManager::getScene(), showPopup, popupDelay, true);
+    if( doc.FindMember(stageKey.c_str()) == doc.MemberEnd() ) {
+        return INVALID_STAR_COUNT;
     }
     
-    return true;
+    return doc[stageKey.c_str()].GetInt();
+     */
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), INVALID_STAR_COUNT);
 }
 
+/**
+ * 스테이지 별 개수를 설정합니다
+ */
+void User::setStageStarCount(int stage, int star) {
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), star);
+}
+
+void User::unlockStage(int stage) {
+    setStageStarCount(stage, MAX(0, getStageStarCount(stage)));
+}
+
+bool User::isStageLocked(int stage) {
+    return getStageStarCount(stage) == INVALID_STAR_COUNT;
+}

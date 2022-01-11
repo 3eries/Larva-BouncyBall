@@ -9,6 +9,7 @@
 
 #include "Define.h"
 #include "GameConfiguration.hpp"
+#include "User.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -133,7 +134,7 @@ bool StageCell::init() {
     stageLabel->setPosition(Vec2MC(CELL_SIZE, 0, 0));
     addChild(stageLabel);
     
-    // Stars
+    int star = User::getStageStarCount(stage);
     
     // onClick
     setTouchEnabled(true);

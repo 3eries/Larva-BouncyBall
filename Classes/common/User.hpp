@@ -51,7 +51,11 @@ public:
     static int              getClearStage();
     static void             resetClearStage();
     
-    static bool             checkReview(float popupDelay = 0);
+    static int              getStageStarCount(int stage);
+    static void             setStageStarCount(int stage, int star);
+    
+    static void             unlockStage(int stage);
+    static bool             isStageLocked(int stage);
 };
 
 #endif /* User_hpp */
