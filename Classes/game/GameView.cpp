@@ -178,39 +178,20 @@ void GameView::onMoveNextStageFinished() {
 
 #pragma mark- Touch Event
 
-#define     SCHEDULER_BALL_DIRECTION                "SCHEDULER_BALL_DIRECTION"
-#define     SCHEDULER_END_VELOCITY                  "SCHEDULER_END_VELOCITY"
-
 void GameView::onTouchBegan(Touch *touch) {
     
-    unschedule(SCHEDULER_BALL_DIRECTION);
-    unschedule(SCHEDULER_END_VELOCITY);
-    
     bool isLeft = (touch->getLocation().x < SB_WIN_SIZE.width*0.5f);
-    ball->setDirection(isLeft ? BallDirection::LEFT : BallDirection::RIGHT);
-    
-    b2Vec2 force = b2Vec2(5, 0);
-    
-    auto body = ball->getBody();
-    // body->ApplyLinearImpulse(force, body->GetPosition(), false);
-    // body->ApplyForceToCenter(b2Vec2(100, 0), false);
-    body->SetLinearVelocity(b2Vec2(isLeft ? -10 : 10, body->GetLinearVelocity().y));
-    
-    // 방향에 따른 가속도 스케줄러 실행
-    schedule([=](float dt) {
-        auto body = ball->getBody();
-        body->SetLinearVelocity(b2Vec2(isLeft ? -10 : 10, body->GetLinearVelocity().y));
-    }, 0.01f, SCHEDULER_BALL_DIRECTION);
+
+    if( isLeft ) {
+        ball->moveLeft();
+    } else {
+        ball->moveRight();
+    }
 }
 
 void GameView::onTouchEnded(Touch *touch) {
     
-    unschedule(SCHEDULER_BALL_DIRECTION);
-    
-    scheduleOnce([=](float dt) {
-        auto body = ball->getBody();
-        body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
-    }, 0.1f, SCHEDULER_END_VELOCITY);
+    ball->stopMoveX();
 }
 
 #pragma mark- Initialize

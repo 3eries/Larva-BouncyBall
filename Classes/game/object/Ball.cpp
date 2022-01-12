@@ -11,11 +11,26 @@
 #include "../GameManager.hpp"
 #include "../GameView.hpp"
 
+#include "tile/Block.hpp"
+
 USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-static const string SCHEDULER_CHECK_MOVEMENT = "SCHEDULER_CHECK_MOVEMENT";
+#define VELOCITY_BOUNCE_UP                     30
+#define VELOCITY_BOUNCE_DOWN                  -25
+#define VELOCITY_MOVE_LEFT                    -20
+#define VELOCITY_MOVE_RIGHT                    20
+
+#define BOUNCE_DOWN_DELAY                      0.5f
+#define CONTINUOUS_X_INTERVAL                  0.01f
+#define RESET_X_DELAY                          0.1f
+
+#define SCHEDULER_BOUNCE_DOWN                  "SCHEDULER_BOUNCE_DOWN"
+#define SCHEDULER_CONTINUOUS_X                 "SCHEDULER_CONTINUOUS_X"
+#define SCHEDULER_RESET_VELOCITY_X             "SCHEDULER_RESET_VELOCITY_X"
+
+#define SCHEDULER_CHECK_MOVEMENT               "SCHEDULER_CHECK_MOVEMENT"
 
 Ball* Ball::create(b2World *world) {
     
@@ -52,11 +67,12 @@ bool Ball::init() {
     setCascadeOpacityEnabled(true);
     
     initImage();
-    initPhysicsListener();
+    initPhysics();
     
-    setBody(createBody(world, (SBPhysicsObject*)this));
     syncNodeToBody();
     setBodyAwake(true);
+    
+    getBody()->SetLinearVelocity(b2Vec2(0, VELOCITY_BOUNCE_DOWN));
     
     return true;
 }
@@ -74,6 +90,9 @@ void Ball::cleanup() {
 void Ball::initImage() {
     
     image = Sprite::create();
+    //
+    image->setVisible(false);
+    //
     image->setAnchorPoint(ANCHOR_MB);
     image->setPosition(Vec2BC(BALL_SIZE, 0, -10));
     addChild(image);
@@ -92,22 +111,22 @@ void Ball::initImage() {
 }
 
 /**
- * 물리 리스너 초기화
+ * 물리 초기화
  */
-void Ball::initPhysicsListener() {
+void Ball::initPhysics() {
     
-//    auto listener = GamePhysicsListener::create();
-//    listener->setTarget(this);
-//    listener->setContactTarget(this);
-//    listener->onBeginContact        = CC_CALLBACK_1(Ball::onBeginContact, this);
-//    listener->onEndContact          = CC_CALLBACK_1(Ball::onEndContact, this);
-//    listener->onPreSolve            = CC_CALLBACK_2(Ball::onPreSolve, this);
-//    listener->onPostSolve           = CC_CALLBACK_2(Ball::onPostSolve, this);
-//    listener->onContactBrick        = CC_CALLBACK_3(Ball::onContactBrick, this);
+    // Listener
+    auto listener = PhysicsListener::create();
+    listener->setTarget(this);
+    listener->setContactTarget(this);
+    listener->onContactBlock        = CC_CALLBACK_3(Ball::onContactBlock, this);
 //    listener->onContactItem         = CC_CALLBACK_2(Ball::onContactItem, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
 //    listener->onContactFloor        = CC_CALLBACK_1(Ball::onContactFloor, this);
-//    GameManager::getPhysicsManager()->addListener(listener);
+    GameManager::getPhysicsManager()->addListener(listener);
+    
+    // Body
+    setBody(createBody(world, (SBPhysicsObject*)this));
 }
 
 b2Body* Ball::createBody(b2World *world, SBPhysicsObject *userData) {
@@ -181,8 +200,58 @@ void Ball::setDirection(BallDirection direction) {
     this->direction = direction;
     
     image->setFlippedX(direction == BallDirection::LEFT);
+}
+
+/**
+ * 왼쪽으로 이동합니다
+ */
+void Ball::moveLeft() {
     
-    // TODO: Physics
+    stopMoveX(false);
+    
+    setDirection(BallDirection::LEFT);
+    
+    auto body = getBody();
+    // body->ApplyLinearImpulse(force, body->GetPosition(), false);
+    // body->ApplyForceToCenter(b2Vec2(100, 0), false);
+    body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_LEFT, body->GetLinearVelocity().y));
+    
+    schedule([=](float dt) {
+        body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_LEFT, body->GetLinearVelocity().y));
+    }, CONTINUOUS_X_INTERVAL, SCHEDULER_CONTINUOUS_X);
+}
+
+/**
+ * 오른쪽으로 이동합니다
+ */
+void Ball::moveRight() {
+    
+    stopMoveX(false);
+    
+    setDirection(BallDirection::RIGHT);
+    
+    auto body = getBody();
+    body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_RIGHT, body->GetLinearVelocity().y));
+    
+    schedule([=](float dt) {
+        body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_RIGHT, body->GetLinearVelocity().y));
+    }, CONTINUOUS_X_INTERVAL, SCHEDULER_CONTINUOUS_X);
+}
+
+/**
+ * X축 움직임을 멈춥니다
+ */
+void Ball::stopMoveX(bool resetVelocity) {
+    
+    unschedule(SCHEDULER_CONTINUOUS_X);
+    unschedule(SCHEDULER_RESET_VELOCITY_X);
+    
+    if( resetVelocity ) {
+        scheduleOnce([=](float dt) {
+            auto body = getBody();
+            body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
+        }, RESET_X_DELAY, SCHEDULER_RESET_VELOCITY_X);
+    }
 }
 
 /**
@@ -299,45 +368,44 @@ void Ball::sleepWithAction() {
     runAction(Sequence::create(fadeOut, hide, nullptr));
 }
 
-//void Ball::onBeginContact(b2Contact *contact) {
-//}
-//
-//void Ball::onEndContact(b2Contact *contact) {
-//}
-//
-//void Ball::onPreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
-//}
-//
-//void Ball::onPostSolve(b2Contact *contact, const b2ContactImpulse *impulse) {
-//}
-//
-///**
-// * 볼 & 브릭 충돌
-// */
-//bool Ball::onContactBrick(Ball *ball, Game::Tile *tile, Vec2 contactPoint) {
-//
-//    // 충돌 잠금 상태일 경우 충돌 무시
-//    if( isCollisionLocked() ) {
-//        return false;
-//    }
-//
-//    // 충돌 횟수 업데이트
-//    contactCount++;
-//
-//    // 중립 브릭은 벽 충돌로 분리
-//    auto brick = (Brick*)tile;
-//
-//    if( brick->getData().type != BrickType::NEUTRAL ) {
-//        brickContactCount++;
-//        wallContactCount = 0;
-//    } else {
-//        brickContactCount = 0;
-//        wallContactCount++;
-//    }
-//
-//    return true;
-//}
-//
+/**
+ * 볼 & 브릭 충돌
+ */
+bool Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
+
+    // 충돌 잠금 상태일 경우 충돌 무시
+    if( isCollisionLocked() ) {
+        return false;
+    }
+    
+
+    auto block = (Block*)tile;
+    
+    // 충돌 횟수 업데이트
+    contactCount++;
+    
+    // Bounce Up
+    CCLOG("Bounce Up");
+    
+    auto body = getBody();
+    body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
+                                   VELOCITY_BOUNCE_UP));
+//    body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 0));
+//    body->ApplyLinearImpulseToCenter(b2Vec2(0, VELOCITY_BOUNCE_UP / 0.1f), true);
+//    body->ApplyForceToCenter(b2Vec2(0, VELOCITY_BOUNCE_UP*3), false);
+    
+    // Bounce Down
+    unschedule(SCHEDULER_BOUNCE_DOWN);
+    
+    scheduleOnce([=](float dt) {
+        CCLOG("Bounce Down");
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
+                                       VELOCITY_BOUNCE_DOWN));
+    }, BOUNCE_DOWN_DELAY, SCHEDULER_BOUNCE_DOWN);
+
+    return true;
+}
+
 ///**
 // * 볼 & 아이템 충돌
 // */

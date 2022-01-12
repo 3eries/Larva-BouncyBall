@@ -87,7 +87,8 @@ enum class BallDirection {
 
 // Physics
 #define                PHYSICS_FPS                        (1 / 60.0f)
-#define                PHYSICS_GRAVITY                    b2Vec2(0, -80)
+// #define                PHYSICS_GRAVITY                    b2Vec2(0, -80)
+#define                PHYSICS_GRAVITY                    b2Vec2(0, -30)
 
 // velocityIterations : 바디들을 정상적으로 이동시키기 위해서 필요한 충돌들을 반복적으로 계산
 // positionIterations : 조인트 분리와, 겹침현상을 줄이기 위해서 바디의 위치를 반복적으로 적용
@@ -96,19 +97,22 @@ enum class BallDirection {
 #define                VELOCITY_ITERATIONS                8
 #define                POSITION_ITERATIONS                4
 
+// 천장 - ceiling
+
 enum PhysicsCategory {
     WALL_LEFT   = (1 << 0),     // 왼쪽 벽
     WALL_RIGHT  = (1 << 1),     // 오른쪽 벽
     WALL_TOP    = (1 << 2),     // 천장
     FLOOR       = (1 << 3),     // 바닥
     BALL        = (1 << 4),
-    BLOCK       = (1 << 5),
-    ITEM        = (1 << 6),
+    BLOCK       = (1 << 5),     // 블럭 천장
+    BLOCK_SIDE  = (1 << 6),     // 블럭 측면, 바닥
+    ITEM        = (1 << 7),
 };
 
 static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
 static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP |
-                                              PhysicsCategory::FLOOR | PhysicsCategory::BLOCK | PhysicsCategory::ITEM);
+                                              PhysicsCategory::FLOOR | PhysicsCategory::BLOCK | PhysicsCategory::BLOCK_SIDE | PhysicsCategory::ITEM);
 
 #define                 BALL_RADIUS                         40
 #define                 BALL_SIZE                           cocos2d::Size(BALL_RADIUS*2, BALL_RADIUS*2)

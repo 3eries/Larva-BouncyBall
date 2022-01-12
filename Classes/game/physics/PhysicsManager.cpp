@@ -9,6 +9,7 @@
 
 #include "../object/Ball.hpp"
 #include "../object/tile/GameTile.hpp"
+#include "../object/tile/Block.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
@@ -98,10 +99,6 @@ bool PhysicsManager::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB) {
         return false;
     }
     
-    return true;
-    
-    /////////////////////////// 살려내
-    /*
     auto userDataA = fixtureA->GetBody()->GetUserData();
     auto userDataB = fixtureB->GetBody()->GetUserData();
     
@@ -115,8 +112,6 @@ bool PhysicsManager::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB) {
     if( objA->isCollisionLocked() || objB->isCollisionLocked() ) {
         return false;
     }
-     */
-    ///////// 살려내
     
     // 벽돌 체크
     /*
@@ -157,27 +152,27 @@ bool PhysicsManager::ShouldCollide(b2Fixture *fixtureA, b2Fixture *fixtureB) {
  */
 void PhysicsManager::BeginContact(b2Contact *contact) {
     
+#if DEBUG_LOG_ENABLED
+    CCLOG("PhysicsManager::BeginContact");
+#endif
+    
     dispatchOnBeginContact(contact);
     
     auto fixtureA = contact->GetFixtureA();
     auto fixtureB = contact->GetFixtureB();
     
-    // 벽돌 체크
-    /*
+    // 블럭 체크
     {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BRICK, fixtureA, fixtureB);
+        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, fixtureA, fixtureB);
         
         if( objs.obj1 && objs.obj2 ) {
-            auto ball = (Ball*)objs.obj1;
-            auto brick = (Brick*)objs.obj2;
-
+//            auto ball = (Ball*)objs.obj1;
+//            auto block = (Block*)objs.obj2;
             return;
         }
     }
-    */
     
     // 아이템 체크
-    /*
     {
         auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, fixtureA, fixtureB);
         
@@ -185,10 +180,8 @@ void PhysicsManager::BeginContact(b2Contact *contact) {
             return;
         }
     }
-     */
     
     // 벽 체크
-    /*
     {
         PhysicsCategory wallCategorys[] = {
             PhysicsCategory::WALL_LEFT,
@@ -205,7 +198,17 @@ void PhysicsManager::BeginContact(b2Contact *contact) {
             }
         }
     }
-     */
+    
+    // 바닥 체크
+    {
+        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::FLOOR, fixtureA, fixtureB);
+        
+        if( objs.obj1 && objs.obj2 ) {
+            contact->SetEnabled(false);
+            dispatchOnContactFloor((Ball*)objs.obj1);
+            return;
+        }
+    }
 }
 
 /**
@@ -233,41 +236,38 @@ void PhysicsManager::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
     
     dispatchOnPreSolve(contact, oldManifold);
     
-    // 벽돌 체크
-    /*
+    // 블럭 체크
     {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BRICK, contact);
+        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, contact);
         
         if( objs.obj1 && objs.obj2 ) {
             auto ball = (Ball*)objs.obj1;
-            auto brick = (Brick*)objs.obj2;
+            auto block = (Block*)objs.obj2;
             
             // 벽돌이 이미 깨진 경우, 충돌 비활성화
+            /*
             if( brick->isBroken() ) {
                 contact->SetEnabled(false);
             }
+             */
 
             return;
         }
     }
-    */
     
     // 아이템 체크
-    /*
     {
         auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, contact);
         
         if( objs.obj1 && objs.obj2 ) {
             contact->SetEnabled(false);
-            dispatchOnContactItem((Ball*)objs.obj1, (Game::Tile*)objs.obj2);
+            dispatchOnContactItem((Ball*)objs.obj1, (GameTile*)objs.obj2);
             
             return;
         }
     }
-     */
     
     // 바닥 체크
-    /*
     {
         auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::FLOOR, contact);
         
@@ -275,7 +275,6 @@ void PhysicsManager::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
             return;
         }
     }
-     */
 }
 
 /**
@@ -290,26 +289,23 @@ void PhysicsManager::PostSolve(b2Contact *contact, const b2ContactImpulse *impul
     
     dispatchOnPostSolve(contact, impulse);
     
-    // 벽돌 체크
-    /*
+    // 블럭 체크
     {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BRICK, contact);
+        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, contact);
         
         if( objs.obj1 && objs.obj2 ) {
             auto ball = (Ball*)objs.obj1;
-            auto brick = (Brick*)objs.obj2;
+            auto block = (Block*)objs.obj2;
             
-            if( !brick->isBroken() ) {
-                dispatchOnContactBrick(ball, brick, SBPhysics::getContactPoint(contact));
-            }
+            // if( !brick->isBroken() ) {
+            dispatchOnContactBlock(ball, block, SBPhysics::getContactPoint(contact));
+            // }
 
             return;
         }
     }
-     */
     
     // 아이템 체크
-    /*
     {
         auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, contact);
         
@@ -317,10 +313,8 @@ void PhysicsManager::PostSolve(b2Contact *contact, const b2ContactImpulse *impul
             return;
         }
     }
-     */
     
     // 바닥 체크
-    /*
     {
         auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::FLOOR, contact);
         
@@ -328,7 +322,6 @@ void PhysicsManager::PostSolve(b2Contact *contact, const b2ContactImpulse *impul
             return;
         }
     }
-     */
 }
 
 /**

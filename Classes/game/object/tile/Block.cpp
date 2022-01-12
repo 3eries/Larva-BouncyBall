@@ -27,10 +27,7 @@ Block* Block::create() {
     return nullptr;
 }
 
-Block::Block(int rows, int columns): SBPhysicsObject(this),
-rows(rows),
-columns(columns),
-available(true),
+Block::Block(int rows, int columns): GameTile(rows, columns),
 image(nullptr) {
 }
 
@@ -40,42 +37,15 @@ Block::~Block() {
 
 bool Block::init() {
     
-    if( !Node::init() ) {
+    if( !GameTile::init() ) {
         return false;
     }
     
     setAnchorPoint(ANCHOR_M);
     setContentSize(BLOCK_SIZE);
     
-    // image
-    image = Sprite::create(DIR_IMG_GAME + "block.png");
-    image->setAnchorPoint(ANCHOR_M);
-    image->setPosition(Vec2MC(BLOCK_SIZE, 0, 0));
-    addChild(image);
-    
-    // physics
-    auto size = BLOCK_SIZE;
-    
-    b2BodyDef bodyDef;
-    bodyDef.userData = (SBPhysicsObject*)this;
-    
-    b2PolygonShape box;
-    box.SetAsBox(PTM(size.width*0.5f), PTM(size.height*0.5f));
-    
-    auto body = GAME_MANAGER->getPhysicsManager()->getWorld()->CreateBody(&bodyDef);
-    setBody(body);
-    
-    b2Filter filter;
-    filter.categoryBits = PhysicsCategory::BLOCK;
-    filter.maskBits = PhysicsCategory::BALL;
-    
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &box;
-    fixtureDef.density = 0.1f;
-    fixtureDef.restitution = 0;
-    fixtureDef.friction = 0;
-    fixtureDef.filter = filter;
-    body->CreateFixture(&fixtureDef);
+    initImage();
+    initPhysics();
     
     // sync
     syncNodeToBody();
@@ -85,16 +55,23 @@ bool Block::init() {
 
 void Block::onEnter() {
     
-    initGameListener();
-    
-    Node::onEnter();
+    GameTile::onEnter();
 }
     
 void Block::cleanup() {
     
-    removeListeners(this);
+    GameTile::cleanup();
+}
+
+/**
+ * 이미지 초기화
+ */
+void Block::initImage() {
     
-    Node::cleanup();
+    image = Sprite::create(DIR_IMG_GAME + "block.png");
+    image->setAnchorPoint(ANCHOR_M);
+    image->setPosition(Vec2MC(BLOCK_SIZE, 0, 0));
+    addChild(image);
 }
     
 /**
@@ -102,124 +79,104 @@ void Block::cleanup() {
  */
 void Block::initPhysics() {
     
-}
-
-/**
- * 게임 리스너 초기화
- */
-void Block::initGameListener() {
+    // Listener
+    auto listener = PhysicsListener::create();
+    listener->setTarget(this);
+    listener->setContactTarget(this);
+    listener->onPreSolve     = CC_CALLBACK_2(Block::onPreSolve, this);
+    listener->onContactBlock = CC_CALLBACK_3(Block::onContactBlock, this);
+    PHYSICS_MANAGER->addListener(listener);
     
-//    auto listener = GameEventListener::create(this);
-//    listener->onStageClear   = CC_CALLBACK_0(Tile::onStageClear, this);
-//    listener->onFloorChanged = CC_CALLBACK_1(Tile::onFloorChanged, this);
-//    GameManager::getEventDispatcher()->addListener(listener);
+    // Body
+    auto size = BLOCK_SIZE;
+    
+    b2BodyDef bodyDef;
+    bodyDef.userData = (SBPhysicsObject*)this;
+    
+    auto body = PHYSICS_MANAGER->getWorld()->CreateBody(&bodyDef);
+    setBody(body);
+    
+    /*
+    b2PolygonShape box;
+    box.SetAsBox(PTM(size.width*0.5f), PTM(size.height*0.5f));
+     
+    b2Filter filter;
+    filter.categoryBits = PhysicsCategory::BLOCK;
+    filter.maskBits = PhysicsCategory::BALL;
+    
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &box;
+    fixtureDef.density = 0.1f;
+    //
+    fixtureDef.restitution = 1.0f;  // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
+//    fixtureDef.restitution = 0;
+    //
+    fixtureDef.friction = 0;
+    fixtureDef.filter = filter;
+    body->CreateFixture(&fixtureDef);
+     */
+    
+    float left   = PTM(-size.width*0.5f);
+    float right  = PTM( size.width*0.5f);
+    float bottom = PTM(-size.height*0.5f);
+    float top    = PTM( size.height*0.5f);
+    
+    b2Vec2 vectors[4][2] = {
+        { b2Vec2(left, bottom), b2Vec2(left, top) },          // left
+        { b2Vec2(right, bottom), b2Vec2(right, top) },        // right
+        { b2Vec2(left, bottom), b2Vec2(right, bottom) },      // bottom
+        { b2Vec2(left, top), b2Vec2(right, top) },            // top
+    };
+    
+    PhysicsCategory categorys[] = {
+        PhysicsCategory::BLOCK_SIDE,
+        PhysicsCategory::BLOCK_SIDE,
+        PhysicsCategory::BLOCK_SIDE,
+        PhysicsCategory::BLOCK,
+    };
+    
+    for( int i = 0; i < 4; ++i ) {
+        b2Vec2 v1 = vectors[i][0];
+        b2Vec2 v2 = vectors[i][1];
+        
+        b2EdgeShape shape;
+        shape.Set(v1, v2);
+        
+        b2Filter filter;
+        filter.categoryBits = categorys[i];
+        filter.maskBits = PhysicsCategory::BALL;
+        
+        b2FixtureDef fixtureDef;
+        fixtureDef.shape = &shape;
+        fixtureDef.density = 0.1f;      // 밀도
+        fixtureDef.restitution = 1.0;   // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
+        fixtureDef.friction = 0;        // 마찰력
+        fixtureDef.filter = filter;
+        body->CreateFixture(&fixtureDef);
+    }
 }
 
 void Block::onStageClear() {
 }
-    
-/**
- * 타일 제거 준비
- */
-void Block::prepareRemove() {
-    
-    removeListeners(this);
-    
-    available = false;
-    
-    setBodyAwake(false);
-    setCollisionLocked(true);
-    
-    b2Filter filter;
-    filter.categoryBits = 0; // 0x0001;
-    filter.maskBits = 0; // 0xFFFF;
-    
-    for( auto f = getBody()->GetFixtureList(); f; f = f->GetNext() ) {
-        f->SetFilterData(filter);
-    }
+
+void Block::onPreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
 }
 
 /**
- * 등장 액션
+ * 볼 & 벽돌 충돌
  */
-void Block::enterWithAction() {
+bool Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
     
-//    setScale(0);
-//    runAction(ScaleTo::create(TILE_ENTER_DURATION, 1));
+    image->setVisible(!image->isVisible());
+    
+//    if( isBroken() ) {
+//        Log::w("이미 깨진 브릭에 충돌 이벤트 발생!!").showMessageBox();
+//        return false;
+//    }
+//
+//    runBallHitAction(ball, contactPoint);
+//    sufferDamage(ball, contactPoint);
+    
+    return true;
 }
-
-/**
- * 제거 액션
- */
-void Block::removeWithAction() {
-    
-    prepareRemove();
-}
-
-/**
- * 타일 좌표 설정
- */
-/*
-void Tile::setTilePosition(const TilePosition &tilePos, bool action, SBCallback onActionFinished) {
-    
-    CCASSERT(tilePos != INVALID_TILE_POSITION, "Tile::setTilePosition error.");
-    
-    this->tilePos = tilePos;
-    
-    Vec2 p = convertToTilePosition(tilePos, rows, columns);
-    
-    if( action ) {
-        auto move = MoveTo::create(TILE_MOVE_DURATION, p);
-        auto callFunc = CallFunc::create([=]() {
-            this->syncNodeToBody();
-            
-            if( onActionFinished ) {
-                onActionFinished();
-            }
-        });
-        runAction(Sequence::create(move, callFunc, nullptr));
-        
-    } else {
-        setPosition(p);
-        syncNodeToBody();
-    }
-}
-*/
-
-void Block::setTilePosition(const TilePosition &tilePos) {
-    
-    CCASSERT(tilePos != INVALID_TILE_POSITION, "Tile::setTilePosition error.");
-    
-    this->tilePos = tilePos;
-    
-    setPosition(convertToTilePosition(tilePos, rows, columns));
-    syncNodeToBody();
-}
- 
-void Block::moveWithAction(const TilePosition &tilePos, float duration, SBCallback onActionFinished) {
-    
-    CCASSERT(tilePos != INVALID_TILE_POSITION, "Tile::moveWithAction error.");
-    
-    this->tilePos = tilePos;
-    
-    auto move = MoveTo::create(duration, convertToTilePosition(tilePos, rows, columns));
-    auto callFunc = CallFunc::create([=]() {
-        this->syncNodeToBody();
-        
-        if( onActionFinished ) {
-            onActionFinished();
-        }
-    });
-    runAction(Sequence::create(move, callFunc, nullptr));
-}
-    
-/**
- * 좌표가 타일에 포함됐는지 반환합니다
- */
-bool Block::isContainsPosition(const TilePosition &p) {
-    
-    return p.x >= tilePos.x && p.x <= tilePos.x + (rows-1) &&
-           p.y >= tilePos.y && p.y <= tilePos.y + (columns-1);
-}
-    
 

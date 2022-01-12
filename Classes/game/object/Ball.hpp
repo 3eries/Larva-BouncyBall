@@ -14,6 +14,8 @@
 #include "superbomb.h"
 #include "../GameDefine.h"
 
+class GameTile;
+
 class Ball: public cocos2d::Node, public SBPhysicsObject {
 public:
     static Ball* create(b2World *world);
@@ -26,7 +28,7 @@ protected:
     virtual void cleanup() override;
     
     virtual void initImage();
-    virtual void initPhysicsListener();
+    virtual void initPhysics();
     
 public:
     static b2Body*  createBody(b2World *world, SBPhysicsObject *userData = nullptr);
@@ -35,6 +37,10 @@ public:
     virtual bool    afterStep() override;
     
     void            setDirection(BallDirection direction);
+    
+    void            moveLeft();
+    void            moveRight();
+    void            stopMoveX(bool resetVelocity = true);
     
     virtual void    shoot(b2Vec2 velocity);
     
@@ -47,11 +53,7 @@ public:
     virtual void    sleepWithAction();
     
 public:
-//    virtual void onBeginContact(b2Contact *contact);
-//    virtual void onEndContact(b2Contact *contact);
-//    virtual void onPreSolve(b2Contact *contact, const b2Manifold *oldManifold);
-//    virtual void onPostSolve(b2Contact *contact, const b2ContactImpulse *impulse);
-//    virtual bool onContactBrick(Ball *ball, Game::Tile *brick, cocos2d::Vec2 contactPoint);
+    virtual bool onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
 //    virtual void onContactItem(Ball *ball, Game::Tile *item);
 //    virtual void onContactWall(Ball *ball);
 //    virtual void onContactFloor(Ball *ball);
