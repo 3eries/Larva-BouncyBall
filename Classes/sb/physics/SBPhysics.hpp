@@ -75,7 +75,7 @@ public:
     virtual void beginContact(b2Fixture *other, b2Contact *contact) {};
     virtual void endContact(b2Fixture *other, b2Contact *contact) {};
     
-    virtual void setNeedRemove(bool isNeedRemove);
+    virtual void setLazyRemove(bool lazyRemove);
         
     virtual void setBodyActive(bool isActive);
     virtual void setBodyAwake(bool isAwake);
@@ -95,7 +95,7 @@ protected:
     
     SB_SYNTHESIZE_BOOL(collisionLocked, CollisionLocked);   // 충돌 잠금 여부
     SB_SYNTHESIZE_BOOL(syncLocked, SyncLocked);             // 동기화 잠금 여부
-    SB_SYNTHESIZE_READONLY_BOOL(needRemove, NeedRemove);    // 제거 여부
+    SB_SYNTHESIZE_READONLY_BOOL(lazyRemove, LazyRemove);    // 제거 여부, true면 afterStep에서 body, node 모두 삭제된다
 };
 
 #endif /* SBPhysics_hpp */

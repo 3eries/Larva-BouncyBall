@@ -145,7 +145,7 @@ node(node),
 body(nullptr),
 collisionLocked(false),
 syncLocked(false),
-needRemove(false) {
+lazyRemove(false) {
     
 }
 
@@ -181,7 +181,7 @@ bool SBPhysicsObject::beforeStep() {
 
 bool SBPhysicsObject::afterStep() {
     
-    if( needRemove ) {
+    if( lazyRemove ) {
         removeBody();
         node->removeFromParent();
         
@@ -191,11 +191,11 @@ bool SBPhysicsObject::afterStep() {
     return true;
 }
 
-void SBPhysicsObject::setNeedRemove(bool isNeedRemove) {
+void SBPhysicsObject::setLazyRemove(bool isLazyRemove) {
     
-    this->needRemove = isNeedRemove;
+    this->lazyRemove = isLazyRemove;
     
-    if( isNeedRemove ) {
+    if( isLazyRemove ) {
         setBodyAwake(false);
         setCollisionLocked(true);
     }
