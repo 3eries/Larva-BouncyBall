@@ -7,6 +7,7 @@
 #include "GameView.hpp"
 
 #include "Define.h"
+#include "GameUIHelper.hpp"
 #include "GameDefine.h"
 #include "ContentManager.hpp"
 #include "SceneManager.h"
@@ -260,31 +261,45 @@ void GameView::initPhysics() {
     addChild(ball);
     
     // 임의의 블럭 생성 for prototype
-    auto blockOrigin = Vec2(400, 300);
+    auto blockOrigin = Vec2(100, 100);
     
     Vec2 blockPos[] = {
-        blockOrigin + Vec2(BLOCK_SIZE.width * -2, 0),
-        blockOrigin + Vec2(BLOCK_SIZE.width * -1, 0),
-        blockOrigin + Vec2(0, 0),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 1, 0),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 2, BLOCK_SIZE.height * 1),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 3, BLOCK_SIZE.height * 1),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 4, 0),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 5, 0),
-        /* empty */
-        blockOrigin + Vec2(BLOCK_SIZE.width * 7, BLOCK_SIZE.height * 1),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 8, BLOCK_SIZE.height * 2),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 9, BLOCK_SIZE.height * 3),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 10, BLOCK_SIZE.height * 3),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 11, BLOCK_SIZE.height * 3),
-        blockOrigin + Vec2(BLOCK_SIZE.width * 12, BLOCK_SIZE.height * 2),
+        // 1층
+        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 1),
+        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 2),
+        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 3),
+        
+        Vec2(BLOCK_SIZE.width * 1, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 2, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 3, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 4, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 5, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 6, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 7, BLOCK_SIZE.height * 0),
+        Vec2(BLOCK_SIZE.width * 8, BLOCK_SIZE.height * 0),
+        
+        // 2층
+        Vec2(BLOCK_SIZE.width * 9, BLOCK_SIZE.height * 1),
+        Vec2(BLOCK_SIZE.width * 10, BLOCK_SIZE.height * 2),
+        Vec2(BLOCK_SIZE.width * 11, BLOCK_SIZE.height * 2),
+        Vec2(BLOCK_SIZE.width * 12, BLOCK_SIZE.height * 2),
+        
+        // 3층
+        Vec2(BLOCK_SIZE.width * 13, BLOCK_SIZE.height * 3),
+        Vec2(BLOCK_SIZE.width * 14, BLOCK_SIZE.height * 4),
+        Vec2(BLOCK_SIZE.width * 15, BLOCK_SIZE.height * 4),
+        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 4),
+        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 5),
+        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 6),
+        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 7),
     };
     
     for( int i = 0; i < sizeof(blockPos) / sizeof(Vec2); ++i ) {
         // auto block = Sprite::create(DIR_IMG_GAME + "block.png");
         auto block = Block::create();
         block->setAnchorPoint(ANCHOR_M);
-        block->setPosition(blockPos[i]);
+        block->setPosition(blockOrigin + blockPos[i]);
         addChild(block);
         
         block->syncNodeToBody();
@@ -293,6 +308,7 @@ void GameView::initPhysics() {
 #if DEBUG_DRAW_PHYSICS
     // DebugDrawView
     auto view = DebugDrawView::create(world);
+    view->setVisible(false);
     view->setTag(Tag::DEBUG_DRAW_VIEW);
     addChild(view, SBZOrder::MIDDLE);
 
@@ -303,6 +319,15 @@ void GameView::initPhysics() {
 //        flags += b2Draw::e_pairBit;
 //        flags += b2Draw::e_centerOfMassBit;
     view->getDebugDraw()->SetFlags(flags);
+    
+    auto toggleBtn = GameUIHelper::createFontButton("DebugDraw", Size(300,200));
+    toggleBtn->setAnchorPoint(ANCHOR_TL);
+    toggleBtn->setPosition(Vec2TL(10, 10));
+    addChild(toggleBtn);
+    
+    toggleBtn->setOnClickListener([=](Node*) {
+        view->setVisible(!view->isVisible());
+    });
 #endif
 }
 

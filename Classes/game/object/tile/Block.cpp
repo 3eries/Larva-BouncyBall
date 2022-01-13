@@ -89,6 +89,7 @@ void Block::initPhysics() {
     
     // Body
     auto size = BLOCK_SIZE;
+    size = size + Size(2,2); // 블럭끼리 겹치게 보정
     
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
@@ -125,7 +126,7 @@ void Block::initPhysics() {
         { b2Vec2(left, bottom), b2Vec2(left, top) },          // left
         { b2Vec2(right, bottom), b2Vec2(right, top) },        // right
         { b2Vec2(left, bottom), b2Vec2(right, bottom) },      // bottom
-        { b2Vec2(left, top), b2Vec2(right, top) },            // top
+        { b2Vec2(left + PTM(1), top), b2Vec2(right - PTM(1), top) },            // top
     };
     
     PhysicsCategory categorys[] = {
@@ -167,7 +168,7 @@ void Block::onPreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
  */
 bool Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
     
-    image->setVisible(!image->isVisible());
+    // image->setVisible(!image->isVisible());
     
 //    if( isBroken() ) {
 //        Log::w("이미 깨진 브릭에 충돌 이벤트 발생!!").showMessageBox();

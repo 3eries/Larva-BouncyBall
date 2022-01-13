@@ -166,6 +166,9 @@ void GameScene::onClick(Node *sender) {
             popup->setOnHomeListener([=]() {
                 this->replaceScene(SceneType::MAIN);
             });
+            popup->setOnExitCallback([=]() {
+                GameManager::onGameResume();
+            });
             SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
         } break;
     }

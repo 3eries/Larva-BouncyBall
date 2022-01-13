@@ -32,7 +32,7 @@ SBButton* GameUIHelper::createButton(SBButton::Config config) {
  */
 SBButton* GameUIHelper::createFontButton(const string &title, const Size &size) {
     
-    auto btn = createButton(SBButton::Config("", size, title, FONT_RETRO, 50));
+    auto btn = createButton(SBButton::Config("", size, title, FONT_ROBOTO_BLACK, 50));
     
     auto titleLabel = btn->getTitle();
     titleLabel->setColor(Color3B::WHITE);

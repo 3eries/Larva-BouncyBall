@@ -28,7 +28,7 @@ protected:
     virtual void cleanup() override;
     
     virtual void initImage();
-    virtual void initPhysics();
+    virtual void initPhysics() override;
     
 public:
     static b2Body*  createBody(b2World *world, SBPhysicsObject *userData = nullptr);

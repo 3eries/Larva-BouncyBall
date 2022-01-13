@@ -17,13 +17,13 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define VELOCITY_BOUNCE_UP                     30
-#define VELOCITY_BOUNCE_DOWN                  -25
-#define VELOCITY_MOVE_LEFT                    -20
-#define VELOCITY_MOVE_RIGHT                    20
+#define VELOCITY_BOUNCE_UP                     22
+#define VELOCITY_BOUNCE_DOWN                  -15
+#define VELOCITY_MOVE_LEFT                    -10
+#define VELOCITY_MOVE_RIGHT                    10
 
 #define BOUNCE_DOWN_DELAY                      0.5f
-#define CONTINUOUS_X_INTERVAL                  0.01f
+#define CONTINUOUS_X_INTERVAL                  0.1f
 #define RESET_X_DELAY                          0.1f
 
 #define SCHEDULER_BOUNCE_DOWN                  "SCHEDULER_BOUNCE_DOWN"
@@ -91,10 +91,10 @@ void Ball::initImage() {
     
     image = Sprite::create();
     //
-    image->setVisible(false);
+    // image->setVisible(false);
     //
     image->setAnchorPoint(ANCHOR_MB);
-    image->setPosition(Vec2BC(BALL_SIZE, 0, -10));
+    image->setPosition(Vec2BC(BALL_SIZE, 0, -20));
     addChild(image);
     
     auto updateImage = [=]() {
@@ -138,8 +138,10 @@ b2Body* Ball::createBody(b2World *world, SBPhysicsObject *userData) {
     // bodyDef.awake = false;
     bodyDef.userData = userData;
     
-    b2CircleShape circle;
-    circle.m_radius = PTM(BALL_RADIUS);
+//    b2CircleShape shape;
+//    shape.m_radius = PTM(BALL_RADIUS);
+    b2PolygonShape shape;
+    shape.SetAsBox(PTM(90/2), PTM(BALL_RADIUS));
     
     auto body = world->CreateBody(&bodyDef);
     
@@ -148,7 +150,7 @@ b2Body* Ball::createBody(b2World *world, SBPhysicsObject *userData) {
     filter.maskBits = PHYSICS_MASK_BITS_BALL;
     
     b2FixtureDef fixtureDef;
-    fixtureDef.shape = &circle;
+    fixtureDef.shape = &shape;
     fixtureDef.density = 0.1f;      // 밀도
     fixtureDef.restitution = 1.0f;  // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
     fixtureDef.friction = 0;        // 마찰력
@@ -398,9 +400,9 @@ bool Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     unschedule(SCHEDULER_BOUNCE_DOWN);
     
     scheduleOnce([=](float dt) {
-        CCLOG("Bounce Down");
-        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
-                                       VELOCITY_BOUNCE_DOWN));
+//        CCLOG("Bounce Down");
+//        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
+//                                       VELOCITY_BOUNCE_DOWN));
     }, BOUNCE_DOWN_DELAY, SCHEDULER_BOUNCE_DOWN);
 
     return true;

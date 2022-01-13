@@ -88,7 +88,7 @@ enum class BallDirection {
 // Physics
 #define                PHYSICS_FPS                        (1 / 60.0f)
 // #define                PHYSICS_GRAVITY                    b2Vec2(0, -80)
-#define                PHYSICS_GRAVITY                    b2Vec2(0, -30)
+#define                PHYSICS_GRAVITY                    b2Vec2(0, -60)
 
 // velocityIterations : 바디들을 정상적으로 이동시키기 위해서 필요한 충돌들을 반복적으로 계산
 // positionIterations : 조인트 분리와, 겹침현상을 줄이기 위해서 바디의 위치를 반복적으로 적용
@@ -114,9 +114,9 @@ static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
 static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP |
                                               PhysicsCategory::FLOOR | PhysicsCategory::BLOCK | PhysicsCategory::BLOCK_SIDE | PhysicsCategory::ITEM);
 
-#define                 BALL_RADIUS                         40
+#define                 BALL_RADIUS                         25
 #define                 BALL_SIZE                           cocos2d::Size(BALL_RADIUS*2, BALL_RADIUS*2)
-#define                 BALL_POSITION                       Vec2MC(-700, 0)
+#define                 BALL_POSITION                       Vec2MC(-650, -150)
 
 #define                 BLOCK_SIZE                          cocos2d::Size(108, 108)
 
