@@ -43,17 +43,6 @@ bool GameView::init() {
     initBg();
     initGameListener();
     initTouchListener();
-     
-    // Debug Value
-    infoLabel = Label::createWithTTF("", FONT_ROBOTO_BLACK, 60, Size::ZERO,
-                                     TextHAlignment::RIGHT, TextVAlignment::BOTTOM);
-    infoLabel->setTextColor(Color4B::WHITE);
-    infoLabel->setAnchorPoint(ANCHOR_BR);
-    infoLabel->setPosition(Vec2BR(-50, 10));
-    addChild(infoLabel);
-    
-    maxVelocity = Vec2(INT_MIN, INT_MIN);
-    minVelocity = Vec2(INT_MAX, INT_MAX);
     
     return true;
 }
@@ -320,12 +309,26 @@ void GameView::initPhysics() {
 //        flags += b2Draw::e_centerOfMassBit;
     view->getDebugDraw()->SetFlags(flags);
     
+    // display label
+    infoLabel = Label::createWithTTF("", FONT_ROBOTO_BLACK, 60, Size::ZERO,
+                                     TextHAlignment::RIGHT, TextVAlignment::BOTTOM);
+    infoLabel->setVisible(false);
+    infoLabel->setTextColor(Color4B::WHITE);
+    infoLabel->setAnchorPoint(ANCHOR_BR);
+    infoLabel->setPosition(Vec2BR(-50, -20));
+    addChild(infoLabel);
+    
+    maxVelocity = Vec2(INT_MIN, INT_MIN);
+    minVelocity = Vec2(INT_MAX, INT_MAX);
+    
+    // toggle button
     auto toggleBtn = GameUIHelper::createFontButton("DebugDraw", Size(300,200));
     toggleBtn->setAnchorPoint(ANCHOR_TL);
     toggleBtn->setPosition(Vec2TL(10, 10));
     addChild(toggleBtn);
     
     toggleBtn->setOnClickListener([=](Node*) {
+        infoLabel->setVisible(!infoLabel->isVisible());
         view->setVisible(!view->isVisible());
     });
 #endif

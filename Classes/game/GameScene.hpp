@@ -63,5 +63,4 @@ private:
     CC_SYNTHESIZE(GameView*, gameView, GameView);
 };
 
-
 #endif /* GameScene_hpp */
