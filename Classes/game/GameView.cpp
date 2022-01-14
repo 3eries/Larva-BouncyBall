@@ -415,11 +415,12 @@ void GameView::initTouchListener() {
         return true;
     };
     touchListener->onTouchMoved = [=](Touch *touch, Event *unusedEvent) {
-        
     };
     touchListener->onTouchEnded = [=](Touch *touch, Event *unusedEvent) {
         this->onTouchEnded(touch);
-        
+    };
+    touchListener->onTouchCancelled = [=](Touch *touch, Event *unusedEvent) {
+        this->onTouchEnded(touch);
     };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(touchListener, this);
 }
