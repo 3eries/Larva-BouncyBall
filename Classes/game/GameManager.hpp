@@ -74,8 +74,9 @@ private:
 public:
     typedef std::function<void(GameEvent/*event*/, void*/*userData*/)> GameEventListener;
     
-    static void addEventListener(StringList events, GameEventListener gameEventListener,
+    static void addEventListener(GameEventList events, GameEventListener gameEventListener,
                                  cocos2d::Node *target);
+    static void dispatchCustomEvent(GameEvent event, void *optionalUserData = nullptr);
     static cocos2d::EventDispatcher* getEventDispatcher();
     
     static void onGameEnter();

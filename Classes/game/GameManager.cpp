@@ -122,15 +122,20 @@ PhysicsManager* GameManager::getPhysicsManager() {
 
 #pragma mark- Game Event
 
-void GameManager::addEventListener(StringList events, GameEventListener gameEventListener,
+void GameManager::addEventListener(GameEventList events, GameEventListener gameEventListener,
                                    Node *target) {
     
-    for( string eventName : events ) {
-        auto listener = EventListenerCustom::create(eventName, [=](EventCustom *event) {
-            gameEventListener(GAME_EVENT_ENUMS[eventName], event->getUserData());
+    for( auto eventKey : events ) {
+        auto listener = EventListenerCustom::create(GAME_EVENT_STRINGS[eventKey], [=](EventCustom *event) {
+            gameEventListener(eventKey, event->getUserData());
         });
         getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, target);
     }
+}
+
+void GameManager::dispatchCustomEvent(GameEvent event, void *optionalUserData) {
+ 
+    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_STRINGS[event], optionalUserData);
 }
 
 EventDispatcher* GameManager::getEventDispatcher() {
@@ -151,7 +156,7 @@ void GameManager::onGameEnter() {
     }
     
     instance->setState(GameState::ENTERED);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_ENTER);
+    dispatchCustomEvent(GameEvent::ENTER);
 }
 
 /**
@@ -168,7 +173,7 @@ void GameManager::onGameExit() {
     
     instance->reset();
     instance->setState(GameState::EXITED);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_EXIT);
+    dispatchCustomEvent(GameEvent::EXIT);
 }
 
 /**
@@ -181,7 +186,7 @@ void GameManager::onGameReset() {
     
     getPhysicsManager()->startScheduler();
     
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_RESET);
+    dispatchCustomEvent(GameEvent::RESET);
     onStageChanged();
 }
 
@@ -198,7 +203,7 @@ void GameManager::onGameStart() {
     UserDefault::getInstance()->flush();
     
     instance->setState(GameState::STARTED);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_START);
+    dispatchCustomEvent(GameEvent::START);
     
     Log::i("GameManager::onGameStart end");
 }
@@ -211,7 +216,7 @@ void GameManager::onGameRestart() {
     CCLOG("GameManager::onGameRestart start");
     
     instance->reset();
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_RESTART);
+    dispatchCustomEvent(GameEvent::RESTART);
     
     onGameStart();
     
@@ -232,7 +237,7 @@ void GameManager::onGamePause() {
     getPhysicsManager()->pauseScheduler();
     
     instance->addState(GameState::PAUSED);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_PAUSE);
+    dispatchCustomEvent(GameEvent::PAUSE);
 }
 
 /**
@@ -249,7 +254,7 @@ void GameManager::onGameResume() {
     getPhysicsManager()->resumeScheduler();
     
     instance->removeState(GameState::PAUSED);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_RESUME);
+    dispatchCustomEvent(GameEvent::RESUME);
 }
 
 /**
@@ -264,7 +269,7 @@ void GameManager::onGameOver(bool isTimeout) {
     getPhysicsManager()->stopScheduler();
     
     instance->addState(GameState::GAME_OVER);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_OVER);
+    dispatchCustomEvent(GameEvent::OVER);
     
     instance->resultCount++;
     
@@ -296,7 +301,7 @@ void GameManager::onGameContinue() {
     instance->removeState(GameState::GAME_OVER);
     instance->addState(GameState::CONTINUE);
     
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_CONTINUE);
+    dispatchCustomEvent(GameEvent::CONTINUE);
     
     Log::i("GameManager::onGameContinue end");
 }
@@ -312,7 +317,7 @@ void GameManager::onGameResult() {
     
     instance->removeState(GameState::GAME_OVER);
     instance->addState(GameState::RESULT);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_RESULT);
+    dispatchCustomEvent(GameEvent::RESULT);
 }
 
 /**
@@ -323,7 +328,7 @@ void GameManager::onStageChanged() {
     auto stage = instance->stage;
     Log::i("GameManager::onStageChanged stage: %d", stage.stage);
     
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_STAGE_CHANGED, &stage);
+    dispatchCustomEvent(GameEvent::STAGE_CHANGED, &stage);
     
     // 통계 이벤트
     SBAnalytics::EventParams params;
@@ -341,7 +346,7 @@ void GameManager::onStageRestart() {
     auto stage = instance->stage;
     Log::i("GameManager::onStageRestart stage: %d", stage.stage);
     
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_STAGE_RESTART, &stage);
+    dispatchCustomEvent(GameEvent::STAGE_RESTART, &stage);
 }
 
 /**
@@ -360,7 +365,7 @@ void GameManager::onStageClear(bool isSkipped) {
     }
     
     if( !isSkipped ) {
-        getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_STAGE_CLEAR, &stage);
+        dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);
         instance->resultCount++;
     }
     
@@ -382,7 +387,7 @@ void GameManager::onMoveNextStage() {
     }
     
     instance->setStage(instance->stage.stage+1);
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_MOVE_NEXT_STAGE, &instance->stage);
+    dispatchCustomEvent(GameEvent::MOVE_NEXT_STAGE, &instance->stage);
 }
 
 /**
@@ -390,6 +395,6 @@ void GameManager::onMoveNextStage() {
  */
 void GameManager::onMoveNextStageFinished() {
     
-    getEventDispatcher()->dispatchCustomEvent(GAME_EVENT_MOVE_NEXT_STAGE_FINISHED, &instance->stage);
+    dispatchCustomEvent(GameEvent::MOVE_NEXT_STAGE_FINISHED, &instance->stage);
     onStageChanged();
 }

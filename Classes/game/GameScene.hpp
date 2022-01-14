@@ -49,6 +49,8 @@ private:
     
 // Game Event
 private:
+    void onGamePause();
+    void onGameResume();
     void onStageChanged(const StageData &stage);
     void onStageClear(const StageData &stage);
 

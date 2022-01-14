@@ -105,7 +105,7 @@ bool GameScene::onApplicationEnterForeground() {
         return false;
     }
     
-    GameManager::onGameResume();
+    // GameManager::onGameResume();
     
     return true;
 }
@@ -123,6 +123,28 @@ bool GameScene::onBackKeyReleased() {
     }
     
     return false;
+}
+
+/**
+ * 게임 일시정지
+ */
+void GameScene::onGamePause() {
+    
+    // 설정 팝업 생성
+    auto popup = SettingPopup::create();
+    popup->setOnHomeListener([=]() {
+        this->replaceScene(SceneType::MAIN);
+    });
+    popup->setOnDismissListener([=](Node*) {
+        GameManager::onGameResume();
+    });
+    SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
+}
+
+/**
+ * 게임 재개
+ */
+void GameScene::onGameResume() {
 }
 
 /**
@@ -161,15 +183,6 @@ void GameScene::onClick(Node *sender) {
     switch( sender->getTag() ) {
         case Tag::BTN_SETTING: {
             GameManager::onGamePause();
-            
-            auto popup = SettingPopup::create();
-            popup->setOnHomeListener([=]() {
-                this->replaceScene(SceneType::MAIN);
-            });
-            popup->setOnExitCallback([=]() {
-                GameManager::onGameResume();
-            });
-            SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
         } break;
     }
 }
@@ -224,14 +237,19 @@ void GameScene::initMenu() {
  */
 void GameScene::initGameListener() {
 
-    StringList events({
-        GAME_EVENT_STAGE_CHANGED,
-        GAME_EVENT_STAGE_CLEAR,
+    GameEventList events({
+        GameEvent::PAUSE,
+        GameEvent::RESUME,
+        GameEvent::STAGE_CHANGED,
+        GameEvent::STAGE_CLEAR,
     });
     
     GameManager::addEventListener(events, [=](GameEvent event, void *userData) {
         
         switch( event ) {
+            case GameEvent::PAUSE:      this->onGamePause();     break;
+            case GameEvent::RESUME:     this->onGameResume();    break;
+                
             case GameEvent::STAGE_CHANGED: {
                 auto stage = (StageData*)userData;
                 this->onStageChanged(*stage);

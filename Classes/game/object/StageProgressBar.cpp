@@ -79,12 +79,12 @@ void StageProgressBar::initUI() {
 
 void StageProgressBar::initGameListener() {
     
-    StringList events({
-        GAME_EVENT_STAGE_CHANGED,
-        GAME_EVENT_STAGE_RESTART,
-        GAME_EVENT_STAGE_CLEAR,
-        GAME_EVENT_MOVE_NEXT_STAGE,
-        GAME_EVENT_MOVE_NEXT_STAGE_FINISHED,
+    GameEventList events({
+        GameEvent::STAGE_CHANGED,
+        GameEvent::STAGE_RESTART,
+        GameEvent::STAGE_CLEAR,
+        GameEvent::MOVE_NEXT_STAGE,
+        GameEvent::MOVE_NEXT_STAGE_FINISHED,
     });
     
     GameManager::addEventListener(events, [=](GameEvent event, void *userData) {
