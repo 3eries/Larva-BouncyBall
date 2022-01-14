@@ -137,6 +137,13 @@ bool StageCell::init() {
     // 잠금 체크
     if( User::isStageLocked(stage) ) {
         // TODO: 잠금 UI
+        auto lockedLabel = Label::createWithTTF("LOCKED", FONT_ROBOTO_BLACK, 30, Size::ZERO,
+                                                TextHAlignment::CENTER, TextVAlignment::BOTTOM);
+        lockedLabel->setTextColor(Color4B::WHITE);
+        lockedLabel->setAnchorPoint(ANCHOR_MB);
+        lockedLabel->setPosition(Vec2BC(CELL_SIZE, 0, 5));
+        addChild(lockedLabel);
+        
         return true;
     }
     
