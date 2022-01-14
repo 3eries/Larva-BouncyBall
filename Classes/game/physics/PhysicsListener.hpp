@@ -13,7 +13,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 
-#include "GameDefine.h"
+#include "../GameDefine.h"
 
 class GameTile;
 class Ball;

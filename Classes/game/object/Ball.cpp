@@ -94,7 +94,7 @@ void Ball::initImage() {
     // image->setVisible(false);
     //
     image->setAnchorPoint(ANCHOR_MB);
-    image->setPosition(Vec2BC(BALL_SIZE, 0, -20));
+    image->setPosition(Vec2BC(BALL_SIZE, 0, -15));
     addChild(image);
     
     auto updateImage = [=]() {
@@ -244,6 +244,8 @@ void Ball::moveRight() {
  * X축 움직임을 멈춥니다
  */
 void Ball::stopMoveX(bool resetVelocity) {
+    
+    setDirection(BallDirection::NONE);
     
     unschedule(SCHEDULER_CONTINUOUS_X);
     unschedule(SCHEDULER_RESET_VELOCITY_X);

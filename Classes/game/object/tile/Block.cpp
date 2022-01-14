@@ -89,7 +89,7 @@ void Block::initPhysics() {
     
     // Body
     auto size = BLOCK_SIZE;
-    size = size + Size(2,2); // 블럭끼리 겹치게 보정
+    // size = size + Size(2,2); // 블럭끼리 겹치게 보정
     
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
@@ -123,10 +123,10 @@ void Block::initPhysics() {
     float top    = PTM( size.height*0.5f);
     
     b2Vec2 vectors[4][2] = {
-        { b2Vec2(left, bottom), b2Vec2(left, top) },          // left
-        { b2Vec2(right, bottom), b2Vec2(right, top) },        // right
-        { b2Vec2(left, bottom), b2Vec2(right, bottom) },      // bottom
-        { b2Vec2(left + PTM(1), top), b2Vec2(right - PTM(1), top) },            // top
+        { b2Vec2(left, bottom), b2Vec2(left, top) },                 // left
+        { b2Vec2(right, bottom), b2Vec2(right, top) },               // right
+        { b2Vec2(left, bottom), b2Vec2(right, bottom) },             // bottom
+        { b2Vec2(left + PTM(1), top), b2Vec2(right - PTM(1), top) }, // top
     };
     
     PhysicsCategory categorys[] = {

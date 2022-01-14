@@ -61,6 +61,11 @@ void WelcomeScene::onEnter() {
 void WelcomeScene::onEnterTransitionDidFinish() {
     
     BaseScene::onEnterTransitionDidFinish();
+    
+    // 자동 씬 전환
+    scheduleOnce([=](float dt) {
+        //onClick(getChildByTag(Tag::BTN_START));
+    }, 0.1f, "AUTO_REPLACE");
 }
 
 void WelcomeScene::onExit() {
@@ -111,20 +116,6 @@ void WelcomeScene::onClick(Node *sender) {
         case Tag::BTN_START: {
             replaceMainScene();
         } break;
-
-        // 리더 보드
-        case Tag::BTN_LEADER_BOARD: {
-            if( superbomb::PluginPlay::isSignedIn() ) {
-                superbomb::PluginPlay::showAllLeaderboards();
-            } else {
-                superbomb::PluginPlay::signIn();
-            }
-        } break;
-            
-        // 설정
-        case Tag::BTN_SETTING: {
-            showSettingPopup();
-        } break;
             
         // test
         case Tag::BTN_TEST: {
@@ -139,8 +130,6 @@ void WelcomeScene::onClick(Node *sender) {
  * 메인씬으로 전환
  */
 void WelcomeScene::replaceMainScene() {
-    
-    SB_SAFE_HIDE(getChildByTag(Tag::BTN_SETTING));
     
     auto onAdClosed = [=]() {
         replaceScene(SceneType::MAIN);
@@ -232,33 +221,5 @@ void WelcomeScene::initMenu() {
             tapToStart->runAction(blink);
         });
         tapToStart->runAction(Sequence::create(delay, callFunc, nullptr));
-    }
-    
-    // 메인 화면 전용 메뉴
-//    auto settingBtn = Button::create(DIR_IMG_COMMON + "common_btn_more.png");
-//    settingBtn->setTag(Tag::BTN_SETTING);
-//    settingBtn->setZoomScale(ButtonZoomScale::NORMAL);
-//    settingBtn->setAnchorPoint(ANCHOR_M);
-//    settingBtn->setPosition(Vec2TR(-56, -54));
-//    addChild(settingBtn);
-//
-//    settingBtn->setOnClickListener(CC_CALLBACK_1(GameScene::onClick, this));
-    
-    SBUIInfo infos[] = {
-        SBUIInfo(Tag::BTN_LEADER_BOARD, ANCHOR_M, Vec2TL(56, -54),
-                 DIR_IMG_MAIN + "main_btn_leaderboard.png"),
-        SBUIInfo(Tag::BTN_SETTING, ANCHOR_M, Vec2TR(-56, -54),
-                 DIR_IMG_COMMON + "common_btn_more.png"),
-    };
-    
-    for( int i = 0; i < sizeof(infos)/sizeof(SBUIInfo); ++i ) {
-        auto info = infos[i];
-        
-        auto btn = SBButton::create(info.file);
-        btn->setZoomScale(ButtonZoomScale::NORMAL);
-        info.apply(btn);
-        addChild(btn);
-        
-        btn->setOnClickListener(CC_CALLBACK_1(WelcomeScene::onClick, this));
     }
 }

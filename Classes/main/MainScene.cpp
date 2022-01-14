@@ -64,6 +64,11 @@ void MainScene::onEnter() {
 void MainScene::onEnterTransitionDidFinish() {
     
     BaseScene::onEnterTransitionDidFinish();
+    
+    // 자동 씬 전환
+    scheduleOnce([=](float dt) {
+        // replaceGameScene(1);
+    }, 0.1f, "AUTO_REPLACE");
 }
 
 void MainScene::onExit() {
@@ -100,13 +105,8 @@ void MainScene::onClick(Node *sender) {
     SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
     
     switch( sender->getTag() ) {
-        // 리더 보드
-        case Tag::BTN_LEADER_BOARD: {
-            if( superbomb::PluginPlay::isSignedIn() ) {
-                superbomb::PluginPlay::showAllLeaderboards();
-            } else {
-                superbomb::PluginPlay::signIn();
-            }
+        // 상점
+        case Tag::BTN_SHOP: {
         } break;
             
         // 설정
@@ -124,6 +124,7 @@ void MainScene::onClick(Node *sender) {
  */
 void MainScene::replaceGameScene(int stage) {
     
+    SB_SAFE_HIDE(getChildByTag(Tag::BTN_SHOP));
     SB_SAFE_HIDE(getChildByTag(Tag::BTN_SETTING));
     
     auto onAdClosed = [=]() {
@@ -178,7 +179,7 @@ void MainScene::initMenu() {
 //    settingBtn->setOnClickListener(CC_CALLBACK_1(GameScene::onClick, this));
     
     SBUIInfo infos[] = {
-        SBUIInfo(Tag::BTN_LEADER_BOARD, ANCHOR_M, Vec2TL(56, -54),
+        SBUIInfo(Tag::BTN_SHOP, ANCHOR_M, Vec2TL(56, -54),
                  DIR_IMG_MAIN + "main_btn_leaderboard.png"),
         SBUIInfo(Tag::BTN_SETTING, ANCHOR_M, Vec2TR(-56, -54),
                  DIR_IMG_COMMON + "common_btn_more.png"),
@@ -204,6 +205,7 @@ void MainScene::initWorlds() {
     auto pageView = PageView::create();
     pageView->setDirection(PageView::Direction::HORIZONTAL);
     pageView->setIndicatorEnabled(true);
+    pageView->setBounceEnabled(true);
     pageView->setAnchorPoint(ANCHOR_M);
     pageView->setPosition(Vec2MC(0, 0));
     pageView->setContentSize(SB_WIN_SIZE);

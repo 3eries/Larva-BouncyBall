@@ -18,7 +18,7 @@
 class MainScene : public BaseScene {
 private:
     enum Tag {
-        BTN_LEADER_BOARD = 100,
+        BTN_SHOP         = 100,
         BTN_SETTING,
     };
     
