@@ -111,6 +111,8 @@ void GameView::onGameExit() {
 #if DEBUG_DRAW_PHYSICS
     removeChildByTag(Tag::DEBUG_DRAW_VIEW);
 #endif
+    
+    SBNodeUtils::recursivePauseSchedulerAndActions(this);
 }
 
 /**
@@ -118,7 +120,7 @@ void GameView::onGameExit() {
  */
 void GameView::onGamePause() {
     
-    SBNodeUtils::recursivePause(this);
+    // SBNodeUtils::recursivePause(this);
 }
 
 /**
@@ -126,7 +128,7 @@ void GameView::onGamePause() {
  */
 void GameView::onGameResume() {
     
-    SBNodeUtils::recursiveResume(this);
+    // SBNodeUtils::recursiveResume(this);
 }
 
 /**
