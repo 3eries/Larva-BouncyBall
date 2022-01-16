@@ -180,15 +180,7 @@ bool Ball::afterStep() {
         return true;
     }
     
-    // 바디 값 동기화
-    auto beforePos = getPositionX();
     syncBodyToNode();
-    
-    // 이미지 좌우반전
-    if( getPositionX() != beforePos ) {
-        bool isLeft = (getPositionX() < beforePos);
-        image->setFlippedX(isLeft);
-    }
     
     if( !isSyncLocked() ) {
         // setRotation(getBodyVelocityAngle());
@@ -201,7 +193,9 @@ void Ball::setDirection(BallDirection direction) {
     
     this->direction = direction;
     
-    image->setFlippedX(direction == BallDirection::LEFT);
+    if( direction != BallDirection::NONE ) {
+        image->setFlippedX(direction == BallDirection::LEFT);
+    }
 }
 
 /**
