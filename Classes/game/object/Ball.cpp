@@ -123,7 +123,7 @@ void Ball::initPhysics() {
 //    listener->onContactItem         = CC_CALLBACK_2(Ball::onContactItem, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
 //    listener->onContactFloor        = CC_CALLBACK_1(Ball::onContactFloor, this);
-    GameManager::getPhysicsManager()->addListener(listener);
+    PHYSICS_MANAGER->addListener(listener);
     
     // Body
     setBody(createBody(world, (SBPhysicsObject*)this));

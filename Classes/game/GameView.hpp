@@ -14,6 +14,7 @@
 
 #include "../content/data/model/StageData.h"
 
+class GameTile;
 class Ball;
 class StageProgressBar;
 
@@ -61,6 +62,11 @@ private:
     
 private:
     bool isTouchEnabled;
+    
+#pragma mark- Contact
+private:
+    bool onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
+    void onContactPortal(Ball *ball, GameTile *tile);
     
 private:
     CC_SYNTHESIZE_READONLY(b2World*, world, World);

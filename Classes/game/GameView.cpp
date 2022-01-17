@@ -186,6 +186,23 @@ void GameView::onTouchEnded(Touch *touch) {
     ball->stopMoveX();
 }
 
+#pragma mark- Contact
+
+/**
+ * 볼 & 브릭 충돌
+ */
+bool GameView::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
+
+    return false;
+}
+
+/**
+ * 볼 & 포털 충돌
+ */
+void GameView::onContactPortal(Ball *ball, GameTile *portal) {
+}
+
+
 #pragma mark- Initialize
 
 /**
@@ -195,6 +212,16 @@ void GameView::initPhysics() {
     
     setSyncLocked(true);
     
+    // Listener
+    auto listener = PhysicsListener::create();
+    listener->setTarget(this);
+    listener->onContactBlock        = CC_CALLBACK_3(GameView::onContactBlock, this);
+    listener->onContactPortal       = CC_CALLBACK_2(GameView::onContactPortal, this);
+//    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
+//    listener->onContactFloor        = CC_CALLBACK_1(Ball::onContactFloor, this);
+    PHYSICS_MANAGER->addListener(listener);
+    
+    // Body
     auto world = PHYSICS_MANAGER->initWorld();
     
     // Wall & Floor
