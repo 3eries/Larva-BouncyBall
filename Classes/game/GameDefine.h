@@ -61,6 +61,7 @@ enum GameState {
     RESULT          = (1 << 8),     // 결과 화면
 };
 
+// In Game
 enum class BallDirection {
     NONE,
     LEFT,
