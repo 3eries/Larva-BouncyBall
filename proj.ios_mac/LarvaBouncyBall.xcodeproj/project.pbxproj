@@ -177,6 +177,7 @@
 		1D6058910D05DD3D006BFB54 /* LarvaBouncyBall-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LarvaBouncyBall-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D803687278BCA260083E400 /* WorldPage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WorldPage.cpp; sourceTree = "<group>"; };
 		1D803688278BCA270083E400 /* WorldPage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WorldPage.hpp; sourceTree = "<group>"; };
+		1DA870E127953FBE000CA59E /* TileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TileData.h; sourceTree = "<group>"; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		294D0D631D0D56D500F7F5D4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
@@ -1007,6 +1008,7 @@
 			isa = PBXGroup;
 			children = (
 				507BF7B526834EF30037F28C /* StageData.h */,
+				1DA870E127953FBE000CA59E /* TileData.h */,
 			);
 			path = model;
 			sourceTree = "<group>";
