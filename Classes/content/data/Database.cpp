@@ -43,6 +43,14 @@ Database::~Database() {
 void Database::init() {
     
     parseStageJson();
+    
+    // tmx
+    const auto FILE = DIR_CONTENT + "stage/stage_0001.tmx";
+    
+    auto mapInfo = TMXMapInfo::create(FILE);
+    auto properties = mapInfo->getTileProperties().at(1).asValueMap();
+    int tileType = properties.at("tileType").asInt();
+    
 }
 
 void Database::parseStageJson() {

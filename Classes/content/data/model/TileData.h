@@ -14,13 +14,13 @@
 enum class TileType {
     INVALID             = -1,
     NONE                = 0,
-    FLAG                = 10,          // 깃발
+    FLAG                = 11,          // 깃발
     PORTAL,                            // 클리어 포털
     // Item
-    ITEM_SAUSAGE        = 1000,        // 소시지
+    ITEM_SAUSAGE        = 1001,        // 소시지
     ITEM_DOUBLE_JUMP,                  // 더블 점프
     // Block
-    BLOCK_NORMAL        = 10000,       // 기본 블럭
+    BLOCK_NORMAL        = 10001,       // 기본 블럭
     BLOCK_BREKING,                     // 깨지는 블럭
     BLOCK_GAME_OVER,                   // 게임 오버 블럭
     BLOCK_JUMP,                        // 점프 블럭
