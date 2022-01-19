@@ -37,7 +37,7 @@ struct TileData {
     int y;
     TilePosition p;
     
-    TileData(): type(TileType::INVALID) {}
+    TileData(TileType _type): type(_type) {}
     
     void setPosition(int _x, int _y) {
         x = _x;
@@ -45,7 +45,7 @@ struct TileData {
         p = TilePosition(x,y);
     }
     
-    bool isNull() {
+    bool isNull() const {
         return type == TileType::INVALID;
     }
     

@@ -28,17 +28,14 @@ public:
 private:
     Database();
     
-    void parseStageJson();
+    void parseStageFile();
     
 public:
-    static StageDataList       getOriginalStages();
     static StageDataList       getStages();
     static StageData           getStage(int stage);
-    static StageData           getFirstStage();
     static StageData           getLastStage();
 
 private:
-    StageDataList originStages;
     StageDataList stages;
 };
 

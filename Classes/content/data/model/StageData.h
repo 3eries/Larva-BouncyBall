@@ -13,104 +13,36 @@
 #include "TileData.h"
 
 struct StageData {
-    int             stage;                   // 스테이지
+    int                       stage;                   // 스테이지
+    cocos2d::Size             mapContentSize;          // 맵 크기
+    int                       mapWidthTiles;           // 맵 가로 타일 수
+    int                       mapHeightTiles;          // 맵 세로 타일 수
+    cocos2d::Size             tileSize;                // 타일 크기
+    std::vector<TileDataList> tiles;                   // 타일 리스트
 
-    cocos2d::Size   mapContentSize;          // 맵 크기
-    cocos2d::Size   mapWidthTiles;           // 맵 가로 타일 수
-    cocos2d::Size   mapHeightTiles;          // 맵 세로 타일 수
-    cocos2d::Size   tileSize;                // 타일 크기
-    
-    TileDataList    tiles;                   // 타일 리스트
-    int             tileRows;                // 타일 가로줄 수
-    int             tileColumns;             // 타일 세로줄 수
-    
-    
     StageData() : stage(0) {}
-    
-    void parse(const rapidjson::Value &v, rapidjson::Document::AllocatorType &allocator) {
-        
-        // int values
-        {
-            StringList keys({
-                "level",
-            });
-            
-            std::vector<int*> ptrs({
-                &stage,
-            });
-            
-            SBJSON::parse(v, allocator, keys, ptrs);
-        }
-        
-        // tile
-        auto tileList = v["tile"].GetArray();
-        tileRows = tileList.Size();
-        tileColumns = tileList[0].GetArray().Size();
-        
-        for( int i = 0; i < tileRows; ++i ) {
-            auto row = tileList[i].GetArray();
-            int y = tileRows - i - 1;
-            
-            for( int x = 0; x < row.Size(); ++x ) {
-                TileData tile;
-                tile.p.x = x;
-                tile.p.y = y;
-                
-                tiles.push_back(tile);
-            }
-        }
-    }
     
     bool isNull() const {
         return stage == 0;
     }
     
     TileData getTile(const TilePosition &p) const {
-        for( auto tile : tiles ) {
-            if( tile.p.equals(p) ) {
-                return tile;
+        int x = (int)p.x;
+        int y = (int)p.y;
+        
+        if( x >= 0 && x < mapWidthTiles ) {
+            if( y >= 0 && y < mapHeightTiles ) {
+                return tiles[x][y];
             }
         }
         
-        TileData tile;
-        tile.p = p;
-        return tile;
-    }
-    
-    TileDataList getRowTiles(int y) const {
-    
-        TileDataList rowTiles;
-        
-        for( int x = 0; x < tileColumns; ++x ) {
-            rowTiles.push_back(getTile(TilePosition(x,y)));
-        }
-        
-        return rowTiles;
-    }
-    
-    TileDataList getColumnTiles(int x) const {
-        
-        TileDataList columnTiles;
-        
-        for( int y = 0; y < tileRows; ++y ) {
-            columnTiles.push_back(getTile(TilePosition(x,y)));
-        }
-        
-        return columnTiles;
-    }
-    
-//    bool isTileEmpty(const TilePosition &p) const {
-//        return getTile(p).isEmpty;
-//    }
-    
-    int getTileId(const TilePosition &p) const {
-        return ((int)p.x + 1) + ((int)p.y * tileColumns);
+        return TileData(TileType::INVALID);
     }
     
     std::string toString() {
         std::string str = "StageData {\n";
         str += STR_FORMAT("\t stage: %d\n", stage);
-        str += STR_FORMAT("\t tileSize: %dx%d\n", tileColumns, tileRows);
+        str += STR_FORMAT("\t tileSize: %dx%d\n", (int)tileSize.width, (int)tileSize.height);
         
 //        str += "\tnumbers: ";
 //        for( int n : numbers ) {
@@ -150,6 +82,33 @@ struct StageData {
     }
 };
 
-typedef std::vector<StageData>           StageDataList;
+typedef std::vector<StageData> StageDataList;
+
+static inline cocos2d::Vec2 convertTilePosition(StageData stage, int x, int y) {
+    
+    // TODO: 맵이 화면보다 큰 경우
+    
+    // 맵이 화면보다 작은 경우 가운데 정렬
+    cocos2d::Vec2 pos;
+    pos.x = (SB_WIN_SIZE.width - stage.mapContentSize.width) / 2;
+    pos.y = (SB_WIN_SIZE.height - stage.mapContentSize.height) / 2;
+    
+    // content size
+    pos.x += x * stage.tileSize.width;
+    pos.y += y * stage.tileSize.height;
+    // padding
+//    pos.x += x * TILE_PADDING_X;
+//    pos.y += y * TILE_PADDING_Y;
+    // anchor middle
+//    cocos2d::Size SIZE = MEASURE_TILE_SIZE(w,h);
+//    pos.x += SIZE.width * 0.5f;
+//    pos.y += SIZE.height * 0.5f;
+    
+    return pos;
+}
+
+//static inline cocos2d::Vec2 convertToTilePosition(const TilePosition &p, int w, int h) {
+//    return convertToTilePosition((int)p.x, (int)p.y, w, h);
+//}
 
 #endif /* StageData_h */

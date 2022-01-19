@@ -15,8 +15,6 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define STAGE_FILE               (DIR_CONTENT_DATA + "stage.json")
-
 static Database *instance = nullptr;
 Database* Database::getInstance() {
     
@@ -42,50 +40,119 @@ Database::~Database() {
 
 void Database::init() {
     
-    parseStageJson();
-    
-    // tmx
-    const auto FILE = DIR_CONTENT + "stage/stage_0001.tmx";
-    
-    auto mapInfo = TMXMapInfo::create(FILE);
-    auto properties = mapInfo->getTileProperties().at(1).asValueMap();
-    int tileType = properties.at("tileType").asInt();
-    
+    parseStageFile();
 }
 
-void Database::parseStageJson() {
+void Database::parseStageFile() {
     
-    CCLOG("========== PARSE START (stage.json)  ==========");
-    string json = SBStringUtils::readTextFile(STAGE_FILE);
+    CCLOG("========== STAGE PARSE START ==========");
     
-#if ENCRYPT_STAGE_FILE
-    json = SBSecurity::decryptAES256(json, AES256_KEY);
-#endif
-    
-    rapidjson::Document doc;
-    doc.Parse(json.c_str());
-    
-    rapidjson::Document::AllocatorType &allocator = doc.GetAllocator();
-
-    auto list = doc.GetArray();
-    
-    for( int i = 0; i < list.Size(); ++i ) {
-        const rapidjson::Value &v = list[i];
+    for( int i = 0; i < 1; ++i ) {
+        const auto STAGE = i+1;
+        const auto STAGE_FILE = DIR_CONTENT_STAGE + STR_FORMAT("stage_%04d.tmx", STAGE);
+        
+        // 맵 정보
+        auto mapInfo = TMXMapInfo::create(STAGE_FILE);
+        auto layerInfo = SBCollection::find(mapInfo->getLayers(), [](TMXLayerInfo *info) -> bool {
+            return info->_name == "BlockLayer";
+        }).at(0);
+        auto tileSize = mapInfo->getTileSize();
         
         StageData stage;
-        stage.parse(v, allocator);
+        stage.stage = STAGE;
+        stage.mapWidthTiles = (int)mapInfo->getMapSize().width;
+        stage.mapHeightTiles = (int)mapInfo->getMapSize().height;
+        stage.mapContentSize = Size(stage.mapWidthTiles * tileSize.width,
+                                    stage.mapHeightTiles * tileSize.height);
+        stage.tileSize = tileSize;
+        
+        // 타일 정보
+//        {
+//            vector<vector<int>> tiles;
+//
+//            for( int x = 0; x < stage.mapWidthTiles; x++ ) {
+//                vector<int> heightTiles;
+//
+//                for( int y = 0; y < stage.mapHeightTiles; y++ ) {
+//                    heightTiles.push_back(0);
+//                }
+//
+//                tiles.push_back(heightTiles);
+//            }
+//        }
+        
+        {
+            CCLOG("=== PARSED TILES HEAD ===");
+            
+            for( int y = 0; y < stage.mapHeightTiles; y++ ) {
+                string str = "";
+                
+                for( int x = 0; x < stage.mapWidthTiles; x++ ) {
+                    int pos = static_cast<int>(x + stage.mapWidthTiles * y);
+
+                    int gid = layerInfo->_tiles[pos];
+                    str += STR_FORMAT("[%d]", gid);
+                }
+                
+                CCLOG("%s", str.c_str());
+            }
+            
+            CCLOG("=== PARSED TILES TAIL ===");
+        }
+        
+        for( int x = 0; x < stage.mapWidthTiles; x++ ) {
+            TileDataList heightTiles;
+            
+            for( int y = 0; y < stage.mapHeightTiles; y++ ) {
+                int pos = static_cast<int>(x + stage.mapWidthTiles * y);
+                int gid = layerInfo->_tiles[pos];
+                int convertToGLY = stage.mapHeightTiles - y - 1;
+                
+                TileData tile(TileType::NONE);
+                tile.setPosition(x, convertToGLY);
+                
+                if( gid != 0 ) {
+                    auto properties = mapInfo->getTileProperties().at(gid).asValueMap();
+                    int tileType = properties.at("tileType").asInt();
+
+                    tile.type = (TileType)tileType;
+                }
+                
+                heightTiles.push_back(tile);
+            }
+            
+            std::reverse(heightTiles.begin(), heightTiles.end()); // convert to gl
+            stage.tiles.push_back(heightTiles);
+        }
+
+        {
+            CCLOG("");
+            CCLOG("=== MY TILES HEAD ===");
+            
+            for( int y = stage.mapHeightTiles-1; y >= 0; y-- ) {
+                string str = "";
+                
+                for( int x = 0; x < stage.mapWidthTiles; x++ ) {
+                    auto tile = stage.tiles[x][y];
+                    str += STR_FORMAT("[%d]", ((int)tile.type > (int)TileType::NONE) ? 1 : 0);
+                }
+                
+                CCLOG("%s", str.c_str());
+            }
+            
+            CCLOG("=== MY TILES TAIL ===");
+        }
         
         stages.push_back(stage);
     }
+
     
-    CCLOG("========== PARSE END (stage.json)  ==========");
+    CCLOG("========== STAGE PARSE END ==========");
     
-    // order by floor asc
+    // order by stage asc
     sort(stages.begin(), stages.end(), [](const StageData &s1, const StageData &s2) {
         return s1.stage < s2.stage;
     });
-    
-    originStages = stages;
     
     // log
     for( auto stage : stages ) {
@@ -97,18 +164,11 @@ void Database::parseStageJson() {
 /**
  * 스테이지 데이터를 반환합니다
  */
-StageDataList Database::getOriginalStages() {
-    
-    return instance->originStages;
-}
-
 StageDataList Database::getStages() {
-    
     return instance->stages;
 }
 
 StageData Database::getStage(int stage) {
-    
     auto stages = getStages();
     
     for( auto stageData : stages ) {
@@ -120,14 +180,8 @@ StageData Database::getStage(int stage) {
     return StageData();
 }
 
-StageData Database::getFirstStage() {
-    
-    auto stages = getStages();
-    return stages[0];
-}
-
 StageData Database::getLastStage() {
-    
     auto stages = getStages();
     return stages.size() > 0 ? stages[stages.size()-1] : StageData();
 }
+

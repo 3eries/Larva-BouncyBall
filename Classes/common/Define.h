@@ -31,7 +31,6 @@ static const std::string INTERNAL_GAME_CONFIG_FILE_VERSION      = "1.0.0";
 
 #define                  ENCRYPT_GAME_CONFIG_FILE                 0
 #define                  ENCRYPT_PLUGIN_CONFIG_FILE               1
-#define                  ENCRYPT_STAGE_FILE                       0
 
 // Plugin
 static const std::string PLUGIN_CONFIG_FILE                     = "config/plugin_config.json";
@@ -82,8 +81,7 @@ static const std::string DIR_IMG_UPDATE             = DIR_ADD(DIR_IMG, "update")
 
 static const std::string DIR_CONTENT                = "content/";
 static const std::string DIR_CONTENT_DATA           = DIR_ADD(DIR_CONTENT, "data");
-static const std::string DIR_CONTENT_WORLD_MAP      = DIR_ADD(DIR_CONTENT, "world_map");
-static const std::string DIR_CONTENT_PUZZLE         = DIR_ADD(DIR_CONTENT, "puzzle");
+static const std::string DIR_CONTENT_STAGE          = DIR_ADD(DIR_CONTENT, "stage");
 
 // 스파인 애니메이션
 static const std::string ANIM_EXT                   = ".json";
