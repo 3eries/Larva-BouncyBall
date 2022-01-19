@@ -7,7 +7,7 @@
         "store": "https://itunes.apple.com/app/id1410764042",
         "more_games": "https://itunes.apple.com/developer/seong-min-hwang/id1392753835"
     },
-    "world_count": 5,
+    "world_count": 4,
     "stage_per_world": 18,
     "first_coin": 30,
     "first_hint": 2,

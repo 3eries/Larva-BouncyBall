@@ -38,6 +38,7 @@ private:
     
     void initPhysics() override;
     void initBg();
+    void initBlocks();
     void initGameListener();
     void initTouchListener();
     

@@ -41,6 +41,7 @@ bool GameView::init() {
     
     initPhysics();
     initBg();
+    initBlocks();
     initGameListener();
     initTouchListener();
     
@@ -318,6 +319,7 @@ void GameView::initPhysics() {
         auto block = Block::create();
         block->setAnchorPoint(ANCHOR_M);
         block->setPosition(blockOrigin + blockPos[i]);
+        block->setVisible(false);
         addChild(block);
         
         block->syncNodeToBody();
@@ -378,6 +380,25 @@ void GameView::initBg() {
     // 스테이지 진행도
     stageProgressBar = StageProgressBar::create();
     addChild(stageProgressBar);
+}
+
+/**
+ * 블럭 초기화
+ */
+void GameView::initBlocks() {
+    
+    auto stage = GAME_MANAGER->getStage();
+    
+    for( auto tile : stage.tiles ) {
+        if( tile.type == TileType::NONE ) {
+            continue;
+        }
+        
+        auto block = Sprite::create(DIR_IMG_GAME + STR_FORMAT("block_%05d.png", (int)tile.type));
+        block->setAnchorPoint(ANCHOR_M);
+        block->setPosition(convertTilePosition(stage, tile.x, tile.y));
+        addChild(block);
+    }
 }
 
 /**

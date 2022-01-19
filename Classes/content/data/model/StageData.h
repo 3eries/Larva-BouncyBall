@@ -18,7 +18,7 @@ struct StageData {
     int                       mapWidthTiles;           // 맵 가로 타일 수
     int                       mapHeightTiles;          // 맵 세로 타일 수
     cocos2d::Size             tileSize;                // 타일 크기
-    std::vector<TileDataList> tiles;                   // 타일 리스트
+    TileDataList              tiles;                   // 타일 리스트
 
     StageData() : stage(0) {}
     
@@ -26,17 +26,26 @@ struct StageData {
         return stage == 0;
     }
     
-    TileData getTile(const TilePosition &p) const {
-        int x = (int)p.x;
-        int y = (int)p.y;
+    TileData getTile(int x, int y) const {
+        auto findTiles = SBCollection::find(tiles, [=](TileData tile) -> bool {
+            return tile.x == x && tile.y == y;
+        });
         
-        if( x >= 0 && x < mapWidthTiles ) {
-            if( y >= 0 && y < mapHeightTiles ) {
-                return tiles[x][y];
-            }
+        if( findTiles.size() > 0 ) {
+            return findTiles[0];
         }
         
         return TileData(TileType::INVALID);
+    }
+    
+    TileData getTile(const TilePosition &p) const {
+        return getTile((int)p.x, (int)p.y);
+    }
+    
+    TileDataList getTiles(TileType type) const {
+        return SBCollection::find(tiles, [=](TileData tile) -> bool {
+            return tile.type == type;
+        });
     }
     
     std::string toString() {
@@ -100,9 +109,8 @@ static inline cocos2d::Vec2 convertTilePosition(StageData stage, int x, int y) {
 //    pos.x += x * TILE_PADDING_X;
 //    pos.y += y * TILE_PADDING_Y;
     // anchor middle
-//    cocos2d::Size SIZE = MEASURE_TILE_SIZE(w,h);
-//    pos.x += SIZE.width * 0.5f;
-//    pos.y += SIZE.height * 0.5f;
+    pos.x += stage.tileSize.width * 0.5f;
+    pos.y += stage.tileSize.height * 0.5f;
     
     return pos;
 }

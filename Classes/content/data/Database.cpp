@@ -118,11 +118,8 @@ void Database::parseStageFile() {
                     tile.type = (TileType)tileType;
                 }
                 
-                heightTiles.push_back(tile);
+                stage.tiles.push_back(tile);
             }
-            
-            std::reverse(heightTiles.begin(), heightTiles.end()); // convert to gl
-            stage.tiles.push_back(heightTiles);
         }
 
         {
@@ -133,7 +130,7 @@ void Database::parseStageFile() {
                 string str = "";
                 
                 for( int x = 0; x < stage.mapWidthTiles; x++ ) {
-                    auto tile = stage.tiles[x][y];
+                    auto tile = stage.getTile(x,y);
                     str += STR_FORMAT("[%d]", ((int)tile.type > (int)TileType::NONE) ? 1 : 0);
                 }
                 
