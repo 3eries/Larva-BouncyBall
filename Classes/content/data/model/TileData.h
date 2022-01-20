@@ -12,13 +12,16 @@
 #include "superbomb.h"
 
 enum class TileType {
-    INVALID             = -1,
-    NONE                = 0,
+    INVALID             = -1,          // 유효하지 않음
+    NONE                = 0,           // 빈 칸
+    
     FLAG                = 11,          // 깃발
     PORTAL,                            // 클리어 포털
+    
     // Item
     ITEM_SAUSAGE        = 1001,        // 소시지
     ITEM_DOUBLE_JUMP,                  // 더블 점프
+    
     // Block
     BLOCK_NORMAL        = 10001,       // 기본 블럭
     BLOCK_BREKING,                     // 깨지는 블럭
@@ -33,6 +36,7 @@ typedef std::vector<TilePosition> TilePositionList;
 
 struct TileData {
     TileType type;
+    int stage;
     int x;
     int y;
     TilePosition p;
@@ -45,8 +49,12 @@ struct TileData {
         p = TilePosition(x,y);
     }
     
-    bool isNull() const {
-        return type == TileType::INVALID;
+    bool isValid() const {
+        return type != TileType::INVALID;
+    }
+    
+    bool isBlockType() const {
+        return (int)type >= (int)TileType::BLOCK_NORMAL;
     }
     
     std::string toString() {

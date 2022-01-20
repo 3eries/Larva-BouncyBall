@@ -14,9 +14,9 @@
 USING_NS_CC;
 using namespace std;
 
-Block* Block::create() {
+Block* Block::create(const TileData &data) {
     
-    auto block = new Block(1,1);
+    auto block = new Block(data);
     
     if( block && block->init() ) {
         block->autorelease();
@@ -27,8 +27,7 @@ Block* Block::create() {
     return nullptr;
 }
 
-Block::Block(int rows, int columns): GameTile(rows, columns),
-image(nullptr) {
+Block::Block(const TileData &data): GameTile(data) {
 }
 
 Block::~Block() {
@@ -41,15 +40,6 @@ bool Block::init() {
         return false;
     }
     
-    setAnchorPoint(ANCHOR_M);
-    setContentSize(BLOCK_SIZE);
-    
-    initImage();
-    initPhysics();
-    
-    // sync
-    syncNodeToBody();
-    
     return true;
 }
 
@@ -61,17 +51,6 @@ void Block::onEnter() {
 void Block::cleanup() {
     
     GameTile::cleanup();
-}
-
-/**
- * 이미지 초기화
- */
-void Block::initImage() {
-    
-    image = Sprite::create(DIR_IMG_GAME + "block.png");
-    image->setAnchorPoint(ANCHOR_M);
-    image->setPosition(Vec2MC(BLOCK_SIZE, 0, 0));
-    addChild(image);
 }
     
 /**

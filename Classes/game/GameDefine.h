@@ -103,7 +103,6 @@ static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | Physi
 
 #define                 BALL_RADIUS                         25
 #define                 BALL_SIZE                           cocos2d::Size(BALL_RADIUS*2, BALL_RADIUS*2)
-#define                 BALL_POSITION                       Vec2MC(-650, -150)
 
 #define                 BLOCK_SIZE                          cocos2d::Size(108, 108)
 

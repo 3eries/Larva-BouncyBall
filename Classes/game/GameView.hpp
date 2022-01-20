@@ -24,6 +24,12 @@ private:
         DEBUG_DRAW_VIEW = 1000,
     };
     
+    enum ZOrder {
+        ITEM = 1,
+        BALL,
+        BLOCK,
+    };
+    
 public:
     CREATE_FUNC(GameView);
     ~GameView();
@@ -39,6 +45,7 @@ private:
     void initPhysics() override;
     void initBg();
     void initBlocks();
+    void initBall();
     void initGameListener();
     void initTouchListener();
     

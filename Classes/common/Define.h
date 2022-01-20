@@ -82,6 +82,7 @@ static const std::string DIR_IMG_UPDATE             = DIR_ADD(DIR_IMG, "update")
 static const std::string DIR_CONTENT                = "content/";
 static const std::string DIR_CONTENT_DATA           = DIR_ADD(DIR_CONTENT, "data");
 static const std::string DIR_CONTENT_STAGE          = DIR_ADD(DIR_CONTENT, "stage");
+static const std::string DIR_CONTENT_TILE           = DIR_ADD(DIR_CONTENT, "tile");
 
 // 스파인 애니메이션
 static const std::string ANIM_EXT                   = ".json";

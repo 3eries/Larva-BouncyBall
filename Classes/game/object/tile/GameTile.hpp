@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 
+#include "ContentManager.hpp"
 #include "../../GameDefine.h"
     
 /** @class GameTile
@@ -21,13 +22,15 @@
  */
 class GameTile: public cocos2d::Node, public SBPhysicsObject {
 public:
-    GameTile(int rows, int columns);
+    GameTile(const TileData &data);
     virtual ~GameTile();
     
 protected:
     virtual bool init() override;
     virtual void onEnter() override;
     virtual void cleanup() override;
+    
+    virtual void initImage();
     virtual void initPhysics() override;
     virtual void initGameListener();
     
@@ -39,18 +42,9 @@ public:
     virtual void enterWithAction();
     virtual void removeWithAction();
     
-public:
-//    virtual void setTilePosition(const TilePosition &tilePos, bool action = true,
-//                                 SBCallback onActionFinished = nullptr);
-    virtual void setTilePosition(const TilePosition &tilePos);
-    virtual void moveWithAction(const TilePosition &tilePos, float duration,
-                                SBCallback onActionFinished = nullptr);
-    virtual bool isContainsPosition(const TilePosition &p);
-    
 protected:
-    CC_SYNTHESIZE_READONLY(int, rows, Rows);        // 가로칸
-    CC_SYNTHESIZE_READONLY(int, columns, Columns);  // 세로칸
-    CC_SYNTHESIZE_READONLY(TilePosition, tilePos, TilePosition);
+    CC_SYNTHESIZE_READONLY(TileData, data, Data);
+    cocos2d::Sprite *image;
     
     // 타일 유효 여부
     SB_SYNTHESIZE_READONLY_BOOL(available, Available);

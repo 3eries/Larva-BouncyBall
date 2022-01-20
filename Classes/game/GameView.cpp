@@ -42,6 +42,7 @@ bool GameView::init() {
     initPhysics();
     initBg();
     initBlocks();
+    initBall();
     initGameListener();
     initTouchListener();
     
@@ -223,11 +224,11 @@ void GameView::initPhysics() {
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    auto world = PHYSICS_MANAGER->initWorld();
+    world = PHYSICS_MANAGER->initWorld();
     
     // Wall & Floor
     auto MAP_POSITION = Vec2MC(0,0);
-    auto MAP_CONTENT_SIZE = SB_WIN_SIZE * 0.95f;
+    auto MAP_CONTENT_SIZE = GAME_MANAGER->getStage().mapContentSize;
     
     b2BodyDef bodyDef;
     bodyDef.position = PTM(MAP_POSITION);
@@ -275,10 +276,6 @@ void GameView::initPhysics() {
         body->CreateFixture(&fixtureDef);
     }
     
-    // Ball
-    ball = Ball::create(world);
-    addChild(ball);
-    
     // 임의의 블럭 생성 for prototype
     auto blockOrigin = Vec2(100, 100);
     
@@ -314,16 +311,16 @@ void GameView::initPhysics() {
         Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 7),
     };
     
-    for( int i = 0; i < sizeof(blockPos) / sizeof(Vec2); ++i ) {
-        // auto block = Sprite::create(DIR_IMG_GAME + "block.png");
-        auto block = Block::create();
-        block->setAnchorPoint(ANCHOR_M);
-        block->setPosition(blockOrigin + blockPos[i]);
-        block->setVisible(false);
-        addChild(block);
-        
-        block->syncNodeToBody();
-    }
+//    for( int i = 0; i < sizeof(blockPos) / sizeof(Vec2); ++i ) {
+//        // auto block = Sprite::create(DIR_IMG_GAME + "block.png");
+//        auto block = Block::create();
+//        block->setAnchorPoint(ANCHOR_M);
+//        block->setPosition(blockOrigin + blockPos[i]);
+//        block->setVisible(false);
+//        addChild(block);
+//
+//        block->syncNodeToBody();
+//    }
     
 #if DEBUG_DRAW_PHYSICS
     // DebugDrawView
@@ -347,7 +344,7 @@ void GameView::initPhysics() {
     infoLabel->setTextColor(Color4B::WHITE);
     infoLabel->setAnchorPoint(ANCHOR_BR);
     infoLabel->setPosition(Vec2BR(-50, -20));
-    addChild(infoLabel);
+    addChild(infoLabel, SBZOrder::MIDDLE);
     
     maxVelocity = Vec2(INT_MIN, INT_MIN);
     minVelocity = Vec2(INT_MAX, INT_MAX);
@@ -394,11 +391,38 @@ void GameView::initBlocks() {
             continue;
         }
         
-        auto block = Sprite::create(DIR_IMG_GAME + STR_FORMAT("block_%05d.png", (int)tile.type));
-        block->setAnchorPoint(ANCHOR_M);
-        block->setPosition(convertTilePosition(stage, tile.x, tile.y));
-        addChild(block);
+        switch( tile.type ) {
+            case TileType::FLAG:    break;
+            case TileType::PORTAL:  break;
+            case TileType::ITEM_SAUSAGE:      break;
+            case TileType::ITEM_DOUBLE_JUMP:  break;
+                
+            case TileType::BLOCK_NORMAL:
+            case TileType::BLOCK_BREKING:
+            case TileType::BLOCK_GAME_OVER:
+            case TileType::BLOCK_JUMP: {
+                
+            } break;
+                
+            default: break;
+        }
+        
+        auto block = Block::create(tile);
+        addChild(block, ZOrder::BLOCK);
     }
+}
+
+/**
+ * 볼(캐릭터) 초기화
+ */
+void GameView::initBall() {
+ 
+    auto stage = GAME_MANAGER->getStage();
+    auto flag = stage.getTiles(TileType::FLAG)[0];
+    
+    ball = Ball::create(world);
+    ball->setFirstPosition(convertTilePosition(stage, flag.x, flag.y+1));
+    addChild(ball, ZOrder::BALL);
 }
 
 /**

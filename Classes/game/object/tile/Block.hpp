@@ -23,9 +23,9 @@ class Ball;
  */
 class Block: public GameTile {
 public:
-    static Block* create();
+    static Block* create(const TileData &data);
     
-    Block(int rows, int columns);
+    Block(const TileData &data);
     virtual ~Block();
     
 protected:
@@ -33,7 +33,6 @@ protected:
     virtual void onEnter() override;
     virtual void cleanup() override;
     
-    virtual void initImage();
     virtual void initPhysics() override;
     
     virtual void onStageClear() override;
@@ -41,9 +40,6 @@ protected:
 public:
     virtual void    onPreSolve(b2Contact *contact, const b2Manifold *oldManifold);
     virtual bool    onContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint);
-    
-protected:
-    cocos2d::Sprite *image;
 };
 
 #endif /* Block_hpp */

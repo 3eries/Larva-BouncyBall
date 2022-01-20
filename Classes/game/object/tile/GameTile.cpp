@@ -14,9 +14,9 @@
 USING_NS_CC;
 using namespace std;
 
-GameTile::GameTile(int rows, int columns) : SBPhysicsObject(this),
-rows(rows),
-columns(columns),
+GameTile::GameTile(const TileData &data) : SBPhysicsObject(this),
+data(data),
+image(nullptr),
 available(true) {
 }
 
@@ -30,8 +30,17 @@ bool GameTile::init() {
         return false;
     }
     
+    auto stage = Database::getStage(data.stage);
+    
     setAnchorPoint(ANCHOR_M);
-    // setContentSize(MEASURE_TILE_SIZE(rows, columns));
+    setContentSize(BLOCK_SIZE);
+    setPosition(convertTilePosition(stage, data));
+    
+    initImage();
+    initPhysics();
+    
+    // sync
+    syncNodeToBody();
     
     return true;
 }
@@ -49,7 +58,18 @@ void GameTile::cleanup() {
     
     Node::cleanup();
 }
+ 
+/**
+ * 이미지 초기화
+ */
+void GameTile::initImage() {
     
+    image = Sprite::create(DIR_CONTENT_TILE + STR_FORMAT("tile_%05d.png", (int)data.type));
+    image->setAnchorPoint(ANCHOR_MB);
+    image->setPosition(Vec2BC(getContentSize(), 0, 0));
+    addChild(image);
+}
+
 /**
  * 물리 객체 초기화
  */
@@ -108,71 +128,6 @@ void GameTile::removeWithAction() {
     
     prepareRemove();
 }
-
-/**
- * 타일 좌표 설정
- */
-/*
-void Tile::setTilePosition(const TilePosition &tilePos, bool action, SBCallback onActionFinished) {
-    
-    CCASSERT(tilePos != INVALID_TILE_POSITION, "Tile::setTilePosition error.");
-    
-    this->tilePos = tilePos;
-    
-    Vec2 p = convertToTilePosition(tilePos, rows, columns);
-    
-    if( action ) {
-        auto move = MoveTo::create(TILE_MOVE_DURATION, p);
-        auto callFunc = CallFunc::create([=]() {
-            this->syncNodeToBody();
-            
-            if( onActionFinished ) {
-                onActionFinished();
-            }
-        });
-        runAction(Sequence::create(move, callFunc, nullptr));
-        
-    } else {
-        setPosition(p);
-        syncNodeToBody();
-    }
-}
-*/
-
-void GameTile::setTilePosition(const TilePosition &tilePos) {
-    
-    CCASSERT(tilePos != INVALID_TILE_POSITION, "Tile::setTilePosition error.");
-    
-    this->tilePos = tilePos;
-    
-    setPosition(convertToTilePosition(tilePos, rows, columns));
-    syncNodeToBody();
-}
  
-void GameTile::moveWithAction(const TilePosition &tilePos, float duration, SBCallback onActionFinished) {
-    
-    CCASSERT(tilePos != INVALID_TILE_POSITION, "Tile::moveWithAction error.");
-    
-    this->tilePos = tilePos;
-    
-    auto move = MoveTo::create(duration, convertToTilePosition(tilePos, rows, columns));
-    auto callFunc = CallFunc::create([=]() {
-        this->syncNodeToBody();
-        
-        if( onActionFinished ) {
-            onActionFinished();
-        }
-    });
-    runAction(Sequence::create(move, callFunc, nullptr));
-}
-    
-/**
- * 좌표가 타일에 포함됐는지 반환합니다
- */
-bool GameTile::isContainsPosition(const TilePosition &p) {
-    
-    return p.x >= tilePos.x && p.x <= tilePos.x + (rows-1) &&
-           p.y >= tilePos.y && p.y <= tilePos.y + (columns-1);
-}
     
 

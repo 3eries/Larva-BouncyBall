@@ -93,7 +93,7 @@ struct StageData {
 
 typedef std::vector<StageData> StageDataList;
 
-static inline cocos2d::Vec2 convertTilePosition(StageData stage, int x, int y) {
+static inline cocos2d::Vec2 convertTilePosition(const StageData &stage, int x, int y) {
     
     // TODO: 맵이 화면보다 큰 경우
     
@@ -115,8 +115,12 @@ static inline cocos2d::Vec2 convertTilePosition(StageData stage, int x, int y) {
     return pos;
 }
 
-//static inline cocos2d::Vec2 convertToTilePosition(const TilePosition &p, int w, int h) {
-//    return convertToTilePosition((int)p.x, (int)p.y, w, h);
-//}
+static inline cocos2d::Vec2 convertTilePosition(const StageData &stage, const TilePosition &p) {
+    return convertTilePosition(stage, (int)p.x, (int)p.y);
+}
+
+static inline cocos2d::Vec2 convertTilePosition(const StageData &stage, const TileData &tile) {
+    return convertTilePosition(stage, tile.x, tile.y);
+}
 
 #endif /* StageData_h */

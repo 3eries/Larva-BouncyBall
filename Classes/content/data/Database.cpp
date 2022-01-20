@@ -109,6 +109,7 @@ void Database::parseStageFile() {
                 int convertToGLY = stage.mapHeightTiles - y - 1;
                 
                 TileData tile(TileType::NONE);
+                tile.stage = STAGE;
                 tile.setPosition(x, convertToGLY);
                 
                 if( gid != 0 ) {

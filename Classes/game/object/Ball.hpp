@@ -36,6 +36,7 @@ public:
     virtual bool    beforeStep() override;
     virtual bool    afterStep() override;
     
+    void            setFirstPosition(const cocos2d::Vec2 &p);
     void            setDirection(BallDirection direction);
     
     void            moveLeft();

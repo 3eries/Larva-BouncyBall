@@ -62,17 +62,11 @@ bool Ball::init() {
     }
     
     setAnchorPoint(ANCHOR_M);
-    setPosition(BALL_POSITION);
     setContentSize(BALL_SIZE);
     setCascadeOpacityEnabled(true);
     
     initImage();
     initPhysics();
-    
-    syncNodeToBody();
-    setBodyAwake(true);
-    
-    getBody()->SetLinearVelocity(b2Vec2(0, VELOCITY_BOUNCE_DOWN));
     
     return true;
 }
@@ -187,6 +181,17 @@ bool Ball::afterStep() {
     }
     
     return true;
+}
+
+/**
+ * 최초 좌표를 설정합니다
+ */
+void Ball::setFirstPosition(const Vec2 &p) {
+    
+    setPosition(p);
+    
+    syncNodeToBody();
+    getBody()->SetLinearVelocity(b2Vec2(0, VELOCITY_BOUNCE_DOWN));
 }
 
 void Ball::setDirection(BallDirection direction) {
