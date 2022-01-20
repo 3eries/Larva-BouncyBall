@@ -71,7 +71,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
                                         ResolutionPolicy::EXACT_FIT);
     } else {
         glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
-                                        ResolutionPolicy::EXACT_FIT);
+                                        ResolutionPolicy::FIXED_HEIGHT);
     }
 
     register_all_packages();
