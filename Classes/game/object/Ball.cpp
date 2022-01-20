@@ -32,9 +32,9 @@ using namespace std;
 
 #define SCHEDULER_CHECK_MOVEMENT               "SCHEDULER_CHECK_MOVEMENT"
 
-Ball* Ball::create(b2World *world) {
+Ball* Ball::create(const StageData &stage) {
     
-    auto ball = new Ball(world);
+    auto ball = new Ball(stage);
     
     if( ball && ball->init() ) {
         ball->autorelease();
@@ -45,8 +45,8 @@ Ball* Ball::create(b2World *world) {
     return nullptr;
 }
 
-Ball::Ball(b2World *world) : SBPhysicsObject(this),
-world(world),
+Ball::Ball(const StageData &stage) : SBPhysicsObject(this),
+stage(stage),
 direction(BallDirection::NONE),
 fall(false) {
 }
@@ -61,8 +61,10 @@ bool Ball::init() {
         return false;
     }
     
+    auto size = Size(stage.tileSize.width*0.8f, stage.tileSize.height*0.5f);
+    
     setAnchorPoint(ANCHOR_M);
-    setContentSize(BALL_SIZE);
+    setContentSize(size);
     setCascadeOpacityEnabled(true);
     
     initImage();
@@ -84,11 +86,8 @@ void Ball::cleanup() {
 void Ball::initImage() {
     
     image = Sprite::create();
-    //
-    // image->setVisible(false);
-    //
     image->setAnchorPoint(ANCHOR_MB);
-    image->setPosition(Vec2BC(BALL_SIZE, 0, -15));
+    image->setPosition(Vec2BC(getContentSize(), 0, -15));
     addChild(image);
     
     auto updateImage = [=]() {
@@ -120,24 +119,19 @@ void Ball::initPhysics() {
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    setBody(createBody(world, (SBPhysicsObject*)this));
-}
-
-b2Body* Ball::createBody(b2World *world, SBPhysicsObject *userData) {
-    
     b2BodyDef bodyDef;
     bodyDef.type = b2_dynamicBody;
     bodyDef.bullet = true;
     bodyDef.fixedRotation = true;
-    // bodyDef.awake = false;
-    bodyDef.userData = userData;
+    bodyDef.userData = (SBPhysicsObject*)this;
     
 //    b2CircleShape shape;
-//    shape.m_radius = PTM(BALL_RADIUS);
+//    shape.m_radius = PTM(getContentSize().height*0.5f);
     b2PolygonShape shape;
-    shape.SetAsBox(PTM(90/2), PTM(BALL_RADIUS));
+    shape.SetAsBox(PTM(getContentSize().width*0.5f), PTM(getContentSize().height*0.5f));
     
-    auto body = world->CreateBody(&bodyDef);
+    auto body = PHYSICS_MANAGER->getWorld()->CreateBody(&bodyDef);
+    setBody(body);
     
     b2Filter filter;
     filter.categoryBits = PhysicsCategory::BALL;
@@ -150,8 +144,6 @@ b2Body* Ball::createBody(b2World *world, SBPhysicsObject *userData) {
     fixtureDef.friction = 0;        // 마찰력
     fixtureDef.filter = filter;
     body->CreateFixture(&fixtureDef);
-    
-    return body;
 }
 
 bool Ball::beforeStep() {
@@ -191,7 +183,7 @@ void Ball::setFirstPosition(const Vec2 &p) {
     setPosition(p);
     
     syncNodeToBody();
-    getBody()->SetLinearVelocity(b2Vec2(0, VELOCITY_BOUNCE_DOWN));
+    // getBody()->SetLinearVelocity(b2Vec2(0, VELOCITY_BOUNCE_DOWN));
 }
 
 void Ball::setDirection(BallDirection direction) {
@@ -381,7 +373,6 @@ bool Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
         return false;
     }
     
-
     auto block = (Block*)tile;
     
     // 충돌 횟수 업데이트

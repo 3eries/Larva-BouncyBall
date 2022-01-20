@@ -276,52 +276,6 @@ void GameView::initPhysics() {
         body->CreateFixture(&fixtureDef);
     }
     
-    // 임의의 블럭 생성 for prototype
-    auto blockOrigin = Vec2(100, 100);
-    
-    Vec2 blockPos[] = {
-        // 1층
-        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 1),
-        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 2),
-        Vec2(BLOCK_SIZE.width * 0, BLOCK_SIZE.height * 3),
-        
-        Vec2(BLOCK_SIZE.width * 1, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 2, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 3, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 4, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 5, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 6, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 7, BLOCK_SIZE.height * 0),
-        Vec2(BLOCK_SIZE.width * 8, BLOCK_SIZE.height * 0),
-        
-        // 2층
-        Vec2(BLOCK_SIZE.width * 9, BLOCK_SIZE.height * 1),
-        Vec2(BLOCK_SIZE.width * 10, BLOCK_SIZE.height * 2),
-        Vec2(BLOCK_SIZE.width * 11, BLOCK_SIZE.height * 2),
-        Vec2(BLOCK_SIZE.width * 12, BLOCK_SIZE.height * 2),
-        
-        // 3층
-        Vec2(BLOCK_SIZE.width * 13, BLOCK_SIZE.height * 3),
-        Vec2(BLOCK_SIZE.width * 14, BLOCK_SIZE.height * 4),
-        Vec2(BLOCK_SIZE.width * 15, BLOCK_SIZE.height * 4),
-        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 4),
-        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 5),
-        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 6),
-        Vec2(BLOCK_SIZE.width * 16, BLOCK_SIZE.height * 7),
-    };
-    
-//    for( int i = 0; i < sizeof(blockPos) / sizeof(Vec2); ++i ) {
-//        // auto block = Sprite::create(DIR_IMG_GAME + "block.png");
-//        auto block = Block::create();
-//        block->setAnchorPoint(ANCHOR_M);
-//        block->setPosition(blockOrigin + blockPos[i]);
-//        block->setVisible(false);
-//        addChild(block);
-//
-//        block->syncNodeToBody();
-//    }
-    
 #if DEBUG_DRAW_PHYSICS
     // DebugDrawView
     auto view = DebugDrawView::create(world);
@@ -353,7 +307,7 @@ void GameView::initPhysics() {
     auto toggleBtn = GameUIHelper::createFontButton("DebugDraw", Size(300,200));
     toggleBtn->setAnchorPoint(ANCHOR_TL);
     toggleBtn->setPosition(Vec2TL(10, 10));
-    addChild(toggleBtn);
+    addChild(toggleBtn, SBZOrder::MIDDLE);
     
     toggleBtn->setOnClickListener([=](Node*) {
         infoLabel->setVisible(!infoLabel->isVisible());
@@ -420,9 +374,13 @@ void GameView::initBall() {
     auto stage = GAME_MANAGER->getStage();
     auto flag = stage.getTiles(TileType::FLAG)[0];
     
-    ball = Ball::create(world);
-    ball->setFirstPosition(convertTilePosition(stage, flag.x, flag.y+1));
+    ball = Ball::create(stage);
     addChild(ball, ZOrder::BALL);
+    
+    auto pos = convertTilePosition(stage, flag.x, flag.y+1);
+//    pos.y -= (stage.tileSize.height - ball->getContentSize().height) / 2;
+//    pos.y += 1;
+    ball->setFirstPosition(pos);
 }
 
 /**

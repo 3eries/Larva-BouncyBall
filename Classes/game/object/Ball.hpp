@@ -12,17 +12,18 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
+#include "ContentManager.hpp"
 #include "../GameDefine.h"
 
 class GameTile;
 
 class Ball: public cocos2d::Node, public SBPhysicsObject {
 public:
-    static Ball* create(b2World *world);
+    static Ball* create(const StageData &stage);
     virtual ~Ball();
     
 protected:
-    Ball(b2World *world);
+    Ball(const StageData &stage);
     
     virtual bool init() override;
     virtual void cleanup() override;
@@ -31,8 +32,6 @@ protected:
     virtual void initPhysics() override;
     
 public:
-    static b2Body*  createBody(b2World *world, SBPhysicsObject *userData = nullptr);
-    
     virtual bool    beforeStep() override;
     virtual bool    afterStep() override;
     
@@ -60,7 +59,8 @@ public:
 //    virtual void onContactFloor(Ball *ball);
     
 protected:
-    CC_SYNTHESIZE_READONLY(b2World*, world, World);
+    StageData stage;
+    
     cocos2d::Sprite *image;
     CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
     

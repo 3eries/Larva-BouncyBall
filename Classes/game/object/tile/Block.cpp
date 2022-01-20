@@ -67,7 +67,7 @@ void Block::initPhysics() {
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    auto size = BLOCK_SIZE;
+    auto size = getContentSize();
     // size = size + Size(2,2); // 블럭끼리 겹치게 보정
     
     b2BodyDef bodyDef;

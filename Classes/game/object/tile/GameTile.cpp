@@ -33,7 +33,7 @@ bool GameTile::init() {
     auto stage = Database::getStage(data.stage);
     
     setAnchorPoint(ANCHOR_M);
-    setContentSize(BLOCK_SIZE);
+    setContentSize(stage.tileSize);
     setPosition(convertTilePosition(stage, data));
     
     initImage();
