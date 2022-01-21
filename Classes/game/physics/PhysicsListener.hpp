@@ -32,9 +32,10 @@ public:
     std::function<void(b2Contact*, const b2Manifold*)>       onPreSolve;
     std::function<void(b2Contact*, const b2ContactImpulse*)> onPostSolve;
     
-    std::function<void(Ball*,GameTile*,cocos2d::Vec2)>       onContactBlock;
+    std::function<void(Ball*,GameTile*)>                     onContactFlag;
     std::function<void(Ball*,GameTile*)>                     onContactItem;
-    std::function<void(Ball*,GameTile*)>                     onContactPortal;
+    std::function<void(Ball*,GameTile*,cocos2d::Vec2)>       onContactBlock;
+    
 //    std::function<void(Ball*,PhysicsCategory)>               onContactWall;
     std::function<void(Ball*)>                               onContactWall;
     std::function<void(Ball*)>                               onContactFloor;
@@ -43,7 +44,7 @@ private:
     PhysicsListener() : target(nullptr), contactTarget(nullptr),
     onUpdate(nullptr),
     onBeginContact(nullptr), onEndContact(nullptr), onPreSolve(nullptr), onPostSolve(nullptr),
-    onContactBlock(nullptr), onContactItem(nullptr), onContactPortal(nullptr),
+    onContactFlag(nullptr), onContactItem(nullptr), onContactBlock(nullptr),
     onContactWall(nullptr), onContactFloor(nullptr) {}
     
     CC_SYNTHESIZE(cocos2d::Ref*, target, Target);

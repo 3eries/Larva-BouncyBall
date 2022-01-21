@@ -24,31 +24,15 @@ private:
     StageProgressBar();
     
     bool init() override;
-    void onEnter() override;
     
     void initUI();
     void initGameListener();
     
 public:
-    void startToggleGageTextScheduler();
-    void stopToggleGageTextScheduler();
-    
-    void setPercentage(float percentage, bool withAction = false);
-    void setClearCount(int clearCount, int clearCondition);
-    
-// Game Event
-public:
-    void onStageChanged(const StageData &stage);
-    void onStageRestart(const StageData &stage);
-    void onStageClear(const StageData &stage);
-    
-    void onMoveNextStage();
-    void onMoveNextStageFinished();
+    void setStar(int star);
     
 private:
-    cocos2d::ProgressTimer *gage;
-    cocos2d::Label *levelLabel;
-    cocos2d::Label *clearCountLabel;
+    std::vector<cocos2d::Sprite*> stars;
 };
 
 #endif /* StageProgressBar_hpp */

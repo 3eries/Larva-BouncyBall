@@ -45,9 +45,6 @@ public:
 protected:
     CC_SYNTHESIZE_READONLY(TileData, data, Data);
     cocos2d::Sprite *image;
-    
-    // 타일 유효 여부
-    SB_SYNTHESIZE_READONLY_BOOL(available, Available);
 };
 
 #endif /* GameTile_hpp */

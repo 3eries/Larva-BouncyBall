@@ -60,8 +60,11 @@ private:
     void dispatchOnEndContact(b2Contact *contact);
     void dispatchOnPreSolve(b2Contact *contact, const b2Manifold *oldManifold);
     void dispatchOnPostSolve(b2Contact *contact, const b2ContactImpulse *impulse);
-    void dispatchOnContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint);
+    
+    void dispatchOnContactFlag(Ball *ball, GameTile *item);
     void dispatchOnContactItem(Ball *ball, GameTile *item);
+    void dispatchOnContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint);
+    
     void dispatchOnContactWall(Ball *ball);
     void dispatchOnContactFloor(Ball *ball);
     

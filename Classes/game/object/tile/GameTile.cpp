@@ -16,8 +16,7 @@ using namespace std;
 
 GameTile::GameTile(const TileData &data) : SBPhysicsObject(this),
 data(data),
-image(nullptr),
-available(true) {
+image(nullptr) {
 }
 
 GameTile::~GameTile() {
@@ -97,8 +96,6 @@ void GameTile::onStageClear() {
 void GameTile::prepareRemove() {
     
     removeListeners(this);
-    
-    available = false;
     
     setBodyAwake(false);
     setCollisionLocked(true);

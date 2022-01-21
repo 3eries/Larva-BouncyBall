@@ -53,7 +53,7 @@ public:
     virtual void    sleepWithAction();
     
 public:
-    virtual bool onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
+    virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
 //    virtual void onContactItem(Ball *ball, Game::Tile *item);
 //    virtual void onContactWall(Ball *ball);
 //    virtual void onContactFloor(Ball *ball);

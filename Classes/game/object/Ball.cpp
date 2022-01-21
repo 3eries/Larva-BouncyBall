@@ -366,11 +366,11 @@ void Ball::sleepWithAction() {
 /**
  * 볼 & 브릭 충돌
  */
-bool Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
+void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
 
     // 충돌 잠금 상태일 경우 충돌 무시
     if( isCollisionLocked() ) {
-        return false;
+        return;
     }
     
     auto block = (Block*)tile;
@@ -396,8 +396,6 @@ bool Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
 //        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
 //                                       VELOCITY_BOUNCE_DOWN));
     }, BOUNCE_DOWN_DELAY, SCHEDULER_BOUNCE_DOWN);
-
-    return true;
 }
 
 ///**

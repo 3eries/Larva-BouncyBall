@@ -236,6 +236,30 @@ void PhysicsManager::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
     
     dispatchOnPreSolve(contact, oldManifold);
     
+    // 깃발 체크
+    {
+        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::FLAG, contact);
+        
+        if( objs.obj1 && objs.obj2 ) {
+            contact->SetEnabled(false);
+            dispatchOnContactFlag((Ball*)objs.obj1, (GameTile*)objs.obj2);
+            
+            return;
+        }
+    }
+    
+    // 아이템 체크
+    {
+        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, contact);
+        
+        if( objs.obj1 && objs.obj2 ) {
+            contact->SetEnabled(false);
+            dispatchOnContactItem((Ball*)objs.obj1, (GameTile*)objs.obj2);
+            
+            return;
+        }
+    }
+    
     // 블럭 체크
     {
         auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, contact);
@@ -251,18 +275,6 @@ void PhysicsManager::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
             }
              */
 
-            return;
-        }
-    }
-    
-    // 아이템 체크
-    {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, contact);
-        
-        if( objs.obj1 && objs.obj2 ) {
-            contact->SetEnabled(false);
-            dispatchOnContactItem((Ball*)objs.obj1, (GameTile*)objs.obj2);
-            
             return;
         }
     }
@@ -471,20 +483,20 @@ void PhysicsManager::dispatchOnPostSolve(b2Contact *contact, const b2ContactImpu
     }
 }
 
-void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
+void PhysicsManager::dispatchOnContactFlag(Ball *ball, GameTile *flag) {
 
     auto copyListeners = listeners;
     
     for( auto listener : copyListeners ) {
-        if( listener->onContactBlock ) {
+        if( listener->onContactItem ) {
             auto contactTarget = listener->getContactTarget();
             
             if( contactTarget ) {
-                if( contactTarget == ball || contactTarget == block ) {
-                    listener->onContactBlock(ball, block, contactPoint);
+                if( contactTarget == ball || contactTarget == flag ) {
+                    listener->onContactFlag(ball, flag);
                 }
             } else {
-                listener->onContactBlock(ball, block, contactPoint);
+                listener->onContactFlag(ball, flag);
             }
         }
     }
@@ -504,6 +516,25 @@ void PhysicsManager::dispatchOnContactItem(Ball *ball, GameTile *item) {
                 }
             } else {
                 listener->onContactItem(ball, item);
+            }
+        }
+    }
+}
+
+void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
+
+    auto copyListeners = listeners;
+    
+    for( auto listener : copyListeners ) {
+        if( listener->onContactBlock ) {
+            auto contactTarget = listener->getContactTarget();
+            
+            if( contactTarget ) {
+                if( contactTarget == ball || contactTarget == block ) {
+                    listener->onContactBlock(ball, block, contactPoint);
+                }
+            } else {
+                listener->onContactBlock(ball, block, contactPoint);
             }
         }
     }

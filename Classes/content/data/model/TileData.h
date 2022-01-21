@@ -15,8 +15,9 @@ enum class TileType {
     INVALID             = -1,          // 유효하지 않음
     NONE                = 0,           // 빈 칸
     
-    FLAG                = 11,          // 깃발
-    PORTAL,                            // 클리어 포털
+    // Flag
+    FLAG_START          = 11,          // 깃발
+    FLAG_CLEAR_PORTAL,                 // 클리어 포털
     
     // Item
     ITEM_SAUSAGE        = 1001,        // 소시지
@@ -62,8 +63,8 @@ struct TileData {
             switch( type ) {
                 case TileType::INVALID:             return "INVALID";
                 case TileType::NONE:                return "NONE";
-                case TileType::FLAG:                return "FLAG";
-                case TileType::PORTAL:              return "PORTAL";
+                case TileType::FLAG_START:          return "FLAG_START";
+                case TileType::FLAG_CLEAR_PORTAL:   return "FLAG_CLEAR_PORTAL";
                 case TileType::ITEM_SAUSAGE:        return "ITEM_SAUSAGE";
                 case TileType::ITEM_DOUBLE_JUMP:    return "ITEM_DOUBLE_JUMP";
                 case TileType::BLOCK_NORMAL:        return "BLOCK_NORMAL";

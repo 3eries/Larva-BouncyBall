@@ -55,10 +55,10 @@ void GameManager::reset() {
     CCLOG("GameManager::reset");
     
     state = GameState::NONE;
-    resultCount = 0;
+    star = 0;
     continueCount = 0;
     
-    setStage(1);
+    // setStage(1);
 }
 
 /**
@@ -106,6 +106,14 @@ void GameManager::setStage(int stage) {
     
     this->stage = Database::getStage(stage);
     User::setLatestPlayStage(stage);
+}
+
+/**
+ * 획득한 별 개수를 설정합니다
+ */
+void GameManager::setStar(int star) {
+    
+    this->star = star;
 }
 
 int GameManager::getPlayCount() {
@@ -271,8 +279,6 @@ void GameManager::onGameOver(bool isTimeout) {
     instance->addState(GameState::GAME_OVER);
     dispatchCustomEvent(GameEvent::OVER);
     
-    instance->resultCount++;
-    
     // 통계 이벤트
 //    int stage = instance->stage.stage;
 //    string overType = isTimeout ? "timeout" : "draw_miss";
@@ -352,29 +358,29 @@ void GameManager::onStageRestart() {
 /**
  * 스테이지 클리어
  */
-void GameManager::onStageClear(bool isSkipped) {
+void GameManager::onStageClear(int star, bool isSkipped) {
     
     auto stage = instance->stage;
     Log::i("GameManager::onStageClear stage: %d", stage.stage);
     
     superbomb::PluginPlay::submitScore(LEADER_BOARD_TOP_LEVEL, stage.stage);
     
-    // 클리어한 스테이지 저장
-    if( stage.stage <= Database::getLastStage().stage ) {
-        // User::setClearStage(stage.stage);
-    }
+    // 스테이지 별 개수 저장, 이전 별 개수보다 커야 함
+    User::setStageStarCount(stage.stage, MAX(star, User::getStageStarCount(stage.stage)));
+    
+    // 다음 스테이지 해제
+    User::unlockStage(stage.stage+1);
     
     if( !isSkipped ) {
         dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);
-        instance->resultCount++;
     }
     
     // 통계 이벤트
-    SBAnalytics::EventParams params;
-    params[ANALYTICS_EVENT_PARAM_LEVEL] = SBAnalytics::EventParam(TO_STRING(stage.stage));
-    params[ANALYTICS_EVENT_PARAM_LEVEL_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
-    
-    SBAnalytics::logEvent(ANALYTICS_EVENT_LEVEL_CLEAR, params);
+//    SBAnalytics::EventParams params;
+//    params[ANALYTICS_EVENT_PARAM_LEVEL] = SBAnalytics::EventParam(TO_STRING(stage.stage));
+//    params[ANALYTICS_EVENT_PARAM_LEVEL_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
+//
+//    SBAnalytics::logEvent(ANALYTICS_EVENT_LEVEL_CLEAR, params);
 }
 
 /**

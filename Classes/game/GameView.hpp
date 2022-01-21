@@ -28,6 +28,8 @@ private:
         ITEM = 1,
         BALL,
         BLOCK,
+        
+        MENU = 10,
     };
     
 public:
@@ -44,7 +46,7 @@ private:
     
     void initPhysics() override;
     void initBg();
-    void initBlocks();
+    void initTiles();
     void initBall();
     void initGameListener();
     void initTouchListener();
@@ -73,8 +75,9 @@ private:
     
 #pragma mark- Contact
 private:
-    bool onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
-    void onContactPortal(Ball *ball, GameTile *tile);
+    void onContactFlag(Ball *ball, GameTile *tile);
+    void onContactItem(Ball *ball, GameTile *tile);
+    void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
     
 private:
     CC_SYNTHESIZE_READONLY(b2World*, world, World);

@@ -12,7 +12,6 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
-
 #include "GameTile.hpp"
 #include "../../GameDefine.h"
     
@@ -30,16 +29,10 @@ public:
     
 protected:
     virtual bool init() override;
-    virtual void onEnter() override;
-    virtual void cleanup() override;
-    
     virtual void initPhysics() override;
     
-    virtual void onStageClear() override;
-    
 public:
-    virtual void    onPreSolve(b2Contact *contact, const b2Manifold *oldManifold);
-    virtual bool    onContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint);
+    virtual void onContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint);
 };
 
 #endif /* Block_hpp */

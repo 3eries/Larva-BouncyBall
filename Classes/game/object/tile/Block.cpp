@@ -8,7 +8,6 @@
 #include "Block.hpp"
 
 #include "Define.h"
-#include "../../GameDefine.h"
 #include "../../GameManager.hpp"
 
 USING_NS_CC;
@@ -42,16 +41,6 @@ bool Block::init() {
     
     return true;
 }
-
-void Block::onEnter() {
-    
-    GameTile::onEnter();
-}
-    
-void Block::cleanup() {
-    
-    GameTile::cleanup();
-}
     
 /**
  * 물리 객체 초기화
@@ -62,7 +51,6 @@ void Block::initPhysics() {
     auto listener = PhysicsListener::create();
     listener->setTarget(this);
     listener->setContactTarget(this);
-    listener->onPreSolve     = CC_CALLBACK_2(Block::onPreSolve, this);
     listener->onContactBlock = CC_CALLBACK_3(Block::onContactBlock, this);
     PHYSICS_MANAGER->addListener(listener);
     
@@ -136,16 +124,10 @@ void Block::initPhysics() {
     }
 }
 
-void Block::onStageClear() {
-}
-
-void Block::onPreSolve(b2Contact *contact, const b2Manifold *oldManifold) {
-}
-
 /**
  * 볼 & 벽돌 충돌
  */
-bool Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
+void Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
     
     // image->setVisible(!image->isVisible());
     
@@ -156,7 +138,5 @@ bool Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
 //
 //    runBallHitAction(ball, contactPoint);
 //    sufferDamage(ball, contactPoint);
-    
-    return true;
 }
 

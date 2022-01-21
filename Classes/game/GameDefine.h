@@ -91,14 +91,14 @@ enum PhysicsCategory {
     WALL_TOP    = (1 << 2),     // 천장
     FLOOR       = (1 << 3),     // 바닥
     BALL        = (1 << 4),
-    BLOCK       = (1 << 5),     // 블럭 천장
-    BLOCK_SIDE  = (1 << 6),     // 블럭 측면, 바닥
-    ITEM        = (1 << 7),
+    FLAG        = (1 << 5),
+    ITEM        = (1 << 6),
+    BLOCK       = (1 << 7),     // 블럭 천장
+    BLOCK_SIDE  = (1 << 8),     // 블럭 측면, 바닥
 };
 
 static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
-static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP |
-                                              PhysicsCategory::FLOOR | PhysicsCategory::BLOCK | PhysicsCategory::BLOCK_SIDE | PhysicsCategory::ITEM);
+static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP | PhysicsCategory::FLOOR |                                                  PhysicsCategory::FLAG | PhysicsCategory::ITEM | PhysicsCategory::BLOCK | PhysicsCategory::BLOCK_SIDE);
 
 #define                 TILE_NUMBER_NORMAL_COLOR            cocos2d::Color4B(0,0,0,255)
 #define                 TILE_NUMBER_SELECTED_COLOR          cocos2d::Color4B(255,255,255,255)

@@ -13,7 +13,10 @@
 #include "SceneManager.h"
 
 #include "object/Ball.hpp"
+#include "object/tile/Flag.hpp"
+#include "object/tile/Item.hpp"
 #include "object/tile/Block.hpp"
+
 #include "object/StageProgressBar.hpp"
 
 USING_NS_CC;
@@ -41,7 +44,7 @@ bool GameView::init() {
     
     initPhysics();
     initBg();
-    initBlocks();
+    initTiles();
     initBall();
     initGameListener();
     initTouchListener();
@@ -188,22 +191,80 @@ void GameView::onTouchEnded(Touch *touch) {
     ball->stopMoveX();
 }
 
-#pragma mark- Contact
+#pragma mark- Physics Event
+
+/**
+ * 볼 & 깃발 충돌
+ */
+void GameView::onContactFlag(Ball *ball, GameTile *tile) {
+    
+    auto flag = dynamic_cast<Flag*>(tile);
+    
+    // 충돌 처리
+    switch( flag->getData().type ) {
+        case TileType::FLAG_CLEAR_PORTAL: {
+        } break;
+            
+        default: break;
+    }
+}
+
+/**
+ * 볼 & 아이템 충돌
+ */
+void GameView::onContactItem(Ball *ball, GameTile *tile) {
+    
+    auto item = dynamic_cast<Item*>(tile);
+    
+    // 아이템 삭제
+    item->prepareRemove();
+    item->setLazyRemove(true);
+    item->setVisible(false);
+    
+    // 충돌 처리
+    switch( item->getData().type ) {
+        // 소시지
+        case TileType::ITEM_SAUSAGE: {
+            int star = GAME_MANAGER->getStar() + 1;
+            star = MIN(3, star);
+            
+            GAME_MANAGER->setStar(star);
+            stageProgressBar->setStar(star);
+        } break;
+            
+        // 더블 점프
+        case TileType::ITEM_DOUBLE_JUMP: {
+            
+        } break;
+            
+        default: break;
+    }
+}
 
 /**
  * 볼 & 브릭 충돌
  */
-bool GameView::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
-
-    return false;
+void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
+    
+    auto block = dynamic_cast<Block*>(tile);
+    
+    // 충돌 처리
+    switch( block->getData().type ) {
+        // Breaking
+        case TileType::BLOCK_BREKING: {
+        } break;
+        
+        // Game Over
+        case TileType::BLOCK_GAME_OVER: {
+        } break;
+            
+        // Jump
+        case TileType::BLOCK_JUMP: {
+        } break;
+            
+        default: break;
+    }
 }
-
-/**
- * 볼 & 포털 충돌
- */
-void GameView::onContactPortal(Ball *ball, GameTile *portal) {
-}
-
 
 #pragma mark- Initialize
 
@@ -217,8 +278,9 @@ void GameView::initPhysics() {
     // Listener
     auto listener = PhysicsListener::create();
     listener->setTarget(this);
+    listener->onContactFlag         = CC_CALLBACK_2(GameView::onContactFlag, this);
+    listener->onContactItem         = CC_CALLBACK_2(GameView::onContactItem, this);
     listener->onContactBlock        = CC_CALLBACK_3(GameView::onContactBlock, this);
-    listener->onContactPortal       = CC_CALLBACK_2(GameView::onContactPortal, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
 //    listener->onContactFloor        = CC_CALLBACK_1(Ball::onContactFloor, this);
     PHYSICS_MANAGER->addListener(listener);
@@ -330,39 +392,47 @@ void GameView::initBg() {
     
     // 스테이지 진행도
     stageProgressBar = StageProgressBar::create();
-    addChild(stageProgressBar);
+    addChild(stageProgressBar, ZOrder::MENU);
 }
 
 /**
- * 블럭 초기화
+ * 타일 초기화
  */
-void GameView::initBlocks() {
+void GameView::initTiles() {
     
     auto stage = GAME_MANAGER->getStage();
     
-    for( auto tile : stage.tiles ) {
-        if( tile.type == TileType::NONE ) {
+    for( auto tileData : stage.tiles ) {
+        if( tileData.type == TileType::NONE ) {
             continue;
         }
         
-        switch( tile.type ) {
-            case TileType::FLAG:    break;
-            case TileType::PORTAL:  break;
-            case TileType::ITEM_SAUSAGE:      break;
-            case TileType::ITEM_DOUBLE_JUMP:  break;
+        GameTile *tile = nullptr;
+        
+        switch( tileData.type ) {
+            case TileType::FLAG_START:
+            case TileType::FLAG_CLEAR_PORTAL: {
+                tile = Flag::create(tileData);
+            } break;
+                
+            case TileType::ITEM_SAUSAGE:
+            case TileType::ITEM_DOUBLE_JUMP: {
+                tile = Item::create(tileData);
+            } break;
                 
             case TileType::BLOCK_NORMAL:
             case TileType::BLOCK_BREKING:
             case TileType::BLOCK_GAME_OVER:
             case TileType::BLOCK_JUMP: {
-                
+                tile = Block::create(tileData);
             } break;
                 
             default: break;
         }
         
-        auto block = Block::create(tile);
-        addChild(block, ZOrder::BLOCK);
+        if( tile ) {
+            addChild(tile, tileData.isBlockType() ? ZOrder::BLOCK : ZOrder::ITEM);
+        }
     }
 }
 
@@ -372,7 +442,7 @@ void GameView::initBlocks() {
 void GameView::initBall() {
  
     auto stage = GAME_MANAGER->getStage();
-    auto flag = stage.getTiles(TileType::FLAG)[0];
+    auto flag = stage.getTiles(TileType::FLAG_START)[0];
     
     ball = Ball::create(stage);
     addChild(ball, ZOrder::BALL);

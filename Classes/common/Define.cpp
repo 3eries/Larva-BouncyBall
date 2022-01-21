@@ -26,6 +26,6 @@ void removeListeners(Ref *target) {
     PopupManager::getInstance()->removeListener(target);
     
     if( !GameManager::isNullInstance() ) {
-        // TODO: GameManager::getPhysicsManager()->removeListener(target);
+        PHYSICS_MANAGER->removeListener(target);
     }
 }

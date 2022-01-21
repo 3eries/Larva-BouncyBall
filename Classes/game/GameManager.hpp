@@ -51,6 +51,7 @@ public:
     
     // Data
     void            setStage(int stage);
+    void            setStar(int star);
     
     // Getter
     static int      getPlayCount();
@@ -60,8 +61,7 @@ private:
     CC_SYNTHESIZE_READONLY(GameState, state, State);              // 게임 상태
     
     CC_SYNTHESIZE_READONLY(StageData, stage, Stage);              // 스테이지
-
-    CC_SYNTHESIZE_READONLY(int, resultCount, ResultCount);        // 결과 노출 횟수
+    CC_SYNTHESIZE_READONLY(int, star, Star);                      // 획득한 별 개수
     CC_SYNTHESIZE_READONLY(int, continueCount, ContinueCount);    // 이어하기한 횟수
     
 // Physics
@@ -92,7 +92,7 @@ public:
     
     static void onStageChanged();
     static void onStageRestart();
-    static void onStageClear(bool isSkipped = false);
+    static void onStageClear(int star, bool isSkipped = false);
     
     static void onMoveNextStage();
     static void onMoveNextStageFinished();
