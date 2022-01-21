@@ -16,6 +16,7 @@
 
 #include "CommonLoadingBar.hpp"
 #include "SettingPopup.hpp"
+#include "ui/ClearPopup.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
@@ -133,7 +134,7 @@ void GameScene::onGamePause() {
     // 설정 팝업 생성
     auto popup = SettingPopup::create();
     popup->setOnHomeListener([=]() {
-        this->replaceScene(SceneType::MAIN);
+        this->replaceMainScene();
     });
     popup->setOnDismissListener([=](Node*) {
         GameManager::onGameResume();
@@ -157,20 +158,48 @@ void GameScene::onStageChanged(const StageData &stage) {
  * 스테이지 클리어
  */
 void GameScene::onStageClear(const StageData &stage) {
-
+    
     // 클리어 팝업
+    auto popup = ClearPopup::create();
+    popup->setOnHomeListener([=]() {
+        this->replaceMainScene();
+    });
+    popup->setOnRetryListener([=]() {
+        this->replaceGameScene(stage.stage);
+    });
+    popup->setOnNextListener([=]() {
+        this->replaceGameScene(stage.stage+1);
+    });
+    SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
 }
 
 /**
  * Scene 전환
  */
-void GameScene::replaceScene(SceneType type) {
+void GameScene::replaceMainScene() {
     
     GameManager::onGameExit();
     GameManager::destroyInstance();
     removeListeners(this);
     
-    BaseScene::replaceScene(type);
+    replaceScene(SceneType::MAIN);
+}
+
+void GameScene::replaceGameScene(int stage) {
+    
+    // 스테이지 유무 체크
+    if( Database::getStage(stage).isNull() ) {
+        return;
+    }
+    
+    GameManager::onGameExit();
+    GameManager::destroyInstance();
+    removeListeners(this);
+    
+    GAME_MANAGER->init();
+    GAME_MANAGER->setStage(stage);
+    
+    replaceScene(SceneType::GAME);
 }
 
 /**

@@ -358,7 +358,7 @@ void GameManager::onStageRestart() {
 /**
  * 스테이지 클리어
  */
-void GameManager::onStageClear(int star, bool isSkipped) {
+void GameManager::onStageClear(bool isSkipped) {
     
     auto stage = instance->stage;
     Log::i("GameManager::onStageClear stage: %d", stage.stage);
@@ -366,6 +366,7 @@ void GameManager::onStageClear(int star, bool isSkipped) {
     superbomb::PluginPlay::submitScore(LEADER_BOARD_TOP_LEVEL, stage.stage);
     
     // 스테이지 별 개수 저장, 이전 별 개수보다 커야 함
+    int star = instance->star;
     User::setStageStarCount(stage.stage, MAX(star, User::getStageStarCount(stage.stage)));
     
     // 다음 스테이지 해제

@@ -55,7 +55,8 @@ private:
     void onStageClear(const StageData &stage);
 
 public:
-    void replaceScene(SceneType type) override;
+    void replaceMainScene();
+    void replaceGameScene(int stage);
     
     void onClick(cocos2d::Node *sender) override;
     

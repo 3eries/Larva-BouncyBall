@@ -24,6 +24,19 @@ private:
     ClearPopup();
     
     bool init() override;
+    void onEnter() override;
+    bool onBackKeyReleased() override;
+    
+    void initBackgroundView() override;
+    void initContentView() override;
+    
+    void runEnterAction(SBCallback onFinished = nullptr) override;
+    void onEnterActionFinished() override;
+    
+private:
+    CC_SYNTHESIZE(SBCallback, onHomeListener, OnHomeListener);
+    CC_SYNTHESIZE(SBCallback, onRetryListener, OnRetryListener);
+    CC_SYNTHESIZE(SBCallback, onNextListener, OnNextListener);
 };
 
 #endif /* ClearPopup_hpp */

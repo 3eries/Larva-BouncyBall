@@ -202,7 +202,9 @@ void GameView::onContactFlag(Ball *ball, GameTile *tile) {
     
     // 충돌 처리
     switch( flag->getData().type ) {
+        // Stage Clear
         case TileType::FLAG_CLEAR_PORTAL: {
+            GameManager::onStageClear();
         } break;
             
         default: break;

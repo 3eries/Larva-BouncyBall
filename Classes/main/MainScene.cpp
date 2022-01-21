@@ -124,6 +124,11 @@ void MainScene::onClick(Node *sender) {
  */
 void MainScene::replaceGameScene(int stage) {
     
+    // 스테이지 유무 체크
+    if( Database::getStage(stage).isNull() ) {
+        return;
+    }
+    
     SB_SAFE_HIDE(getChildByTag(Tag::BTN_SHOP));
     SB_SAFE_HIDE(getChildByTag(Tag::BTN_SETTING));
     
