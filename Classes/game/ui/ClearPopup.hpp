@@ -13,7 +13,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 #include "PopupManager.hpp"
-#include "GameManager.hpp"
+#include "../GameManager.hpp"
 
 class ClearPopup: public BasePopup {
 public:
