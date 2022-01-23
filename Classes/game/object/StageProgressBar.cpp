@@ -40,14 +40,14 @@ void StageProgressBar::initUI() {
     auto starBg = LayerColor::create(Color4B(0,0,0,255*0.9f));
     starBg->setIgnoreAnchorPointForPosition(false);
     starBg->setAnchorPoint(ANCHOR_MT);
-    starBg->setPosition(Vec2TC(0, -20));
-    starBg->setContentSize(Size(400, 150));
+    starBg->setPosition(Vec2TC(0, 0));
+    starBg->setContentSize(Size(400, 120));
     addChild(starBg);
     
     Vec2 pos[] = {
-        Vec2TC(-150, -30),
-        Vec2TC(0, -30),
-        Vec2TC(150, -30),
+        Vec2TC(-150, -6),
+        Vec2TC(0, -6),
+        Vec2TC(150, -6),
     };
     
     for( int i = 0; i < 3; ++i ) {

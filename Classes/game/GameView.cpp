@@ -14,6 +14,7 @@
 
 #include "object/Ball.hpp"
 #include "object/tile/Flag.hpp"
+#include "object/tile/ClearPortal.hpp"
 #include "object/tile/Item.hpp"
 #include "object/tile/Block.hpp"
 
@@ -173,6 +174,51 @@ void GameView::onMoveNextStage() {
 void GameView::onMoveNextStageFinished() {
 }
 
+/**
+ * 타일을 추가합니다
+ */
+void GameView::addTile(GameTile *tile) {
+    
+    addChild(tile, tile->getData().isBlockType() ? ZOrder::BLOCK : ZOrder::ITEM);
+    tiles.push_back(tile);
+}
+
+/**
+ * 타일을 제거합니다
+ */
+void GameView::removeTile(GameTile *tile) {
+ 
+    tile->prepareRemove();
+    tile->setLazyRemove(true);
+    tile->setVisible(false);
+    
+    SBCollection::remove(tiles, tile);
+}
+
+/**
+ * 좌표에 해당하는 타일을 반환합니다
+ */
+GameTile* GameView::getTile(const TilePosition &p) {
+    
+    vector<GameTile*> foundTiles = SBCollection::find(tiles, [=](GameTile *tile) -> bool {
+        return tile->getData().p == p;
+    });
+    CCASSERT(foundTiles.size() <= 1, "GameView::getTile error.");
+    
+    return foundTiles[0];
+}
+
+/**
+ * 타입에 해당하는 타일을 반환합니다
+ */
+vector<GameTile*> GameView::getTiles(const TileType &type) {
+    
+    vector<GameTile*> foundTiles = SBCollection::find(tiles, [=](GameTile *tile) -> bool {
+        return tile->getData().type == type;
+    });
+    return foundTiles;
+}
+
 #pragma mark- Touch Event
 
 void GameView::onTouchBegan(Touch *touch) {
@@ -204,7 +250,6 @@ void GameView::onContactFlag(Ball *ball, GameTile *tile) {
     switch( flag->getData().type ) {
         // Stage Clear
         case TileType::FLAG_CLEAR_PORTAL: {
-            GameManager::onStageClear();
         } break;
             
         default: break;
@@ -219,9 +264,7 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
     auto item = dynamic_cast<Item*>(tile);
     
     // 아이템 삭제
-    item->prepareRemove();
-    item->setLazyRemove(true);
-    item->setVisible(false);
+    removeTile(item);
     
     // 충돌 처리
     switch( item->getData().type ) {
@@ -232,6 +275,9 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             
             GAME_MANAGER->setStar(star);
             stageProgressBar->setStar(star);
+            
+            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileType::FLAG_CLEAR_PORTAL)[0]);
+            portal->setStar(star);
         } break;
             
         // 더블 점프
@@ -252,8 +298,34 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     
     // 충돌 처리
     switch( block->getData().type ) {
+        // Normal
+        case TileType::BLOCK_NORMAL: {
+            // 포털 오픈됨 && 포털 아래칸 충돌 => 스테이지 클리어
+            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileType::FLAG_CLEAR_PORTAL)[0]);
+            auto portalBelowTile = getTile(portal->getData().p + Vec2(0,-1));
+            
+            if( portal->isOpened() && portalBelowTile == block ) {
+                ball->setCollisionLocked(true);
+                ball->setSyncLocked(true);
+                
+                auto portalBox = SBNodeUtils::getBoundingBoxInWorld(portal);
+                ball->setPositionY(portalBox.getMinY() + ball->getContentSize().height*0.5f);
+                
+                SBDirector::postDelayed(this, [=]() {
+                    auto fadeOut = FadeOut::create(0.3f);
+                    auto callFunc = CallFunc::create([=]() {
+                        GameManager::onStageClear();
+                    });
+                    ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
+                }, 0.2f);
+            }
+            
+        } break;
+            
         // Breaking
-        case TileType::BLOCK_BREKING: {
+        case TileType::BLOCK_BREKING_1:
+        case TileType::BLOCK_BREKING_2: { 
+            removeTile(block);
         } break;
         
         // Game Over
@@ -266,6 +338,16 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
             
         default: break;
     }
+}
+
+void GameView::onContactFloor(Ball *ball) {
+    
+    ball->setCollisionLocked(true);
+    ball->setSyncLocked(true);
+    
+    SBDirector::postDelayed(this, [=]() {
+        GameManager::onGameOver(false);
+    }, 0.2f);
 }
 
 #pragma mark- Initialize
@@ -284,7 +366,7 @@ void GameView::initPhysics() {
     listener->onContactItem         = CC_CALLBACK_2(GameView::onContactItem, this);
     listener->onContactBlock        = CC_CALLBACK_3(GameView::onContactBlock, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
-//    listener->onContactFloor        = CC_CALLBACK_1(Ball::onContactFloor, this);
+    listener->onContactFloor        = CC_CALLBACK_1(GameView::onContactFloor, this);
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
@@ -412,9 +494,11 @@ void GameView::initTiles() {
         GameTile *tile = nullptr;
         
         switch( tileData.type ) {
-            case TileType::FLAG_START:
-            case TileType::FLAG_CLEAR_PORTAL: {
+            case TileType::FLAG_START: {
                 tile = Flag::create(tileData);
+            } break;
+            case TileType::FLAG_CLEAR_PORTAL: {
+                tile = ClearPortal::create(tileData);
             } break;
                 
             case TileType::ITEM_SAUSAGE:
@@ -423,7 +507,8 @@ void GameView::initTiles() {
             } break;
                 
             case TileType::BLOCK_NORMAL:
-            case TileType::BLOCK_BREKING:
+            case TileType::BLOCK_BREKING_1:
+            case TileType::BLOCK_BREKING_2:
             case TileType::BLOCK_GAME_OVER:
             case TileType::BLOCK_JUMP: {
                 tile = Block::create(tileData);
@@ -433,7 +518,7 @@ void GameView::initTiles() {
         }
         
         if( tile ) {
-            addChild(tile, tileData.isBlockType() ? ZOrder::BLOCK : ZOrder::ITEM);
+            addTile(tile);
         }
     }
 }

@@ -174,7 +174,7 @@ void GameManager::onGameExit() {
     
     Log::i("GameManager::onGameExit");
     
-    onGamePause();
+    // onGamePause();
     
     getPhysicsManager()->stopScheduler();
     getPhysicsManager()->removeBodies();

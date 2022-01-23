@@ -65,6 +65,11 @@ public:
     void onMoveNextStage();
     void onMoveNextStageFinished();
 
+    void addTile(GameTile *tile);
+    void removeTile(GameTile *tile);
+    GameTile*              getTile(const TilePosition &p);
+    std::vector<GameTile*> getTiles(const TileType &type);
+    
 #pragma mark- Touch Event
 private:
     void onTouchBegan(cocos2d::Touch *touch);
@@ -78,11 +83,12 @@ private:
     void onContactFlag(Ball *ball, GameTile *tile);
     void onContactItem(Ball *ball, GameTile *tile);
     void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
+    void onContactFloor(Ball *ball);
     
 private:
     CC_SYNTHESIZE_READONLY(b2World*, world, World);
     Ball *ball;
-    
+    std::vector<GameTile*> tiles;
     StageProgressBar *stageProgressBar;
     
     // for debug

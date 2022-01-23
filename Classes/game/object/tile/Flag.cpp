@@ -81,7 +81,7 @@ void Flag::initPhysics() {
 }
 
 /**
- * 볼 & 아이템 충돌
+ * 볼 & Flag 충돌
  */
 void Flag::onContactFlag(Ball *ball, GameTile *tile) {
 }

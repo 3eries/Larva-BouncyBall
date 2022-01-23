@@ -379,7 +379,7 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     contactCount++;
     
     // Bounce Up
-    CCLOG("Bounce Up");
+    // CCLOG("Bounce Up");
     
     auto body = getBody();
     body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,

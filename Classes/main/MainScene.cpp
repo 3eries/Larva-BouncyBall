@@ -126,6 +126,7 @@ void MainScene::replaceGameScene(int stage) {
     
     // 스테이지 유무 체크
     if( Database::getStage(stage).isNull() ) {
+        MessageBox("스테이지 데이터가 없습니다", "");
         return;
     }
     

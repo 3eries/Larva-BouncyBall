@@ -23,8 +23,6 @@ USING_NS_SB;
 using namespace cocos2d::ui;
 using namespace std;
 
-#define DEBUG_DRAW_PHYSICS      1
-
 GameScene* GameScene::create() {
     
     auto scene = new GameScene();
@@ -149,6 +147,15 @@ void GameScene::onGameResume() {
 }
 
 /**
+ * 게임 오버
+ */
+void GameScene::onGameOver() {
+    
+    MessageBox("게임 오버됨 -> 재시작", "");
+    replaceGameScene(GAME_MANAGER->getStage().stage);
+}
+
+/**
  * 스테이지 변경
  */
 void GameScene::onStageChanged(const StageData &stage) {
@@ -189,6 +196,7 @@ void GameScene::replaceGameScene(int stage) {
     
     // 스테이지 유무 체크
     if( Database::getStage(stage).isNull() ) {
+        MessageBox("스테이지 데이터가 없습니다", "");
         return;
     }
     
@@ -269,6 +277,7 @@ void GameScene::initGameListener() {
     GameEventList events({
         GameEvent::PAUSE,
         GameEvent::RESUME,
+        GameEvent::OVER,
         GameEvent::STAGE_CHANGED,
         GameEvent::STAGE_CLEAR,
     });
@@ -278,6 +287,7 @@ void GameScene::initGameListener() {
         switch( event ) {
             case GameEvent::PAUSE:      this->onGamePause();     break;
             case GameEvent::RESUME:     this->onGameResume();    break;
+            case GameEvent::OVER:       this->onGameOver();      break;
                 
             case GameEvent::STAGE_CHANGED: {
                 auto stage = (StageData*)userData;

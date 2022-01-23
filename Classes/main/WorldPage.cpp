@@ -59,7 +59,7 @@ bool WorldPage::init() {
     addChild(worldLabel);
     
     // 스테이지 Cell 생성
-    Vec2 origin(300, 650);
+    Vec2 origin(SB_WIN_SIZE.width/2 - 600, 700);
     Vec2 padding(50, 50);
     Vec2 pos = origin;
     
@@ -148,6 +148,21 @@ bool StageCell::init() {
     }
     
     int star = User::getStageStarCount(stage);
+    string starStr = "";
+    
+    switch( star ) {
+        case 1: starStr = "O";      break;
+        case 2: starStr = "O O";    break;
+        case 3: starStr = "O O O";  break;
+        default: break;
+    }
+    
+    auto starLabel = Label::createWithTTF(starStr, FONT_ROBOTO_BLACK, 30, Size::ZERO,
+                                            TextHAlignment::CENTER, TextVAlignment::BOTTOM);
+    starLabel->setTextColor(Color4B::WHITE);
+    starLabel->setAnchorPoint(ANCHOR_MB);
+    starLabel->setPosition(Vec2BC(CELL_SIZE, 0, 5));
+    addChild(starLabel);
     
     // onClick
     setTouchEnabled(true);

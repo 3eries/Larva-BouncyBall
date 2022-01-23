@@ -122,6 +122,7 @@
 		507BF83626834EF30037F28C /* SplashScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7D626834EF30037F28C /* SplashScene.cpp */; };
 		507BF83726834EF30037F28C /* TestHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7D926834EF30037F28C /* TestHelper.cpp */; };
 		507BF980268364E40037F28C /* StageProgressBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF97F268364E40037F28C /* StageProgressBar.cpp */; };
+		5081109D279D2D4200FC9577 /* ClearPortal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5081109B279D2D4200FC9577 /* ClearPortal.cpp */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
 		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
@@ -387,6 +388,8 @@
 		507BF7DA26834EF30037F28C /* TestHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = TestHelper.hpp; sourceTree = "<group>"; };
 		507BF97E268364E40037F28C /* StageProgressBar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StageProgressBar.hpp; sourceTree = "<group>"; };
 		507BF97F268364E40037F28C /* StageProgressBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageProgressBar.cpp; sourceTree = "<group>"; };
+		5081109B279D2D4200FC9577 /* ClearPortal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClearPortal.cpp; sourceTree = "<group>"; };
+		5081109C279D2D4200FC9577 /* ClearPortal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClearPortal.hpp; sourceTree = "<group>"; };
 		5087E78817EB974C00C73F5D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
@@ -1113,6 +1116,8 @@
 			children = (
 				50617DA227144C58005CE3EF /* Block.cpp */,
 				50617DA127144C58005CE3EF /* Block.hpp */,
+				5081109B279D2D4200FC9577 /* ClearPortal.cpp */,
+				5081109C279D2D4200FC9577 /* ClearPortal.hpp */,
 				1DEB5552279A732A00699529 /* Flag.cpp */,
 				1DEB5553279A732A00699529 /* Flag.hpp */,
 				50B5736127033346009F3240 /* GameTile.cpp */,
@@ -1321,6 +1326,7 @@
 				507BF80B26834EF30037F28C /* SBTransition.cpp in Sources */,
 				507BF7FB26834EF30037F28C /* FirebaseManager.cpp in Sources */,
 				507BF83526834EF30037F28C /* LogoView.cpp in Sources */,
+				5081109D279D2D4200FC9577 /* ClearPortal.cpp in Sources */,
 				50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */,
 				507BF80526834EF30037F28C /* SBPlatformHelper-ios.mm in Sources */,
 				507BF82426834EF30037F28C /* MainScene.cpp in Sources */,
@@ -1357,7 +1363,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				CURRENT_PROJECT_VERSION = 0.1.1;
+				CURRENT_PROJECT_VERSION = 0.1.2;
 				DEVELOPMENT_TEAM = 4AFC962N95;
 				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1397,7 +1403,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
-				CURRENT_PROJECT_VERSION = 0.1.1;
+				CURRENT_PROJECT_VERSION = 0.1.2;
 				DEVELOPMENT_TEAM = 4AFC962N95;
 				ENABLE_BITCODE = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;

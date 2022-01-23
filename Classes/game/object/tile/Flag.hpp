@@ -18,7 +18,7 @@
 class Ball;
 
 /** @class Flag
- * @brief 기본 블럭, 특수 블럭 등 맵에 표시되는 블럭은 Flag 클래스를 상속합니다
+ * @brief 설명
  */
 class Flag: public GameTile {
 public:
@@ -32,7 +32,7 @@ protected:
     virtual void initPhysics() override;
     
 public:
-    virtual void onContactFlag(Ball *ball, GameTile *Flag);
+    virtual void onContactFlag(Ball *ball, GameTile *tile);
 };
 
 #endif /* Flag_hpp */

@@ -25,7 +25,8 @@ enum class TileType {
     
     // Block
     BLOCK_NORMAL        = 10001,       // 기본 블럭
-    BLOCK_BREKING,                     // 깨지는 블럭
+    BLOCK_BREKING_1,                   // 깨지는 블럭
+    BLOCK_BREKING_2,                   // 깨지는 블럭
     BLOCK_GAME_OVER,                   // 게임 오버 블럭
     BLOCK_JUMP,                        // 점프 블럭
 };
@@ -68,7 +69,8 @@ struct TileData {
                 case TileType::ITEM_SAUSAGE:        return "ITEM_SAUSAGE";
                 case TileType::ITEM_DOUBLE_JUMP:    return "ITEM_DOUBLE_JUMP";
                 case TileType::BLOCK_NORMAL:        return "BLOCK_NORMAL";
-                case TileType::BLOCK_BREKING:       return "BLOCK_BREKING";
+                case TileType::BLOCK_BREKING_1:
+                case TileType::BLOCK_BREKING_2:     return "BLOCK_BREKING";
                 case TileType::BLOCK_JUMP:          return "BLOCK_JUMP";
                 default:                            return "";
             }

@@ -47,7 +47,7 @@ void Database::parseStageFile() {
     
     CCLOG("========== STAGE PARSE START ==========");
     
-    for( int i = 0; i < 1; ++i ) {
+    for( int i = 0; i < 3; ++i ) {
         const auto STAGE = i+1;
         const auto STAGE_FILE = DIR_CONTENT_STAGE + STR_FORMAT("stage_%04d.tmx", STAGE);
         
