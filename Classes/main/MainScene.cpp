@@ -19,6 +19,7 @@
 #include "WorldPage.hpp"
 #include "CommonLoadingBar.hpp"
 #include "ExitAlertPopup.hpp"
+#include "ShopPopup.hpp"
 #include "SettingPopup.hpp"
 #include "BannerView.hpp"
 
@@ -107,6 +108,7 @@ void MainScene::onClick(Node *sender) {
     switch( sender->getTag() ) {
         // 상점
         case Tag::BTN_SHOP: {
+            showShopPopup();
         } break;
             
         // 설정
@@ -156,7 +158,16 @@ void MainScene::replaceGameScene(int stage) {
 }
 
 /**
- * 설정 팝업 노출
+ * 상점 팝업을 띄웁니다
+ */
+void MainScene::showShopPopup() {
+    
+    auto popup = ShopPopup::create();
+    SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
+}
+
+/**
+ * 설정 팝업을 띄웁니다
  */
 void MainScene::showSettingPopup() {
     

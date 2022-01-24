@@ -17,6 +17,9 @@
 		1D53A5CB27857D0200A8B792 /* WelcomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1D803689278BCA270083E400 /* WorldPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D803687278BCA260083E400 /* WorldPage.cpp */; };
+		1DBD57F4279E307600F07409 /* ShopPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DBD57F2279E307600F07409 /* ShopPopup.cpp */; };
+		1DBD57F9279E439600F07409 /* IAPCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DBD57F7279E439600F07409 /* IAPCell.cpp */; };
+		1DBD57FE279E43D000F07409 /* CharacterCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DBD57FC279E43D000F07409 /* CharacterCell.cpp */; };
 		1DEB554E279A4DE500699529 /* Item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB554C279A4DE500699529 /* Item.cpp */; };
 		1DEB5554279A732B00699529 /* Flag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB5552279A732A00699529 /* Flag.cpp */; };
 		1DEB5559279A7B3900699529 /* ClearPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB5557279A7B3900699529 /* ClearPopup.cpp */; };
@@ -182,6 +185,12 @@
 		1D803687278BCA260083E400 /* WorldPage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WorldPage.cpp; sourceTree = "<group>"; };
 		1D803688278BCA270083E400 /* WorldPage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WorldPage.hpp; sourceTree = "<group>"; };
 		1DA870E127953FBE000CA59E /* TileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TileData.h; sourceTree = "<group>"; };
+		1DBD57F2279E307600F07409 /* ShopPopup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ShopPopup.cpp; sourceTree = "<group>"; };
+		1DBD57F3279E307600F07409 /* ShopPopup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ShopPopup.hpp; sourceTree = "<group>"; };
+		1DBD57F7279E439600F07409 /* IAPCell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IAPCell.cpp; sourceTree = "<group>"; };
+		1DBD57F8279E439600F07409 /* IAPCell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IAPCell.hpp; sourceTree = "<group>"; };
+		1DBD57FC279E43D000F07409 /* CharacterCell.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterCell.cpp; sourceTree = "<group>"; };
+		1DBD57FD279E43D000F07409 /* CharacterCell.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CharacterCell.hpp; sourceTree = "<group>"; };
 		1DEB554C279A4DE500699529 /* Item.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Item.cpp; sourceTree = "<group>"; };
 		1DEB554D279A4DE500699529 /* Item.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Item.hpp; sourceTree = "<group>"; };
 		1DEB5552279A732A00699529 /* Flag.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Flag.cpp; sourceTree = "<group>"; };
@@ -495,6 +504,19 @@
 			path = ui;
 			sourceTree = "<group>";
 		};
+		1DBD57F1279E306800F07409 /* shop */ = {
+			isa = PBXGroup;
+			children = (
+				1DBD57FC279E43D000F07409 /* CharacterCell.cpp */,
+				1DBD57FD279E43D000F07409 /* CharacterCell.hpp */,
+				1DBD57F7279E439600F07409 /* IAPCell.cpp */,
+				1DBD57F8279E439600F07409 /* IAPCell.hpp */,
+				1DBD57F2279E307600F07409 /* ShopPopup.cpp */,
+				1DBD57F3279E307600F07409 /* ShopPopup.hpp */,
+			);
+			path = shop;
+			sourceTree = "<group>";
+		};
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
@@ -565,6 +587,7 @@
 				507BF7A726834EF30037F28C /* main */,
 				507BF7B626834EF30037F28C /* popup */,
 				507BF70926834EF20037F28C /* sb */,
+				1DBD57F1279E306800F07409 /* shop */,
 				507BF7D526834EF30037F28C /* splash */,
 				507BF7D826834EF30037F28C /* test */,
 				507BF7C726834EF30037F28C /* tutorial */,
@@ -1253,6 +1276,7 @@
 				507BF80926834EF30037F28C /* SBEffect.cpp in Sources */,
 				507BF83626834EF30037F28C /* SplashScene.cpp in Sources */,
 				507BF80826834EF30037F28C /* SBAction.cpp in Sources */,
+				1DBD57F9279E439600F07409 /* IAPCell.cpp in Sources */,
 				507BF7E226834EF30037F28C /* SBUIInfo.cpp in Sources */,
 				507BF7E926834EF30037F28C /* NSData+AES.m in Sources */,
 				507BF81126834EF30037F28C /* SBCollection.cpp in Sources */,
@@ -1283,6 +1307,7 @@
 				50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */,
 				507BF80226834EF30037F28C /* GameCenterHelper.mm in Sources */,
 				1D53A5CB27857D0200A8B792 /* WelcomeScene.cpp in Sources */,
+				1DBD57FE279E43D000F07409 /* CharacterCell.cpp in Sources */,
 				507BF7F526834EF30037F28C /* PluginManager.cpp in Sources */,
 				1AF87B781F6F77F7007BE51C /* AppController.mm in Sources */,
 				507BF82B26834EF30037F28C /* PopupManager.cpp in Sources */,
@@ -1321,6 +1346,7 @@
 				507BF80426834EF30037F28C /* SBAnalytics.cpp in Sources */,
 				507BF7E026834EF30037F28C /* ResourceHelper.cpp in Sources */,
 				507BF980268364E40037F28C /* StageProgressBar.cpp in Sources */,
+				1DBD57F4279E307600F07409 /* ShopPopup.cpp in Sources */,
 				507BF7FF26834EF30037F28C /* FirebaseManager-android.cpp in Sources */,
 				507BF7F926834EF30037F28C /* IAPHelper-ios.mm in Sources */,
 				507BF80B26834EF30037F28C /* SBTransition.cpp in Sources */,

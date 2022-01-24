@@ -43,6 +43,8 @@ private:
     void onClick(cocos2d::Node *sender) override;
     
     void replaceGameScene(int stage);
+    
+    void showShopPopup();
     void showSettingPopup();
     
 private:

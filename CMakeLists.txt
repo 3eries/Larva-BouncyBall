@@ -128,6 +128,7 @@ target_include_directories(${APP_NAME}
         PRIVATE Classes/content/
         PRIVATE Classes/gift/
         PRIVATE Classes/popup/
+        PRIVATE Classes/shop/
         PRIVATE Classes/ranking/
         PRIVATE Classes/test/
         PRIVATE Classes/tutorial/
