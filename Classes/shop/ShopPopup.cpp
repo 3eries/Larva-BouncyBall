@@ -52,8 +52,16 @@ bool ShopPopup::onBackKeyReleased() {
     }
     
     SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
-    dismissWithAction();
     
+    // lazy remove
+    // ShopPopup을 바로 삭제하면 다른 Node에 onBackKeyReleased가 호출됨
+    // dismissWithAction();
+    setVisible(false);
+    
+    SBDirector::postDelayed(this, [=]() {
+        this->dismiss();
+    }, 0.1f);
+
     return true;
 }
 
