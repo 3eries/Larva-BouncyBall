@@ -43,15 +43,9 @@ static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 
 static const std::string ANALYTICS_EVENT_CREDIT                     = "credit";                     // 크레딧 화면 진입
 static const std::string ANALYTICS_EVENT_MORE_GAMES                 = "more_games";                 // 게임 더보기 클릭
-static const std::string ANALYTICS_EVENT_REVIEW_POPUP               = "review_popup";               // 리뷰 팝업 진입
 
-static const std::string ANALYTICS_EVENT_LEVEL_PLAY                 = "level_play";
-static const std::string ANALYTICS_EVENT_LEVEL_CLEAR                = "level_clear";
-static const std::string ANALYTICS_EVENT_LEVEL_REFRESH              = "level_refresh";
-
-static const std::string ANALYTICS_EVENT_HINT_USE                   = "hint_use";                   // 힌트 사용
-static const std::string ANALYTICS_EVENT_HINT_GET_POPUP             = "hint_get_popup";             // 힌트 획득 팝업 노출
-static const std::string ANALYTICS_EVENT_HINT_GET                   = "hint_get";                   // 힌트 획득
+static const std::string ANALYTICS_EVENT_LEVEL_PLAY                 = "stage_play";
+static const std::string ANALYTICS_EVENT_LEVEL_CLEAR                = "stage_clear";
 
 static const std::string ANALYTICS_EVENT_PARAM_LEVEL                = "level";
 static const std::string ANALYTICS_EVENT_PARAM_LEVEL_RANGE          = "level_range";
