@@ -58,10 +58,13 @@ void User::init() {
     unlockStage(1);
     
     CCLOG("User {");
-    CCLOG("\t coin: %d", getCoin());
     CCLOG("\t latest play stage: %d", getLatestPlayStage());
     CCLOG("\t top unlocked stage: %d", getTopUnlockedStage());
     CCLOG("}");
+    
+    if( isRemovedAds() ) {
+        removeAds();
+    }
     
     // IAP 리스너 초기화
     auto onRemoveAds = [=]() {
@@ -81,10 +84,6 @@ void User::init() {
     restoreListener->setForever(true);
     restoreListener->onRemoveAds = onRemoveAds;
     iap::IAPHelper::getInstance()->addListener(this, restoreListener);
-    
-    if( isRemovedAds() ) {
-        removeAds();
-    }
 }
 
 /**
@@ -97,6 +96,7 @@ void User::setRemoveAds(bool isRemoveAds) {
     
     AdsHelper::getInstance()->setBannerEnabled(!isRemoveAds);
     AdsHelper::getInstance()->setInterstitialEnabled(!isRemoveAds);
+    AdsHelper::getInstance()->setRewardedVideoEnabled(!isRemoveAds);
     
     if( isRemoveAds ) {
         AdsHelper::hideBanner();
@@ -118,98 +118,6 @@ void User::removeAds() {
 bool User::isRemovedAds() {
     
     return USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_REMOVE_ADS, false);
-}
-
-/**
- * 힌트 개수를 설정합니다
- */
-void User::setHintCount(int i) {
-    
-    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_HINT, i);
-    USER_DEFAULT->flush();
-    
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(DIRECTOR_EVENT_UPDATE_HINT_COUNT);
-}
-
-/**
- * 힌트 개수를 반환합니다
- */
-int User::getHintCount() {
-    
-    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_HINT, GAME_CONFIG->getFirstHint());
-}
-
-/**
- * 힌트를 획득합니다
- */
-void User::getHint(int i) {
-    
-    setHintCount(getHintCount() + i);
-}
-
-/**
- * 힌트를 사용합니다
- */
-bool User::useHint() {
-    
-    int count = getHintCount();
-    if( count == 0 ) {
-        return false;
-    }
-    
-    setHintCount(count-1);
-    return true;
-}
-
-/**
- * 코인을 설정합니다
- */
-void User::setCoin(int i) {
-    
-    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_COIN, i);
-    USER_DEFAULT->flush();
-    
-    Director::getInstance()->getEventDispatcher()->dispatchCustomEvent(DIRECTOR_EVENT_UPDATE_USER_COIN);
-}
-
-/**
- * 코인을 획득합니다
- */
-void User::earnCoin(int i) {
-    
-    int coin = getCoin() + i;
-    setCoin(coin);
-}
-
-/**
- * 코인을 소모합니다
- * @return 코인이 충분한지 않으면 false를 반환합니다
- */
-bool User::spendCoin(int i) {
-    
-    int coin = getCoin() - i;
-    if( coin < 0 ) {
-        return false;
-    }
-    
-    setCoin(coin);
-    return true;
-}
-
-/**
- * 코인을 반환합니다
- */
-int User::getCoin() {
-    
-    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_COIN, GAME_CONFIG->getFirstCoin());
-}
-
-/**
- * 코인이 충분한지 반환합니다
- */
-bool User::isEnoughCoin(int i) {
-    
-    return getCoin() >= i;
 }
 
 /**
@@ -254,6 +162,25 @@ int User::getStageStarCount(int stage) {
     return doc[stageKey.c_str()].GetInt();
      */
     return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), INVALID_STAR_COUNT);
+}
+
+/**
+ * 합산된 별 개수를 반환합니다
+ */
+int User::getStageStarTotalCount() {
+    
+    int topStage = getTopUnlockedStage();
+    int total = 0;
+    
+    for( int stage = 1; stage <= topStage; ++stage ) {
+        int star = getStageStarCount(stage);
+        
+        if( star != INVALID_STAR_COUNT ) {
+            total += star;
+        }
+    }
+        
+    return total;
 }
 
 /**

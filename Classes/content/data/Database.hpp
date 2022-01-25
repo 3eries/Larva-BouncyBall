@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 
+#include "model/CharacterData.h"
 #include "model/StageData.h"
 
 /** @class Database

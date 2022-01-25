@@ -30,24 +30,12 @@ public:
     static void             removeAds();
     static bool             isRemovedAds();
     
-    // hint
-    static void             setHintCount(int i);
-    static int              getHintCount();
-    static void             getHint(int i);
-    static bool             useHint();
-    
-    // coin
-    static void             setCoin(int i);
-    static void             earnCoin(int i);
-    static bool             spendCoin(int i);
-    static int              getCoin();
-    static bool             isEnoughCoin(int i = 0);
-    
     // in game
     static void             setTutorialCompleted(bool isCompleted);
     static bool             isTutorialCompleted();
     
     static int              getStageStarCount(int stage);
+    static int              getStageStarTotalCount();
     static void             setStageStarCount(int stage, int star);
     
     static void             unlockStage(int stage);

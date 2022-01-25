@@ -16,6 +16,7 @@
 		1AF87B8B1F6F782A007BE51C /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */; };
 		1D53A5CB27857D0200A8B792 /* WelcomeScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1D75C573279F873300741E10 /* GetCharacterPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D75C571279F873300741E10 /* GetCharacterPopup.cpp */; };
 		1D803689278BCA270083E400 /* WorldPage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1D803687278BCA260083E400 /* WorldPage.cpp */; };
 		1DBD57F4279E307600F07409 /* ShopPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DBD57F2279E307600F07409 /* ShopPopup.cpp */; };
 		1DBD57F9279E439600F07409 /* IAPCell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DBD57F7279E439600F07409 /* IAPCell.cpp */; };
@@ -182,6 +183,9 @@
 		1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WelcomeScene.cpp; sourceTree = "<group>"; };
 		1D53A5CA27857D0200A8B792 /* WelcomeScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WelcomeScene.hpp; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* LarvaBouncyBall-mobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LarvaBouncyBall-mobile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D75C571279F873300741E10 /* GetCharacterPopup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GetCharacterPopup.cpp; sourceTree = "<group>"; };
+		1D75C572279F873300741E10 /* GetCharacterPopup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GetCharacterPopup.hpp; sourceTree = "<group>"; };
+		1D75C576279F896F00741E10 /* CharacterData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CharacterData.h; sourceTree = "<group>"; };
 		1D803687278BCA260083E400 /* WorldPage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WorldPage.cpp; sourceTree = "<group>"; };
 		1D803688278BCA270083E400 /* WorldPage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WorldPage.hpp; sourceTree = "<group>"; };
 		1DA870E127953FBE000CA59E /* TileData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TileData.h; sourceTree = "<group>"; };
@@ -1044,6 +1048,7 @@
 		507BF7B426834EF30037F28C /* model */ = {
 			isa = PBXGroup;
 			children = (
+				1D75C576279F896F00741E10 /* CharacterData.h */,
 				507BF7B526834EF30037F28C /* StageData.h */,
 				1DA870E127953FBE000CA59E /* TileData.h */,
 			);
@@ -1057,6 +1062,8 @@
 				507BF7B826834EF30037F28C /* BasePopup.hpp */,
 				507BF7BE26834EF30037F28C /* ExitAlertPopup.cpp */,
 				507BF7B726834EF30037F28C /* ExitAlertPopup.hpp */,
+				1D75C571279F873300741E10 /* GetCharacterPopup.cpp */,
+				1D75C572279F873300741E10 /* GetCharacterPopup.hpp */,
 				507BF7C126834EF30037F28C /* PopupDefine.h */,
 				507BF7B926834EF30037F28C /* PopupListener.cpp */,
 				507BF7C026834EF30037F28C /* PopupListener.hpp */,
@@ -1335,6 +1342,7 @@
 				507BF7E426834EF30037F28C /* SBBasePopup.cpp in Sources */,
 				507BF7DC26834EF30037F28C /* Define.cpp in Sources */,
 				507BF7F726834EF30037F28C /* IAPHelper-android.cpp in Sources */,
+				1D75C573279F873300741E10 /* GetCharacterPopup.cpp in Sources */,
 				507BF7FC26834EF30037F28C /* FirebaseAnalytics-ios.mm in Sources */,
 				1DEB5554279A732B00699529 /* Flag.cpp in Sources */,
 				507BF83726834EF30037F28C /* TestHelper.cpp in Sources */,

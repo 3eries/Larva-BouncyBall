@@ -55,7 +55,6 @@ string PopupManager::getPopupInfo() {
             case PopupType::SHOP:              return "SHOP";
             case PopupType::SETTING:           return "SETTING";
             case PopupType::PAUSE:             return "PAUSE";
-            case PopupType::GET_HINT:          return "GET_HINT";
             case PopupType::GAME_CLEAR:        return "GAME_CLEAR";
             case PopupType::GAME_RESULT:       return "GAME_RESULT";
             case PopupType::CONTINUE:          return "CONTINUE";
