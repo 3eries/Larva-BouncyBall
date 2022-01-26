@@ -10,7 +10,7 @@
 #include "User.hpp"
 #include "SceneManager.h"
 #include "PopupManager.hpp"
-#include "GameUIHelper.hpp"
+#include "GameConfiguration.hpp"
 
 #include "../test/TestHelper.hpp"
 #include "../game/GameDefine.h"
@@ -18,7 +18,6 @@
 #include "CommonLoadingBar.hpp"
 #include "ExitAlertPopup.hpp"
 #include "SettingPopup.hpp"
-#include "BannerView.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
@@ -161,20 +160,26 @@ void WelcomeScene::showSettingPopup() {
 
 void WelcomeScene::initBg() {
     
-    addChild(LayerColor::create(Color4B(GAME_BG_COLOR)));
+    int latestPlayWorld = GAME_CONFIG->getWorldAtStage(User::getLatestPlayStage());
     
-    // 배너
-    if( !User::isRemovedAds() ) {
-//        auto bannerView = BannerView::create();
-//        addChild(bannerView, SBZOrder::TOP);
-    }
+    auto bg = Sprite::create(DIR_IMG_COMMON + STR_FORMAT("common_bg%02d.png", latestPlayWorld));
+    bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
+    bg->setAnchorPoint(ANCHOR_M);
+    bg->setPosition(Vec2MC(0,0));
+    addChild(bg);
+    
+    // 타이틀
+    auto title = Sprite::create(DIR_IMG_MAIN + "lobby_game_title.png");
+    title->setAnchorPoint(ANCHOR_M);
+    title->setPosition(Vec2MC(0, 62));
+    addChild(title);
     
     // 크레딧
     auto creditBtn = SBNodeUtils::createTouchNode();
     creditBtn->setTag(Tag::BTN_CREDIT);
     creditBtn->setAnchorPoint(ANCHOR_M);
-    creditBtn->setPosition(Vec2MC(0, 100));
-    creditBtn->setContentSize(Size(SB_WIN_SIZE.width*0.3f, 250));
+    creditBtn->setPosition(Vec2MC(0, 50));
+    creditBtn->setContentSize(Size(title->getContentSize().width * 0.7f, 250));
     addChild(creditBtn, SBZOrder::MIDDLE);
     
     creditBtn->addClickEventListener([=](Ref*) {
@@ -195,17 +200,13 @@ void WelcomeScene::initTitle() {
 void WelcomeScene::initMenu() {
     
     // 탭하여 시작
-    auto tapToStart = Label::createWithTTF("TAP TO START", FONT_ROBOTO_BLACK, 40, Size::ZERO,
-                                           TextHAlignment::CENTER, TextVAlignment::CENTER);
-    tapToStart->setTextColor(Color4B(239, 255, 233, 255));
+    auto tapToStart = Sprite::create(DIR_IMG_MAIN + "lobby_touch_to_start.png");
     tapToStart->setAnchorPoint(ANCHOR_M);
-    tapToStart->setPosition(Vec2BC(0, 250));
+    tapToStart->setPosition(Vec2MC(0, -328));
     addChild(tapToStart);
     
     auto btn = SBNodeUtils::createTouchNode();
     btn->setTag(Tag::BTN_START);
-    btn->setAnchorPoint(ANCHOR_MB);
-    btn->setPosition(Vec2BC(0, 80));
     btn->setContentSize(Size(SB_WIN_SIZE.width*0.85f, SB_WIN_SIZE.height*0.40f));
     addChild(btn);
     
