@@ -187,7 +187,7 @@ void WelcomeScene::initBg() {
     });
     
     // 크레딧 영역 확인용
-    creditBtn->addChild(SBNodeUtils::createBackgroundNode(creditBtn, Color4B(255,0,0,255*0.5f)));
+    // creditBtn->addChild(SBNodeUtils::createBackgroundNode(creditBtn, Color4B(255,0,0,255*0.5f)));
     //
 }
 
@@ -207,7 +207,7 @@ void WelcomeScene::initMenu() {
     
     auto btn = SBNodeUtils::createTouchNode();
     btn->setTag(Tag::BTN_START);
-    btn->setContentSize(Size(SB_WIN_SIZE.width*0.85f, SB_WIN_SIZE.height*0.40f));
+    btn->setContentSize(Size(SB_WIN_SIZE.width*0.9f, SB_WIN_SIZE.height*0.85f));
     addChild(btn);
     
     btn->addClickEventListener([=](Ref*) {
