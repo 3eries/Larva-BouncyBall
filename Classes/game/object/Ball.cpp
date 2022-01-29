@@ -17,10 +17,10 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define VELOCITY_BOUNCE_UP                     22
-#define VELOCITY_BOUNCE_DOWN                  -15
-#define VELOCITY_MOVE_LEFT                    -10
-#define VELOCITY_MOVE_RIGHT                    10
+#define VELOCITY_BOUNCE_UP                     (22 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_BOUNCE_DOWN                   (-15 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_MOVE_LEFT                     (-10 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_MOVE_RIGHT                    (10 * GAME_MANAGER->getMapScaleFactor())
 
 #define BOUNCE_DOWN_DELAY                      0.5f
 #define CONTINUOUS_X_INTERVAL                  0.1f
@@ -61,7 +61,7 @@ bool Ball::init() {
         return false;
     }
     
-    auto size = Size(stage.tileSize.width*0.8f, stage.tileSize.height*0.5f);
+    auto size = Size(stage.tileSize.width*0.7f, stage.tileSize.height*0.5f);
     
     setAnchorPoint(ANCHOR_M);
     setContentSize(size);
@@ -86,6 +86,7 @@ void Ball::cleanup() {
 void Ball::initImage() {
     
     image = Sprite::create();
+    image->setScale(GAME_MANAGER->getMapScaleFactor());
     image->setAnchorPoint(ANCHOR_MB);
     image->setPosition(Vec2BC(getContentSize(), 0, -15));
     addChild(image);

@@ -7,6 +7,8 @@
 
 #include "PhysicsManager.hpp"
 
+#include "../GameManager.hpp"
+
 #include "../object/Ball.hpp"
 #include "../object/tile/GameTile.hpp"
 #include "../object/tile/Block.hpp"

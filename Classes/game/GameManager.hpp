@@ -58,11 +58,13 @@ public:
     bool            isContinuable();
     
 private:
-    CC_SYNTHESIZE_READONLY(GameState, state, State);              // 게임 상태
+    CC_SYNTHESIZE_READONLY(GameState, state, State);               // 게임 상태
     
-    CC_SYNTHESIZE_READONLY(StageData, stage, Stage);              // 스테이지
-    CC_SYNTHESIZE_READONLY(int, star, Star);                      // 획득한 별 개수
-    CC_SYNTHESIZE_READONLY(int, continueCount, ContinueCount);    // 이어하기한 횟수
+    CC_SYNTHESIZE_READONLY(StageData, stage, Stage);               // 스테이지
+    CC_SYNTHESIZE_READONLY(float, mapScaleFactor, MapScaleFactor); //
+    
+    CC_SYNTHESIZE_READONLY(int, star, Star);                       // 획득한 별 개수
+    CC_SYNTHESIZE_READONLY(int, continueCount, ContinueCount);     // 이어하기한 횟수
     
 // Physics
 public:

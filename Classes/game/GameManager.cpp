@@ -55,6 +55,7 @@ void GameManager::reset() {
     CCLOG("GameManager::reset");
     
     state = GameState::NONE;
+    mapScaleFactor = 1;
     star = 0;
     continueCount = 0;
     
@@ -106,6 +107,9 @@ void GameManager::setStage(int stage) {
     
     this->stage = Database::getStage(stage);
     User::setLatestPlayStage(stage);
+    
+    // Scale factor 설정
+    mapScaleFactor = this->stage.tileSize.height / TILE_DEFAULT_SIZE.height;
 }
 
 /**

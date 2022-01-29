@@ -74,7 +74,7 @@ enum class BallDirection {
 
 // Physics
 #define                PHYSICS_FPS                        (1 / 60.0f)
-#define                PHYSICS_GRAVITY                    b2Vec2(0, -60)
+#define                PHYSICS_GRAVITY                    b2Vec2(0, -60 * GAME_MANAGER->getMapScaleFactor())
 
 // velocityIterations : 바디들을 정상적으로 이동시키기 위해서 필요한 충돌들을 반복적으로 계산
 // positionIterations : 조인트 분리와, 겹침현상을 줄이기 위해서 바디의 위치를 반복적으로 적용
@@ -100,16 +100,11 @@ enum PhysicsCategory {
 static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
 static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP | PhysicsCategory::FLOOR |                                                  PhysicsCategory::FLAG | PhysicsCategory::ITEM | PhysicsCategory::BLOCK | PhysicsCategory::BLOCK_SIDE);
 
-#define                 TILE_NUMBER_NORMAL_COLOR            cocos2d::Color4B(0,0,0,255)
-#define                 TILE_NUMBER_SELECTED_COLOR          cocos2d::Color4B(255,255,255,255)
+#define                 TILE_DEFAULT_SIZE                  cocos2d::Size(108,108)
 
-#define                 TILE_ENTER_DURATION                 0.3f
-#define                 TILE_EXIT_DURATION                  0.3f
-#define                 TILE_MOVE_DURATION                  0.3f
-
-#define                 TILE_NUMBER_ENTER_DURATION          0.3f
-#define                 TILE_NUMBER_EXIT_DURATION           0.3f
-
+#define                 TILE_ENTER_DURATION                0.3f
+#define                 TILE_EXIT_DURATION                 0.3f
+#define                 TILE_MOVE_DURATION                 0.3f
 
 #define                 TILE_PADDING_X                     4
 #define                 TILE_PADDING_Y                     4
