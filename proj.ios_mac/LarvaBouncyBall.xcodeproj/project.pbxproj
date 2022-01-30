@@ -107,7 +107,6 @@
 		507BF82326834EF30037F28C /* GameView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7A626834EF30037F28C /* GameView.cpp */; };
 		507BF82426834EF30037F28C /* MainScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7A826834EF30037F28C /* MainScene.cpp */; };
 		507BF82526834EF30037F28C /* CreditPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7A926834EF30037F28C /* CreditPopup.cpp */; };
-		507BF82626834EF30037F28C /* ContentResourceHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7AF26834EF30037F28C /* ContentResourceHelper.cpp */; };
 		507BF82726834EF30037F28C /* ContentManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7B026834EF30037F28C /* ContentManager.cpp */; };
 		507BF82826834EF30037F28C /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7B326834EF30037F28C /* Database.cpp */; };
 		507BF82926834EF30037F28C /* PopupListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7B926834EF30037F28C /* PopupListener.cpp */; };
@@ -361,9 +360,7 @@
 		507BF7A926834EF30037F28C /* CreditPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CreditPopup.cpp; sourceTree = "<group>"; };
 		507BF7AA26834EF30037F28C /* MainScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MainScene.hpp; sourceTree = "<group>"; };
 		507BF7AB26834EF30037F28C /* CreditPopup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CreditPopup.hpp; sourceTree = "<group>"; };
-		507BF7AD26834EF30037F28C /* ContentResourceHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ContentResourceHelper.hpp; sourceTree = "<group>"; };
 		507BF7AE26834EF30037F28C /* ContentManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ContentManager.hpp; sourceTree = "<group>"; };
-		507BF7AF26834EF30037F28C /* ContentResourceHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContentResourceHelper.cpp; sourceTree = "<group>"; };
 		507BF7B026834EF30037F28C /* ContentManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContentManager.cpp; sourceTree = "<group>"; };
 		507BF7B226834EF30037F28C /* Database.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Database.hpp; sourceTree = "<group>"; };
 		507BF7B326834EF30037F28C /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Database.cpp; sourceTree = "<group>"; };
@@ -1028,8 +1025,6 @@
 			children = (
 				507BF7B026834EF30037F28C /* ContentManager.cpp */,
 				507BF7AE26834EF30037F28C /* ContentManager.hpp */,
-				507BF7AF26834EF30037F28C /* ContentResourceHelper.cpp */,
-				507BF7AD26834EF30037F28C /* ContentResourceHelper.hpp */,
 				507BF7B126834EF30037F28C /* data */,
 			);
 			path = content;
@@ -1295,7 +1290,6 @@
 				507BF7DE26834EF30037F28C /* GameConfiguration.cpp in Sources */,
 				507BF81726834EF30037F28C /* ConsentForm.cpp in Sources */,
 				507BF82A26834EF30037F28C /* ReviewPopup.cpp in Sources */,
-				507BF82626834EF30037F28C /* ContentResourceHelper.cpp in Sources */,
 				507BF80C26834EF30037F28C /* SBMath.cpp in Sources */,
 				507BF7E326834EF30037F28C /* SBAnimationSprite.cpp in Sources */,
 				507BF81D26834EF30037F28C /* SBScheduleHelper.cpp in Sources */,

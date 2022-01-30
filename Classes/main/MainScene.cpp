@@ -7,6 +7,7 @@
 #include "MainScene.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "User.hpp"
 #include "SceneManager.h"
 #include "PopupManager.hpp"
@@ -29,7 +30,9 @@ using namespace cocos2d::ui;
 using namespace spine;
 using namespace std;
 
-MainScene::MainScene() {
+MainScene::MainScene():
+pageIndex(0),
+pageDiffCount(0) {
     
 }
 
@@ -177,7 +180,18 @@ void MainScene::showSettingPopup() {
 
 void MainScene::initBg() {
     
-    addChild(LayerColor::create(Color4B(GAME_BG_COLOR)));
+    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(User::getLatestPlayStage().world));
+    bg->setTag(Tag::BG);
+    bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
+    bg->setAnchorPoint(ANCHOR_M);
+    bg->setPosition(Vec2MC(0,0));
+    addChild(bg);
+    
+    auto cover = Sprite::create(DIR_IMG_MAIN + "main_bg_cover.png");
+    cover->setScale(SB_WIN_SIZE.width / cover->getContentSize().width);
+    cover->setAnchorPoint(ANCHOR_M);
+    cover->setPosition(Vec2MC(0,0));
+    addChild(cover);
 }
 
 /**
@@ -185,21 +199,11 @@ void MainScene::initBg() {
  */
 void MainScene::initMenu() {
     
-    // 메인 화면 전용 메뉴
-//    auto settingBtn = Button::create(DIR_IMG_COMMON + "common_btn_more.png");
-//    settingBtn->setTag(Tag::BTN_SETTING);
-//    settingBtn->setZoomScale(ButtonZoomScale::NORMAL);
-//    settingBtn->setAnchorPoint(ANCHOR_M);
-//    settingBtn->setPosition(Vec2TR(-56, -54));
-//    addChild(settingBtn);
-//
-//    settingBtn->setOnClickListener(CC_CALLBACK_1(GameScene::onClick, this));
-    
+    // main_btn_shop.png Vec2TL(224, -104) , Size(368, 192)
+    // main_btn_menu.png Vec2TR(-104, -104) , Size(128, 128)
     SBUIInfo infos[] = {
-        SBUIInfo(Tag::BTN_SHOP, ANCHOR_M, Vec2TL(56, -54),
-                 DIR_IMG_MAIN + "main_btn_leaderboard.png"),
-        SBUIInfo(Tag::BTN_SETTING, ANCHOR_M, Vec2TR(-56, -54),
-                 DIR_IMG_COMMON + "common_btn_more.png"),
+        SBUIInfo(Tag::BTN_SHOP,    ANCHOR_M, Vec2TL(224, -104),  DIR_IMG_MAIN + "main_btn_shop.png"),
+        SBUIInfo(Tag::BTN_SETTING, ANCHOR_M, Vec2TR(-104, -104), DIR_IMG_MAIN + "main_btn_menu.png"),
     };
     
     for( int i = 0; i < sizeof(infos)/sizeof(SBUIInfo); ++i ) {
@@ -219,14 +223,38 @@ void MainScene::initMenu() {
  */
 void MainScene::initWorlds() {
     
+    int latestPlayWorld = User::getLatestPlayStage().world;
+    
+    auto worldTitle = Sprite::create(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png",
+                                                               latestPlayWorld));
+    worldTitle->setTag(Tag::WORLD_TITLE);
+    worldTitle->setAnchorPoint(ANCHOR_M);
+    worldTitle->setPosition(Vec2TC(0, -184));
+    addChild(worldTitle);
+    
     auto pageView = PageView::create();
     pageView->setDirection(PageView::Direction::HORIZONTAL);
-    pageView->setIndicatorEnabled(true);
     pageView->setBounceEnabled(true);
     pageView->setAnchorPoint(ANCHOR_M);
     pageView->setPosition(Vec2MC(0, 0));
     pageView->setContentSize(SB_WIN_SIZE);
     addChild(pageView);
+    
+    // 인디게이터
+    // main_indicator_off.png Vec2TC(-120, -308) , Size(32, 32)
+    // main_indicator_off.png Vec2TC(-60, -308) , Size(32, 32)
+    pageView->setIndicatorEnabled(false);
+    pageView->setIndicatorEnabled(true);
+    pageView->setIndicatorIndexNodesTexture(DIR_IMG_MAIN + "main_indicator_dot.png");
+    pageView->setIndicatorPosition(Vec2TC(0, -308) + Vec2(0, -32 / 2));
+    // pageView->setIndicatorIndexNodesScale(0.55f);
+    pageView->setIndicatorIndexNodesColor(Color3B(0, 0, 0));
+    pageView->setIndicatorIndexNodesOpacity(255*0.5f);
+    pageView->setIndicatorSelectedIndexColor(Color3B(39, 163, 255));
+    pageView->setIndicatorSelectedIndexOpacity(255);
+    pageView->setIndicatorSpaceBetweenIndexNodes(28);
+    
+    // SBNodeUtils::recursiveCascadeOpacityEnabled(pageView, true);
     
     // 월드 페이지 생성
     for( int i = 0; i < GAME_CONFIG->getWorldCount(); ++i ) {
@@ -238,6 +266,59 @@ void MainScene::initWorlds() {
     }
     
     // 마지막으로 플레이한 월드로 포커스
-    int latestPlayWorld = GAME_CONFIG->getWorldAtStage(User::getLatestPlayStage());
     pageView->setCurrentPageIndex(latestPlayWorld-1);
+    
+    // 페이지 전환 시 타이틀 업데이트
+    auto onPageChanged = [=](size_t page) {
+        
+        this->pageIndex = page;
+        int world = page + 1;
+        
+        worldTitle->setTexture(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png", world));
+        
+        auto bg = getChildByTag<Sprite*>(Tag::BG);
+        bg->setTexture(ResourceHelper::getWorldBackgroundImage(world));
+    };
+    
+//    pageView->addEventListener([=](Ref*, PageView::EventType eventType) {
+//        if( eventType == PageView::EventType::TURNING ) {
+//            onPageChanged(pageView->getCurrentPageIndex());
+//        }
+//    });
+    
+    pageView->addEventListener([=](Ref*, ScrollView::EventType eventType) {
+       
+        switch( eventType ) {
+            // 페이지 스크롤 진행중
+            case ScrollView::EventType::CONTAINER_MOVED: {
+                ssize_t i = pageView->getCurrentPageIndex();
+                if( i < 0 ) {
+                    return;
+                }
+                
+                if( pageIndex == i ) {
+                    return;
+                }
+                
+                ++pageDiffCount;
+
+                // 페이지 전환
+                if( pageDiffCount == 3 ) {
+                    pageDiffCount = 0;
+                    // onPageChanged(i);
+                }
+            } break;
+                
+            // 스크롤 완료
+            case ScrollView::EventType::AUTOSCROLL_ENDED: {
+                pageDiffCount = 0;
+                
+                if( pageIndex != pageView->getCurrentPageIndex() ) {
+                    onPageChanged(pageView->getCurrentPageIndex());
+                }
+            } break;
+                
+            default: break;
+        }
+    });
 }

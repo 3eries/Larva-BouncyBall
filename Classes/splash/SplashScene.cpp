@@ -149,7 +149,6 @@ void SplashScene::loginCompleted() {
     
     ContentManager::getInstance()->init();
     User::getInstance()->init();
-    ContentResourceHelper::preload();
 }
 
 

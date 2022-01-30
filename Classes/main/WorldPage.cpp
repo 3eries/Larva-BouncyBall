@@ -14,7 +14,7 @@
 USING_NS_CC;
 using namespace std;
 
-#define CELL_SIZE       Size(200, 180)
+#define CELL_SIZE       Size(184, 172)
 
 #pragma mark- WorldPage
 
@@ -51,19 +51,25 @@ bool WorldPage::init() {
     setPosition(Vec2::ZERO);
     setContentSize(SB_WIN_SIZE);
     
-    auto worldLabel = Label::createWithTTF(STR_FORMAT("WORLD %d", world), FONT_ROBOTO_BLACK, 60,
-                                           Size::ZERO, TextHAlignment::CENTER, TextVAlignment::CENTER);
-    worldLabel->setTextColor(Color4B::WHITE);
-    worldLabel->setAnchorPoint(ANCHOR_M);
-    worldLabel->setPosition(Vec2TC(0, -70));
-    addChild(worldLabel);
-    
     // 스테이지 Cell 생성
-    Vec2 origin(SB_WIN_SIZE.width/2 - 600, 700);
-    Vec2 padding(50, 50);
-    Vec2 pos = origin;
-    
+    // main_box_stage.png Vec2MC(-560, 74) , Size(184, 172)
+    // main_box_stage.png Vec2MC(-336, 74) , Size(184, 172)
+    // main_box_stage.png Vec2MC(-560, -138) , Size(184, 172)
     const int STAGE_COUNT = GAME_CONFIG->getStagePerWorld();
+    const int STAGE_WIDTH_COUNT = 6;
+    const Vec2 PADDING(40, 40);
+    
+    auto getStageWidth = [=]() -> float {
+        float w = STAGE_WIDTH_COUNT * CELL_SIZE.width;
+        w += ((STAGE_WIDTH_COUNT-1) * PADDING.x);
+        return w;
+    };
+    
+    Vec2 origin;
+    origin.x = ((SB_WIN_SIZE.width - getStageWidth()) / 2) + CELL_SIZE.width*0.5f;
+    origin.y = SB_WIN_SIZE.height*0.5f + 74;
+    
+    Vec2 pos = origin;
     
     for( int i = 0; i < STAGE_COUNT; ++i ) {
         int stage = ((world-1) * STAGE_COUNT) + (i + 1);
@@ -81,12 +87,12 @@ bool WorldPage::init() {
         addChild(cell);
         
         pos.x += CELL_SIZE.width;
-        pos.x += padding.x;
+        pos.x += PADDING.x;
         
-        if( stage % 6 == 0 ) {
+        if( stage % STAGE_WIDTH_COUNT == 0 ) {
             pos.x = origin.x;
             pos.y -= CELL_SIZE.height;
-            pos.y -= padding.y;
+            pos.y -= PADDING.y;
         }
     }
     
@@ -125,44 +131,45 @@ bool StageCell::init() {
     
     setContentSize(CELL_SIZE);
     
-    addChild(SBNodeUtils::createBackgroundNode(this, Color4B(50, 50, 50, 255)));
-    
-    auto stageLabel = Label::createWithTTF(TO_STRING(stage), FONT_ROBOTO_BLACK, 40, Size::ZERO,
-                                           TextHAlignment::CENTER, TextVAlignment::CENTER);
-    stageLabel->setTextColor(Color4B::WHITE);
-    stageLabel->setAnchorPoint(ANCHOR_M);
-    stageLabel->setPosition(Vec2MC(CELL_SIZE, 0, 0));
-    addChild(stageLabel);
-    
-    // 잠금 체크
     if( User::isStageLocked(stage) ) {
-        // TODO: 잠금 UI
-        auto lockedLabel = Label::createWithTTF("LOCKED", FONT_ROBOTO_BLACK, 30, Size::ZERO,
-                                                TextHAlignment::CENTER, TextVAlignment::BOTTOM);
-        lockedLabel->setTextColor(Color4B::WHITE);
-        lockedLabel->setAnchorPoint(ANCHOR_MB);
-        lockedLabel->setPosition(Vec2BC(CELL_SIZE, 0, 5));
-        addChild(lockedLabel);
+        // 잠김
+        auto locked = Sprite::create(DIR_IMG_MAIN + "main_box_stage_disable.png");
+        locked->setAnchorPoint(ANCHOR_M);
+        locked->setPosition(Vec2MC(CELL_SIZE, 0, 0));
+        addChild(locked);
         
         return true;
     }
     
-    int star = User::getStageStarCount(stage);
-    string starStr = "";
+    auto bg = Sprite::create(DIR_IMG_MAIN + "main_box_stage.png");
+    bg->setAnchorPoint(ANCHOR_M);
+    bg->setPosition(Vec2MC(CELL_SIZE, 0, 0));
+    addChild(bg);
     
-    switch( star ) {
-        case 1: starStr = "O";      break;
-        case 2: starStr = "O O";    break;
-        case 3: starStr = "O O O";  break;
-        default: break;
+    // 888 Superstar size:80 255,255,255 stroke:4px shadow:4px Vec2MC(0, 25) , Size(128, 61)
+    auto stageLabel = Label::createWithTTF(TO_STRING(stage), FONT_SUPER_STAR, 80, Size::ZERO,
+                                           TextHAlignment::CENTER, TextVAlignment::CENTER);
+    stageLabel->setTextColor(Color4B::WHITE);
+    stageLabel->enableOutline(Color4B::BLACK, 4);
+    stageLabel->enableShadow(Color4B::BLACK, Size(0, -4));
+    stageLabel->setAnchorPoint(ANCHOR_M);
+    stageLabel->setPosition(Vec2MC(CELL_SIZE, 0, 25));
+    addChild(stageLabel);
+
+    int stars = User::getStageStarCount(stage);
+    
+    Vec2 pos[] = {
+        Vec2BC(CELL_SIZE, -36, 48),
+        Vec2BC(CELL_SIZE, 0, 48),
+        Vec2BC(CELL_SIZE, 36, 48),
+    };
+    
+    for( int i = 0; i < stars; ++i ) {
+        auto starSpr = Sprite::create(DIR_IMG_MAIN + "main_icon_stage_star.png");
+        starSpr->setAnchorPoint(ANCHOR_M);
+        starSpr->setPosition(pos[i]);
+        addChild(starSpr);
     }
-    
-    auto starLabel = Label::createWithTTF(starStr, FONT_ROBOTO_BLACK, 30, Size::ZERO,
-                                            TextHAlignment::CENTER, TextVAlignment::BOTTOM);
-    starLabel->setTextColor(Color4B::WHITE);
-    starLabel->setAnchorPoint(ANCHOR_MB);
-    starLabel->setPosition(Vec2BC(CELL_SIZE, 0, 5));
-    addChild(starLabel);
     
     // onClick
     setTouchEnabled(true);

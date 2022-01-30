@@ -11,8 +11,9 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
+#include "ContentManager.hpp"
 
-class User : public cocos2d::Ref {
+class User: public cocos2d::Ref {
 public:
     static User* getInstance();
     static void destroyInstance();
@@ -41,7 +42,7 @@ public:
     static void             unlockStage(int stage);
     static bool             isStageLocked(int stage);
     
-    static int              getLatestPlayStage();
+    static StageData        getLatestPlayStage();
     static void             setLatestPlayStage(int stage);
     
     static int              getTopUnlockedStage();

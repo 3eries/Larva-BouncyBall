@@ -20,6 +20,7 @@ public:
     static void preload();
     
     static std::string getLocalizedImage(const std::string &image);
+    static std::string getWorldBackgroundImage(int world);
 };
 
 #endif /* ResourceHelper_hpp */

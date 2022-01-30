@@ -58,7 +58,7 @@ void User::init() {
     unlockStage(1);
     
     CCLOG("User {");
-    CCLOG("\t latest play stage: %d", getLatestPlayStage());
+    CCLOG("\t latest play stage: %d", getLatestPlayStage().stage);
     CCLOG("\t top unlocked stage: %d", getTopUnlockedStage());
     CCLOG("}");
     
@@ -206,8 +206,9 @@ bool User::isStageLocked(int stage) {
 /**
  * 마지막으로 플레이한 스테이지를 반환합니다.
  */
-int User::getLatestPlayStage() {
-    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, getTopUnlockedStage());
+StageData User::getLatestPlayStage() {
+    int stage = USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, getTopUnlockedStage());
+    return Database::getStage(stage);
 }
 
 void User::setLatestPlayStage(int stage) {

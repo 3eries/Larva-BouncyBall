@@ -7,6 +7,7 @@
 #include "WelcomeScene.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "User.hpp"
 #include "SceneManager.h"
 #include "PopupManager.hpp"
@@ -160,9 +161,9 @@ void WelcomeScene::showSettingPopup() {
 
 void WelcomeScene::initBg() {
     
-    int latestPlayWorld = GAME_CONFIG->getWorldAtStage(User::getLatestPlayStage());
+    int latestPlayWorld = User::getLatestPlayStage().world;
     
-    auto bg = Sprite::create(DIR_IMG_COMMON + STR_FORMAT("common_bg%02d.png", latestPlayWorld));
+    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(latestPlayWorld));
     bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
     bg->setAnchorPoint(ANCHOR_M);
     bg->setPosition(Vec2MC(0,0));

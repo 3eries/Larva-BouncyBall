@@ -27,8 +27,6 @@ public:
     void init();
     void parse(const std::string &json);
     
-    int  getWorldAtStage(int stage);
-    
 private:
     CC_SYNTHESIZE_READONLY(std::string, storeUrl, StoreUrl);
     CC_SYNTHESIZE_READONLY(std::string, moreGamesUrl, MoreGamesUrl);

@@ -71,8 +71,3 @@ void GameConfiguration::parse(const string &json) {
     CCLOG("\tfirstHint: %d", firstHint);
     CCLOG("========== PARSE END (game_config.json)  ==========");
 }
-
-int GameConfiguration::getWorldAtStage(int stage) {
-    
-    return ((stage-1) / stagePerWorld) + 1;
-}

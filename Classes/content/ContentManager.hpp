@@ -13,7 +13,6 @@
 #include "superbomb.h"
 
 #include "data/Database.hpp"
-#include "ContentResourceHelper.hpp"
 
 /** @class ContentManager
  * @brief 이 클래스는 컨텐츠를 관리합니다

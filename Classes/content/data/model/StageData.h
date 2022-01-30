@@ -14,6 +14,7 @@
 
 struct StageData {
     int                       stage;                   // 스테이지
+    int                       world;                   // 월드
     cocos2d::Size             mapContentSize;          // 맵 크기
     int                       mapWidthTiles;           // 맵 가로 타일 수
     int                       mapHeightTiles;          // 맵 세로 타일 수

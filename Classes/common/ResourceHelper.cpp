@@ -79,3 +79,11 @@ string ResourceHelper::getLocalizedImage(const string &image) {
     
     return SBStringUtils::replaceAll(image, ".png", STR_FORMAT("_%s.png", lanCode.c_str()));
 }
+
+/**
+ * 월드 배경 이미지를 반환합니다
+ */
+string ResourceHelper::getWorldBackgroundImage(int world) {
+    
+    return DIR_IMG_COMMON + STR_FORMAT("common_bg%02d.png", world);
+}

@@ -18,6 +18,8 @@
 class MainScene : public BaseScene {
 private:
     enum Tag {
+        BG               = 10,
+        WORLD_TITLE,
         BTN_SHOP         = 100,
         BTN_SETTING,
     };
@@ -48,8 +50,8 @@ private:
     void showSettingPopup();
     
 private:
-    std::vector<cocos2d::Color3B> titleColors;
-    int titleColorIndex;
+    size_t pageIndex;
+    int    pageDiffCount;
 };
 
 #endif /* MainScene_hpp */

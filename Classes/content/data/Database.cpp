@@ -47,7 +47,7 @@ void Database::parseStageFile() {
     
     CCLOG("========== STAGE PARSE START ==========");
     
-    for( int i = 0; i < 5; ++i ) {
+    for( int i = 0; i < 7; ++i ) {
         const auto STAGE = i+1;
         const auto STAGE_FILE = DIR_CONTENT_STAGE + STR_FORMAT("stage_%04d.tmx", STAGE);
         
@@ -60,6 +60,7 @@ void Database::parseStageFile() {
         
         StageData stage;
         stage.stage = STAGE;
+        stage.world = ((STAGE-1) / GAME_CONFIG->getStagePerWorld()) + 1;
         stage.mapWidthTiles = (int)mapInfo->getMapSize().width;
         stage.mapHeightTiles = (int)mapInfo->getMapSize().height;
         stage.mapContentSize = Size(stage.mapWidthTiles * tileSize.width,

@@ -96,7 +96,7 @@ static const std::string FONT_MANIA                 = DIR_FONT + "mania.ttf";
 static const std::string FONT_GAME_OVER             = DIR_FONT + "game_over.ttf";
 static const std::string FONT_RETRO                 = DIR_FONT + "Commodore.ttf";
 static const std::string FONT_NEW_RECORD            = DIR_FONT + "Sabo-Filled.otf";
-static const std::string FONT_FAMOUS_SAYING         = DIR_FONT + "game_over.ttf";
+static const std::string FONT_SUPER_STAR            = DIR_FONT + "superstar_memesbruh03.ttf";
 static const std::string FONT_ROBOTO_BLACK          = DIR_FONT + "Roboto-Black.ttf";
 
 // 사운드 경로
