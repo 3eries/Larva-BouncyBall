@@ -96,12 +96,13 @@ typedef std::vector<StageData> StageDataList;
 
 static inline cocos2d::Vec2 convertTilePosition(const StageData &stage, int x, int y) {
     
-    // TODO: 맵이 화면보다 큰 경우
+    cocos2d::Vec2 pos;
+    pos.y = (SB_WIN_SIZE.height - stage.mapContentSize.height) / 2;
     
     // 맵이 화면보다 작은 경우 가운데 정렬
-    cocos2d::Vec2 pos;
-    pos.x = (SB_WIN_SIZE.width - stage.mapContentSize.width) / 2;
-    pos.y = (SB_WIN_SIZE.height - stage.mapContentSize.height) / 2;
+    if( stage.mapContentSize.width < SB_WIN_SIZE.width ) {
+        pos.x = (SB_WIN_SIZE.width - stage.mapContentSize.width) / 2;
+    }
     
     // content size
     pos.x += x * stage.tileSize.width;

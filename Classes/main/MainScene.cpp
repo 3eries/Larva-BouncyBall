@@ -241,8 +241,6 @@ void MainScene::initWorlds() {
     addChild(pageView);
     
     // 인디게이터
-    // main_indicator_off.png Vec2TC(-120, -308) , Size(32, 32)
-    // main_indicator_off.png Vec2TC(-60, -308) , Size(32, 32)
     pageView->setIndicatorEnabled(false);
     pageView->setIndicatorEnabled(true);
     pageView->setIndicatorIndexNodesTexture(DIR_IMG_MAIN + "main_indicator_dot.png");

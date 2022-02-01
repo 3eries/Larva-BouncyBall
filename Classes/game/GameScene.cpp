@@ -229,8 +229,6 @@ void GameScene::onClick(Node *sender) {
  */
 void GameScene::initBg() {
     
-    addChild(LayerColor::create(Color4B(GAME_BG_COLOR)));
-    
     // 배너
     /*
     if( !User::isRemovedAds() ) {

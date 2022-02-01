@@ -24,6 +24,8 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
+#define SCHEDULER_UPDATE_CAMERA             "UPDATE_CAMERA"
+
 #define DEBUG_DRAW_PHYSICS      1
 
 GameView::GameView(): SBPhysicsObject(this),
@@ -44,6 +46,7 @@ bool GameView::init() {
     setContentSize(SB_WIN_SIZE);
     
     initPhysics();
+    initCamera();
     initBg();
     initTiles();
     initBall();
@@ -70,7 +73,10 @@ void GameView::onEnterTransitionDidFinish() {
     if( GAME_MANAGER->getStage().stage == 1 ) {
     }
     
-    //
+    // 카메라 업데이트 스케줄러 실행
+    schedule(CC_CALLBACK_1(GameView::updateCamera, this), SCHEDULER_UPDATE_CAMERA);
+    
+    // update info label
     schedule([=](float dt) {
         auto body = ball->getBody();
         auto velocity = body->GetLinearVelocity();
@@ -126,7 +132,8 @@ void GameView::onGameExit() {
  */
 void GameView::onGamePause() {
     
-    // SBNodeUtils::recursivePause(this);
+    getScheduler()->pauseTarget(this);
+    getActionManager()->pauseTarget(this);
 }
 
 /**
@@ -134,7 +141,8 @@ void GameView::onGamePause() {
  */
 void GameView::onGameResume() {
     
-    // SBNodeUtils::recursiveResume(this);
+    getScheduler()->resumeTarget(this);
+    getActionManager()->resumeTarget(this);
 }
 
 /**
@@ -175,9 +183,44 @@ void GameView::onMoveNextStageFinished() {
 }
 
 /**
+ * 카메라 업데이트
+ */
+void GameView::updateCamera(float dt) {
+    
+    auto MAP_CONTENT_SIZE = GAME_MANAGER->getStage().mapContentSize;
+    
+    if( MAP_CONTENT_SIZE.width <= SB_WIN_SIZE.width ) {
+        return;
+    }
+    
+    auto chcBox = SB_BOUNDING_BOX_IN_WORLD(ball);
+    
+    // 캐릭터 좌표 체크
+    float chcDiff = (SB_WIN_SIZE.width*0.5f) - chcBox.getMidX();
+    // CCLOG("chcDiff: %f", chcDiff);
+    
+    // 캐릭터가 화면 가운데로 위치하도록 캠 노드 좌표 변경
+    Vec3 pos = mapCameraInfo.camControlNode->getPosition3D();
+    pos.x = SB_WIN_SIZE.width*0.5f; // reset
+    pos.x -= chcDiff;
+    pos.x = MAX(SB_WIN_SIZE.width*0.5f, pos.x);
+    pos.x = MIN(MAP_CONTENT_SIZE.width - (SB_WIN_SIZE.width*0.5f), pos.x);
+    mapCameraInfo.camControlNode->setPosition3D(pos);
+
+    // 카메라 이동
+    Vec3 worldPos;
+    mapCameraInfo.camNode->getNodeToWorldTransform().getTranslation(&worldPos);
+
+    mapCameraInfo.camera->setPosition3D(worldPos);
+    mapCameraInfo.camera->lookAt(mapCameraInfo.camControlNode->getPosition3D());
+}
+
+/**
  * 타일을 추가합니다
  */
 void GameView::addTile(GameTile *tile) {
+    
+    tile->setCameraMask((unsigned short)CAMERA_FLAG_MAP);
     
     addChild(tile, tile->getData().isBlockType() ? ZOrder::BLOCK : ZOrder::ITEM);
     tiles.push_back(tile);
@@ -319,7 +362,6 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
                     ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
                 }, 0.2f);
             }
-            
         } break;
             
         // Breaking
@@ -373,8 +415,10 @@ void GameView::initPhysics() {
     world = PHYSICS_MANAGER->initWorld();
     
     // Wall & Floor
-    auto MAP_POSITION = Vec2MC(0,0);
-    auto MAP_CONTENT_SIZE = GAME_MANAGER->getStage().mapContentSize;
+    auto STAGE = GAME_MANAGER->getStage();
+    auto MAP_POSITION = Vec2MC(Size(MAX(STAGE.mapContentSize.width, SB_WIN_SIZE.width),
+                                    SB_WIN_SIZE.height), 0, 0);
+    auto MAP_CONTENT_SIZE = STAGE.mapContentSize;
     
     b2BodyDef bodyDef;
     bodyDef.position = PTM(MAP_POSITION);
@@ -383,10 +427,11 @@ void GameView::initPhysics() {
     auto body = world->CreateBody(&bodyDef);
     setBody(body);
     
-    float left   = PTM(-MAP_CONTENT_SIZE.width*0.5f);
-    float right  = PTM( MAP_CONTENT_SIZE.width*0.5f);
-    float bottom = PTM(-MAP_CONTENT_SIZE.height*0.5f);
-    float top    = PTM( MAP_CONTENT_SIZE.height*0.5f);
+    float dt = 10; // 월드 영역을 확인하기 위한 델타 값
+    float left   = PTM(-MAP_CONTENT_SIZE.width*0.5f + dt);
+    float right  = PTM( MAP_CONTENT_SIZE.width*0.5f - dt);
+    float bottom = PTM(-MAP_CONTENT_SIZE.height*0.5f + dt);
+    float top    = PTM( MAP_CONTENT_SIZE.height*0.5f - dt);
     
     b2Vec2 vectors[4][2] = {
         { b2Vec2(left, bottom), b2Vec2(left, top) },          // left
@@ -425,6 +470,7 @@ void GameView::initPhysics() {
 #if DEBUG_DRAW_PHYSICS
     // DebugDrawView
     auto view = DebugDrawView::create(world);
+    view->setCameraMask((unsigned short)CAMERA_FLAG_MAP);
     view->setVisible(false);
     view->setTag(Tag::DEBUG_DRAW_VIEW);
     addChild(view, SBZOrder::MIDDLE);
@@ -463,15 +509,54 @@ void GameView::initPhysics() {
 }
 
 /**
+ * 카메라 초기화
+ */
+void GameView::initCamera() {
+    
+    // setCameraMask((unsigned short)CameraFlag::USER1, false);
+    
+    auto bgCamera = Camera::create();
+    bgCamera->setCameraFlag(CAMERA_FLAG_BG);
+    bgCamera->setDepth(CAMERA_DEPTH_BG);
+    addChild(bgCamera);
+    
+    auto mapCamera = Camera::create();
+    mapCamera->setCameraFlag(CAMERA_FLAG_MAP);
+    mapCamera->setDepth(CAMERA_DEPTH_MAP);
+    addChild(mapCamera);
+    
+    auto camControlNode = Node::create();
+    camControlNode->setPositionNormalized(Vec2(.5,.5));
+    addChild(camControlNode);
+    
+    CCLOG("first cam controll: %f", camControlNode->getPositionX());
+    
+    auto camNode = Node::create();
+    camNode->setPositionZ(mapCamera->getPosition3D().z);
+    camControlNode->addChild(camNode);
+    
+    mapCameraInfo.camera = mapCamera;
+    mapCameraInfo.camControlNode = camControlNode;
+    mapCameraInfo.camNode = camNode;
+}
+
+/**
  * 배경 초기화
  */
 void GameView::initBg() {
     
+    auto stage = GAME_MANAGER->getStage();
+//    auto bgWidth = MAX(stage.mapContentSize.width, SB_WIN_SIZE.width);
+//    auto bgHeight = MAX(stage.mapContentSize.height, SB_WIN_SIZE.height);
+    auto bgWidth = SB_WIN_SIZE.width;
+    auto bgHeight = SB_WIN_SIZE.height;
+    
     auto bg = Sprite::create(DIR_IMG_GAME + "bg.png");
+    bg->setCameraMask((unsigned short)CAMERA_FLAG_BG);
     bg->setAnchorPoint(ANCHOR_M);
     bg->setPosition(Vec2MC(0,0));
-    bg->setScaleX(SB_WIN_SIZE.width / bg->getContentSize().width);
-    bg->setScaleY(SB_WIN_SIZE.height / bg->getContentSize().height);
+    bg->setScaleX(bgWidth / bg->getContentSize().width);
+    bg->setScaleY(bgHeight / bg->getContentSize().height);
     addChild(bg, -1);
     
     // 스테이지 진행도
@@ -532,6 +617,7 @@ void GameView::initBall() {
     auto flag = stage.getTiles(TileType::FLAG_START)[0];
     
     ball = Ball::create(stage);
+    ball->setCameraMask((unsigned short)CAMERA_FLAG_MAP);
     addChild(ball, ZOrder::BALL);
     
     auto pos = convertTilePosition(stage, flag.x, flag.y+1);

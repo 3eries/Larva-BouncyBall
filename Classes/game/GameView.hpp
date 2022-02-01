@@ -32,6 +32,11 @@ private:
         MENU = 10,
     };
     
+    static const cocos2d::CameraFlag CAMERA_FLAG_BG  = cocos2d::CameraFlag::USER1;
+    static const cocos2d::CameraFlag CAMERA_FLAG_MAP = cocos2d::CameraFlag::USER2;
+    static const int                 CAMERA_DEPTH_BG  = -2;
+    static const int                 CAMERA_DEPTH_MAP = -1;
+    
 public:
     CREATE_FUNC(GameView);
     ~GameView();
@@ -45,6 +50,7 @@ private:
     void cleanup() override;
     
     void initPhysics() override;
+    void initCamera();
     void initBg();
     void initTiles();
     void initBall();
@@ -65,6 +71,8 @@ public:
     void onMoveNextStage();
     void onMoveNextStageFinished();
 
+    void updateCamera(float dt);
+    
     void addTile(GameTile *tile);
     void removeTile(GameTile *tile);
     GameTile*              getTile(const TilePosition &p);
@@ -90,6 +98,14 @@ private:
     Ball *ball;
     std::vector<GameTile*> tiles;
     StageProgressBar *stageProgressBar;
+    
+    struct MapCameraInfo {
+        cocos2d::Camera *camera;
+        cocos2d::Node *camControlNode;
+        cocos2d::Node *camNode;
+    };
+    
+    MapCameraInfo mapCameraInfo;
     
     // for debug
     cocos2d::Label *infoLabel;
