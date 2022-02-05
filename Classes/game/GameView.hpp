@@ -76,7 +76,7 @@ public:
     void addTile(GameTile *tile);
     void removeTile(GameTile *tile);
     GameTile*              getTile(const TilePosition &p);
-    std::vector<GameTile*> getTiles(const TileType &type);
+    std::vector<GameTile*> getTiles(const TileId &tileId);
     
 #pragma mark- Touch Event
 private:

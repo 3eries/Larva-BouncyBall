@@ -36,16 +36,16 @@ struct StageData {
             return findTiles[0];
         }
         
-        return TileData(TileType::INVALID);
+        return TileData(TileId::INVALID);
     }
     
     TileData getTile(const TilePosition &p) const {
         return getTile((int)p.x, (int)p.y);
     }
     
-    TileDataList getTiles(TileType type) const {
+    TileDataList getTiles(TileId tileId) const {
         return SBCollection::find(tiles, [=](TileData tile) -> bool {
-            return tile.type == type;
+            return tile.tileId == tileId;
         });
     }
     

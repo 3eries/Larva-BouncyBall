@@ -109,15 +109,15 @@ void Database::parseStageFile() {
                 int gid = layerInfo->_tiles[pos];
                 int convertToGLY = stage.mapHeightTiles - y - 1;
                 
-                TileData tile(TileType::NONE);
+                TileData tile(TileId::NONE);
                 tile.stage = STAGE;
                 tile.setPosition(x, convertToGLY);
                 
                 if( gid != 0 ) {
                     auto properties = mapInfo->getTileProperties().at(gid).asValueMap();
-                    int tileType = properties.at("tileType").asInt();
+                    int tileId = properties.at("tileType").asInt();
 
-                    tile.type = (TileType)tileType;
+                    tile.tileId = (TileId)tileId;
                 }
                 
                 stage.tiles.push_back(tile);
@@ -133,7 +133,7 @@ void Database::parseStageFile() {
                 
                 for( int x = 0; x < stage.mapWidthTiles; x++ ) {
                     auto tile = stage.getTile(x,y);
-                    str += STR_FORMAT("[%d]", ((int)tile.type > (int)TileType::NONE) ? 1 : 0);
+                    str += STR_FORMAT("[%d]", ((int)tile.tileId > (int)TileId::NONE) ? 1 : 0);
                 }
                 
                 CCLOG("%s", str.c_str());

@@ -254,10 +254,10 @@ GameTile* GameView::getTile(const TilePosition &p) {
 /**
  * 타입에 해당하는 타일을 반환합니다
  */
-vector<GameTile*> GameView::getTiles(const TileType &type) {
+vector<GameTile*> GameView::getTiles(const TileId &tileId) {
     
     vector<GameTile*> foundTiles = SBCollection::find(tiles, [=](GameTile *tile) -> bool {
-        return tile->getData().type == type;
+        return tile->getData().tileId == tileId;
     });
     return foundTiles;
 }
@@ -290,9 +290,9 @@ void GameView::onContactFlag(Ball *ball, GameTile *tile) {
     auto flag = dynamic_cast<Flag*>(tile);
     
     // 충돌 처리
-    switch( flag->getData().type ) {
+    switch( flag->getData().tileId ) {
         // Stage Clear
-        case TileType::FLAG_CLEAR_PORTAL: {
+        case TileId::FLAG_CLEAR_PORTAL: {
         } break;
             
         default: break;
@@ -310,21 +310,21 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
     removeTile(item);
     
     // 충돌 처리
-    switch( item->getData().type ) {
+    switch( item->getData().tileId ) {
         // 소시지
-        case TileType::ITEM_SAUSAGE: {
+        case TileId::ITEM_SAUSAGE: {
             int star = GAME_MANAGER->getStar() + 1;
             star = MIN(3, star);
             
             GAME_MANAGER->setStar(star);
             stageProgressBar->setStar(star);
             
-            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileType::FLAG_CLEAR_PORTAL)[0]);
+            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
             portal->setStar(star);
         } break;
             
         // 더블 점프
-        case TileType::ITEM_DOUBLE_JUMP: {
+        case TileId::ITEM_DOUBLE_JUMP: {
             
         } break;
             
@@ -340,11 +340,11 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     auto block = dynamic_cast<Block*>(tile);
     
     // 충돌 처리
-    switch( block->getData().type ) {
+    switch( block->getData().tileId ) {
         // Normal
-        case TileType::BLOCK_NORMAL: {
+        case TileId::BLOCK_NORMAL: {
             // 포털 오픈됨 && 포털 아래칸 충돌 => 스테이지 클리어
-            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileType::FLAG_CLEAR_PORTAL)[0]);
+            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
             auto portalBelowTile = getTile(portal->getData().p + Vec2(0,-1));
             
             if( portal->isOpened() && portalBelowTile == block ) {
@@ -365,17 +365,17 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
         } break;
             
         // Breaking
-        case TileType::BLOCK_BREKING_1:
-        case TileType::BLOCK_BREKING_2: { 
+        case TileId::BLOCK_BREKING_1:
+        case TileId::BLOCK_BREKING_2: { 
             removeTile(block);
         } break;
         
         // Game Over
-        case TileType::BLOCK_GAME_OVER: {
+        case TileId::BLOCK_GAME_OVER: {
         } break;
             
         // Jump
-        case TileType::BLOCK_JUMP: {
+        case TileId::BLOCK_JUMP: {
         } break;
             
         default: break;
@@ -572,30 +572,30 @@ void GameView::initTiles() {
     auto stage = GAME_MANAGER->getStage();
     
     for( auto tileData : stage.tiles ) {
-        if( tileData.type == TileType::NONE ) {
+        if( tileData.tileId == TileId::NONE ) {
             continue;
         }
         
         GameTile *tile = nullptr;
         
-        switch( tileData.type ) {
-            case TileType::FLAG_START: {
+        switch( tileData.tileId ) {
+            case TileId::FLAG_START: {
                 tile = Flag::create(tileData);
             } break;
-            case TileType::FLAG_CLEAR_PORTAL: {
+            case TileId::FLAG_CLEAR_PORTAL: {
                 tile = ClearPortal::create(tileData);
             } break;
                 
-            case TileType::ITEM_SAUSAGE:
-            case TileType::ITEM_DOUBLE_JUMP: {
+            case TileId::ITEM_SAUSAGE:
+            case TileId::ITEM_DOUBLE_JUMP: {
                 tile = Item::create(tileData);
             } break;
                 
-            case TileType::BLOCK_NORMAL:
-            case TileType::BLOCK_BREKING_1:
-            case TileType::BLOCK_BREKING_2:
-            case TileType::BLOCK_GAME_OVER:
-            case TileType::BLOCK_JUMP: {
+            case TileId::BLOCK_NORMAL:
+            case TileId::BLOCK_BREKING_1:
+            case TileId::BLOCK_BREKING_2:
+            case TileId::BLOCK_GAME_OVER:
+            case TileId::BLOCK_JUMP: {
                 tile = Block::create(tileData);
             } break;
                 
@@ -614,7 +614,7 @@ void GameView::initTiles() {
 void GameView::initBall() {
  
     auto stage = GAME_MANAGER->getStage();
-    auto flag = stage.getTiles(TileType::FLAG_START)[0];
+    auto flag = stage.getTiles(TileId::FLAG_START)[0];
     
     ball = Ball::create(stage);
     ball->setCameraMask((unsigned short)CAMERA_FLAG_MAP);

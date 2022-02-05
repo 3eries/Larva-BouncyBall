@@ -63,7 +63,7 @@ void GameTile::cleanup() {
  */
 void GameTile::initImage() {
     
-    image = Sprite::create(DIR_CONTENT_TILE + STR_FORMAT("tile_%05d.png", (int)data.type));
+    image = Sprite::create(DIR_CONTENT_TILE + STR_FORMAT("tile_%05d.png", (int)data.tileId));
     image->setScale(GAME_MANAGER->getMapScaleFactor());
     image->setAnchorPoint(ANCHOR_MB);
     image->setPosition(Vec2BC(getContentSize(), 0, 0));

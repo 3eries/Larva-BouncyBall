@@ -11,7 +11,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 
-enum class TileType {
+enum class TileId {
     INVALID             = -1,          // 유효하지 않음
     NONE                = 0,           // 빈 칸
     
@@ -37,13 +37,13 @@ typedef cocos2d::Vec2 TilePosition;
 typedef std::vector<TilePosition> TilePositionList;
 
 struct TileData {
-    TileType type;
+    TileId tileId;
     int stage;
     int x;
     int y;
     TilePosition p;
     
-    TileData(TileType _type): type(_type) {}
+    TileData(TileId _tileId): tileId(_tileId) {}
     
     void setPosition(int _x, int _y) {
         x = _x;
@@ -52,31 +52,31 @@ struct TileData {
     }
     
     bool isValid() const {
-        return type != TileType::INVALID;
+        return tileId != TileId::INVALID;
     }
     
     bool isBlockType() const {
-        return (int)type >= (int)TileType::BLOCK_NORMAL;
+        return (int)tileId >= (int)TileId::BLOCK_NORMAL;
     }
     
     std::string toString() {
-        auto getTypeStr = [](TileType type) -> std::string {
-            switch( type ) {
-                case TileType::INVALID:             return "INVALID";
-                case TileType::NONE:                return "NONE";
-                case TileType::FLAG_START:          return "FLAG_START";
-                case TileType::FLAG_CLEAR_PORTAL:   return "FLAG_CLEAR_PORTAL";
-                case TileType::ITEM_SAUSAGE:        return "ITEM_SAUSAGE";
-                case TileType::ITEM_DOUBLE_JUMP:    return "ITEM_DOUBLE_JUMP";
-                case TileType::BLOCK_NORMAL:        return "BLOCK_NORMAL";
-                case TileType::BLOCK_BREKING_1:
-                case TileType::BLOCK_BREKING_2:     return "BLOCK_BREKING";
-                case TileType::BLOCK_JUMP:          return "BLOCK_JUMP";
+        auto getIdStr = [](TileId tileId) -> std::string {
+            switch( tileId ) {
+                case TileId::INVALID:             return "INVALID";
+                case TileId::NONE:                return "NONE";
+                case TileId::FLAG_START:          return "FLAG_START";
+                case TileId::FLAG_CLEAR_PORTAL:   return "FLAG_CLEAR_PORTAL";
+                case TileId::ITEM_SAUSAGE:        return "ITEM_SAUSAGE";
+                case TileId::ITEM_DOUBLE_JUMP:    return "ITEM_DOUBLE_JUMP";
+                case TileId::BLOCK_NORMAL:        return "BLOCK_NORMAL";
+                case TileId::BLOCK_BREKING_1:
+                case TileId::BLOCK_BREKING_2:     return "BLOCK_BREKING";
+                case TileId::BLOCK_JUMP:          return "BLOCK_JUMP";
                 default:                            return "";
             }
         };
         
-        return STR_FORMAT("TileData { %s, x,y=(%d,%d) }", getTypeStr(type).c_str(), x, y);
+        return STR_FORMAT("TileData { %s, x,y=(%d,%d) }", getIdStr(tileId).c_str(), x, y);
     }
 };
 
