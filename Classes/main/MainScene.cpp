@@ -303,7 +303,7 @@ void MainScene::initWorlds() {
                 // 페이지 전환
                 if( pageDiffCount == 3 ) {
                     pageDiffCount = 0;
-                    // onPageChanged(i);
+                    onPageChanged(i);
                 }
             } break;
                 
