@@ -7,6 +7,7 @@
 #include "GameView.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "GameUIHelper.hpp"
 #include "GameDefine.h"
 #include "ContentManager.hpp"
@@ -551,7 +552,7 @@ void GameView::initBg() {
     auto bgWidth = SB_WIN_SIZE.width;
     auto bgHeight = SB_WIN_SIZE.height;
     
-    auto bg = Sprite::create(DIR_IMG_GAME + "bg.png");
+    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(stage.world));
     bg->setCameraMask((unsigned short)CAMERA_FLAG_BG);
     bg->setAnchorPoint(ANCHOR_M);
     bg->setPosition(Vec2MC(0,0));

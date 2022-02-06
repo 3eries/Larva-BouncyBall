@@ -256,12 +256,11 @@ void GameScene::initGameView() {
 void GameScene::initMenu() {
     
     // 설정 버튼
-    // common_btn_more.png Vec2TR(-56, -54) , Size(74, 74)
-    auto settingBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_more.png");
+    auto settingBtn = SBButton::create(DIR_IMG_GAME + "game_btn_pause.png");
     settingBtn->setTag(Tag::BTN_SETTING);
     settingBtn->setZoomScale(ButtonZoomScale::NORMAL);
     settingBtn->setAnchorPoint(ANCHOR_M);
-    settingBtn->setPosition(Vec2TR(-56, -54));
+    settingBtn->setPosition(Vec2TR(-78, -80));
     addChild(settingBtn);
     
     settingBtn->setOnClickListener(CC_CALLBACK_1(GameScene::onClick, this));

@@ -79,7 +79,7 @@ void ClearPopup::initContentView() {
     };
     
     for( int i = 0; i < STAR; ++i ) {
-        auto star = Sprite::create(DIR_IMG_GAME + "game_top_sausage.png");
+        auto star = Sprite::create(DIR_IMG_GAME + "game_ui_sausage.png");
         star->setScale(2);
         star->setAnchorPoint(ANCHOR_M);
         star->setPosition(pos[i]);
