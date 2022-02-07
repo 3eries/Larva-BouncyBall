@@ -365,17 +365,24 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
             }
         } break;
             
-        // Breaking
-        case TileId::BLOCK_BREKING_1:
-        case TileId::BLOCK_BREKING_2: { 
+        // 드랍 블럭
+        case TileId::BLOCK_DROP_1:
+        case TileId::BLOCK_DROP_2: {
             removeTile(block);
         } break;
         
-        // Game Over
-        case TileId::BLOCK_GAME_OVER: {
+        // 데스 블럭
+        case TileId::BLOCK_DEATH: {
+            ball->setCollisionLocked(true);
+            ball->setSyncLocked(true);
+            ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
+            
+            SBDirector::postDelayed(this, [=]() {
+                GameManager::onGameOver(false);
+            }, 0.2f);
         } break;
             
-        // Jump
+        // 점프 블럭
         case TileId::BLOCK_JUMP: {
         } break;
             
@@ -593,9 +600,9 @@ void GameView::initTiles() {
             } break;
                 
             case TileId::BLOCK_NORMAL:
-            case TileId::BLOCK_BREKING_1:
-            case TileId::BLOCK_BREKING_2:
-            case TileId::BLOCK_GAME_OVER:
+            case TileId::BLOCK_DROP_1:
+            case TileId::BLOCK_DROP_2:
+            case TileId::BLOCK_DEATH:
             case TileId::BLOCK_JUMP: {
                 tile = Block::create(tileData);
             } break;

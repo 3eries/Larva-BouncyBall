@@ -16,19 +16,26 @@ enum class TileId {
     NONE                = 0,           // 빈 칸
     
     // Flag
-    FLAG_START          = 11,          // 깃발
-    FLAG_CLEAR_PORTAL,                 // 클리어 포털
+    FLAG_START,                        // 깃발
+    FLAG_CLEAR_PORTAL   = 11,          // 클리어 포털
     
     // Item
     ITEM_SAUSAGE        = 1001,        // 소시지
-    ITEM_DOUBLE_JUMP,                  // 더블 점프
+    ITEM_DOUBLE_JUMP    = 1011,        // 더블 점프
     
     // Block
     BLOCK_NORMAL        = 10001,       // 기본 블럭
-    BLOCK_BREKING_1,                   // 깨지는 블럭
-    BLOCK_BREKING_2,                   // 깨지는 블럭
-    BLOCK_GAME_OVER,                   // 게임 오버 블럭
-    BLOCK_JUMP,                        // 점프 블럭
+    BLOCK_DROP_1        = 10101,       // 드랍 블럭
+    BLOCK_DROP_2        = 10102,
+    BLOCK_DEATH         = 10201,       // 데스 블럭
+    BLOCK_JUMP          = 10301,       // 점프 블럭
+};
+
+enum class TileType {
+    NONE = 0,
+    FLAG,
+    ITEM,
+    BLOCK,
 };
 
 #define INVALID_TILE_NUMBER         0
@@ -69,10 +76,11 @@ struct TileData {
                 case TileId::ITEM_SAUSAGE:        return "ITEM_SAUSAGE";
                 case TileId::ITEM_DOUBLE_JUMP:    return "ITEM_DOUBLE_JUMP";
                 case TileId::BLOCK_NORMAL:        return "BLOCK_NORMAL";
-                case TileId::BLOCK_BREKING_1:
-                case TileId::BLOCK_BREKING_2:     return "BLOCK_BREKING";
+                case TileId::BLOCK_DROP_1:
+                case TileId::BLOCK_DROP_2:        return "BLOCK_DROP";
+                case TileId::BLOCK_DEATH:         return "BLOCK_DEATH";
                 case TileId::BLOCK_JUMP:          return "BLOCK_JUMP";
-                default:                            return "";
+                default:                          return "";
             }
         };
         

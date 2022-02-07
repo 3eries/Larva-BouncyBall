@@ -151,7 +151,7 @@ void GameScene::onGameResume() {
  */
 void GameScene::onGameOver() {
     
-    MessageBox("게임 오버됨 -> 재시작", "");
+    // MessageBox("게임 오버됨 -> 재시작", "");
     replaceGameScene(GAME_MANAGER->getStage().stage);
 }
 

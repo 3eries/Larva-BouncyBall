@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
+#include "ContentManager.hpp"
 
 #define LOCALIZED_IMAGE(__image__) \
 ResourceHelper::getLocalizedImage(__image__)
@@ -21,6 +22,7 @@ public:
     
     static std::string getLocalizedImage(const std::string &image);
     static std::string getWorldBackgroundImage(int world);
+    static StringList  getTileImage(const TileId &tileId);
 };
 
 #endif /* ResourceHelper_hpp */

@@ -18,9 +18,10 @@ USING_NS_SB;
 using namespace std;
 
 #define VELOCITY_BOUNCE_UP                     (22 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_JUMP_UP                       (37 * GAME_MANAGER->getMapScaleFactor())
 #define VELOCITY_BOUNCE_DOWN                   (-15 * GAME_MANAGER->getMapScaleFactor())
-#define VELOCITY_MOVE_LEFT                     (-10 * GAME_MANAGER->getMapScaleFactor())
-#define VELOCITY_MOVE_RIGHT                    (10 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_MOVE_LEFT                     (-13 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_MOVE_RIGHT                    (13 * GAME_MANAGER->getMapScaleFactor())
 
 #define BOUNCE_DOWN_DELAY                      0.5f
 #define CONTINUOUS_X_INTERVAL                  0.1f
@@ -88,7 +89,7 @@ void Ball::initImage() {
     image = Sprite::create();
     image->setScale(GAME_MANAGER->getMapScaleFactor());
     image->setAnchorPoint(ANCHOR_MB);
-    image->setPosition(Vec2BC(getContentSize(), 0, -15));
+    image->setPosition(Vec2BC(getContentSize(), 0, 0));
     addChild(image);
     
     auto updateImage = [=]() {
@@ -381,13 +382,12 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     
     // Bounce Up
     // CCLOG("Bounce Up");
-    
     auto body = getBody();
-    body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
-                                   VELOCITY_BOUNCE_UP));
 //    body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, 0));
 //    body->ApplyLinearImpulseToCenter(b2Vec2(0, VELOCITY_BOUNCE_UP / 0.1f), true);
 //    body->ApplyForceToCenter(b2Vec2(0, VELOCITY_BOUNCE_UP*3), false);
+    float velocityY = (block->getData().tileId == TileId::BLOCK_JUMP) ? VELOCITY_JUMP_UP : VELOCITY_BOUNCE_UP;
+    body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, velocityY));
     
     // Bounce Down
     unschedule(SCHEDULER_BOUNCE_DOWN);

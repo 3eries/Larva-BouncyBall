@@ -58,6 +58,10 @@ void Item::initPhysics() {
     auto size = getContentSize();
     // size = size + Size(2,2); // 블럭끼리 겹치게 보정
     
+    if( data.tileId == TileId::ITEM_SAUSAGE ) {
+        size.width *= 0.7f;
+    }
+    
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
     

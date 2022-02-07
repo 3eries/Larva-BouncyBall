@@ -47,14 +47,14 @@ void Database::parseStageFile() {
     
     CCLOG("========== STAGE PARSE START ==========");
     
-    for( int i = 0; i < 7; ++i ) {
+    for( int i = 0; i < 10; ++i ) {
         const auto STAGE = i+1;
         const auto STAGE_FILE = DIR_CONTENT_STAGE + STR_FORMAT("stage_%04d.tmx", STAGE);
         
         // 맵 정보
         auto mapInfo = TMXMapInfo::create(STAGE_FILE);
         auto layerInfo = SBCollection::find(mapInfo->getLayers(), [](TMXLayerInfo *info) -> bool {
-            return info->_name == "BlockLayer";
+            return info->_name == "TileLayer";
         }).at(0);
         auto tileSize = mapInfo->getTileSize();
         
@@ -115,7 +115,7 @@ void Database::parseStageFile() {
                 
                 if( gid != 0 ) {
                     auto properties = mapInfo->getTileProperties().at(gid).asValueMap();
-                    int tileId = properties.at("tileType").asInt();
+                    int tileId = properties.at("tile_id").asInt();
 
                     tile.tileId = (TileId)tileId;
                 }

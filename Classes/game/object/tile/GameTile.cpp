@@ -8,6 +8,7 @@
 #include "GameTile.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "../../GameDefine.h"
 #include "../../GameManager.hpp"
 
@@ -63,11 +64,20 @@ void GameTile::cleanup() {
  */
 void GameTile::initImage() {
     
-    image = Sprite::create(DIR_CONTENT_TILE + STR_FORMAT("tile_%05d.png", (int)data.tileId));
+    auto files = ResourceHelper::getTileImage(data.tileId);
+    
+    image = Sprite::create(files[0]);
     image->setScale(GAME_MANAGER->getMapScaleFactor());
     image->setAnchorPoint(ANCHOR_MB);
     image->setPosition(Vec2BC(getContentSize(), 0, 0));
     addChild(image);
+    
+    if( files.size() > 1 ) {
+        float interval = (files.size() == 2) ? 0.5f : 0.1f;
+        
+        auto animate = Animate::create(SBNodeUtils::createAnimation(files, interval));
+        image->runAction(RepeatForever::create(animate));
+    }
 }
 
 /**

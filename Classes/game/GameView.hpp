@@ -26,8 +26,8 @@ private:
     
     enum ZOrder {
         ITEM = 1,
-        BALL,
         BLOCK,
+        BALL,
         
         MENU = 10,
     };

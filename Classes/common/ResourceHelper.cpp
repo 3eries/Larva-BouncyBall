@@ -85,5 +85,37 @@ string ResourceHelper::getLocalizedImage(const string &image) {
  */
 string ResourceHelper::getWorldBackgroundImage(int world) {
     
-    return DIR_IMG_COMMON + STR_FORMAT("common_bg%02d.png", world);
+    return DIR_CONTENT_BG + STR_FORMAT("world_%02d.png", world);
+}
+
+/**
+ * 타일 이미지를 반환합니다
+ */
+StringList ResourceHelper::getTileImage(const TileId &tileId) {
+    
+    StringList files;
+    
+    // 단일 이미지
+    auto file = DIR_CONTENT_TILE + STR_FORMAT("tile_%05d.png", (int)tileId);
+    
+    if( FileUtils::getInstance()->isFileExist(file) ) {
+        files.push_back(file);
+    }
+    // 애니메이션
+    else {
+        int i = 0;
+        
+        while( true ) {
+            auto file = DIR_CONTENT_TILE + STR_FORMAT("tile_%05d_%d.png", (int)tileId, i+1);
+            
+            if( !FileUtils::getInstance()->isFileExist(file) ) {
+                break;
+            }
+            
+            files.push_back(file);
+            i++;
+        }
+    }
+    
+    return files;
 }
