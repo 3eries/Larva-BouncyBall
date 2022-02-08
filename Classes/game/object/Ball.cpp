@@ -25,7 +25,7 @@ using namespace std;
 
 #define BOUNCE_DOWN_DELAY                      0.5f
 #define CONTINUOUS_X_INTERVAL                  0.1f
-#define RESET_X_DELAY                          0.1f
+#define RESET_X_DELAY                          0.05f
 
 #define SCHEDULER_BOUNCE_DOWN                  "SCHEDULER_BOUNCE_DOWN"
 #define SCHEDULER_CONTINUOUS_X                 "SCHEDULER_CONTINUOUS_X"
@@ -170,10 +170,6 @@ bool Ball::afterStep() {
     
     syncBodyToNode();
     
-    if( !isSyncLocked() ) {
-        // setRotation(getBodyVelocityAngle());
-    }
-    
     return true;
 }
 
@@ -244,6 +240,9 @@ void Ball::stopMoveX(bool resetVelocity) {
     unschedule(SCHEDULER_RESET_VELOCITY_X);
     
     if( resetVelocity ) {
+//        auto body = getBody();
+//        body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
+        
         scheduleOnce([=](float dt) {
             auto body = getBody();
             body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));

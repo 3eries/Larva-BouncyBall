@@ -26,6 +26,7 @@ USING_NS_SB;
 using namespace std;
 
 #define SCHEDULER_UPDATE_CAMERA             "UPDATE_CAMERA"
+#define TOUCH_TAP_DURATION                  0.1f            // 터치 탭 판정 시간
 
 #define DEBUG_DRAW_PHYSICS      1
 
@@ -397,7 +398,7 @@ void GameView::onContactFloor(Ball *ball) {
     
     SBDirector::postDelayed(this, [=]() {
         GameManager::onGameOver(false);
-    }, 0.2f);
+    }, 0.1f);
 }
 
 #pragma mark- Initialize
@@ -424,9 +425,11 @@ void GameView::initPhysics() {
     
     // Wall & Floor
     auto STAGE = GAME_MANAGER->getStage();
-    auto MAP_POSITION = Vec2MC(Size(MAX(STAGE.mapContentSize.width, SB_WIN_SIZE.width),
-                                    SB_WIN_SIZE.height), 0, 0);
-    auto MAP_CONTENT_SIZE = STAGE.mapContentSize;
+    
+    auto MAP_CONTENT_SIZE = SB_WIN_SIZE;
+    MAP_CONTENT_SIZE.width = MAX(STAGE.mapContentSize.width, MAP_CONTENT_SIZE.width);
+    
+    auto MAP_POSITION = Vec2MC(MAP_CONTENT_SIZE, 0, 0);
     
     b2BodyDef bodyDef;
     bodyDef.position = PTM(MAP_POSITION);
@@ -435,7 +438,7 @@ void GameView::initPhysics() {
     auto body = world->CreateBody(&bodyDef);
     setBody(body);
     
-    float dt = 10; // 월드 영역을 확인하기 위한 델타 값
+    float dt     = -STAGE.tileSize.width*1.5f; // 바닥 충돌을 자연스럽게 보이기 위해 확장
     float left   = PTM(-MAP_CONTENT_SIZE.width*0.5f + dt);
     float right  = PTM( MAP_CONTENT_SIZE.width*0.5f - dt);
     float bottom = PTM(-MAP_CONTENT_SIZE.height*0.5f + dt);
