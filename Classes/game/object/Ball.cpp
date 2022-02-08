@@ -93,7 +93,7 @@ void Ball::initImage() {
     addChild(image);
     
     auto updateImage = [=]() {
-        image->setTexture(DIR_IMG_GAME + "hero.png");
+        image->setTexture(DIR_CONTENT_CHARACTER + "char_001.png");
     };
     
     updateImage();

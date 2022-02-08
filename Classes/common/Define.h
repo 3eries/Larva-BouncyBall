@@ -74,6 +74,7 @@ static const std::string DIR_IMG_PAUSE              = DIR_ADD(DIR_IMG, "pause");
 static const std::string DIR_IMG_UPDATE             = DIR_ADD(DIR_IMG, "update");
 
 static const std::string DIR_CONTENT                = "content/";
+static const std::string DIR_CONTENT_CHARACTER      = DIR_ADD(DIR_CONTENT, "character");
 static const std::string DIR_CONTENT_BG             = DIR_ADD(DIR_CONTENT, "bg");
 static const std::string DIR_CONTENT_STAGE          = DIR_ADD(DIR_CONTENT, "stage");
 static const std::string DIR_CONTENT_TILE           = DIR_ADD(DIR_CONTENT, "tile");
