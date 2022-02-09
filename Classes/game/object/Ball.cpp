@@ -31,8 +31,6 @@ using namespace std;
 #define SCHEDULER_CONTINUOUS_X                 "SCHEDULER_CONTINUOUS_X"
 #define SCHEDULER_RESET_VELOCITY_X             "SCHEDULER_RESET_VELOCITY_X"
 
-#define SCHEDULER_CHECK_MOVEMENT               "SCHEDULER_CHECK_MOVEMENT"
-
 Ball* Ball::create(const StageData &stage) {
     
     auto ball = new Ball(stage);
@@ -49,7 +47,7 @@ Ball* Ball::create(const StageData &stage) {
 Ball::Ball(const StageData &stage) : SBPhysicsObject(this),
 stage(stage),
 direction(BallDirection::NONE),
-fall(false) {
+jumpEffectPlayedTime(0) {
 }
 
 Ball::~Ball() {
@@ -240,128 +238,15 @@ void Ball::stopMoveX(bool resetVelocity) {
     unschedule(SCHEDULER_RESET_VELOCITY_X);
     
     if( resetVelocity ) {
-//        auto body = getBody();
-//        body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
+        auto body = getBody();
+        body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
         
-        scheduleOnce([=](float dt) {
-            auto body = getBody();
-            body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
-        }, RESET_X_DELAY, SCHEDULER_RESET_VELOCITY_X);
+        // 딜레이 후 리셋
+//        scheduleOnce([=](float dt) {
+//            auto body = getBody();
+//            body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
+//        }, RESET_X_DELAY, SCHEDULER_RESET_VELOCITY_X);
     }
-}
-
-/**
- * 발사
- */
-void Ball::shoot(b2Vec2 velocity) {
-    
-    contactCount = 0;
-    brickContactCount = 0;
-    wallContactCount = 0;
-    
-    // 활성화
-    setFall(false);
-    setBodyAwake(true);
-    setCollisionLocked(false);
-    setOpacity(255);
-    setRotation(0);
-    
-    // 발사
-    getBody()->SetLinearVelocity(velocity);
-    
-    // 움직임 체크
-    schedule(CC_CALLBACK_1(Ball::checkMovement, this), PHYSICS_FPS*2, SCHEDULER_CHECK_MOVEMENT);
-}
-
-/**
- * 볼의 발사 속도를 반환합니다
- */
-b2Vec2 Ball::getShootingVelocity(const Vec2 &start, const Vec2 &end, float maxVelocity) {
-    
-    Vec2 diff = end - start;
-    
-    b2Vec2 v = PTM(diff);
-    v.Normalize();
-    v.x *= maxVelocity;
-    v.y *= maxVelocity;
-    
-    return v;
-}
-
-/**
- * 추락
- */
-void Ball::fallToFloor() {
-    
-    contactCount = 0;
-    brickContactCount = 0;
-    wallContactCount = 0;
-    unschedule(SCHEDULER_CHECK_MOVEMENT);
-    
-    setFall(true);
-    setBodyAwake(false);
-    setCollisionLocked(true);
-    setSyncLocked(true);
-    
-    runAction(RotateTo::create(0.05f, 0));
-}
-
-void Ball::checkMovement(float dt) {
- 
-    auto velocity = getBody()->GetLinearVelocity();
-    float angle = getBodyVelocityAngle();
-    
-    /*
-    auto tuningVelocity = velocity;
-    tuningVelocity.Normalize();
-    tuningVelocity.x *= BALL_MAX_VELOCITY;
-    tuningVelocity.y *= BALL_MAX_VELOCITY;
-    
-    CCLOG("before(%f,%f, angle:%d) -> after(%f,%f, angle:%d)",
-          velocity.x, velocity.y, (int)SBPhysics::getVelocityAngle(velocity),
-          tuningVelocity.x, tuningVelocity.y, (int)SBPhysics::getVelocityAngle(tuningVelocity));
-    
-    if( fabsf(tuningVelocity.x - velocity.x) > 0.5f ||
-        fabsf(tuningVelocity.y - velocity.y) > 0.5f ) {
-        CCLOG("---------> 차이 발생함!!!!!!!");
-    }
-    */
-    
-    // 수평으로 무한 반복되지 않게 조정
-    // 진행 각도에 따라 강제로 힘을 가한다
-    // Test Code
-    /*
-    if( fabsf(angle) > 85 && wallContactCount >= 2 ) {
-        Log::i("force!!");
-        getBody()->ApplyForceToCenter(b2Vec2(0,1), false);
-    }
-     */
-    
-    const int RANGE = 5;
-    angle = fabsf(angle);
-    
-    if( angle >= 90-RANGE && angle <= 90+RANGE ) {
-        if( brickContactCount >= 5 || wallContactCount >= 2 ) {
-//            Log::i("velocity: %f,%f, angle: %f, contactCount: %d, brickContactCount: %d, wallContactCount: %d",
-//                   velocity.x, velocity.y, angle,
-//                   contactCount, brickContactCount, wallContactCount);
-//            Log::i("force!!");
-            
-            getBody()->ApplyForceToCenter(b2Vec2(0, angle < 90 ? 0.5f : -0.5f), false);
-        }
-    }
-}
-
-/**
- * 물리 세계에서 rest 상태로 진입합니다
- */
-void Ball::sleepWithAction() {
-    
-    setBodyAwake(false);
-    
-    auto fadeOut = FadeOut::create(0.1f);
-    auto hide = Hide::create();
-    runAction(Sequence::create(fadeOut, hide, nullptr));
 }
 
 /**
@@ -379,6 +264,14 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     // 충돌 횟수 업데이트
     contactCount++;
     
+    // 효과음
+    double now = SBSystemUtils::getCurrentTimeSeconds();
+    
+    if( now - jumpEffectPlayedTime > 0.1f ) {
+        jumpEffectPlayedTime = now;
+        // SBAudioEngine::playEffect(SOUND_JUMP);
+    }
+    
     // Bounce Up
     // CCLOG("Bounce Up");
     auto body = getBody();
@@ -388,6 +281,7 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     float velocityY = (block->getData().tileId == TileId::BLOCK_JUMP) ? VELOCITY_JUMP_UP : VELOCITY_BOUNCE_UP;
     body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, velocityY));
     
+    // 중력 없이 바운스 하는 방법
     // Bounce Down
     unschedule(SCHEDULER_BOUNCE_DOWN);
     
@@ -402,16 +296,6 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
 // * 볼 & 아이템 충돌
 // */
 //void Ball::onContactItem(Ball *ball, Game::Tile *item) {
-//}
-//
-///**
-// * 볼 & 벽 충돌
-// */
-//void Ball::onContactWall(Ball *ball) {
-//
-//    contactCount++;
-//    brickContactCount = 0;
-//    wallContactCount++;
 //}
 //
 ///**

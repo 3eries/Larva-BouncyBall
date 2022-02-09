@@ -42,20 +42,9 @@ public:
     void            moveRight();
     void            stopMoveX(bool resetVelocity = true);
     
-    virtual void    shoot(b2Vec2 velocity);
-    
-    static  b2Vec2  getShootingVelocity(const cocos2d::Vec2 &start, const cocos2d::Vec2 &end,
-                                        float maxVelocity);
-    virtual void    fallToFloor();
-    
-    virtual void    checkMovement(float dt);
-    
-    virtual void    sleepWithAction();
-    
 public:
     virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
 //    virtual void onContactItem(Ball *ball, Game::Tile *item);
-//    virtual void onContactWall(Ball *ball);
 //    virtual void onContactFloor(Ball *ball);
     
 protected:
@@ -64,7 +53,7 @@ protected:
     cocos2d::Sprite *image;
     CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
     
-    SB_SYNTHESIZE_BOOL(fall, Fall);   // 추락 여부
+    double jumpEffectPlayedTime; // 점프 효과음 재생된 시간
     
     // 충돌 횟수
     // 발사 후 충돌을 카운팅합니다

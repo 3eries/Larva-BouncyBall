@@ -174,6 +174,7 @@ bool StageCell::init() {
     // onClick
     setTouchEnabled(true);
     addClickEventListener([=](Ref*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER_N(this, onClickListener);
     });
     

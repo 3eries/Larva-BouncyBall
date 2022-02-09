@@ -115,35 +115,6 @@ void SettingPopup::initContentView() {
         return false;
     });
     
-    // how to play
-    // common_btn_how_to_play.png Vec2MC(166, 85) , Size(154, 154)
-    auto howToPlayBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_how_to_play.png");
-    howToPlayBtn->setZoomScale(ButtonZoomScale::NORMAL);
-    howToPlayBtn->setAnchorPoint(ANCHOR_M);
-    howToPlayBtn->setPosition(Vec2MC(166, 85));
-    addContentChild(howToPlayBtn);
-    
-    howToPlayBtn->setOnClickListener([=](Node*) {
-        
-        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
-        
-        this->dismiss();
-    });
-    
-    // more games
-    // common_btn_3eries.png Vec2MC(0, -85) , Size(154, 154)
-    // common_btn_3eries.png Vec2MC(-83, -85) , Size(154, 154)
-    auto moreGames = SBButton::create(DIR_IMG_COMMON + "common_btn_more_games.png");
-    moreGames->setZoomScale(0);
-    moreGames->setAnchorPoint(ANCHOR_M);
-    moreGames->setPosition(isRemovedAds ? Vec2MC(-83, -85) : Vec2MC(0, -85));
-    addContentChild(moreGames);
-    
-    moreGames->setOnClickListener([=](Node*) {
-        SBAnalytics::logEvent(ANALYTICS_EVENT_MORE_GAMES);
-        Application::getInstance()->openURL(GAME_CONFIG->getMoreGamesUrl());
-    });
-    
     // remove ads
     SBButton *removeAdsBtn = nullptr;
     
@@ -208,8 +179,6 @@ void SettingPopup::initContentView() {
         
         effectBtn->setPosition(Vec2MC(-166, 31));
         bgmBtn->setPosition(Vec2MC(0, 31));
-        howToPlayBtn->setPosition(Vec2MC(166, 31));
-        moreGames->setPosition(isRemovedAds ? Vec2MC(-83, -139) : Vec2MC(0, -139));
         restoreBtn->setPosition(isRemovedAds ? Vec2MC(83, -139) : Vec2MC(166, -139));
         
         if( removeAdsBtn ) {
