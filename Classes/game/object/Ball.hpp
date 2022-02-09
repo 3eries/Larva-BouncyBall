@@ -38,12 +38,16 @@ public:
     void            setFirstPosition(const cocos2d::Vec2 &p);
     void            setDirection(BallDirection direction);
     
+    void            tapMove(BallDirection direction);
+    void            pressedMove(BallDirection direction);
+    
     void            moveLeft();
     void            moveRight();
     void            stopMoveX(bool resetVelocity = true);
     
 public:
-    virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
+    virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
+                                PhysicsCategory category);
 //    virtual void onContactItem(Ball *ball, Game::Tile *item);
 //    virtual void onContactFloor(Ball *ball);
     

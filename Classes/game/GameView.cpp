@@ -9,7 +9,6 @@
 #include "Define.h"
 #include "ResourceHelper.hpp"
 #include "GameUIHelper.hpp"
-#include "GameDefine.h"
 #include "ContentManager.hpp"
 #include "SceneManager.h"
 
@@ -28,7 +27,7 @@ using namespace std;
 #define SCHEDULER_UPDATE_CAMERA             "UPDATE_CAMERA"
 #define TOUCH_TAP_DURATION                  0.1f            // 터치 탭 판정 시간
 
-#define DEBUG_DRAW_PHYSICS      1
+#define DEBUG_DRAW_PHYSICS                  (defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1)
 
 GameView::GameView(): SBPhysicsObject(this),
 isTouchEnabled(false) {
@@ -346,7 +345,7 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
 /**
  * 볼 & 브릭 충돌
  */
-void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
+void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, PhysicsCategory category) {
     
     auto block = dynamic_cast<Block*>(tile);
     
@@ -354,42 +353,52 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
     switch( block->getData().tileId ) {
         // Normal
         case TileId::BLOCK_NORMAL: {
-            // 포털 오픈됨 && 포털 아래칸 충돌 => 스테이지 클리어
-            auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
-            auto portalBelowTile = getTile(portal->getData().p + Vec2(0,-1));
-            
-            if( portal->isOpened() && portalBelowTile == block ) {
-                ball->setCollisionLocked(true);
-                ball->setSyncLocked(true);
+            if( category == PhysicsCategory::BLOCK_TOP ) {
+                // 포털 오픈됨 && 포털 아래칸 충돌 => 스테이지 클리어
+                auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
+                auto portalBelowTile = getTile(portal->getData().p + Vec2(0,-1));
                 
-                auto portalBox = SBNodeUtils::getBoundingBoxInWorld(portal);
-                ball->setPositionY(portalBox.getMinY() + ball->getContentSize().height*0.5f);
-                
-                SBDirector::postDelayed(this, [=]() {
-                    auto fadeOut = FadeOut::create(0.3f);
-                    auto callFunc = CallFunc::create([=]() {
-                        GameManager::onStageClear();
-                    });
-                    ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
-                }, 0.2f);
+                if( portal->isOpened() && portalBelowTile == block ) {
+                    ball->setCollisionLocked(true);
+                    ball->setSyncLocked(true);
+                    
+                    auto portalBox = SBNodeUtils::getBoundingBoxInWorld(portal);
+                    ball->setPositionY(portalBox.getMinY() + ball->getContentSize().height*0.5f);
+                    
+                    SBDirector::postDelayed(this, [=]() {
+                        auto fadeOut = FadeOut::create(0.3f);
+                        auto callFunc = CallFunc::create([=]() {
+                            GameManager::onStageClear();
+                        });
+                        ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
+                    }, 0.2f);
+                }
             }
         } break;
             
         // 드랍 블럭
         case TileId::BLOCK_DROP_1:
         case TileId::BLOCK_DROP_2: {
-            removeTile(block);
+            if( category == PhysicsCategory::BLOCK_TOP ) {
+                removeTile(block);
+            }
         } break;
         
         // 데스 블럭
         case TileId::BLOCK_DEATH: {
-            ball->setCollisionLocked(true);
-            ball->setSyncLocked(true);
-            ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
-            
-            SBDirector::postDelayed(this, [=]() {
-                GameManager::onGameOver(false);
-            }, 0.2f);
+            if( category == PhysicsCategory::BLOCK_TOP ||
+                category == PhysicsCategory::BLOCK_SIDE ) {
+                ball->setCollisionLocked(true);
+                ball->setSyncLocked(true);
+                
+                if( category == PhysicsCategory::BLOCK_TOP ) {
+                    ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
+                }
+                
+                SBDirector::postDelayed(this, [=]() {
+                    GameManager::onGameOver(false);
+                }, 0.2f);
+            }
         } break;
             
         // 점프 블럭
@@ -424,7 +433,7 @@ void GameView::initPhysics() {
     listener->setTarget(this);
     listener->onContactFlag         = CC_CALLBACK_2(GameView::onContactFlag, this);
     listener->onContactItem         = CC_CALLBACK_2(GameView::onContactItem, this);
-    listener->onContactBlock        = CC_CALLBACK_3(GameView::onContactBlock, this);
+    listener->onContactBlock        = CC_CALLBACK_4(GameView::onContactBlock, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
     listener->onContactFloor        = CC_CALLBACK_1(GameView::onContactFloor, this);
     PHYSICS_MANAGER->addListener(listener);

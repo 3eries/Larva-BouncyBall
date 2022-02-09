@@ -86,25 +86,22 @@ enum class BallDirection {
 // 천장 - ceiling
 
 enum PhysicsCategory {
-    WALL_LEFT   = (1 << 0),     // 왼쪽 벽
-    WALL_RIGHT  = (1 << 1),     // 오른쪽 벽
-    WALL_TOP    = (1 << 2),     // 천장
-    FLOOR       = (1 << 3),     // 바닥
-    BALL        = (1 << 4),
-    FLAG        = (1 << 5),
-    ITEM        = (1 << 6),
-    BLOCK       = (1 << 7),     // 블럭 천장
-    BLOCK_SIDE  = (1 << 8),     // 블럭 측면, 바닥
+    WALL_LEFT    = (1 << 0),     // 왼쪽 벽
+    WALL_RIGHT   = (1 << 1),     // 오른쪽 벽
+    WALL_TOP     = (1 << 2),     // 천장
+    FLOOR        = (1 << 3),     // 바닥
+    BALL         = (1 << 4),
+    FLAG         = (1 << 5),
+    ITEM         = (1 << 6),
+    BLOCK_TOP    = (1 << 7),     // 블럭 상단
+    BLOCK_SIDE   = (1 << 8),     // 블럭 측면
+    BLOCK_BOTTOM = (1 << 9),     // 블럭 하단
 };
 
 static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
-static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP | PhysicsCategory::FLOOR |                                                  PhysicsCategory::FLAG | PhysicsCategory::ITEM | PhysicsCategory::BLOCK | PhysicsCategory::BLOCK_SIDE);
+static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP | PhysicsCategory::FLOOR | PhysicsCategory::FLAG | PhysicsCategory::ITEM | PhysicsCategory::BLOCK_TOP | PhysicsCategory::BLOCK_SIDE | PhysicsCategory::BLOCK_BOTTOM);
 
 #define                 TILE_DEFAULT_SIZE                  cocos2d::Size(108,108)
-
-#define                 TILE_ENTER_DURATION                0.3f
-#define                 TILE_EXIT_DURATION                 0.3f
-#define                 TILE_MOVE_DURATION                 0.3f
 
 #define                 TILE_PADDING_X                     4
 #define                 TILE_PADDING_Y                     4

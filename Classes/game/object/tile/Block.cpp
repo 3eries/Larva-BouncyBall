@@ -51,7 +51,7 @@ void Block::initPhysics() {
     auto listener = PhysicsListener::create();
     listener->setTarget(this);
     listener->setContactTarget(this);
-    listener->onContactBlock = CC_CALLBACK_3(Block::onContactBlock, this);
+    listener->onContactBlock = CC_CALLBACK_4(Block::onContactBlock, this);
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
@@ -61,6 +61,8 @@ void Block::initPhysics() {
     if( data.tileId == TileId::BLOCK_DEATH ) {
         size.width *= 0.5f;
     }
+    
+    physicsSize = size;
     
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
@@ -103,8 +105,8 @@ void Block::initPhysics() {
     PhysicsCategory categorys[] = {
         PhysicsCategory::BLOCK_SIDE,
         PhysicsCategory::BLOCK_SIDE,
-        PhysicsCategory::BLOCK_SIDE,
-        PhysicsCategory::BLOCK,
+        PhysicsCategory::BLOCK_BOTTOM,
+        PhysicsCategory::BLOCK_TOP,
     };
     
     for( int i = 0; i < 4; ++i ) {
@@ -131,7 +133,7 @@ void Block::initPhysics() {
 /**
  * 볼 & 벽돌 충돌
  */
-void Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
+void Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint, PhysicsCategory category) {
     
     // image->setVisible(!image->isVisible());
     

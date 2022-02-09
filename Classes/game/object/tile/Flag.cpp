@@ -56,6 +56,7 @@ void Flag::initPhysics() {
     
     // Body
     auto size = getContentSize();
+    physicsSize = size;
     
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;

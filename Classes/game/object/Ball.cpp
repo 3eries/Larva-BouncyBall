@@ -112,7 +112,7 @@ void Ball::initPhysics() {
     auto listener = PhysicsListener::create();
     listener->setTarget(this);
     listener->setContactTarget(this);
-    listener->onContactBlock        = CC_CALLBACK_3(Ball::onContactBlock, this);
+    listener->onContactBlock        = CC_CALLBACK_4(Ball::onContactBlock, this);
 //    listener->onContactItem         = CC_CALLBACK_2(Ball::onContactItem, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
 //    listener->onContactFloor        = CC_CALLBACK_1(Ball::onContactFloor, this);
@@ -250,10 +250,15 @@ void Ball::stopMoveX(bool resetVelocity) {
 }
 
 /**
- * 볼 & 브릭 충돌
+ * 볼 & 블럭 충돌
  */
-void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint) {
+void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, PhysicsCategory category) {
 
+    // 충돌 지점이 블럭의 상단이 아니면 무시
+    if( category != PhysicsCategory::BLOCK_TOP ) {
+        return;
+    }
+    
     // 충돌 잠금 상태일 경우 충돌 무시
     if( isCollisionLocked() ) {
         return;

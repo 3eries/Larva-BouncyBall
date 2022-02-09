@@ -91,6 +91,8 @@ void Item::initPhysics() {
         size.width *= 0.7f;
     }
     
+    physicsSize = size;
+    
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
     

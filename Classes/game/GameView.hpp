@@ -11,7 +11,7 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
-
+#include "GameDefine.h"
 #include "../content/data/model/StageData.h"
 
 class GameTile;
@@ -91,7 +91,8 @@ private:
 private:
     void onContactFlag(Ball *ball, GameTile *tile);
     void onContactItem(Ball *ball, GameTile *tile);
-    void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint);
+    void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
+                        PhysicsCategory category);
     void onContactFloor(Ball *ball);
     
 private:

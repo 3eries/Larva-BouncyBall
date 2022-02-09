@@ -163,25 +163,23 @@ void PhysicsManager::BeginContact(b2Contact *contact) {
     auto fixtureA = contact->GetFixtureA();
     auto fixtureB = contact->GetFixtureB();
     
-    // 블럭 체크
-    {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, fixtureA, fixtureB);
-        
-        if( objs.obj1 && objs.obj2 ) {
-//            auto ball = (Ball*)objs.obj1;
-//            auto block = (Block*)objs.obj2;
-            return;
-        }
-    }
-    
-    // 아이템 체크
-    {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, fixtureA, fixtureB);
-        
-        if( objs.obj1 && objs.obj2 ) {
-            return;
-        }
-    }
+    // 블럭 상단 체크
+//    {
+//        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK_TOP, fixtureA, fixtureB);
+//
+//        if( objs.obj1 && objs.obj2 ) {
+//            return;
+//        }
+//    }
+//
+//    // 아이템 체크
+//    {
+//        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::ITEM, fixtureA, fixtureB);
+//
+//        if( objs.obj1 && objs.obj2 ) {
+//            return;
+//        }
+//    }
     
     // 벽 체크
     {
@@ -263,32 +261,32 @@ void PhysicsManager::PreSolve(b2Contact *contact, const b2Manifold *oldManifold)
     }
     
     // 블럭 체크
-    {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, contact);
-        
-        if( objs.obj1 && objs.obj2 ) {
-            auto ball = (Ball*)objs.obj1;
-            auto block = (Block*)objs.obj2;
-            
-            // 벽돌이 이미 깨진 경우, 충돌 비활성화
-            /*
-            if( brick->isBroken() ) {
-                contact->SetEnabled(false);
-            }
-             */
-
-            return;
-        }
-    }
-    
-    // 바닥 체크
-    {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::FLOOR, contact);
-        
-        if( objs.obj1 && objs.obj2 ) {
-            return;
-        }
-    }
+//    {
+//        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK_TOP, contact);
+//
+//        if( objs.obj1 && objs.obj2 ) {
+//            auto ball = (Ball*)objs.obj1;
+//            auto block = (Block*)objs.obj2;
+//
+//            // 벽돌이 이미 깨진 경우, 충돌 비활성화
+//            /*
+//            if( brick->isBroken() ) {
+//                contact->SetEnabled(false);
+//            }
+//             */
+//
+//            return;
+//        }
+//    }
+//
+//    // 바닥 체크
+//    {
+//        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::FLOOR, contact);
+//
+//        if( objs.obj1 && objs.obj2 ) {
+//            return;
+//        }
+//    }
 }
 
 /**
@@ -305,17 +303,23 @@ void PhysicsManager::PostSolve(b2Contact *contact, const b2ContactImpulse *impul
     
     // 블럭 체크
     {
-        auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, PhysicsCategory::BLOCK, contact);
+        PhysicsCategory categorys[] = {
+            PhysicsCategory::BLOCK_TOP,
+            PhysicsCategory::BLOCK_SIDE,
+            PhysicsCategory::BLOCK_BOTTOM,
+        };
         
-        if( objs.obj1 && objs.obj2 ) {
-            auto ball = (Ball*)objs.obj1;
-            auto block = (Block*)objs.obj2;
+        for( auto category : categorys ) {
+            auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, category, contact);
             
-            // if( !brick->isBroken() ) {
-            dispatchOnContactBlock(ball, block, SBPhysics::getContactPoint(contact));
-            // }
+            if( objs.obj1 && objs.obj2 ) {
+                auto ball = (Ball*)objs.obj1;
+                auto block = (Block*)objs.obj2;
+                
+                dispatchOnContactBlock(ball, block, SBPhysics::getContactPoint(contact), category);
 
-            return;
+                return;
+            }
         }
     }
     
@@ -523,9 +527,46 @@ void PhysicsManager::dispatchOnContactItem(Ball *ball, GameTile *item) {
     }
 }
 
-void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint) {
+void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint, PhysicsCategory category) {
 
     auto copyListeners = listeners;
+    
+//    auto ballBox = SB_BOUNDING_BOX_IN_WORLD(ball);
+//    auto blockBox = SB_BOUNDING_BOX_IN_WORLD(block);
+//
+//    Rect physicsBox;
+//    physicsBox.size = block->getPhysicsSize();
+//    physicsBox.origin = Vec2(blockBox.getMidX(), blockBox.getMidY()) - Vec2(physicsBox.size*0.5f);
+//
+//    auto contactDirection = [=]() -> ContactDirection {
+//
+//        auto ballCenter = Vec2(ballBox.getMidX(), ballBox.getMidY());
+//
+//        auto t1 = Vec2(physicsBox.getMinX(), physicsBox.getMaxY()).getDistance(contactPoint);
+////        auto t2 = Vec2(physicsBox.getMidX(), physicsBox.getMaxY()).getDistance(contactPoint);
+////        auto t3 = Vec2(physicsBox.getMaxX(), physicsBox.getMaxY()).getDistance(contactPoint);
+//
+//        auto l1 = Vec2(physicsBox.getMinX(), physicsBox.getMidY()).getDistance(contactPoint);
+//        auto l2 = Vec2(physicsBox.getMinX(), physicsBox.getMinY()).getDistance(contactPoint);
+//
+//        auto r1 = Vec2(physicsBox.getMaxX(), physicsBox.getMidY()).getDistance(contactPoint);
+//        auto r2 = Vec2(physicsBox.getMaxX(), physicsBox.getMinY()).getDistance(contactPoint);
+//
+//        auto b = Vec2(physicsBox.getMidX(), physicsBox.getMinY()).getDistance(contactPoint);
+//
+//        float min = t1;
+//        // min = MIN(t2, MIN(t3, min));
+//        min = MIN(l1, MIN(l2, min));
+//        min = MIN(r1, MIN(r2, min));
+//        min = MIN(b, min);
+//
+//        // 상단부터 체크
+//        if( min == t1 /*|| min == t2 || min == t3*/ ) return ContactDirection::TOP;
+//        if( min == l1 || min == l2 )              return ContactDirection::LEFT;
+//        if( min == r1 || min == r2 )              return ContactDirection::LEFT;
+//        if( min == b )                            return ContactDirection::BOTTOM;
+//        return ContactDirection::TOP;
+//    }();
     
     for( auto listener : copyListeners ) {
         if( listener->onContactBlock ) {
@@ -533,10 +574,10 @@ void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 co
             
             if( contactTarget ) {
                 if( contactTarget == ball || contactTarget == block ) {
-                    listener->onContactBlock(ball, block, contactPoint);
+                    listener->onContactBlock(ball, block, contactPoint, category);
                 }
             } else {
-                listener->onContactBlock(ball, block, contactPoint);
+                listener->onContactBlock(ball, block, contactPoint, category);
             }
         }
     }

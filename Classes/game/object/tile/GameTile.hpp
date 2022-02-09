@@ -44,6 +44,7 @@ public:
     
 protected:
     CC_SYNTHESIZE_READONLY(TileData, data, Data);
+    CC_SYNTHESIZE_READONLY(cocos2d::Size, physicsSize, PhysicsSize);
     cocos2d::Sprite *image;
 };
 

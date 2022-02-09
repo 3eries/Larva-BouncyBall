@@ -116,51 +116,49 @@ void SettingPopup::initContentView() {
     });
     
     // remove ads
-    SBButton *removeAdsBtn = nullptr;
-    
-    if( !isRemovedAds ) {
-        removeAdsBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_remove_ads.png");
-        removeAdsBtn->setZoomScale(ButtonZoomScale::NORMAL);
-        removeAdsBtn->setAnchorPoint(ANCHOR_M);
-        removeAdsBtn->setPosition(Vec2MC(-166, -85));
-        addContentChild(removeAdsBtn);
-        
-        removeAdsBtn->setOnClickListener([=](Node*) {
-//            SBDirector::getInstance()->setScreenTouchLocked(true);
+//    SBButton *removeAdsBtn = nullptr;
 //
-//            auto listener = iap::PurchaseListener::create();
-//            listener->setTarget(this);
-//            listener->onPurchased = [=](const iap::Item &item) {
-//                User::removeAds();
-//                this->dismissWithAction();
-//            };
-//            
-//            listener->onFinished = [=](bool result) {
-//                SBDirector::postDelayed(this, [=]() {
-//                    SBDirector::getInstance()->setScreenTouchLocked(false);
-//                }, 0.2f);
-//            };
+//    if( !isRemovedAds ) {
+//        removeAdsBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_remove_ads.png");
+//        removeAdsBtn->setZoomScale(ButtonZoomScale::NORMAL);
+//        removeAdsBtn->setAnchorPoint(ANCHOR_M);
+//        removeAdsBtn->setPosition(Vec2MC(-166, -85));
+//        addContentChild(removeAdsBtn);
 //
-//            iap::IAPHelper::purchaseRemoveAds(listener);
-        });
-    }
-    
-    // restore purchases
-    // common_btn_restore.png Vec2MC(166, -85) , Size(154, 154)
-    // common_btn_restore.png Vec2MC(83, -85) , Size(154, 154)
-    auto restoreBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_restore.png");
-    restoreBtn->setZoomScale(ButtonZoomScale::NORMAL);
-    restoreBtn->setAnchorPoint(ANCHOR_M);
-    restoreBtn->setPosition(isRemovedAds ? Vec2MC(83, -85) : Vec2MC(166, -85));
-    addContentChild(restoreBtn);
-    
-    restoreBtn->setOnClickListener([=](Node*) {
-        if( iap::IAPHelper::isReady() ) {
-            iap::IAPHelper::restore(nullptr);
-        }
-        
-        this->dismissWithAction();
-    });
+//        removeAdsBtn->setOnClickListener([=](Node*) {
+////            SBDirector::getInstance()->setScreenTouchLocked(true);
+////
+////            auto listener = iap::PurchaseListener::create();
+////            listener->setTarget(this);
+////            listener->onPurchased = [=](const iap::Item &item) {
+////                User::removeAds();
+////                this->dismissWithAction();
+////            };
+////
+////            listener->onFinished = [=](bool result) {
+////                SBDirector::postDelayed(this, [=]() {
+////                    SBDirector::getInstance()->setScreenTouchLocked(false);
+////                }, 0.2f);
+////            };
+////
+////            iap::IAPHelper::purchaseRemoveAds(listener);
+//        });
+//    }
+//
+//    // restore purchases
+//    auto restoreBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_restore.png");
+//    restoreBtn->setZoomScale(ButtonZoomScale::NORMAL);
+//    restoreBtn->setAnchorPoint(ANCHOR_M);
+//    restoreBtn->setPosition(isRemovedAds ? Vec2MC(83, -85) : Vec2MC(166, -85));
+//    addContentChild(restoreBtn);
+//
+//    restoreBtn->setOnClickListener([=](Node*) {
+//        if( iap::IAPHelper::isReady() ) {
+//            iap::IAPHelper::restore(nullptr);
+//        }
+//
+//        this->dismissWithAction();
+//    });
     
     // 게임씬인 경우 UI 변경
     if( isGameScene ) {
@@ -179,11 +177,11 @@ void SettingPopup::initContentView() {
         
         effectBtn->setPosition(Vec2MC(-166, 31));
         bgmBtn->setPosition(Vec2MC(0, 31));
-        restoreBtn->setPosition(isRemovedAds ? Vec2MC(83, -139) : Vec2MC(166, -139));
-        
-        if( removeAdsBtn ) {
-            removeAdsBtn->setPosition(Vec2MC(-166, -139));
-        }
+//        restoreBtn->setPosition(isRemovedAds ? Vec2MC(83, -139) : Vec2MC(166, -139));
+//
+//        if( removeAdsBtn ) {
+//            removeAdsBtn->setPosition(Vec2MC(-166, -139));
+//        }
     }
 }
 
