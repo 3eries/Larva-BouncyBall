@@ -106,10 +106,10 @@ void WelcomeScene::onClick(Node *sender) {
         case Tag::BTN_CREDIT: {
             SBAnalytics::logEvent(ANALYTICS_EVENT_CREDIT);
             
-            auto popup = PopupManager::show(PopupType::CREDIT);
-            popup->setLocalZOrder(ZOrder::POPUP_TOP);
-            popup->setOnDismissListener([=](Node*) {
-            });
+//            auto popup = PopupManager::show(PopupType::CREDIT);
+//            popup->setLocalZOrder(ZOrder::POPUP_TOP);
+//            popup->setOnDismissListener([=](Node*) {
+//            });
         } break;
             
         // 게임 시작
