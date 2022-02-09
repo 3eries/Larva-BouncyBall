@@ -1,0 +1,323 @@
+{
+"skeleton": { "hash": "mxJqKmaEl+AVR1qKT/g0mFQ+e38", "spine": "3.7.94", "width": 228, "height": 228, "images": "./door/", "audio": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "door", "parent": "root", "y": 62 },
+	{ "name": "door_frame", "parent": "door" },
+	{ "name": "door_closed", "parent": "door", "x": -42, "y": -4 },
+	{ "name": "door_open", "parent": "door", "y": -4, "color": "ffffff00" },
+	{ "name": "door_frame_shine", "parent": "door" },
+	{ "name": "door_open_effect", "parent": "door" },
+	{ "name": "door_open_blue", "parent": "door", "y": -4 }
+],
+"slots": [
+	{ "name": "door_open_effect", "bone": "door_open_effect", "attachment": "door_open_effect", "blend": "additive" },
+	{ "name": "door_frame_shine", "bone": "door_frame_shine", "attachment": "door_frame_shine" },
+	{ "name": "door_open_blue", "bone": "door_open_blue", "attachment": "door_open02" },
+	{ "name": "door_open", "bone": "door_open", "attachment": "door_open" },
+	{ "name": "door_closed", "bone": "door_closed", "attachment": "door_closed" },
+	{ "name": "door_frame", "bone": "door_frame", "attachment": "door_frame" }
+],
+"skins": {
+	"default": {
+		"door_closed": {
+			"door_closed": { "x": 42, "width": 84, "height": 100 }
+		},
+		"door_frame": {
+			"door_frame": { "width": 116, "height": 124 }
+		},
+		"door_frame_shine": {
+			"door_frame_shine": { "width": 124, "height": 132 }
+		},
+		"door_open": {
+			"door_open": { "width": 84, "height": 100 }
+		},
+		"door_open_blue": {
+			"door_open02": { "width": 84, "height": 100 }
+		},
+		"door_open_effect": {
+			"door_open_effect": { "width": 228, "height": 228 }
+		}
+	}
+},
+"animations": {
+	"clear": {
+		"slots": {
+			"door_closed": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_frame": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_frame_shine": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_open": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_open_blue": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_open_effect": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"closed": {
+		"slots": {
+			"door_frame_shine": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_open_effect": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"door_dummy": {
+		"slots": {
+			"door_closed": {
+				"color": [
+					{
+						"time": 0,
+						"color": "ffffffff",
+						"curve": [ 0.554, 0, 0.525, 1 ]
+					},
+					{ "time": 0.5, "color": "7f7f7fff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "door_closed" },
+					{ "time": 0.5, "name": null }
+				]
+			},
+			"door_frame_shine": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.5, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "door_frame_shine" }
+				]
+			},
+			"door_open": {
+				"color": [
+					{
+						"time": 0.5,
+						"color": "ffffffff",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{
+						"time": 1.3333,
+						"color": "ffffff95",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{
+						"time": 2.1667,
+						"color": "ffffffff",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{
+						"time": 3,
+						"color": "ffffff95",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{ "time": 3.8333, "color": "ffffffff" }
+				]
+			},
+			"door_open_effect": {
+				"color": [
+					{
+						"time": 0,
+						"color": "ffffff00",
+						"curve": [ 0.536, 0, 0.467, 1 ]
+					},
+					{ "time": 0.5, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "door_open_effect" }
+				]
+			}
+		},
+		"bones": {
+			"door_open_effect": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": 45,
+						"curve": [ 0.544, 0, 0.511, 1 ]
+					},
+					{ "time": 0.5, "angle": 0 },
+					{ "time": 2.1667, "angle": 180 },
+					{ "time": 3.8333, "angle": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.5, "x": 1, "y": 1 }
+				]
+			},
+			"door_closed": {
+				"scale": [
+					{
+						"time": 0,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.525, 0, 0.54, 1 ]
+					},
+					{ "time": 0.5, "x": 0, "y": 1 }
+				]
+			}
+		}
+	},
+	"open_idle": {
+		"slots": {
+			"door_closed": {
+				"color": [
+					{ "time": 0, "color": "7f7f7fff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"door_frame_shine": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			},
+			"door_open": {
+				"color": [
+					{
+						"time": 0,
+						"color": "ffffffff",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{
+						"time": 0.8333,
+						"color": "ffffff95",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{
+						"time": 1.6667,
+						"color": "ffffffff",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{
+						"time": 2.5,
+						"color": "ffffff95",
+						"curve": [ 0.453, 0.01, 0.547, 1 ]
+					},
+					{ "time": 3.3333, "color": "ffffffff" }
+				]
+			},
+			"door_open_effect": {
+				"color": [
+					{ "time": 0, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"door_open_effect": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 1.6667, "angle": 180 },
+					{ "time": 3.3333, "angle": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 1 }
+				]
+			},
+			"door_closed": {
+				"scale": [
+					{ "time": 0, "x": 0, "y": 1 }
+				]
+			}
+		}
+	},
+	"opening": {
+		"slots": {
+			"door_closed": {
+				"color": [
+					{
+						"time": 0,
+						"color": "ffffffff",
+						"curve": [ 0.554, 0, 0.525, 1 ]
+					},
+					{ "time": 0.5, "color": "7f7f7fff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "door_closed" },
+					{ "time": 0.5, "name": null }
+				]
+			},
+			"door_frame_shine": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.5, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "door_frame_shine" }
+				]
+			},
+			"door_open": {
+				"color": [
+					{ "time": 0.5, "color": "ffffffff" }
+				]
+			},
+			"door_open_effect": {
+				"color": [
+					{
+						"time": 0,
+						"color": "ffffff00",
+						"curve": [ 0.536, 0, 0.467, 1 ]
+					},
+					{ "time": 0.5, "color": "ffffffff" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "door_open_effect" }
+				]
+			}
+		},
+		"bones": {
+			"door_open_effect": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": 45,
+						"curve": [ 0.544, 0, 0.511, 1 ]
+					},
+					{ "time": 0.5, "angle": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.5, "x": 1, "y": 1 }
+				]
+			},
+			"door_closed": {
+				"scale": [
+					{
+						"time": 0,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.525, 0, 0.54, 1 ]
+					},
+					{ "time": 0.5, "x": 0, "y": 1 }
+				]
+			}
+		}
+	}
+}
+}

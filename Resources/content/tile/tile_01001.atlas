@@ -1,0 +1,13 @@
+
+tile_01001.png
+size: 128,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+game_ui_sausage
+  rotate: false
+  xy: 2, 2
+  size: 100, 80
+  orig: 100, 80
+  offset: 0, 0
+  index: -1

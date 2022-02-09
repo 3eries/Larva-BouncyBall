@@ -8,6 +8,7 @@
 #include "Item.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "../../GameManager.hpp"
 
 USING_NS_CC;
@@ -40,6 +41,34 @@ bool Item::init() {
     }
     
     return true;
+}
+
+void Item::initImage() {
+    
+    auto skeletonJsonFile = ResourceHelper::getTileSkeletonJsonFile(data.tileId);
+    
+    // 스파인 애니메이션
+    if( skeletonJsonFile != "" ) {
+        anim = SBSkeletonAnimation::create(skeletonJsonFile);
+        anim->setScale(GAME_MANAGER->getMapScaleFactor());
+        anim->setAnchorPoint(Vec2::ZERO);
+        anim->setPosition(Vec2BC(getContentSize(), 0, 0));
+        addChild(anim);
+        
+        anim->setAnimation(0, ANIM_NAME_RUN, true);
+    }
+    // 이미지
+    else {
+        GameTile::initImage();
+    }
+    
+    // 소시지 파티클
+    if( data.tileId == TileId::ITEM_SAUSAGE ) {
+        auto particle = ParticleSystemQuad::create(DIR_IMG_GAME + "steam_particle_texture.plist");
+        particle->setAnchorPoint(ANCHOR_M);
+        particle->setPosition(Vec2MC(getContentSize(), 0, 25));
+        addChild(particle);
+    }
 }
     
 /**

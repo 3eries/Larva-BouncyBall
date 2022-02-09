@@ -1,0 +1,48 @@
+
+tile_00011.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+door_closed
+  rotate: false
+  xy: 476, 130
+  size: 84, 100
+  orig: 84, 100
+  offset: 0, 0
+  index: -1
+door_frame
+  rotate: false
+  xy: 358, 106
+  size: 116, 124
+  orig: 116, 124
+  offset: 0, 0
+  index: -1
+door_frame_shine
+  rotate: false
+  xy: 232, 98
+  size: 124, 132
+  orig: 124, 132
+  offset: 0, 0
+  index: -1
+door_open
+  rotate: false
+  xy: 562, 130
+  size: 84, 100
+  orig: 84, 100
+  offset: 0, 0
+  index: -1
+door_open02
+  rotate: true
+  xy: 232, 12
+  size: 84, 100
+  orig: 84, 100
+  offset: 0, 0
+  index: -1
+door_open_effect
+  rotate: false
+  xy: 2, 2
+  size: 228, 228
+  orig: 228, 228
+  offset: 0, 0
+  index: -1

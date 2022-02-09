@@ -23,6 +23,7 @@ public:
     static std::string getLocalizedImage(const std::string &image);
     static std::string getWorldBackgroundImage(int world);
     static StringList  getTileImage(const TileId &tileId);
+    static std::string getTileSkeletonJsonFile(const TileId &tileId);
 };
 
 #endif /* ResourceHelper_hpp */

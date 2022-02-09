@@ -1,0 +1,49 @@
+{
+"skeleton": { "hash": "vyYls02sEgv3AsTJn1IdHgV1jBo", "spine": "3.7.94", "width": 100, "height": 80, "images": "./sausage/", "audio": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "sausage", "parent": "root", "y": 55 }
+],
+"slots": [
+	{ "name": "game_ui_sausage", "bone": "sausage", "attachment": "game_ui_sausage" }
+],
+"skins": {
+	"default": {
+		"game_ui_sausage": {
+			"game_ui_sausage": { "width": 100, "height": 80 }
+		}
+	}
+},
+"animations": {
+	"clear": {
+		"slots": {
+			"game_ui_sausage": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"run": {
+		"bones": {
+			"sausage": {
+				"translate": [
+					{
+						"time": 0,
+						"x": 0,
+						"y": 5,
+						"curve": [ 0.475, 0, 0.54, 1 ]
+					},
+					{
+						"time": 1,
+						"x": 0,
+						"y": -5,
+						"curve": [ 0.475, 0, 0.54, 1 ]
+					},
+					{ "time": 2, "x": 0, "y": 5 }
+				]
+			}
+		}
+	}
+}
+}

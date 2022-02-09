@@ -8,6 +8,7 @@
 #include "ClearPortal.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "../../GameManager.hpp"
 
 USING_NS_CC;
@@ -46,6 +47,18 @@ bool ClearPortal::init() {
     return true;
 }
 
+void ClearPortal::initImage() {
+    
+    anim = SBSkeletonAnimation::create(ResourceHelper::getTileSkeletonJsonFile(data.tileId));
+    anim->setScale(GAME_MANAGER->getMapScaleFactor());
+    anim->setAnchorPoint(Vec2::ZERO);
+    anim->setPosition(Vec2BC(getContentSize(), 0, 0));
+    addChild(anim);
+    
+    // anim->runAnimation(ANIM_NAME_CLEAR);
+    anim->setAnimation(0, "closed", true);
+}
+
 void ClearPortal::setStar(int star) {
     
     // setCollisionLocked(star >= 1);
@@ -53,9 +66,12 @@ void ClearPortal::setStar(int star) {
     if( !opened && star >= 1 ) {
         opened = true;
         
-        // TODO: 포털 오픈 연출
-        auto blink = Blink::create(2.0f, 2);
-        image->runAction(RepeatForever::create(blink));
+        // 포털 오픈 연출
+        anim->clearTracks();
+        anim->runAnimation(ANIM_NAME_CLEAR);
+        anim->runAnimation("opening", false, [=](spine::TrackEntry *entry) {
+            anim->setAnimation(0, "open_idle", true);
+        });
     }
 }
 

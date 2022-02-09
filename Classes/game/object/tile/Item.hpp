@@ -29,10 +29,14 @@ public:
     
 protected:
     virtual bool init() override;
+    virtual void initImage() override;
     virtual void initPhysics() override;
     
 public:
     virtual void onContactItem(Ball *ball, GameTile *Item);
+    
+protected:
+    SBSkeletonAnimation *anim;
 };
 
 #endif /* Item_hpp */

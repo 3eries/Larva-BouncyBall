@@ -119,3 +119,17 @@ StringList ResourceHelper::getTileImage(const TileId &tileId) {
     
     return files;
 }
+
+/**
+ * 타일 스파인 json 파일을 반환합니다
+ */
+string ResourceHelper::getTileSkeletonJsonFile(const TileId &tileId) {
+    
+    auto file = DIR_CONTENT_TILE + STR_FORMAT("tile_%05d.json", (int)tileId);
+    
+    if( FileUtils::getInstance()->isFileExist(file) ) {
+        return file;
+    }
+    
+    return "";
+}

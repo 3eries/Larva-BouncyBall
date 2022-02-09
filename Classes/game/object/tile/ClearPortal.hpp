@@ -20,6 +20,7 @@ public:
     virtual ~ClearPortal();
 
     virtual bool init() override;
+    virtual void initImage() override;
     
 public:
     void setStar(int star);
@@ -28,6 +29,7 @@ public:
     
 private:
     SB_SYNTHESIZE_BOOL(opened, Opened);
+    SBSkeletonAnimation *anim;
 };
 
 #endif /* ClearPortal_hpp */
