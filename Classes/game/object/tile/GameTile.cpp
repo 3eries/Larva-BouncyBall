@@ -73,7 +73,7 @@ void GameTile::initImage() {
     addChild(image);
     
     if( files.size() > 1 ) {
-        float interval = (files.size() == 2) ? 0.5f : 0.1f;
+        float interval = (files.size() == 2) ? 0.8f : 0.15f;
         
         auto animate = Animate::create(SBNodeUtils::createAnimation(files, interval));
         image->runAction(RepeatForever::create(animate));
