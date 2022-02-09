@@ -111,7 +111,7 @@ void MainScene::onClick(Node *sender) {
     switch( sender->getTag() ) {
         // 상점
         case Tag::BTN_SHOP: {
-            showShopPopup();
+            // showShopPopup();
         } break;
             
         // 설정
