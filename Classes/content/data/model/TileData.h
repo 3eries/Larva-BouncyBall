@@ -16,14 +16,17 @@ enum class TileId {
     NONE                = 0,           // 빈 칸
     
     // Flag
-    FLAG_START,                        // 깃발
+    FLAG                = 0,
+    FLAG_START          = 1,           // 깃발
     FLAG_CLEAR_PORTAL   = 11,          // 클리어 포털
     
     // Item
+    ITEM                = 1000,
     ITEM_SAUSAGE        = 1001,        // 소시지
     ITEM_DOUBLE_JUMP    = 1011,        // 더블 점프
     
     // Block
+    BLOCK               = 10000,
     BLOCK_NORMAL        = 10001,       // 기본 블럭
     BLOCK_DROP_1        = 10101,       // 드랍 블럭
     BLOCK_DROP_2        = 10102,
@@ -45,12 +48,26 @@ typedef std::vector<TilePosition> TilePositionList;
 
 struct TileData {
     TileId tileId;
+    TileType type;
     int stage;
     int x;
     int y;
     TilePosition p;
     
-    TileData(TileId _tileId): tileId(_tileId) {}
+    TileData(TileId _tileId): tileId(_tileId), type(TileType::NONE) {
+        setTileId(_tileId);
+    }
+    
+    void setTileId(TileId _tileId) {
+        tileId = _tileId;
+        
+        // 타입 설정
+        int i = (int)tileId;
+        
+        if( i > (int)TileId::BLOCK )           type = TileType::BLOCK;
+        else if( i > (int)TileId::ITEM )       type = TileType::ITEM;
+        else if( i > (int)TileId::FLAG )       type = TileType::FLAG;
+    }
     
     void setPosition(int _x, int _y) {
         x = _x;
@@ -84,7 +101,18 @@ struct TileData {
             }
         };
         
-        return STR_FORMAT("TileData { %s, x,y=(%d,%d) }", getIdStr(tileId).c_str(), x, y);
+        auto getTypeStr = [](TileType type) -> std::string {
+            switch( type ) {
+                case TileType::NONE:              return "NONE";
+                case TileType::FLAG:              return "FLAG";
+                case TileType::ITEM:              return "ITEM";
+                case TileType::BLOCK:             return "BLOCK";
+                default:                          return "";
+            }
+        };
+        
+        return STR_FORMAT("TileData { %s, type=%s, x,y=(%d,%d) }",
+                          getIdStr(tileId).c_str(), getTypeStr(type).c_str(), x, y);
     }
 };
 

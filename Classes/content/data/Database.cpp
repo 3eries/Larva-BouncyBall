@@ -117,7 +117,7 @@ void Database::parseStageFile() {
                     auto properties = mapInfo->getTileProperties().at(gid).asValueMap();
                     int tileId = properties.at("tile_id").asInt();
 
-                    tile.tileId = (TileId)tileId;
+                    tile.setTileId((TileId)tileId);
                 }
                 
                 stage.tiles.push_back(tile);

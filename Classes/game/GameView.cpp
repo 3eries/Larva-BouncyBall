@@ -224,7 +224,16 @@ void GameView::addTile(GameTile *tile) {
     
     tile->setCameraMask((unsigned short)CAMERA_FLAG_MAP);
     
-    addChild(tile, tile->getData().isBlockType() ? ZOrder::BLOCK : ZOrder::ITEM);
+    int z = 0;
+    
+    switch( tile->getData().type ) {
+        case TileType::FLAG:    z = ZOrder::TILE_FLAG;      break;
+        case TileType::ITEM:    z = ZOrder::TILE_ITEM;      break;
+        case TileType::BLOCK:   z = ZOrder::TILE_BLOCK;      break;
+        default: break;
+    }
+    
+    addChild(tile, z);
     tiles.push_back(tile);
 }
 

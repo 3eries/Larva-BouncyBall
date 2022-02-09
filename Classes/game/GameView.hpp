@@ -25,8 +25,9 @@ private:
     };
     
     enum ZOrder {
-        ITEM = 1,
-        BLOCK,
+        TILE_FLAG = 1,
+        TILE_ITEM,
+        TILE_BLOCK,
         BALL,
         
         MENU = 10,
