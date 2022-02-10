@@ -27,7 +27,11 @@ using namespace std;
 #define SCHEDULER_UPDATE_CAMERA             "UPDATE_CAMERA"
 #define TOUCH_TAP_DURATION                  0.1f            // 터치 탭 판정 시간
 
-#define DEBUG_DRAW_PHYSICS                  (defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1)
+#if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
+#define DEBUG_DRAW_PHYSICS                  1
+#else
+#define DEBUG_DRAW_PHYSICS                  0
+#endif // COCOS2D_DEBUG == 1
 
 GameView::GameView(): SBPhysicsObject(this),
 isTouchEnabled(false) {
@@ -78,6 +82,7 @@ void GameView::onEnterTransitionDidFinish() {
     schedule(CC_CALLBACK_1(GameView::updateCamera, this), SCHEDULER_UPDATE_CAMERA);
     
     // update info label
+#if DEBUG_DRAW_PHYSICS
     schedule([=](float dt) {
         auto body = ball->getBody();
         auto velocity = body->GetLinearVelocity();
@@ -99,6 +104,7 @@ void GameView::onEnterTransitionDidFinish() {
         infoLabel->setString(msg);
         
     }, 0.1f, "TEST");
+#endif
 }
 
 void GameView::cleanup() {
