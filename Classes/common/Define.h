@@ -30,7 +30,7 @@ static const std::string INTERNAL_GAME_CONFIG_FILE              = "config/" + GA
 static const std::string INTERNAL_GAME_CONFIG_FILE_VERSION      = "1.0.0";
 
 #define                  ENCRYPT_GAME_CONFIG_FILE                 0
-#define                  ENCRYPT_PLUGIN_CONFIG_FILE               1
+#define                  ENCRYPT_PLUGIN_CONFIG_FILE               0
 
 // Plugin
 static const std::string PLUGIN_CONFIG_FILE                     = "config/plugin_config.json";
