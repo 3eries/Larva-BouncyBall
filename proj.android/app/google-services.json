@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "926305691868",
+    "project_id": "larva-bouncy-ball",
+    "storage_bucket": "larva-bouncy-ball.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926305691868:android:d44d581f21bc5221a42c19",
+        "android_client_info": {
+          "package_name": "com.tuban.LarvaBouncyBall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926305691868-6grf1ffiru4l3umk66tgj8qpkc8psqdm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuban.LarvaBouncyBall",
+            "certificate_hash": "974066f51b60e6c42a62862599e69c9678f102d7"
+          }
+        },
+        {
+          "client_id": "926305691868-9afo0hhq64fom4a7be0cfobs7rr826o4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuban.LarvaBouncyBall",
+            "certificate_hash": "a1fc26a7f1d13fb96b7e8d16ccf056f5cbe8f83d"
+          }
+        },
+        {
+          "client_id": "926305691868-r1o4uvg518e47n7eut2n43ulfgkbemso.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuban.LarvaBouncyBall",
+            "certificate_hash": "7ec1df14f50f6d7193af61b2ba838182ffc43a07"
+          }
+        },
+        {
+          "client_id": "926305691868-rmu4e3r2me99s7bl2j528f8es2s49r25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaw-kUlQzEm9sPOXf-b9f5t37qPpx21w0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926305691868-rmu4e3r2me99s7bl2j528f8es2s49r25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

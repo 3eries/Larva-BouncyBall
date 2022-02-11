@@ -402,7 +402,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                 }
                 
                 SBDirector::postDelayed(this, [=]() {
-                    GameManager::onGameOver(false);
+                    GameManager::onGameOver(GameOverType::DEATH_BLOCK);
                 }, 0.2f);
             }
         } break;
@@ -421,7 +421,7 @@ void GameView::onContactFloor(Ball *ball) {
     ball->setSyncLocked(true);
     
     SBDirector::postDelayed(this, [=]() {
-        GameManager::onGameOver(false);
+        GameManager::onGameOver(GameOverType::FALL);
     }, 0.1f);
 }
 

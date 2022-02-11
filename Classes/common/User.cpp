@@ -184,6 +184,13 @@ int User::getStageStarTotalCount() {
 }
 
 /**
+ * 스테이지 클리어 여부를 반환합니다
+ */
+bool User::isStageCleared(int stage) {
+    return getStageStarCount(stage) > 0;
+}
+
+/**
  * 스테이지 별 개수를 설정합니다
  */
 void User::setStageStarCount(int stage, int star) {

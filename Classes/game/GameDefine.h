@@ -61,6 +61,11 @@ enum GameState {
     RESULT          = (1 << 8),     // 결과 화면
 };
 
+enum GameOverType {
+    FALL = 0,
+    DEATH_BLOCK,
+};
+
 // In Game
 enum class BallDirection {
     NONE,

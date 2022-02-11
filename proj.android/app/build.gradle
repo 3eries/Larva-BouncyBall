@@ -1,6 +1,7 @@
 import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
@@ -10,7 +11,7 @@ android {
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
-        versionName "0.1.1"
+        versionName "0.1.5"
         multiDexEnabled true
 
         externalNativeBuild {
@@ -132,9 +133,9 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     // External Plugins
-    // implementation platform('com.google.firebase:firebase-bom:28.1.0')
-    // implementation 'com.google.firebase:firebase-analytics'
-    // implementation 'com.google.android.gms:play-services-ads:20.2.0'
+    implementation platform('com.google.firebase:firebase-bom:29.0.4')
+    implementation 'com.google.firebase:firebase-analytics'
+    // implementation 'com.google.android.gms:play-services-ads:20.5.0'
 
     // gps
     // implementation "com.google.android.gms:play-services-auth:18.1.0"
@@ -143,5 +144,3 @@ dependencies {
     // billing
     // implementation 'com.android.billingclient:billing:4.0.0'
 }
-
-// apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin

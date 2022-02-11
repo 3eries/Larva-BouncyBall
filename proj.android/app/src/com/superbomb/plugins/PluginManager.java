@@ -3,6 +3,8 @@ package com.superbomb.plugins;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.superbomb.plugins.firebase.Analytics;
+
 import org.cocos2dx.lib.Cocos2dxActivity;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class PluginManager {
 
         PluginManager mgr = getInstance();
         mgr.context = context;
-        // mgr.listeners.add(Analytics.getInstance());
+        mgr.listeners.add(Analytics.getInstance());
         // mgr.listeners.add(GameHelper.getInstance());
         // mgr.listeners.add(AdsManager.getInstance());
         // mgr.listeners.add(IAPHelper.getInstance());

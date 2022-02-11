@@ -42,14 +42,19 @@ static const std::string ANALYTICS_SCREEN_MAIN                      = "main";
 static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 
 static const std::string ANALYTICS_EVENT_CREDIT                     = "credit";                     // 크레딧 화면 진입
-static const std::string ANALYTICS_EVENT_MORE_GAMES                 = "more_games";                 // 게임 더보기 클릭
 
-static const std::string ANALYTICS_EVENT_LEVEL_PLAY                 = "stage_play";
-static const std::string ANALYTICS_EVENT_LEVEL_CLEAR                = "stage_clear";
+static const std::string ANALYTICS_EVENT_STAGE_PLAY                 = "stage_play";
+static const std::string ANALYTICS_EVENT_STAGE_CLEAR                = "stage_clear";
+static const std::string ANALYTICS_EVENT_STAGE_PLAY_RE              = "stage_play_re";
+static const std::string ANALYTICS_EVENT_STAGE_CLEAR_RE             = "stage_clear_re";
 
-static const std::string ANALYTICS_EVENT_PARAM_LEVEL                = "level";
-static const std::string ANALYTICS_EVENT_PARAM_LEVEL_RANGE          = "level_range";
+static const std::string ANALYTICS_EVENT_GAME_OVER                  = "game_over";
+
 static const std::string ANALYTICS_EVENT_PARAM_SUMMARY              = "summary";                    // 요약
+static const std::string ANALYTICS_EVENT_PARAM_STAGE                = "stage";
+static const std::string ANALYTICS_EVENT_PARAM_STAGE_RANGE          = "stage_range";
+static const std::string ANALYTICS_EVENT_PARAM_STAR                 = "star";
+static const std::string ANALYTICS_EVENT_PARAM_TYPE                 = "type";
 
 // Leaderboard
 static const std::string LEADER_BOARD_TOP_LEVEL                     = "CgkI3oP_ia0VEAIQAQ";

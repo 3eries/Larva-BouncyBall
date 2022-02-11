@@ -36,8 +36,6 @@ bool BannerView::init() {
     addChild(moreGames);
     
     moreGames->setOnClickListener([=](Node*) {
-        
-        SBAnalytics::logEvent(ANALYTICS_EVENT_MORE_GAMES);
         Application::getInstance()->openURL(GAME_CONFIG->getMoreGamesUrl());
     });
     

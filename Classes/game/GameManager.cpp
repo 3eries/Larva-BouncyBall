@@ -209,6 +209,21 @@ void GameManager::onGameStart() {
     
     Log::i("GameManager::onGameStart start");
     
+    auto stage = instance->stage;
+    
+    // 통계 이벤트
+    {
+        SBAnalytics::EventParams params;
+        params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
+        params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
+
+        if( User::isStageCleared(stage.stage) ) {
+            SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_PLAY_RE, params);
+        } else {
+            SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_PLAY, params);
+        }
+    }
+    
     onGameReset();
     
     UserDefault::getInstance()->setIntegerForKey(UserDefaultKey::PLAY_COUNT, getPlayCount()+1);
@@ -272,11 +287,31 @@ void GameManager::onGameResume() {
 /**
  * 게임 오버
  */
-void GameManager::onGameOver(bool isTimeout) {
+void GameManager::onGameOver(GameOverType type) {
     
-    Log::i("GameManager::onGameOver isTimeout: %d", isTimeout);
+    Log::i("GameManager::onGameOver type: %d", (int)type);
     
     CCASSERT(instance->hasState(GameState::STARTED), "GameManager::onGameOver invalid called.");
+    
+    auto stage = instance->stage;
+    
+    // 통계 이벤트
+    {
+        auto gameOverType = [type]() -> string {
+            switch( type ) {
+                case GameOverType::FALL:        return "fall";
+                case GameOverType::DEATH_BLOCK: return "death_block";
+                default:                        return "none";
+            }
+        }();
+        
+        SBAnalytics::EventParams params;
+        params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
+        params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
+        params[ANALYTICS_EVENT_PARAM_TYPE] = SBAnalytics::EventParam(gameOverType);
+
+        SBAnalytics::logEvent(ANALYTICS_EVENT_GAME_OVER, params);
+    }
     
     getPhysicsManager()->stopScheduler();
     
@@ -339,13 +374,6 @@ void GameManager::onStageChanged() {
     Log::i("GameManager::onStageChanged stage: %d", stage.stage);
     
     dispatchCustomEvent(GameEvent::STAGE_CHANGED, &stage);
-    
-    // 통계 이벤트
-    SBAnalytics::EventParams params;
-    params[ANALYTICS_EVENT_PARAM_LEVEL] = SBAnalytics::EventParam(TO_STRING(stage.stage));
-    params[ANALYTICS_EVENT_PARAM_LEVEL_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
-
-    SBAnalytics::logEvent(ANALYTICS_EVENT_LEVEL_PLAY, params);
 }
 
 /**
@@ -369,9 +397,23 @@ void GameManager::onStageClear(bool isSkipped) {
     
     superbomb::PluginPlay::submitScore(LEADER_BOARD_TOP_LEVEL, stage.stage);
     
+    // 통계 이벤트
+    {
+        SBAnalytics::EventParams params;
+        params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
+        params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
+        params[ANALYTICS_EVENT_PARAM_STAR] = SBAnalytics::EventParam(TO_STRING(instance->star));
+
+        if( User::isStageCleared(stage.stage) ) {
+            SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_CLEAR_RE, params);
+        } else {
+            SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_CLEAR, params);
+        }
+    }
+    
     // 스테이지 별 개수 저장, 이전 별 개수보다 커야 함
-    int star = instance->star;
-    User::setStageStarCount(stage.stage, MAX(star, User::getStageStarCount(stage.stage)));
+    int star = MAX(instance->star, User::getStageStarCount(stage.stage));
+    User::setStageStarCount(stage.stage, star);
     
     // 다음 스테이지 해제
     User::unlockStage(stage.stage+1);

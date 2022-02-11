@@ -37,6 +37,7 @@ public:
     
     static int              getStageStarCount(int stage);
     static int              getStageStarTotalCount();
+    static bool             isStageCleared(int stage);
     static void             setStageStarCount(int stage, int star);
     
     static void             unlockStage(int stage);
