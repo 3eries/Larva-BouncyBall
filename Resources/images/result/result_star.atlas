@@ -1,0 +1,27 @@
+
+result_star.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+result_sausage
+  rotate: false
+  xy: 2, 2
+  size: 176, 120
+  orig: 176, 120
+  offset: 0, 0
+  index: -1
+result_star
+  rotate: false
+  xy: 2, 124
+  size: 392, 372
+  orig: 392, 372
+  offset: 0, 0
+  index: -1
+result_star_effect
+  rotate: true
+  xy: 396, 347
+  size: 149, 478
+  orig: 149, 478
+  offset: 0, 0
+  index: -1

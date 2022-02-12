@@ -30,10 +30,15 @@ private:
     void initBackgroundView() override;
     void initContentView() override;
     
+    void runStarAnimation(int i);
+    
     void runEnterAction(SBCallback onFinished = nullptr) override;
     void onEnterActionFinished() override;
     
 private:
+    std::vector<cocos2d::Sprite*> starBgs;
+    
+    CC_SYNTHESIZE(SBCallback, onShopListener, OnShopListener);
     CC_SYNTHESIZE(SBCallback, onHomeListener, OnHomeListener);
     CC_SYNTHESIZE(SBCallback, onRetryListener, OnRetryListener);
     CC_SYNTHESIZE(SBCallback, onNextListener, OnNextListener);

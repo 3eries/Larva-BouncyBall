@@ -73,6 +73,7 @@ static const std::string DIR_IMG_MAIN               = DIR_ADD(DIR_IMG, "main");
 static const std::string DIR_IMG_MAIN_IPAD          = DIR_ADD(DIR_IMG_MAIN, "ipad");
 static const std::string DIR_IMG_GAME               = DIR_ADD(DIR_IMG, "game");
 static const std::string DIR_IMG_GAME_IPAD          = DIR_ADD(DIR_IMG_GAME, "ipad");
+static const std::string DIR_IMG_RESULT             = DIR_ADD(DIR_IMG, "result");
 static const std::string DIR_IMG_EXIT               = DIR_ADD(DIR_IMG, "exit");
 static const std::string DIR_IMG_SETTING            = DIR_ADD(DIR_IMG, "setting");
 static const std::string DIR_IMG_PAUSE              = DIR_ADD(DIR_IMG, "pause");
