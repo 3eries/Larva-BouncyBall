@@ -9,7 +9,6 @@
 #include "Define.h"
 #include "GameConfiguration.hpp"
 #include "User.hpp"
-#include "../ContentResourceHelper.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
