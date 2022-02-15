@@ -131,6 +131,7 @@
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
 		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
 		50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736427033665009F3240 /* PhysicsListener.cpp */; };
+		50B685A427BBD6790022C45D /* BlockDrop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B685A227BBD6790022C45D /* BlockDrop.cpp */; };
 		50C1C48A26B8F725003BF8FD /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C1C48926B8F725003BF8FD /* MediaPlayer.framework */; };
 		50C1C48C26B8F72C003BF8FD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C1C48B26B8F72C003BF8FD /* WebKit.framework */; };
 		50C1C4A626B92745003BF8FD /* DebugDrawView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C1C4A326B92745003BF8FD /* DebugDrawView.cpp */; };
@@ -413,6 +414,8 @@
 		50B5736227033346009F3240 /* GameTile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameTile.hpp; sourceTree = "<group>"; };
 		50B5736427033665009F3240 /* PhysicsListener.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsListener.cpp; sourceTree = "<group>"; };
 		50B5736527033665009F3240 /* PhysicsListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsListener.hpp; sourceTree = "<group>"; };
+		50B685A227BBD6790022C45D /* BlockDrop.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockDrop.cpp; sourceTree = "<group>"; };
+		50B685A327BBD6790022C45D /* BlockDrop.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockDrop.hpp; sourceTree = "<group>"; };
 		50C1C48926B8F725003BF8FD /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/System/Library/Frameworks/MediaPlayer.framework; sourceTree = DEVELOPER_DIR; };
 		50C1C48B26B8F72C003BF8FD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		50C1C4A026B92745003BF8FD /* DebugDrawView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DebugDrawView.hpp; sourceTree = "<group>"; };
@@ -1144,6 +1147,8 @@
 			children = (
 				50617DA227144C58005CE3EF /* Block.cpp */,
 				50617DA127144C58005CE3EF /* Block.hpp */,
+				50B685A227BBD6790022C45D /* BlockDrop.cpp */,
+				50B685A327BBD6790022C45D /* BlockDrop.hpp */,
 				5081109B279D2D4200FC9577 /* ClearPortal.cpp */,
 				5081109C279D2D4200FC9577 /* ClearPortal.hpp */,
 				1DEB5552279A732A00699529 /* Flag.cpp */,
@@ -1305,6 +1310,7 @@
 				507BF7F426834EF30037F28C /* AdsHelper.cpp in Sources */,
 				507BF80326834EF30037F28C /* PluginPlay-android.cpp in Sources */,
 				507BF81E26834EF30037F28C /* SBDirector.cpp in Sources */,
+				50B685A427BBD6790022C45D /* BlockDrop.cpp in Sources */,
 				507BF7E526834EF30037F28C /* SBButton.cpp in Sources */,
 				50C1C4A826B92745003BF8FD /* GLES-Render.cpp in Sources */,
 				507BF82926834EF30037F28C /* PopupListener.cpp in Sources */,

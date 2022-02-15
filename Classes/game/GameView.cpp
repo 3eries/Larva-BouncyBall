@@ -17,6 +17,7 @@
 #include "object/tile/ClearPortal.hpp"
 #include "object/tile/Item.hpp"
 #include "object/tile/Block.hpp"
+#include "object/tile/BlockDrop.hpp"
 
 #include "object/StageProgressBar.hpp"
 
@@ -386,7 +387,10 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
         case TileId::BLOCK_DROP_1:
         case TileId::BLOCK_DROP_2: {
             if( category == PhysicsCategory::BLOCK_TOP ) {
-                removeTile(block);
+                auto dropBlock = dynamic_cast<BlockDrop*>(block);
+                dropBlock->dropEffect();
+                
+                removeTile(dropBlock);
             }
         } break;
         
@@ -627,11 +631,14 @@ void GameView::initTiles() {
             } break;
                 
             case TileId::BLOCK_NORMAL:
-            case TileId::BLOCK_DROP_1:
-            case TileId::BLOCK_DROP_2:
             case TileId::BLOCK_DEATH:
             case TileId::BLOCK_JUMP: {
                 tile = Block::create(tileData);
+            } break;
+                
+            case TileId::BLOCK_DROP_1:
+            case TileId::BLOCK_DROP_2: {
+                tile = BlockDrop::create(tileData);
             } break;
                 
             default: break;
