@@ -1,10 +1,11 @@
 //
-//  SettingPopup.cpp
+//  PausePopup.cpp
+//  LarvaBouncyBall-mobile
 //
-//  Created by seongmin hwang on 2018. 7. 6..
+//  Created by ace on 2022/02/15.
 //
 
-#include "SettingPopup.hpp"
+#include "PausePopup.hpp"
 
 #include "Define.h"
 #include "User.hpp"
@@ -20,13 +21,16 @@ using namespace std;
 static const float FADE_DURATION    = 0.15f;
 static const float SLIDE_DURATION   = EffectDuration::POPUP_SLIDE_FAST;
 
-SettingPopup::SettingPopup() : BasePopup(PopupType::SETTING) {
+PausePopup::PausePopup() : BasePopup(PopupType::PAUSE),
+onHomeListener(nullptr),
+onRetryListener(nullptr) {
+    
 }
 
-SettingPopup::~SettingPopup() {
+PausePopup::~PausePopup() {
 }
 
-bool SettingPopup::init() {
+bool PausePopup::init() {
     
     if( !BasePopup::init() ) {
         return false;
@@ -35,14 +39,14 @@ bool SettingPopup::init() {
     return true;
 }
 
-void SettingPopup::onEnter() {
+void PausePopup::onEnter() {
     
     BasePopup::onEnter();
     
     runEnterAction();
 }
 
-bool SettingPopup::onBackKeyReleased() {
+bool PausePopup::onBackKeyReleased() {
     
     if( !BasePopup::onBackKeyReleased() ) {
         return false;
@@ -54,20 +58,20 @@ bool SettingPopup::onBackKeyReleased() {
     return true;
 }
 
-void SettingPopup::initBackgroundView() {
+void PausePopup::initBackgroundView() {
     
     BasePopup::initBackgroundView();
     
     setBackgroundColor(Color::POPUP_BG);
 }
 
-void SettingPopup::initContentView() {
+void PausePopup::initContentView() {
     
     BasePopup::initContentView();
     
-    popupBg = Sprite::create(DIR_IMG_COMMON + "common_bg_settings.png");
+    popupBg = Sprite::create(DIR_IMG_COMMON + "common_bg_pause.png");
     popupBg->setAnchorPoint(ANCHOR_M);
-    popupBg->setPosition(Vec2MC(0, 24));
+    popupBg->setPosition(Vec2MC(0, 2));
     addContentChild(popupBg);
     
     // 효과음
@@ -75,7 +79,7 @@ void SettingPopup::initContentView() {
                                             DIR_IMG_COMMON + "common_btn_effect_on.png");
     effectBtn->setZoomScale(ButtonZoomScale::NORMAL);
     effectBtn->setAnchorPoint(ANCHOR_M);
-    effectBtn->setPosition(Vec2MC(-192, 8));
+    effectBtn->setPosition(Vec2MC(-192, 44));
     addContentChild(effectBtn);
     
     auto audioEngine = SBAudioEngine::getInstance();
@@ -94,7 +98,7 @@ void SettingPopup::initContentView() {
                                          DIR_IMG_COMMON + "common_btn_bgm_on.png");
     bgmBtn->setZoomScale(ButtonZoomScale::NORMAL);
     bgmBtn->setAnchorPoint(ANCHOR_M);
-    bgmBtn->setPosition(Vec2MC(0, 8));
+    bgmBtn->setPosition(Vec2MC(0, 44));
     addContentChild(bgmBtn);
     
     bgmBtn->setSelected(!audioEngine->isBGMMute());
@@ -105,27 +109,34 @@ void SettingPopup::initContentView() {
         
         return false;
     });
-
-    // restore purchases
-    auto restoreBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_restore.png");
-    restoreBtn->setZoomScale(ButtonZoomScale::NORMAL);
-    restoreBtn->setAnchorPoint(ANCHOR_M);
-    restoreBtn->setPosition(Vec2MC(192, 8));
-    addContentChild(restoreBtn);
-
-    restoreBtn->setOnClickListener([=](Node*) {
-        if( iap::IAPHelper::isReady() ) {
-            iap::IAPHelper::restore(nullptr);
-        }
-
-        this->dismissWithAction();
+    
+    auto homeBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_home.png");
+    homeBtn->setZoomScale(ButtonZoomScale::NORMAL);
+    homeBtn->setAnchorPoint(ANCHOR_M);
+    homeBtn->setPosition(Vec2MC(192, 44));
+    addContentChild(homeBtn);
+    
+    homeBtn->setOnClickListener([=](Node*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
+        onHomeListener();
+    });
+    
+    auto retryBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_retry.png");
+    retryBtn->setZoomScale(ButtonZoomScale::NORMAL);
+    retryBtn->setAnchorPoint(ANCHOR_M);
+    retryBtn->setPosition(Vec2MC(0, -114));
+    addContentChild(retryBtn);
+    
+    retryBtn->setOnClickListener([=](Node*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
+        onRetryListener();
     });
 }
 
 /**
  * 등장 연출
  */
-void SettingPopup::runEnterAction(SBCallback onFinished) {
+void PausePopup::runEnterAction(SBCallback onFinished) {
     
     BasePopup::runEnterAction(SLIDE_DURATION, onFinished);
     
@@ -144,7 +155,7 @@ void SettingPopup::runEnterAction(SBCallback onFinished) {
 /**
  * 퇴장 연출
  */
-void SettingPopup::runExitAction(SBCallback onFinished) {
+void PausePopup::runExitAction(SBCallback onFinished) {
     
     BasePopup::runExitAction(SLIDE_DURATION, onFinished);
     
@@ -163,7 +174,7 @@ void SettingPopup::runExitAction(SBCallback onFinished) {
 /**
  * 등장 연출 완료
  */
-void SettingPopup::onEnterActionFinished() {
+void PausePopup::onEnterActionFinished() {
     
     BasePopup::onEnterActionFinished();
     

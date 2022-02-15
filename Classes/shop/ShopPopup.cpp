@@ -107,6 +107,22 @@ void ShopPopup::initContentView() {
     iapCell->setOnClickListener([=]() {
         // TODO: IAP
         CCLOG("상품 구매");
+//        SBDirector::getInstance()->setScreenTouchLocked(true);
+//
+//        auto listener = iap::PurchaseListener::create();
+//        listener->setTarget(this);
+//        listener->onPurchased = [=](const iap::Item &item) {
+//            User::removeAds();
+//            this->dismissWithAction();
+//        };
+//
+//        listener->onFinished = [=](bool result) {
+//            SBDirector::postDelayed(this, [=]() {
+//                SBDirector::getInstance()->setScreenTouchLocked(false);
+//            }, 0.2f);
+//        };
+//
+//        iap::IAPHelper::purchaseRemoveAds(listener);
     });
     
     // ScrollView - CharacterList

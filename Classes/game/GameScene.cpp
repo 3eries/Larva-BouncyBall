@@ -15,7 +15,7 @@
 #include "GameView.hpp"
 
 #include "CommonLoadingBar.hpp"
-#include "SettingPopup.hpp"
+#include "ui/PausePopup.hpp"
 #include "ui/ClearPopup.hpp"
 
 USING_NS_CC;
@@ -115,9 +115,9 @@ bool GameScene::onBackKeyReleased() {
         return false;
     }
     
-    // 설정 팝업 생성
+    // 일시정지 팝업 생성
     if( PopupManager::getInstance()->getPopupCount() == 0 ) {
-        onClick(getChildByTag(Tag::BTN_SETTING));
+        onClick(getChildByTag(Tag::BTN_PAUSE));
         return true;
     }
     
@@ -129,10 +129,13 @@ bool GameScene::onBackKeyReleased() {
  */
 void GameScene::onGamePause() {
     
-    // 설정 팝업 생성
-    auto popup = SettingPopup::create();
+    // 일시정지 팝업 생성
+    auto popup = PausePopup::create();
     popup->setOnHomeListener([=]() {
         this->replaceMainScene();
+    });
+    popup->setOnRetryListener([=]() {
+        this->replaceGameScene(GAME_MANAGER->getStage().stage);
     });
     popup->setOnDismissListener([=](Node*) {
         GameManager::onGameResume();
@@ -218,7 +221,7 @@ void GameScene::onClick(Node *sender) {
     SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
     
     switch( sender->getTag() ) {
-        case Tag::BTN_SETTING: {
+        case Tag::BTN_PAUSE: {
             GameManager::onGamePause();
         } break;
     }
@@ -256,14 +259,14 @@ void GameScene::initGameView() {
 void GameScene::initMenu() {
     
     // 설정 버튼
-    auto settingBtn = SBButton::create(DIR_IMG_GAME + "game_btn_pause.png");
-    settingBtn->setTag(Tag::BTN_SETTING);
-    settingBtn->setZoomScale(ButtonZoomScale::NORMAL);
-    settingBtn->setAnchorPoint(ANCHOR_M);
-    settingBtn->setPosition(Vec2TR(-78, -80));
-    addChild(settingBtn);
+    auto pauseBtn = SBButton::create(DIR_IMG_GAME + "game_btn_pause.png");
+    pauseBtn->setTag(Tag::BTN_PAUSE);
+    pauseBtn->setZoomScale(ButtonZoomScale::NORMAL);
+    pauseBtn->setAnchorPoint(ANCHOR_M);
+    pauseBtn->setPosition(Vec2TR(-78, -80));
+    addChild(pauseBtn);
     
-    settingBtn->setOnClickListener(CC_CALLBACK_1(GameScene::onClick, this));
+    pauseBtn->setOnClickListener(CC_CALLBACK_1(GameScene::onClick, this));
 }
 
 /**

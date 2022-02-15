@@ -27,7 +27,7 @@ private:
     enum Tag {
         BANNER           = 100,
         
-        BTN_SETTING,
+        BTN_PAUSE,
     };
     
 private:
