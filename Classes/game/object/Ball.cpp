@@ -60,7 +60,7 @@ bool Ball::init() {
         return false;
     }
     
-    auto size = Size(stage.tileSize.width*0.7f, stage.tileSize.height*0.5f);
+    auto size = Size(stage.tileSize.width*0.5f, stage.tileSize.height*0.5f);
     
     setAnchorPoint(ANCHOR_M);
     setContentSize(size);
