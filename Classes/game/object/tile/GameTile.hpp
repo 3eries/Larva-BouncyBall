@@ -12,7 +12,6 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
-
 #include "ContentManager.hpp"
 #include "../../GameDefine.h"
     
@@ -44,7 +43,7 @@ public:
     
 protected:
     CC_SYNTHESIZE_READONLY(TileData, data, Data);
-    CC_SYNTHESIZE_READONLY(cocos2d::Size, physicsSize, PhysicsSize);
+    CC_SYNTHESIZE_READONLY(PhysicsDef, physicsDef, PhysicsDef);
     cocos2d::Sprite *image;
 };
 

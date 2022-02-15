@@ -55,45 +55,16 @@ void Block::initPhysics() {
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    auto size = getContentSize();
-    // size = size + Size(2,2); // 블럭끼리 겹치게 보정
-    
-    if( data.tileId == TileId::BLOCK_DEATH ) {
-        size.width *= 0.5f;
-    }
-    
-    physicsSize = size;
-    
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
     
     auto body = PHYSICS_MANAGER->getWorld()->CreateBody(&bodyDef);
     setBody(body);
     
-    /*
-    b2PolygonShape box;
-    box.SetAsBox(PTM(size.width*0.5f), PTM(size.height*0.5f));
-     
-    b2Filter filter;
-    filter.categoryBits = PhysicsCategory::BLOCK;
-    filter.maskBits = PhysicsCategory::BALL;
-    
-    b2FixtureDef fixtureDef;
-    fixtureDef.shape = &box;
-    fixtureDef.density = 0.1f;
-    //
-    fixtureDef.restitution = 1.0f;  // 반발력 - 물체가 다른 물체에 닿았을때 팅기는 값
-//    fixtureDef.restitution = 0;
-    //
-    fixtureDef.friction = 0;
-    fixtureDef.filter = filter;
-    body->CreateFixture(&fixtureDef);
-     */
-    
-    float left   = PTM(-size.width*0.5f);
-    float right  = PTM( size.width*0.5f);
-    float bottom = PTM(-size.height*0.5f);
-    float top    = PTM( size.height*0.5f);
+    const float left   = physicsDef.left;
+    const float right  = physicsDef.right;
+    const float bottom = physicsDef.bottom;
+    const float top    = physicsDef.top;
     
     b2Vec2 vectors[4][2] = {
         { b2Vec2(left, bottom), b2Vec2(left, top) },                 // left

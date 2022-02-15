@@ -9,6 +9,7 @@
 
 #include "Define.h"
 #include "ResourceHelper.hpp"
+#include "TileFactory.hpp"
 #include "../../GameDefine.h"
 #include "../../GameManager.hpp"
 
@@ -17,6 +18,7 @@ using namespace std;
 
 GameTile::GameTile(const TileData &data) : SBPhysicsObject(this),
 data(data),
+physicsDef(TileFactory::createPhysicsDef(data)),
 image(nullptr) {
 }
 

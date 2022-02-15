@@ -84,15 +84,6 @@ void Item::initPhysics() {
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    auto size = getContentSize();
-    // size = size + Size(2,2); // 블럭끼리 겹치게 보정
-    
-    if( data.tileId == TileId::ITEM_SAUSAGE ) {
-        size.width *= 0.7f;
-    }
-    
-    physicsSize = size;
-    
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
     
@@ -100,7 +91,7 @@ void Item::initPhysics() {
     setBody(body);
     
     b2PolygonShape shape;
-    shape.SetAsBox(PTM(size.width*0.5f), PTM(size.height*0.5f));
+    shape.SetAsBox(physicsDef.size.x * 0.5f, physicsDef.size.y * 0.5f);
      
     b2Filter filter;
     filter.categoryBits = PhysicsCategory::ITEM;

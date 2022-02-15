@@ -126,6 +126,7 @@
 		507BF980268364E40037F28C /* StageProgressBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF97F268364E40037F28C /* StageProgressBar.cpp */; };
 		5081109D279D2D4200FC9577 /* ClearPortal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5081109B279D2D4200FC9577 /* ClearPortal.cpp */; };
 		5083565927BA45E80063258C /* StageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083565827BA45E80063258C /* StageManager.cpp */; };
+		5083565C27BBCFAF0063258C /* TileFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083565A27BBCFAE0063258C /* TileFactory.cpp */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
 		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
@@ -400,6 +401,8 @@
 		5081109C279D2D4200FC9577 /* ClearPortal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClearPortal.hpp; sourceTree = "<group>"; };
 		5083565727BA45E80063258C /* StageManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StageManager.hpp; sourceTree = "<group>"; };
 		5083565827BA45E80063258C /* StageManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageManager.cpp; sourceTree = "<group>"; };
+		5083565A27BBCFAE0063258C /* TileFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TileFactory.cpp; sourceTree = "<group>"; };
+		5083565B27BBCFAF0063258C /* TileFactory.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TileFactory.hpp; sourceTree = "<group>"; };
 		5087E78817EB974C00C73F5D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
@@ -1149,6 +1152,8 @@
 				50B5736227033346009F3240 /* GameTile.hpp */,
 				1DEB554C279A4DE500699529 /* Item.cpp */,
 				1DEB554D279A4DE500699529 /* Item.hpp */,
+				5083565A27BBCFAE0063258C /* TileFactory.cpp */,
+				5083565B27BBCFAF0063258C /* TileFactory.hpp */,
 			);
 			path = tile;
 			sourceTree = "<group>";
@@ -1280,6 +1285,7 @@
 				507BF83626834EF30037F28C /* SplashScene.cpp in Sources */,
 				507BF80826834EF30037F28C /* SBAction.cpp in Sources */,
 				1DBD57F9279E439600F07409 /* IAPCell.cpp in Sources */,
+				5083565C27BBCFAF0063258C /* TileFactory.cpp in Sources */,
 				507BF7E226834EF30037F28C /* SBUIInfo.cpp in Sources */,
 				507BF7E926834EF30037F28C /* NSData+AES.m in Sources */,
 				507BF81126834EF30037F28C /* SBCollection.cpp in Sources */,

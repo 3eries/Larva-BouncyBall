@@ -55,9 +55,6 @@ void Flag::initPhysics() {
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    auto size = getContentSize();
-    physicsSize = size;
-    
     b2BodyDef bodyDef;
     bodyDef.userData = (SBPhysicsObject*)this;
     
@@ -65,7 +62,7 @@ void Flag::initPhysics() {
     setBody(body);
     
     b2PolygonShape shape;
-    shape.SetAsBox(PTM(size.width*0.5f), PTM(size.height*0.5f));
+    shape.SetAsBox(physicsDef.size.x * 0.5f, physicsDef.size.y * 0.5f);
      
     b2Filter filter;
     filter.categoryBits = PhysicsCategory::FLAG;

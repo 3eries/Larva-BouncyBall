@@ -89,7 +89,6 @@ enum class BallDirection {
 #define                POSITION_ITERATIONS                4
 
 // 천장 - ceiling
-
 enum PhysicsCategory {
     WALL_LEFT    = (1 << 0),     // 왼쪽 벽
     WALL_RIGHT   = (1 << 1),     // 오른쪽 벽
@@ -105,6 +104,18 @@ enum PhysicsCategory {
 
 static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
 static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP | PhysicsCategory::FLOOR | PhysicsCategory::FLAG | PhysicsCategory::ITEM | PhysicsCategory::BLOCK_TOP | PhysicsCategory::BLOCK_SIDE | PhysicsCategory::BLOCK_BOTTOM);
+
+/**
+ * PhysicsDef
+ * 기본 단위는 meter
+ */
+struct PhysicsDef {
+    b2Vec2 size;
+    float left;
+    float right;
+    float bottom;
+    float top;
+};
 
 #define                 TILE_DEFAULT_SIZE                  cocos2d::Size(108,108)
 
