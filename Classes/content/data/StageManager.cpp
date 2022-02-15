@@ -1,10 +1,10 @@
 //
-//  Database.cpp
+//  StageManager.cpp
 //
 //  Created by seongmin hwang on 13/12/2018.
 //
 
-#include "Database.hpp"
+#include "StageManager.hpp"
 
 #include "Define.h"
 #include "GameConfiguration.hpp"
@@ -14,35 +14,50 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-static Database *instance = nullptr;
-Database* Database::getInstance() {
+#define USER_DEFAULT_KEY_LATEST_PLAY_STAGE              "USER_LATEST_PLAY_STAGE"
+#define USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE             "USER_TOP_UNLOCKED_STAGE"
+
+// #define USER_DEFAULT_KEY_STAGE_STAR                     "USER_STAGE_STAR"
+#define USER_DEFAULT_KEY_STAGE_STAR(__STAGE__) \
+STR_FORMAT("USER_STAGE_%d_STAR", __STAGE__).c_str()
+
+static StageManager *instance = nullptr;
+StageManager* StageManager::getInstance() {
     
     if( !instance ) {
-        instance = new Database();
+        instance = new StageManager();
     }
     
     return instance;
 }
 
-void Database::destroyInstance() {
+void StageManager::destroyInstance() {
     
     CC_SAFE_DELETE(instance);
 }
 
-Database::Database() {
+StageManager::StageManager() {
     
 }
 
-Database::~Database() {
+StageManager::~StageManager() {
     
 }
 
-void Database::init() {
+void StageManager::init() {
     
     parseStageFile();
+    
+    // 1스테이지 잠금 해제
+    unlockStage(1);
+    
+    CCLOG("StageManager {");
+    CCLOG("\t latest play stage: %d", getLatestPlayStage().stage);
+    CCLOG("\t top unlocked stage: %d", getTopUnlockedStage());
+    CCLOG("}");
 }
 
-void Database::parseStageFile() {
+void StageManager::parseStageFile() {
     
     CCLOG("========== STAGE PARSE START ==========");
     
@@ -162,11 +177,11 @@ void Database::parseStageFile() {
 /**
  * 스테이지 데이터를 반환합니다
  */
-StageDataList Database::getStages() {
+StageDataList StageManager::getStages() {
     return instance->stages;
 }
 
-StageData Database::getStage(int stage) {
+StageData StageManager::getStage(int stage) {
     auto stages = getStages();
     
     for( auto stageData : stages ) {
@@ -178,8 +193,113 @@ StageData Database::getStage(int stage) {
     return StageData();
 }
 
-StageData Database::getLastStage() {
+/**
+ * 마지막 스테이지 데이터를 반환합니다
+ */
+StageData StageManager::getLastStage() {
     auto stages = getStages();
     return stages.size() > 0 ? stages[stages.size()-1] : StageData();
+}
+
+#pragma mark- UserData
+
+/**
+ * 스테이지 별 개수를 반환합니다
+ */
+#define INVALID_STAR_COUNT      -1
+
+int StageManager::getStageStarCount(int stage) {
+ 
+    // use json
+    /*
+    auto json = USER_DEFAULT->getStringForKey(USER_DEFAULT_KEY_STAGE_STAR, "");
+    
+    if( json == "" ) {
+        return INVALID_STAR_COUNT;
+    }
+    
+    auto doc = SBJSON::parse(json);
+    auto stageKey = TO_STRING(stage);
+    
+    if( doc.FindMember(stageKey.c_str()) == doc.MemberEnd() ) {
+        return INVALID_STAR_COUNT;
+    }
+    
+    return doc[stageKey.c_str()].GetInt();
+     */
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), INVALID_STAR_COUNT);
+}
+
+/**
+ * 합산된 별 개수를 반환합니다
+ */
+int StageManager::getStageStarTotalCount() {
+    
+    int topStage = getTopUnlockedStage();
+    int total = 0;
+    
+    for( int stage = 1; stage <= topStage; ++stage ) {
+        int star = getStageStarCount(stage);
+        
+        if( star != INVALID_STAR_COUNT ) {
+            total += star;
+        }
+    }
+        
+    return total;
+}
+
+/**
+ * 스테이지 클리어 여부를 반환합니다
+ */
+bool StageManager::isStageCleared(int stage) {
+    return getStageStarCount(stage) > 0;
+}
+
+/**
+ * 스테이지 별 개수를 설정합니다
+ */
+void StageManager::setStageStarCount(int stage, int star) {
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), star);
+    USER_DEFAULT->flush();
+}
+
+/**
+ * 스테이지를 잠금 해제합니다
+ */
+void StageManager::unlockStage(int stage) {
+    setStageStarCount(stage, MAX(0, getStageStarCount(stage)));
+    setTopUnlockedStage(stage);
+}
+
+bool StageManager::isStageLocked(int stage) {
+    return getStageStarCount(stage) == INVALID_STAR_COUNT;
+}
+
+/**
+ * 마지막으로 플레이한 스테이지를 반환합니다.
+ */
+StageData StageManager::getLatestPlayStage() {
+    int stage = USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, getTopUnlockedStage());
+    return StageManager::getStage(stage);
+}
+
+void StageManager::setLatestPlayStage(int stage) {
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, stage);
+    USER_DEFAULT->flush();
+}
+
+/**
+ * 잠금 해제된 최고 스테이지를 반환합니다.
+ */
+int StageManager::getTopUnlockedStage() {
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE, 1);
+}
+
+void StageManager::setTopUnlockedStage(int stage) {
+    stage = MAX(getTopUnlockedStage(), stage);
+    
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE, stage);
+    USER_DEFAULT->flush();
 }
 

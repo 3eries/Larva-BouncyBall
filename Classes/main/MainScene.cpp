@@ -130,7 +130,7 @@ void MainScene::onClick(Node *sender) {
 void MainScene::replaceGameScene(int stage) {
     
     // 스테이지 유무 체크
-    if( Database::getStage(stage).isNull() ) {
+    if( StageManager::getStage(stage).isNull() ) {
         MessageBox("스테이지 데이터가 없습니다", "");
         return;
     }
@@ -180,7 +180,7 @@ void MainScene::showSettingPopup() {
 
 void MainScene::initBg() {
     
-    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(User::getLatestPlayStage().world));
+    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(StageManager::getLatestPlayStage().world));
     bg->setTag(Tag::BG);
     bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
     bg->setAnchorPoint(ANCHOR_M);
@@ -223,7 +223,7 @@ void MainScene::initMenu() {
  */
 void MainScene::initWorlds() {
     
-    int latestPlayWorld = User::getLatestPlayStage().world;
+    int latestPlayWorld = StageManager::getLatestPlayStage().world;
     
     auto worldTitle = Sprite::create(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png",
                                                                latestPlayWorld));

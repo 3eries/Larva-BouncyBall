@@ -28,7 +28,7 @@ void ContentManager::destroyInstance() {
 }
 
 ContentManager::ContentManager() :
-db(nullptr) {
+stageMgr(nullptr) {
     
 }
 
@@ -38,10 +38,10 @@ ContentManager::~ContentManager() {
 
 void ContentManager::init() {
     
-    db = Database::getInstance();
-    db->init();
+    stageMgr = StageManager::getInstance();
+    stageMgr->init();
 }
 
-Database* ContentManager::getDatabase() {
-    return instance->db;
+StageManager* ContentManager::getStageManager() {
+    return instance->stageMgr;
 }

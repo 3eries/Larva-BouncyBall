@@ -34,20 +34,6 @@ public:
     // in game
     static void             setTutorialCompleted(bool isCompleted);
     static bool             isTutorialCompleted();
-    
-    static int              getStageStarCount(int stage);
-    static int              getStageStarTotalCount();
-    static bool             isStageCleared(int stage);
-    static void             setStageStarCount(int stage, int star);
-    
-    static void             unlockStage(int stage);
-    static bool             isStageLocked(int stage);
-    
-    static StageData        getLatestPlayStage();
-    static void             setLatestPlayStage(int stage);
-    
-    static int              getTopUnlockedStage();
-    static void             setTopUnlockedStage(int stage);
 };
 
 #endif /* User_hpp */

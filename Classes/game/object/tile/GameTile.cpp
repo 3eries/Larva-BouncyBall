@@ -30,7 +30,7 @@ bool GameTile::init() {
         return false;
     }
     
-    auto stage = Database::getStage(data.stage);
+    auto stage = StageManager::getStage(data.stage);
     
     setAnchorPoint(ANCHOR_M);
     setContentSize(stage.tileSize);

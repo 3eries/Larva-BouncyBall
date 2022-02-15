@@ -131,7 +131,7 @@ bool StageCell::init() {
     
     setContentSize(CELL_SIZE);
     
-    if( User::isStageLocked(stage) ) {
+    if( StageManager::isStageLocked(stage) ) {
         // 잠김
         auto locked = Sprite::create(DIR_IMG_MAIN + "main_box_stage_disable.png");
         locked->setAnchorPoint(ANCHOR_M);
@@ -156,7 +156,7 @@ bool StageCell::init() {
     stageLabel->setPosition(Vec2MC(CELL_SIZE, 0, 25));
     addChild(stageLabel);
 
-    int stars = User::getStageStarCount(stage);
+    int stars = StageManager::getStageStarCount(stage);
     
     Vec2 pos[] = {
         Vec2BC(CELL_SIZE, -36, 48),

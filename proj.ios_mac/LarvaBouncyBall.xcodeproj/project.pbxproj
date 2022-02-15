@@ -108,7 +108,6 @@
 		507BF82426834EF30037F28C /* MainScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7A826834EF30037F28C /* MainScene.cpp */; };
 		507BF82526834EF30037F28C /* CreditPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7A926834EF30037F28C /* CreditPopup.cpp */; };
 		507BF82726834EF30037F28C /* ContentManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7B026834EF30037F28C /* ContentManager.cpp */; };
-		507BF82826834EF30037F28C /* Database.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7B326834EF30037F28C /* Database.cpp */; };
 		507BF82926834EF30037F28C /* PopupListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7B926834EF30037F28C /* PopupListener.cpp */; };
 		507BF82A26834EF30037F28C /* ReviewPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7BA26834EF30037F28C /* ReviewPopup.cpp */; };
 		507BF82B26834EF30037F28C /* PopupManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7BC26834EF30037F28C /* PopupManager.cpp */; };
@@ -126,6 +125,7 @@
 		507BF83726834EF30037F28C /* TestHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF7D926834EF30037F28C /* TestHelper.cpp */; };
 		507BF980268364E40037F28C /* StageProgressBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF97F268364E40037F28C /* StageProgressBar.cpp */; };
 		5081109D279D2D4200FC9577 /* ClearPortal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5081109B279D2D4200FC9577 /* ClearPortal.cpp */; };
+		5083565927BA45E80063258C /* StageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5083565827BA45E80063258C /* StageManager.cpp */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
 		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
@@ -362,8 +362,6 @@
 		507BF7AB26834EF30037F28C /* CreditPopup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CreditPopup.hpp; sourceTree = "<group>"; };
 		507BF7AE26834EF30037F28C /* ContentManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ContentManager.hpp; sourceTree = "<group>"; };
 		507BF7B026834EF30037F28C /* ContentManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ContentManager.cpp; sourceTree = "<group>"; };
-		507BF7B226834EF30037F28C /* Database.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Database.hpp; sourceTree = "<group>"; };
-		507BF7B326834EF30037F28C /* Database.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Database.cpp; sourceTree = "<group>"; };
 		507BF7B526834EF30037F28C /* StageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageData.h; sourceTree = "<group>"; };
 		507BF7B726834EF30037F28C /* ExitAlertPopup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExitAlertPopup.hpp; sourceTree = "<group>"; };
 		507BF7B826834EF30037F28C /* BasePopup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BasePopup.hpp; sourceTree = "<group>"; };
@@ -400,6 +398,8 @@
 		507BF97F268364E40037F28C /* StageProgressBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageProgressBar.cpp; sourceTree = "<group>"; };
 		5081109B279D2D4200FC9577 /* ClearPortal.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ClearPortal.cpp; sourceTree = "<group>"; };
 		5081109C279D2D4200FC9577 /* ClearPortal.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ClearPortal.hpp; sourceTree = "<group>"; };
+		5083565727BA45E80063258C /* StageManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StageManager.hpp; sourceTree = "<group>"; };
+		5083565827BA45E80063258C /* StageManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageManager.cpp; sourceTree = "<group>"; };
 		5087E78817EB974C00C73F5D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
@@ -1033,9 +1033,9 @@
 		507BF7B126834EF30037F28C /* data */ = {
 			isa = PBXGroup;
 			children = (
-				507BF7B326834EF30037F28C /* Database.cpp */,
-				507BF7B226834EF30037F28C /* Database.hpp */,
 				507BF7B426834EF30037F28C /* model */,
+				5083565827BA45E80063258C /* StageManager.cpp */,
+				5083565727BA45E80063258C /* StageManager.hpp */,
 			);
 			path = data;
 			sourceTree = "<group>";
@@ -1262,6 +1262,7 @@
 				507BF81026834EF30037F28C /* ReviewHelper.cpp in Sources */,
 				507BF83026834EF30037F28C /* TutorialHelper.cpp in Sources */,
 				507BF82326834EF30037F28C /* GameView.cpp in Sources */,
+				5083565927BA45E80063258C /* StageManager.cpp in Sources */,
 				50B5736327033346009F3240 /* GameTile.cpp in Sources */,
 				507BF83226834EF30037F28C /* CommonLoadingBar.cpp in Sources */,
 				507BF80026834EF30037F28C /* PluginPlay.cpp in Sources */,
@@ -1326,7 +1327,6 @@
 				507BF7DF26834EF30037F28C /* SceneManager.cpp in Sources */,
 				507BF81326834EF30037F28C /* SBJSON.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
-				507BF82826834EF30037F28C /* Database.cpp in Sources */,
 				507BF7EA26834EF30037F28C /* SBSecurity-android.cpp in Sources */,
 				507BF7FA26834EF30037F28C /* IAPHelper.cpp in Sources */,
 				507BF7EB26834EF30037F28C /* SBSecurity.cpp in Sources */,

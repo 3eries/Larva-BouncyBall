@@ -105,8 +105,8 @@ bool GameManager::isPaused() {
  */
 void GameManager::setStage(int stage) {
     
-    this->stage = Database::getStage(stage);
-    User::setLatestPlayStage(stage);
+    this->stage = StageManager::getStage(stage);
+    StageManager::setLatestPlayStage(stage);
     
     // Scale factor 설정
     mapScaleFactor = this->stage.tileSize.height / TILE_DEFAULT_SIZE.height;
@@ -217,7 +217,7 @@ void GameManager::onGameStart() {
         params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
         params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
 
-        if( User::isStageCleared(stage.stage) ) {
+        if( StageManager::isStageCleared(stage.stage) ) {
             SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_PLAY_RE, params);
         } else {
             SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_PLAY, params);
@@ -404,7 +404,7 @@ void GameManager::onStageClear(bool isSkipped) {
         params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
         params[ANALYTICS_EVENT_PARAM_STAR] = SBAnalytics::EventParam(TO_STRING(instance->star));
 
-        if( User::isStageCleared(stage.stage) ) {
+        if( StageManager::isStageCleared(stage.stage) ) {
             SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_CLEAR_RE, params);
         } else {
             SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_CLEAR, params);
@@ -412,22 +412,15 @@ void GameManager::onStageClear(bool isSkipped) {
     }
     
     // 스테이지 별 개수 저장, 이전 별 개수보다 커야 함
-    int star = MAX(instance->star, User::getStageStarCount(stage.stage));
-    User::setStageStarCount(stage.stage, star);
+    int star = MAX(instance->star, StageManager::getStageStarCount(stage.stage));
+    StageManager::setStageStarCount(stage.stage, star);
     
     // 다음 스테이지 해제
-    User::unlockStage(stage.stage+1);
+    StageManager::unlockStage(stage.stage+1);
     
     if( !isSkipped ) {
         dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);
     }
-    
-    // 통계 이벤트
-//    SBAnalytics::EventParams params;
-//    params[ANALYTICS_EVENT_PARAM_LEVEL] = SBAnalytics::EventParam(TO_STRING(stage.stage));
-//    params[ANALYTICS_EVENT_PARAM_LEVEL_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
-//
-//    SBAnalytics::logEvent(ANALYTICS_EVENT_LEVEL_CLEAR, params);
 }
 
 /**
@@ -436,7 +429,7 @@ void GameManager::onStageClear(bool isSkipped) {
 void GameManager::onMoveNextStage() {
     
     // 마지막 레벨
-    if( instance->stage.stage == Database::getLastStage().stage ) {
+    if( instance->stage.stage == StageManager::getLastStage().stage ) {
     }
     
     instance->setStage(instance->stage.stage+1);
