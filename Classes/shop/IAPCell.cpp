@@ -13,7 +13,7 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace std;
 
-#define CELL_SIZE       Size(400,700)
+#define CELL_SIZE       Size(384, 736)
 
 IAPCell* IAPCell::create() {
     
@@ -43,18 +43,21 @@ bool IAPCell::init() {
     
     setContentSize(CELL_SIZE);
     
-    auto bg = LayerColor::create(Color4B(100,0,0,255*0.9f));
-    bg->setIgnoreAnchorPointForPosition(false);
+    auto bg = Sprite::create(DIR_IMG_SHOP + "shop_column_deal.png");
     bg->setAnchorPoint(ANCHOR_M);
     bg->setPosition(Vec2MC(getContentSize(), 0, 0));
-    bg->setContentSize(getContentSize());
     addChild(bg);
     
+    auto tag = Sprite::create(DIR_IMG_SHOP + "shop_column_deal_tag.png");
+    tag->setAnchorPoint(ANCHOR_M);
+    tag->setPosition(Vec2TC(getContentSize(), 0, 20));
+    addChild(tag);
+    
     // BUY 버튼
-    auto buyBtn = SBButton::create(DIR_IMG_COMMON + "shop_btn_coin_purchase.png");
+    auto buyBtn = SBButton::create(DIR_IMG_SHOP + "shop_btn_buy.png");
     buyBtn->setZoomScale(0);
     buyBtn->setAnchorPoint(ANCHOR_M);
-    buyBtn->setPosition(Vec2BC(getContentSize(), 0, 90));
+    buyBtn->setPosition(Vec2BC(getContentSize(), 0, 100));
     addChild(buyBtn);
     
     buyBtn->setOnClickListener([=](Node*) {

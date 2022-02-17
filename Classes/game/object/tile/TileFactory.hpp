@@ -12,7 +12,7 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
 #include "../../GameDefine.h"
 
 class TileFactory {

@@ -9,7 +9,7 @@
 #include "Define.h"
 #include "ResourceHelper.hpp"
 #include "GameUIHelper.hpp"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
 #include "SceneManager.h"
 
 #include "object/Ball.hpp"

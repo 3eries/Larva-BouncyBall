@@ -13,7 +13,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 #include "PopupManager.hpp"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
 
 class GetCharacterPopup: public BasePopup {
 public:

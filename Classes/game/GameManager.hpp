@@ -14,7 +14,7 @@
 
 #include "Define.h"
 #include "GameConfiguration.hpp"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
 #include "GameDefine.h"
 #include "physics/PhysicsManager.hpp"
 

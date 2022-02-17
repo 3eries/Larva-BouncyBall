@@ -12,8 +12,8 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 
-#include "model/CharacterData.h"
-#include "model/StageData.h"
+#include "data/model/CharacterData.h"
+#include "data/model/StageData.h"
 
 /** @class StageManager
  * @brief 이 클래스는 스테이지 데이터를 관리합니다

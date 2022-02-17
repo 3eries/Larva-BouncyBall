@@ -14,6 +14,8 @@
 #include "superbomb.h"
 #include "PopupManager.hpp"
 
+class CharacterCell;
+
 class ShopPopup: public BasePopup {
 public:
     CREATE_FUNC(ShopPopup);

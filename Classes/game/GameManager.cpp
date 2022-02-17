@@ -9,6 +9,7 @@
 #include "UserDefaultKey.h"
 #include "User.hpp"
 #include "TestHelper.hpp"
+#include "CharacterManager.hpp"
 
 #include "GameView.hpp"
 
@@ -417,6 +418,11 @@ void GameManager::onStageClear(bool isSkipped) {
     
     // 다음 스테이지 해제
     StageManager::unlockStage(stage.stage+1);
+    
+    // 캐릭터 잠금해제 체크
+    CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
+        // TODO: 캐릭터 획득 팝업
+    });
     
     if( !isSkipped ) {
         dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);

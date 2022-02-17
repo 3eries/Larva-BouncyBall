@@ -23,6 +23,8 @@ static const std::string SERVER_GAME_CONFIG_FILE                = "http://superb
 #define                  AES256_KEY                               "A1din7aah98dh9wef974fnsudh54ugJs"
 
 static const std::string GAME_CONFIG_FILE                       = "game_config.json";
+static const std::string PLUGIN_CONFIG_FILE                     = "config/plugin_config.json";
+static const std::string CHARACTER_CONFIG_FILE                  = "content/character/character.json";
 
 static const std::string INTERNAL_GAME_CONFIG_FILE              = "config/" + GAME_CONFIG_FILE;
 #define                  EXTERNAL_GAME_CONFIG_FILE                 std::string(cocos2d::FileUtils::getInstance()->getWritablePath() + GAME_CONFIG_FILE)
@@ -31,9 +33,7 @@ static const std::string INTERNAL_GAME_CONFIG_FILE_VERSION      = "1.0.0";
 
 #define                  ENCRYPT_GAME_CONFIG_FILE                 0
 #define                  ENCRYPT_PLUGIN_CONFIG_FILE               0
-
-// Plugin
-static const std::string PLUGIN_CONFIG_FILE                     = "config/plugin_config.json";
+#define                  ENCRYPT_CHARACTER_CONFIG_FILE            0
 
 // Analytics
 static const std::string ANALYTICS_SCREEN_SPLASH                    = "splash";
@@ -74,6 +74,7 @@ static const std::string DIR_IMG_MAIN_IPAD          = DIR_ADD(DIR_IMG_MAIN, "ipa
 static const std::string DIR_IMG_GAME               = DIR_ADD(DIR_IMG, "game");
 static const std::string DIR_IMG_GAME_IPAD          = DIR_ADD(DIR_IMG_GAME, "ipad");
 static const std::string DIR_IMG_RESULT             = DIR_ADD(DIR_IMG, "result");
+static const std::string DIR_IMG_SHOP               = DIR_ADD(DIR_IMG, "shop");
 static const std::string DIR_IMG_EXIT               = DIR_ADD(DIR_IMG, "exit");
 static const std::string DIR_IMG_SETTING            = DIR_ADD(DIR_IMG, "setting");
 static const std::string DIR_IMG_PAUSE              = DIR_ADD(DIR_IMG, "pause");

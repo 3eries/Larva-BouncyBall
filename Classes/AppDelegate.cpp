@@ -7,7 +7,8 @@
 #include "GameConfiguration.hpp"
 #include "User.hpp"
 #include "SceneManager.h"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
+#include "CharacterManager.hpp"
 
 #include "game/GameManager.hpp"
 
@@ -24,7 +25,8 @@ AppDelegate::AppDelegate()
 AppDelegate::~AppDelegate() 
 {
     GameManager::destroyInstance();
-    ContentManager::destroyInstance();
+    StageManager::destroyInstance();
+    CharacterManager::destroyInstance();
     GameConfiguration::destroyInstance();
     User::destroyInstance();
     PatchManager::destroyInstance();

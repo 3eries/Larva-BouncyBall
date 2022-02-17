@@ -1,0 +1,27 @@
+{
+    "characters": [{
+            "char_id": "char_001",
+            "name": "RED",
+            "unlock_type": 0,
+            "unlock_amount": 0
+        },
+        {
+            "char_id": "char_002",
+            "name": "YELLOW",
+            "unlock_type": 1,
+            "unlock_amount": 3
+        },
+        {
+            "char_id": "char_003",
+            "name": "BROWN",
+            "unlock_type": 2,
+            "unlock_amount": 3
+        },
+        {
+            "char_id": "char_004",
+            "name": "PINK",
+            "unlock_type": 3,
+            "unlock_amount": 1
+        }
+    ]
+}

@@ -8,6 +8,7 @@
 
 #include "SceneManager.h"
 #include "PopupManager.hpp"
+#include "CharacterManager.hpp"
 #include "../game/GameManager.hpp"
 
 USING_NS_CC;
@@ -23,6 +24,7 @@ void removeListeners(Ref *target) {
     
     iap::IAPHelper::getInstance()->removeListener(target);
     AdsHelper::getInstance()->getEventDispatcher()->removeListener(target);
+    CharacterManager::getInstance()->removeListener(target);
     PopupManager::getInstance()->removeListener(target);
     
     if( !GameManager::isNullInstance() ) {

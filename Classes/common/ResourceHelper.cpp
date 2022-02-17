@@ -81,10 +81,16 @@ string ResourceHelper::getLocalizedImage(const string &image) {
 }
 
 /**
+ * 캐릭터 이미지를 반환합니다
+ */
+string ResourceHelper::getCharacterImage(const string &charId) {
+    return DIR_CONTENT_CHARACTER + STR_FORMAT("%s.png", charId.c_str());
+}
+
+/**
  * 월드 배경 이미지를 반환합니다
  */
 string ResourceHelper::getWorldBackgroundImage(int world) {
-    
     return DIR_CONTENT_BG + STR_FORMAT("world_%02d.png", world);
 }
 

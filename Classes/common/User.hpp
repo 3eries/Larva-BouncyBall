@@ -11,7 +11,7 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
 
 class User: public cocos2d::Ref {
 public:

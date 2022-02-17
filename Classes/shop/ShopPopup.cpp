@@ -8,6 +8,7 @@
 #include "ShopPopup.hpp"
 
 #include "Define.h"
+#include "User.hpp"
 #include "GameUIHelper.hpp"
 
 #include "IAPCell.hpp"
@@ -17,10 +18,16 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace std;
 
-#define CHARACTER_LIST_SIZE_1               Size(1300,700)   // Cell 3개
-#define CHARACTER_LIST_SIZE_2               Size(1750,700)   // Cell 4개
-#define CHARACTER_LIST_CELL_SIZE            Size(400,700)
-#define CHARACTER_LIST_CELL_PADDING         50
+// shop_column_deal.png Vec2MC(-676, -48) , Size(384, 736)
+// shop_column_bg.png Vec2MC(-260, -48) , Size(384, 736)
+// shop_column_bg.png Vec2MC(156, -48) , Size(384, 736)
+// shop_column_bg.png Vec2MC(572, -48) , Size(384, 736)
+// mask Vec2MC(0, -48) , Size(1736, 736)
+
+#define CHARACTER_LIST_SIZE_1               Size(1736-384-32, 736)   // Cell 3개
+#define CHARACTER_LIST_SIZE_2               Size(1736, 736)          // Cell 4개
+#define CHARACTER_LIST_CELL_SIZE            Size(384, 736)
+#define CHARACTER_LIST_CELL_PADDING         32
 
 ShopPopup::ShopPopup(): BasePopup(PopupType::SHOP) {
 }
@@ -76,18 +83,22 @@ void ShopPopup::initContentView() {
     
     BasePopup::initContentView();
     
+    auto bg = Sprite::create(DIR_IMG_SHOP + "shop_bg.png");
+    bg->setAnchorPoint(ANCHOR_M);
+    bg->setPosition(Vec2MC(0, -24));
+    addContentChild(bg);
+    
     // 타이틀
-    auto title = Label::createWithTTF("SHOP", FONT_ROBOTO_BLACK, 120, Size::ZERO,
-                                      TextHAlignment::CENTER, TextVAlignment::TOP);
-    title->setTextColor(Color4B::WHITE);
-    title->setAnchorPoint(ANCHOR_MT);
-    title->setPosition(Vec2TC(0, -30));
+    auto title = Sprite::create(DIR_IMG_SHOP + "shop_title_shop.png");
+    title->setAnchorPoint(ANCHOR_M);
+    title->setPosition(Vec2TC(2, -128));
     addContentChild(title);
     
     // 닫기 버튼
-    auto closeBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_close.png");
+    auto closeBtn = SBButton::create(DIR_IMG_SHOP + "shop_btn_close.png");
+    closeBtn->setZoomScale(ButtonZoomScale::NORMAL);
     closeBtn->setAnchorPoint(ANCHOR_M);
-    closeBtn->setPosition(Vec2TR(-80, -100));
+    closeBtn->setPosition(Vec2TR(-74, -114));
     addContentChild(closeBtn);
     
     closeBtn->setOnClickListener([=](Node*) {
@@ -96,51 +107,57 @@ void ShopPopup::initContentView() {
     });
     
     // IAP Cell
-    // 가운데 정렬을 위한 좌표 계산
-    float firstCellX = (SB_WIN_SIZE.width - CHARACTER_LIST_SIZE_2.width) / 2;
+    const bool ownIAPItem = User::isRemovedAds();
     
-    auto iapCell = IAPCell::create();
-    iapCell->setAnchorPoint(ANCHOR_ML);
-    iapCell->setPosition(Vec2ML(firstCellX, -70));
-    addContentChild(iapCell);
+    auto characterListSize = CHARACTER_LIST_SIZE_2;
+    Vec2 characterListPos;
+    characterListPos.x = (SB_WIN_SIZE.width - CHARACTER_LIST_SIZE_2.width) / 2;
+    characterListPos.y = SB_WIN_SIZE.height*0.5f - 48;
+    
+    if( !ownIAPItem ) {
+        // 가운데 정렬을 위한 좌표 계산
+        // float firstCellX = (SB_WIN_SIZE.width - CHARACTER_LIST_SIZE_2.width) / 2;
+        
+        auto iapCell = IAPCell::create();
+        iapCell->setAnchorPoint(ANCHOR_ML);
+        iapCell->setPosition(characterListPos);
+        addContentChild(iapCell);
 
-    iapCell->setOnClickListener([=]() {
-        // TODO: IAP
-        CCLOG("상품 구매");
-//        SBDirector::getInstance()->setScreenTouchLocked(true);
-//
-//        auto listener = iap::PurchaseListener::create();
-//        listener->setTarget(this);
-//        listener->onPurchased = [=](const iap::Item &item) {
-//            User::removeAds();
-//            this->dismissWithAction();
-//        };
-//
-//        listener->onFinished = [=](bool result) {
-//            SBDirector::postDelayed(this, [=]() {
-//                SBDirector::getInstance()->setScreenTouchLocked(false);
-//            }, 0.2f);
-//        };
-//
-//        iap::IAPHelper::purchaseRemoveAds(listener);
-    });
+        iapCell->setOnClickListener([=]() {
+            // TODO: IAP
+            CCLOG("상품 구매");
+    //        SBDirector::getInstance()->setScreenTouchLocked(true);
+    //
+    //        auto listener = iap::PurchaseListener::create();
+    //        listener->setTarget(this);
+    //        listener->onPurchased = [=](const iap::Item &item) {
+    //            User::removeAds();
+    //            this->dismissWithAction();
+    //        };
+    //
+    //        listener->onFinished = [=](bool result) {
+    //            SBDirector::postDelayed(this, [=]() {
+    //                SBDirector::getInstance()->setScreenTouchLocked(false);
+    //            }, 0.2f);
+    //        };
+    //
+    //        iap::IAPHelper::purchaseRemoveAds(listener);
+        });
+        
+        characterListSize = CHARACTER_LIST_SIZE_1;
+        characterListPos.x = SBNodeUtils::getBoundingBoxInWorld(iapCell).getMaxX() + CHARACTER_LIST_CELL_PADDING;
+    }
     
     // ScrollView - CharacterList
-    Vec2 pos;
-    pos.x = SBNodeUtils::getBoundingBoxInWorld(iapCell).getMaxX() + CHARACTER_LIST_CELL_PADDING;
-    pos.y = SB_WIN_SIZE.height*0.5f - 70;
-    
     auto characterListView = ListView::create();
     characterListView->setDirection(ui::ScrollView::Direction::HORIZONTAL);
     // characterListView->setPadding(50, 0, 0, 0);
     characterListView->setGravity(ListView::Gravity::CENTER_VERTICAL);
     characterListView->setItemsMargin(CHARACTER_LIST_CELL_PADDING);
-    // characterListView->setBounceEnabled(true);
-    // characterListView->setScrollBarEnabled(false);
-    // characterListView->setAnchorPoint(ANCHOR_M);
-    // characterListView->setPosition(Vec2MC(0, -70));
+    characterListView->setBounceEnabled(true);
+    characterListView->setScrollBarEnabled(false);
     characterListView->setAnchorPoint(ANCHOR_ML);
-    characterListView->setPosition(pos);
+    characterListView->setPosition(characterListPos);
     characterListView->setContentSize(CHARACTER_LIST_SIZE_1);
     characterListView->addEventListener([=](Ref*, ScrollView::EventType eventType) {
       
@@ -152,13 +169,33 @@ void ShopPopup::initContentView() {
     
     addContentChild(characterListView);
     
-    for( int i = 0; i < 8; ++i ) {
-        auto cell = CharacterCell::create();
+    auto characters = CHARACTER_MANAGER->getCharacters();
+    
+    for( int i = 0; i < characters.size() ; ++i ) {
+        auto cell = CharacterCell::create(characters[i]);
         cell->setAnchorPoint(ANCHOR_M);
         characterListView->pushBackCustomItem(cell);
         
-        cell->setOnClickListener([=]() {
-            CCLOG("Cell: %d", i);
+        cell->setOnSelectListener([=](CharacterCell *cell) {
+            CHARACTER_MANAGER->setSelected(cell->getData().charId);
+            
+            auto items = characterListView->getItems();
+            
+            for( auto item : items ) {
+                dynamic_cast<CharacterCell*>(item)->unselect();
+            }
+            
+            cell->select();
+        });
+        
+        cell->setOnViewAdsListener([=](CharacterCell *cell) {
+            CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
+            CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
+                
+                // TODO: 캐릭터 획득 팝업
+                
+                cell->unlock();
+            });
         });
     }
     

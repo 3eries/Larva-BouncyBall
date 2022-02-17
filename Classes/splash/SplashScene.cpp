@@ -16,7 +16,8 @@
 #include "SceneManager.h"
 #include "GameUIHelper.hpp"
 #include "FunnyHelper.hpp"
-#include "ContentManager.hpp"
+#include "StageManager.hpp"
+#include "CharacterManager.hpp"
 
 #include "LogoView.hpp"
 
@@ -147,7 +148,8 @@ void SplashScene::loginCompleted() {
     
     isLoginCompleted = true;
     
-    ContentManager::getInstance()->init();
+    StageManager::getInstance()->init();
+    CharacterManager::getInstance()->init();
     User::getInstance()->init();
 }
 
