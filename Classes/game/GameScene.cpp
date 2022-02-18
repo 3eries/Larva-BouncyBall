@@ -15,6 +15,7 @@
 #include "GameView.hpp"
 
 #include "CommonLoadingBar.hpp"
+#include "ShopPopup.hpp"
 #include "ui/PausePopup.hpp"
 #include "ui/ClearPopup.hpp"
 
@@ -179,6 +180,10 @@ void GameScene::onStageClear(const StageData &stage) {
     });
     popup->setOnNextListener([=]() {
         this->replaceGameScene(stage.stage+1);
+    });
+    popup->setOnShopListener([=]() {
+        auto shopPopup = ShopPopup::create();
+        SceneManager::getScene()->addChild(shopPopup, ZOrder::POPUP_MIDDLE);
     });
     SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
 }

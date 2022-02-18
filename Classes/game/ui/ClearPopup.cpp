@@ -94,6 +94,7 @@ void ClearPopup::initContentView() {
     addContentChild(shopBtn);
     
     shopBtn->setOnClickListener([=](Node*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER(this, onShopListener);
     });
     
@@ -105,6 +106,7 @@ void ClearPopup::initContentView() {
     addChild(homeBtn);
     
     homeBtn->setOnClickListener([=](Node*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER(this, onHomeListener);
     });
     
@@ -116,6 +118,7 @@ void ClearPopup::initContentView() {
     addChild(retryBtn);
     
     retryBtn->setOnClickListener([=](Node*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER(this, onRetryListener);
     });
     
@@ -127,6 +130,7 @@ void ClearPopup::initContentView() {
     addChild(nextBtn);
     
     nextBtn->setOnClickListener([=](Node*) {
+        SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER(this, onNextListener);
     });
 }
