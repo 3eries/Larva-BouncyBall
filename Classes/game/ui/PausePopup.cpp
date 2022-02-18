@@ -71,7 +71,7 @@ void PausePopup::initContentView() {
     
     popupBg = Sprite::create(DIR_IMG_COMMON + "common_bg_pause.png");
     popupBg->setAnchorPoint(ANCHOR_M);
-    popupBg->setPosition(Vec2MC(0, 2));
+    popupBg->setPosition(Vec2MC(0, -4));
     addContentChild(popupBg);
     
     // 효과음

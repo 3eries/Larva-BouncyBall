@@ -67,7 +67,7 @@ void SettingPopup::initContentView() {
     
     popupBg = Sprite::create(DIR_IMG_COMMON + "common_bg_settings.png");
     popupBg->setAnchorPoint(ANCHOR_M);
-    popupBg->setPosition(Vec2MC(0, 24));
+    popupBg->setPosition(Vec2MC(0, 17));
     addContentChild(popupBg);
     
     // 효과음
