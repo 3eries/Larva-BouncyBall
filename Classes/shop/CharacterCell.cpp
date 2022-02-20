@@ -35,6 +35,7 @@ CharacterCell::CharacterCell(const CharacterData &data):
 data(data),
 onSelectListener(nullptr),
 onViewAdsListener(nullptr),
+unlockAmountLayer(nullptr),
 lockLayer(nullptr), unlockLayer(nullptr) {
 }
 
@@ -68,9 +69,13 @@ bool CharacterCell::init() {
     image = superbomb::EffectSprite::create(ResourceHelper::getCharacterImage(data.charId));
     image->setAnchorPoint(ANCHOR_M);
     image->setPosition(Vec2MC(getContentSize(), 0, 2));
-    image->setScale(138 / image->getContentSize().width);
+    image->setScale(1.5f);
     addChild(image);
     
+    // 잠금 해제 조건
+    updateUnlockAmount();
+    
+    // 기타 UI
     initUnlockLayer();
     
     if( isUnlocked ) {
@@ -96,61 +101,6 @@ void CharacterCell::initLockLayer() {
     lockLayer->setPosition(Vec2::ZERO);
     lockLayer->setContentSize(getContentSize());
     addChild(lockLayer);
-    
-    // 해제 조건
-    string unlockIconFile;
-    string unlockAmountStr;
-    
-    switch( data.unlockType ) {
-        case CharacterUnlockType::SAUSAGE: {
-            unlockIconFile = DIR_IMG_SHOP + "shop_icon_sausage.png";
-            unlockAmountStr = STR_FORMAT("%d/%d",
-                                         StageManager::getStageStarTotalCount(),
-                                         data.unlockAmount);
-        } break;
-
-        case CharacterUnlockType::STAGE: {
-            // shop_icon_stage.png Vec2TC(-122, -136) , Size(60, 52)
-            // World 4-18 color:197,0,0 size:52 Vec2TC(36, -135) , Size(232, 29)
-            unlockIconFile = DIR_IMG_SHOP + "shop_icon_stage.png";
-            unlockAmountStr = STR_FORMAT("WORLD %d-%d",
-                                         StageManager::getStage(data.unlockAmount).world,
-                                         data.unlockAmount);
-        } break;
-
-        case CharacterUnlockType::VIEW_ADS: {
-            // shop_icon_ad.png Vec2TC(-55, -136) , Size(64, 44)
-            // 3/10 color:197,0,0 size:52 Vec2TC(39, -135) , Size(96, 29)
-            unlockIconFile = DIR_IMG_SHOP + "shop_icon_ad.png";
-            unlockAmountStr = STR_FORMAT("%d/%d",
-                                         CHARACTER_MANAGER->getViewAdsCount(data.charId),
-                                         data.unlockAmount);
-        } break;
-            
-        default: break;
-    }
-    
-    // shop_icon_sausage.png Vec2TC(-88, -136) , Size(64, 52)
-    auto unlockIcon = Sprite::create(unlockIconFile);
-    unlockIcon->setAnchorPoint(ANCHOR_ML);
-    unlockIcon->setPosition(Vec2TL(getContentSize(), 0, -136));
-    lockLayer->addChild(unlockIcon);
-    
-    // 88/688 color:255,255,255 size:52 Vec2TC(39, -135) , Size(161, 29)
-    auto unlockAmount = Label::createWithTTF(unlockAmountStr, FONT_SUPER_STAR, 52, Size::ZERO,
-                                             TextHAlignment::LEFT, TextVAlignment::CENTER);
-    unlockAmount->setTextColor(Color4B(197,0,0,255));
-    unlockAmount->setAnchorPoint(ANCHOR_ML);
-    unlockAmount->setPosition(Vec2(unlockIcon->getPositionX() + unlockIcon->getContentSize().width + 14,
-                                   unlockIcon->getPositionY() - 2));
-    lockLayer->addChild(unlockAmount);
-    
-    // 가운데 정렬
-    float w = SB_BOUNDING_BOX_IN_WORLD(unlockAmount).getMaxX() - SB_BOUNDING_BOX_IN_WORLD(unlockIcon).getMinX();
-    float diff = (getContentSize().width - w) / 2;
-    
-    unlockIcon->setPositionX(unlockIcon->getPositionX() + diff);
-    unlockAmount->setPositionX(unlockAmount->getPositionX() + diff);
     
     // VIEW ADS 버튼
     if( data.isViewAdsType() ) {
@@ -184,14 +134,6 @@ void CharacterCell::initUnlockLayer() {
     unlockLayer->setPosition(Vec2::ZERO);
     unlockLayer->setContentSize(getContentSize());
     addChild(unlockLayer);
-    
-    // - Vec2TC(0, -137) , Size(20, 6)
-    auto none = Label::createWithTTF("-", FONT_SUPER_STAR, 52, Size::ZERO,
-                                     TextHAlignment::CENTER, TextVAlignment::CENTER);
-    none->setTextColor(Color4B(27,27,27,255));
-    none->setAnchorPoint(ANCHOR_M);
-    none->setPosition(Vec2TC(getContentSize(), 0, -137 -2));
-    unlockLayer->addChild(none);
     
     // SELECTED
     {
@@ -244,6 +186,7 @@ void CharacterCell::unlock() {
     
     name->setTextColor(Color4B(27,27,27,255));
     image->setEffect(nullptr);
+    updateUnlockAmount();
     
     unselect();
 }
@@ -258,4 +201,87 @@ void CharacterCell::unselect() {
  
     selectedLayer->setVisible(false);
     unselectedLayer->setVisible(true);
+}
+
+void CharacterCell::updateUnlockAmount() {
+
+    const bool isUnlocked = CHARACTER_MANAGER->isCharacterUnlocked(data.charId);
+    
+    if( unlockAmountLayer ) {
+        unlockAmountLayer->removeFromParent();
+        unlockAmountLayer = nullptr;
+    }
+    
+    unlockAmountLayer = Widget::create();
+    unlockAmountLayer->setAnchorPoint(Vec2::ZERO);
+    unlockAmountLayer->setPosition(Vec2::ZERO);
+    unlockAmountLayer->setContentSize(getContentSize());
+    addChild(unlockAmountLayer);
+    
+    // 디폴트 캐릭터 체크
+    if( data.unlockType == CharacterUnlockType::DEFAULT ) {
+        // - Vec2TC(0, -137) , Size(20, 6)
+        auto none = Label::createWithTTF("-", FONT_SUPER_STAR, 52, Size::ZERO,
+                                         TextHAlignment::CENTER, TextVAlignment::CENTER);
+        none->setTextColor(Color4B(255,255,255,255));
+        none->setAnchorPoint(ANCHOR_M);
+        none->setPosition(Vec2TC(getContentSize(), 0, -137 -2));
+        unlockAmountLayer->addChild(none);
+        
+        return;
+    }
+    
+    string unlockIconFile;
+    string unlockAmountStr;
+    
+    switch( data.unlockType ) {
+        case CharacterUnlockType::SAUSAGE: {
+            unlockIconFile = DIR_IMG_SHOP + "shop_icon_sausage.png";
+            unlockAmountStr = STR_FORMAT("%d/%d",
+                                         MIN(StageManager::getStageStarTotalCount(), data.unlockAmount),
+                                         data.unlockAmount);
+        } break;
+
+        case CharacterUnlockType::STAGE: {
+            // shop_icon_stage.png Vec2TC(-122, -136) , Size(60, 52)
+            // World 4-18 color:197,0,0 size:52 Vec2TC(36, -135) , Size(232, 29)
+            unlockIconFile = DIR_IMG_SHOP + "shop_icon_stage.png";
+            unlockAmountStr = STR_FORMAT("WORLD %d-%d",
+                                         MIN(StageManager::getStage(data.unlockAmount).world, data.unlockAmount),
+                                         data.unlockAmount);
+        } break;
+
+        case CharacterUnlockType::VIEW_ADS: {
+            // shop_icon_ad.png Vec2TC(-55, -136) , Size(64, 44)
+            // 3/10 color:197,0,0 size:52 Vec2TC(39, -135) , Size(96, 29)
+            unlockIconFile = DIR_IMG_SHOP + "shop_icon_ad.png";
+            unlockAmountStr = STR_FORMAT("%d/%d",
+                                         MIN(CHARACTER_MANAGER->getViewAdsCount(data.charId), data.unlockAmount),
+                                         data.unlockAmount);
+        } break;
+            
+        default: break;
+    }
+    
+    // shop_icon_sausage.png Vec2TC(-88, -136) , Size(64, 52)
+    auto unlockIcon = Sprite::create(unlockIconFile);
+    unlockIcon->setAnchorPoint(ANCHOR_ML);
+    unlockIcon->setPosition(Vec2TL(getContentSize(), 0, -136));
+    unlockAmountLayer->addChild(unlockIcon);
+    
+    // 88/688 color:255,255,255 size:52 Vec2TC(39, -135) , Size(161, 29)
+    auto unlockAmount = Label::createWithTTF(unlockAmountStr, FONT_SUPER_STAR, 52, Size::ZERO,
+                                             TextHAlignment::LEFT, TextVAlignment::CENTER);
+    unlockAmount->setTextColor(isUnlocked ? Color4B(255,255,255,255) : Color4B(197,0,0,255));
+    unlockAmount->setAnchorPoint(ANCHOR_ML);
+    unlockAmount->setPosition(Vec2(unlockIcon->getPositionX() + unlockIcon->getContentSize().width + 14,
+                                   unlockIcon->getPositionY() - 2));
+    unlockAmountLayer->addChild(unlockAmount);
+    
+    // 가운데 정렬
+    float w = SB_BOUNDING_BOX_IN_WORLD(unlockAmount).getMaxX() - SB_BOUNDING_BOX_IN_WORLD(unlockIcon).getMinX();
+    float diff = (getContentSize().width - w) / 2;
+    
+    unlockIcon->setPositionX(unlockIcon->getPositionX() + diff);
+    unlockAmount->setPositionX(unlockAmount->getPositionX() + diff);
 }

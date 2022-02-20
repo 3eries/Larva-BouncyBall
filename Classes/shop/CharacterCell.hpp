@@ -32,19 +32,22 @@ public:
     void select();
     void unselect();
     
+    void updateUnlockAmount();
+    
 private:
     CC_SYNTHESIZE_READONLY(CharacterData, data, Data);
     CC_SYNTHESIZE(std::function<void(CharacterCell*)>, onSelectListener, OnSelectListener);
     CC_SYNTHESIZE(std::function<void(CharacterCell*)>, onViewAdsListener, OnViewAdsListener);
+    
+    cocos2d::Label *name;
+    superbomb::EffectSprite *image;
+    cocos2d::ui::Widget *unlockAmountLayer;
     
     cocos2d::ui::Widget *lockLayer;
     cocos2d::ui::Widget *unlockLayer;
     
     cocos2d::ui::Widget *selectedLayer;
     cocos2d::ui::Widget *unselectedLayer;
-    
-    cocos2d::Label *name;
-    superbomb::EffectSprite *image;
 };
 
 #endif /* CharacterCell_hpp */

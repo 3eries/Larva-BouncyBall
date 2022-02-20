@@ -190,6 +190,8 @@ void ShopPopup::initContentView() {
         
         cell->setOnViewAdsListener([=](CharacterCell *cell) {
             CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
+            cell->updateUnlockAmount();
+            
             CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
                 
                 // TODO: 캐릭터 획득 팝업

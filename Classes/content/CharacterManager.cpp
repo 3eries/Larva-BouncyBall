@@ -200,7 +200,7 @@ void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
             } break;
                 
             case CharacterUnlockType::STAGE: {
-                if( StageManager::getTopUnlockedStage() >= chc.unlockAmount ) {
+                if( StageManager::isStageCleared(chc.unlockAmount) ) {
                     unlockList.push_back(chc);
                 }
             } break;
