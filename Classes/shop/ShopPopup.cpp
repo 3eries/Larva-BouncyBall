@@ -49,6 +49,8 @@ void ShopPopup::onEnter() {
     
     BasePopup::onEnter();
     
+    SBAnalytics::logEvent(ANALYTICS_EVENT_SHOP);
+    
     runEnterAction();
 }
 
@@ -186,18 +188,35 @@ void ShopPopup::initContentView() {
             }
             
             cell->select();
+            
+            // 통계 이벤트
+            {
+                SBAnalytics::EventParams params;
+                params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
+
+                SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_SELECT, params);
+            }
         });
         
         cell->setOnViewAdsListener([=](CharacterCell *cell) {
             CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
             cell->updateUnlockAmount();
             
+            // 잠금 해제 체크
             CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
                 
                 // TODO: 캐릭터 획득 팝업
                 
                 cell->unlock();
             });
+            
+            // 통계 이벤트
+            {
+                SBAnalytics::EventParams params;
+                params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
+
+                SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK, params);
+            }
         });
     }
     

@@ -42,6 +42,7 @@ static const std::string ANALYTICS_SCREEN_MAIN                      = "main";
 static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 
 static const std::string ANALYTICS_EVENT_CREDIT                     = "credit";                     // 크레딧 화면 진입
+static const std::string ANALYTICS_EVENT_SHOP                       = "shop";                       // 상점 팝업 진입
 
 static const std::string ANALYTICS_EVENT_STAGE_PLAY                 = "stage_play";
 static const std::string ANALYTICS_EVENT_STAGE_CLEAR                = "stage_clear";
@@ -50,7 +51,12 @@ static const std::string ANALYTICS_EVENT_STAGE_CLEAR_RE             = "stage_cle
 
 static const std::string ANALYTICS_EVENT_GAME_OVER                  = "game_over";
 
+static const std::string ANALYTICS_EVENT_CHARACTER_GET              = "character_get";              // 캐릭터 획득
+static const std::string ANALYTICS_EVENT_CHARACTER_SELECT           = "character_select";           // 캐릭터 선택
+static const std::string ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK   = "character_view_ads_click";   // 캐릭터 광고 보기 클릭
+
 static const std::string ANALYTICS_EVENT_PARAM_SUMMARY              = "summary";                    // 요약
+static const std::string ANALYTICS_EVENT_PARAM_CHAR_ID              = "char_id";                    // 캐릭터 아이디
 static const std::string ANALYTICS_EVENT_PARAM_STAGE                = "stage";
 static const std::string ANALYTICS_EVENT_PARAM_STAGE_RANGE          = "stage_range";
 static const std::string ANALYTICS_EVENT_PARAM_STAR                 = "star";
