@@ -30,9 +30,6 @@ private:
     
     void initBackgroundView() override;
     void initContentView() override;
-    
-    void runEnterAction(SBCallback onFinished = nullptr) override;
-    void onEnterActionFinished() override;
 };
 
 #endif /* ShopPopup_hpp */

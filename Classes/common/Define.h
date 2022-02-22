@@ -139,9 +139,9 @@ namespace ZOrder {
 
 // 연출 시간
 namespace EffectDuration {
-    static const float POPUP_SLIDE_SLOW        = 0.4f;
-    static const float POPUP_SLIDE_NORMAL      = 0.3f;
-    static const float POPUP_SLIDE_FAST        = 0.25f;
+    static const float POPUP_SLIDE_SLOW        = 0.35f;
+    static const float POPUP_SLIDE_NORMAL      = 0.25f;
+    static const float POPUP_SLIDE_FAST        = 0.2f;
     
     static const float MENU_SLIDE_NORMAL       = 0.3f;
     static const float MENU_SLIDE_FAST         = 0.25f;

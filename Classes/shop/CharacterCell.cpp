@@ -62,7 +62,7 @@ bool CharacterCell::init() {
                                 TextHAlignment::CENTER, TextVAlignment::CENTER);
     name->setTextColor(Color4B(27,27,27,255));
     name->setAnchorPoint(ANCHOR_M);
-    name->setPosition(Vec2TC(getContentSize(), -1, -53 -2));
+    name->setPosition(Vec2TC(getContentSize(), -1, -53) + Vec2(0, -2));
     addChild(name);
     
     // 캐릭터 이미지
@@ -225,7 +225,7 @@ void CharacterCell::updateUnlockAmount() {
                                          TextHAlignment::CENTER, TextVAlignment::CENTER);
         none->setTextColor(Color4B(255,255,255,255));
         none->setAnchorPoint(ANCHOR_M);
-        none->setPosition(Vec2TC(getContentSize(), 0, -137 -2));
+        none->setPosition(Vec2TC(getContentSize(), 0, -137) + Vec2(0, -2));
         unlockAmountLayer->addChild(none);
         
         return;
@@ -275,7 +275,8 @@ void CharacterCell::updateUnlockAmount() {
     unlockAmount->setTextColor(isUnlocked ? Color4B(255,255,255,255) : Color4B(197,0,0,255));
     unlockAmount->setAnchorPoint(ANCHOR_ML);
     unlockAmount->setPosition(Vec2(unlockIcon->getPositionX() + unlockIcon->getContentSize().width + 14,
-                                   unlockIcon->getPositionY() - 2));
+                                   unlockIcon->getPositionY()) +
+                              Vec2(0, -2));
     unlockAmountLayer->addChild(unlockAmount);
     
     // 가운데 정렬

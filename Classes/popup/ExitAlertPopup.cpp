@@ -14,7 +14,7 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace std;
 
-static const float FADE_DURATION    = 0.15f;
+static const float FADE_DURATION    = 0.1f;
 static const float SLIDE_DURATION   = EffectDuration::POPUP_SLIDE_FAST;
 
 ExitAlertPopup::ExitAlertPopup() : BasePopup(PopupType::EXIT_APP),

@@ -210,18 +210,3 @@ void ShopPopup::initContentView() {
 //    addContentChild(n);
 }
 
-/**
- * 등장 연출
- */
-void ShopPopup::runEnterAction(SBCallback onFinished) {
-    
-    BasePopup::runEnterAction(0/* ACTION DURATION */, onFinished);
-}
-
-/**
- * 등장 연출 완료
- */
-void ShopPopup::onEnterActionFinished() {
-    
-    BasePopup::onEnterActionFinished();
-}
