@@ -13,9 +13,12 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 #include "PopupManager.hpp"
-#include "StageManager.hpp"
+#include "CharacterManager.hpp"
 
 class GetCharacterPopup: public BasePopup {
+public:
+    static void show(const CharacterDataList &characters);
+    
 public:
     static GetCharacterPopup* create(const CharacterData &data);
     ~GetCharacterPopup();
@@ -31,10 +34,11 @@ private:
     void initContentView() override;
     
     void runEnterAction(SBCallback onFinished = nullptr) override;
-    void onEnterActionFinished() override;
+    void runExitAction(SBCallback onFinished = nullptr) override;
     
 private:
     CharacterData data;
+    CC_SYNTHESIZE(SBCallback, onConfirmListener, OnConfirmListener);
 };
 
 
