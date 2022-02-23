@@ -2,16 +2,13 @@
     "android": {
         "firebase": {},
         "ads": {
-            "test": 0,
+            "test": 1,
             "test_devices": ["0A16B70F54452DD393143983A218FB9A"],
-            "auto_load_interval": 30,
-            "app_id": "ca-app-pub-9699962520672188~7389000315",
-            "banner_unit_id": "ca-app-pub-9699962520672188/7361080156",
-            "interstitial_unit_id": "ca-app-pub-9699962520672188/5370531000",
-            "rewarded_video_unit_id": "ca-app-pub-9699962520672188/9664999239",
-            "placements": {
-                "vungle": []
-            }
+            "auto_load_interval": 5,
+            "app_id": "ca-app-pub-1272300599065219~3986702699",
+            "banner_unit_id": "",
+            "interstitial_unit_id": "ca-app-pub-1272300599065219/3328227143",
+            "rewarded_video_unit_id": "ca-app-pub-1272300599065219/7626047884"
         },
         "iap": {
             "items": {
@@ -30,14 +27,11 @@
         "ads": {
             "test": 0,
             "test_devices": ["b4557ed216280a136490cbe37144356d"],
-            "auto_load_interval": 30,
-            "app_id": "ca-app-pub-9699962520672188~3095899061",
-            "banner_unit_id": "ca-app-pub-9699962520672188/1427594176",
-            "interstitial_unit_id": "ca-app-pub-9699962520672188/9114512508",
-            "rewarded_video_unit_id": "ca-app-pub-9699962520672188/1580278048",
-            "placements": {
-                "vungle": []
-            }
+            "auto_load_interval": 5,
+            "app_id": "ca-app-pub-1272300599065219~7598127729",
+            "banner_unit_id": "",
+            "interstitial_unit_id": "ca-app-pub-1272300599065219/1092429128",
+            "rewarded_video_unit_id": "ca-app-pub-1272300599065219/1604081931"
         },
         "iap": {
             "items": {

@@ -16,6 +16,11 @@
         <meta-data android:name="android.app.lib_name"
                    android:value="MyGame" />
 
+        <!-- AdMob App ID -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1272300599065219~3986702699"/>
+
         <activity
             android:name="org.cocos2dx.cpp.AppActivity"
             android:screenOrientation="landscape"

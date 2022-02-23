@@ -135,7 +135,7 @@ dependencies {
     // External Plugins
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
-    // implementation 'com.google.android.gms:play-services-ads:20.5.0'
+    implementation 'com.google.android.gms:play-services-ads:20.4.0'
 
     // gps
     // implementation "com.google.android.gms:play-services-auth:18.1.0"
