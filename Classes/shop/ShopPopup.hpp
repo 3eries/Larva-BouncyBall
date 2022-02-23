@@ -30,6 +30,10 @@ private:
     
     void initBackgroundView() override;
     void initContentView() override;
+    
+private:
+    void onCharacterSelect(cocos2d::ui::ListView *listView, CharacterCell *cell);
+    void onCharacterViewAds(CharacterCell *cell);
 };
 
 #endif /* ShopPopup_hpp */

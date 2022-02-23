@@ -8,6 +8,8 @@
 #include "Ball.hpp"
 
 #include "Define.h"
+#include "ResourceHelper.hpp"
+#include "CharacterManager.hpp"
 #include "../GameManager.hpp"
 #include "../GameView.hpp"
 
@@ -91,7 +93,7 @@ void Ball::initImage() {
     addChild(image);
     
     auto updateImage = [=]() {
-        image->setTexture(DIR_CONTENT_CHARACTER + "char_001.png");
+        image->setTexture(ResourceHelper::getCharacterImage(CHARACTER_MANAGER->getSelectedCharacter().charId));
     };
     
     updateImage();

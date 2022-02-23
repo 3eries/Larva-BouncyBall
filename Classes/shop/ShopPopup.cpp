@@ -11,6 +11,7 @@
 #include "User.hpp"
 #include "GameUIHelper.hpp"
 
+#include "GetCharacterPopup.hpp"
 #include "IAPCell.hpp"
 #include "CharacterCell.hpp"
 
@@ -126,7 +127,7 @@ void ShopPopup::initContentView() {
         addContentChild(iapCell);
 
         iapCell->setOnClickListener([=]() {
-            // TODO: IAP
+            // TODO: IAP Purchase, Restore
             CCLOG("상품 구매");
     //        SBDirector::getInstance()->setScreenTouchLocked(true);
     //
@@ -179,44 +180,10 @@ void ShopPopup::initContentView() {
         characterListView->pushBackCustomItem(cell);
         
         cell->setOnSelectListener([=](CharacterCell *cell) {
-            CHARACTER_MANAGER->setSelected(cell->getData().charId);
-            
-            auto items = characterListView->getItems();
-            
-            for( auto item : items ) {
-                dynamic_cast<CharacterCell*>(item)->unselect();
-            }
-            
-            cell->select();
-            
-            // 통계 이벤트
-            {
-                SBAnalytics::EventParams params;
-                params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
-
-                SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_SELECT, params);
-            }
+            this->onCharacterSelect(characterListView, cell);
         });
-        
         cell->setOnViewAdsListener([=](CharacterCell *cell) {
-            CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
-            cell->updateUnlockAmount();
-            
-            // 잠금 해제 체크
-            CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-                
-                // TODO: 캐릭터 획득 팝업
-                
-                cell->unlock();
-            });
-            
-            // 통계 이벤트
-            {
-                SBAnalytics::EventParams params;
-                params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
-
-                SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK, params);
-            }
+            this->onCharacterViewAds(cell);
         });
     }
     
@@ -229,3 +196,73 @@ void ShopPopup::initContentView() {
 //    addContentChild(n);
 }
 
+/**
+ * 캐릭터 선택
+ */
+void ShopPopup::onCharacterSelect(ListView *listView, CharacterCell *cell) {
+    
+    CHARACTER_MANAGER->setSelected(cell->getData().charId);
+    
+    // 모든 Cell 선택 취소
+    auto items = listView->getItems();
+    
+    for( auto item : items ) {
+        dynamic_cast<CharacterCell*>(item)->unselect();
+    }
+    
+    // 해당 Cell 선택
+    cell->select();
+    
+    // 통계 이벤트
+    {
+        SBAnalytics::EventParams params;
+        params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
+
+        SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_SELECT, params);
+    }
+}
+
+/**
+ * 광고 보기
+ */
+void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
+
+    if( !superbomb::AdsHelper::isRewardedVideoLoaded() ) {
+        return;
+    }
+    
+    SBDirector::getInstance()->setScreenTouchLocked(true);
+    
+    auto listener = superbomb::RewardedVideoAdListener::create();
+    listener->setTarget(this);
+    listener->onAdOpened = [=]() {
+        SBDirector::getInstance()->setScreenTouchLocked(false);
+    };
+    listener->onAdClosed = [=]() {
+        if( listener->isRewarded() ) {
+            CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
+            cell->updateUnlockAmount();
+            
+            // 잠금 해제 체크
+            CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
+                
+                cell->unlock();
+                
+                // 캐릭터 획득 팝업
+                GetCharacterPopup::show(unlockCharacters);
+            });
+        }
+        
+        cell->updateViewAdsButton();
+    };
+    
+    superbomb::AdsHelper::getInstance()->showRewardedVideo(listener);
+    
+    // 통계 이벤트
+    {
+        SBAnalytics::EventParams params;
+        params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
+
+        SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK, params);
+    }
+}

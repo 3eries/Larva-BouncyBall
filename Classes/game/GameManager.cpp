@@ -421,7 +421,7 @@ void GameManager::onStageClear(bool isSkipped) {
     
     // 캐릭터 잠금해제 체크
     CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-        // TODO: 캐릭터 획득 팝업
+        instance->unlockCharacters = unlockCharacters;
     });
     
     if( !isSkipped ) {

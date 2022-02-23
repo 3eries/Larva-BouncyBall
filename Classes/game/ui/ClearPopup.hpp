@@ -38,6 +38,7 @@ private:
 private:
     std::vector<cocos2d::Sprite*> starBgs;
     
+    CC_SYNTHESIZE(SBCallback, onStarEffectFinishedListener, OnStarEffectFinishedListener);
     CC_SYNTHESIZE(SBCallback, onShopListener, OnShopListener);
     CC_SYNTHESIZE(SBCallback, onHomeListener, OnHomeListener);
     CC_SYNTHESIZE(SBCallback, onRetryListener, OnRetryListener);

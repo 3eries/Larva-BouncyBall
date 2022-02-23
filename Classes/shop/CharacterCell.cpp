@@ -104,17 +104,29 @@ void CharacterCell::initLockLayer() {
     
     // VIEW ADS 버튼
     if( data.isViewAdsType() ) {
-        auto viewAdsBtn = SBButton::create(DIR_IMG_SHOP + "shop_btn_ad.png");
-        viewAdsBtn->setZoomScale(0);
-        viewAdsBtn->setAnchorPoint(ANCHOR_M);
-        viewAdsBtn->setPosition(Vec2BC(getContentSize(), 0, 100));
-        lockLayer->addChild(viewAdsBtn);
+        viewAdsButton = SBButton::create(DIR_IMG_SHOP + "shop_btn_ad.png");
+        viewAdsButton->setZoomScale(0);
+        viewAdsButton->setAnchorPoint(ANCHOR_M);
+        viewAdsButton->setPosition(Vec2BC(getContentSize(), 0, 100));
+        lockLayer->addChild(viewAdsButton);
         
-        viewAdsBtn->setOnClickListener([=](Node*) {
+        viewAdsButton->setOnClickListener([=](Node*) {
             this->retain();
             onViewAdsListener(this);
             this->release();
         });
+        
+        viewAdsDisabledImage = superbomb::EffectSprite::create(DIR_IMG_SHOP + "shop_btn_ad.png");
+        viewAdsDisabledImage->setEffect(superbomb::Effect::create("shaders/example_GreyScale.fsh"));
+        viewAdsDisabledImage->setAnchorPoint(viewAdsButton->getAnchorPoint());
+        viewAdsDisabledImage->setPosition(viewAdsButton->getPosition());
+        viewAdsButton->getParent()->addChild(viewAdsDisabledImage);
+        
+        updateViewAdsButton();
+        
+        schedule([=](float dt) {
+            this->updateViewAdsButton();
+        }, 1.0f, "SCHEDULER_CHECK_AD_LOADED");
     }
     // 자물쇠
     else {
@@ -203,6 +215,9 @@ void CharacterCell::unselect() {
     unselectedLayer->setVisible(true);
 }
 
+/**
+ * 잠금 해제 수량 업데이트
+ */
 void CharacterCell::updateUnlockAmount() {
 
     const bool isUnlocked = CHARACTER_MANAGER->isCharacterUnlocked(data.charId);
@@ -285,4 +300,23 @@ void CharacterCell::updateUnlockAmount() {
     
     unlockIcon->setPositionX(unlockIcon->getPositionX() + diff);
     unlockAmount->setPositionX(unlockAmount->getPositionX() + diff);
+}
+
+/**
+ * 광고 보기 버튼 업데이트
+ */
+void CharacterCell::updateViewAdsButton() {
+
+    if( !data.isViewAdsType() ) {
+        return;
+    }
+    
+    if( CHARACTER_MANAGER->isCharacterUnlocked(data.charId) ) {
+        return;
+    }
+    
+    const bool isAdLoaded = superbomb::AdsHelper::isRewardedVideoLoaded();
+    
+    viewAdsButton->setVisible(isAdLoaded);
+    viewAdsDisabledImage->setVisible(!isAdLoaded);
 }

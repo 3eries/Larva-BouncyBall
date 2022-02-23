@@ -20,6 +20,7 @@
 #include "WorldPage.hpp"
 #include "CommonLoadingBar.hpp"
 #include "ExitAlertPopup.hpp"
+#include "GetCharacterPopup.hpp"
 #include "ShopPopup.hpp"
 #include "SettingPopup.hpp"
 #include "BannerView.hpp"
@@ -73,6 +74,13 @@ void MainScene::onEnterTransitionDidFinish() {
     scheduleOnce([=](float dt) {
         // replaceGameScene(1);
     }, 0.1f, "AUTO_REPLACE");
+    
+    // 캐릭터 잠금 해제 체크
+    CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
+        
+        // 캐릭터 획득 팝업
+        GetCharacterPopup::show(unlockCharacters);
+    });
 }
 
 void MainScene::onExit() {

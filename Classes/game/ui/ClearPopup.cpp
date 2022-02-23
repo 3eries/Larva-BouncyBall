@@ -14,6 +14,7 @@ USING_NS_CC;
 using namespace std;
 
 ClearPopup::ClearPopup(): BasePopup(PopupType::GAME_CLEAR),
+onStarEffectFinishedListener(nullptr),
 onShopListener(nullptr),
 onHomeListener(nullptr),
 onRetryListener(nullptr),
@@ -159,6 +160,10 @@ void ClearPopup::runStarAnimation(int i) {
     if( i == GAME_MANAGER->getStar()-1 ) {
         // 터치 재개
         SBDirector::getInstance()->setScreenTouchLocked(false);
+        
+        SBDirector::getInstance()->postDelayed(this, [=]() {
+            SB_SAFE_PERFORM_LISTENER(this, onStarEffectFinishedListener);
+        }, 0.5f);
     }
     // 다음 별 애니메이션
     else {

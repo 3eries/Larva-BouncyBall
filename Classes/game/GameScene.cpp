@@ -15,6 +15,7 @@
 #include "GameView.hpp"
 
 #include "CommonLoadingBar.hpp"
+#include "GetCharacterPopup.hpp"
 #include "ShopPopup.hpp"
 #include "ui/PausePopup.hpp"
 #include "ui/ClearPopup.hpp"
@@ -172,6 +173,13 @@ void GameScene::onStageClear(const StageData &stage) {
     
     // 클리어 팝업
     auto popup = ClearPopup::create();
+    popup->setOnStarEffectFinishedListener([=]() {
+        auto characters = GAME_MANAGER->getUnlockCharacters();
+        
+        if( characters.size() > 0 ) {
+            GetCharacterPopup::show(characters);
+        }
+    });
     popup->setOnHomeListener([=]() {
         this->replaceMainScene();
     });

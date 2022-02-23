@@ -33,6 +33,7 @@ public:
     void unselect();
     
     void updateUnlockAmount();
+    void updateViewAdsButton();
     
 private:
     CC_SYNTHESIZE_READONLY(CharacterData, data, Data);
@@ -48,6 +49,9 @@ private:
     
     cocos2d::ui::Widget *selectedLayer;
     cocos2d::ui::Widget *unselectedLayer;
+    
+    SBButton*                viewAdsButton;
+    superbomb::EffectSprite* viewAdsDisabledImage;
 };
 
 #endif /* CharacterCell_hpp */
