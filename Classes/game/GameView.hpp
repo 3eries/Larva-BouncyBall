@@ -86,6 +86,7 @@ private:
     
 private:
     bool isTouchEnabled;
+    cocos2d::Vector<cocos2d::Touch*> touches;
     
 #pragma mark- Contact
 private:

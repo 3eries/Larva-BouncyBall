@@ -26,12 +26,11 @@ using namespace std;
 #define VELOCITY_MOVE_RIGHT                    (13 * GAME_MANAGER->getMapScaleFactor())
 
 #define BOUNCE_DOWN_DELAY                      0.5f
-#define CONTINUOUS_X_INTERVAL                  0.1f
-#define RESET_X_DELAY                          0.05f
+#define HORIZONTAL_MOVE_LOCKED_DURATION        (0.1f * GAME_MANAGER->getMapScaleFactor())
 
+#define SCHEDULER_HORIZONTAL_MOVE              "SCHEDULER_HORIZONTAL_MOVE"          // 수평 이동
+#define SCHEDULER_HORIZONTAL_MOVE_LOCKED       "SCHEDULER_HORIZONTAL_MOVE_LOCKED"   // 수평 이동 잠금
 #define SCHEDULER_BOUNCE_DOWN                  "SCHEDULER_BOUNCE_DOWN"
-#define SCHEDULER_CONTINUOUS_X                 "SCHEDULER_CONTINUOUS_X"
-#define SCHEDULER_RESET_VELOCITY_X             "SCHEDULER_RESET_VELOCITY_X"
 
 Ball* Ball::create(const StageData &stage) {
     
@@ -49,6 +48,7 @@ Ball* Ball::create(const StageData &stage) {
 Ball::Ball(const StageData &stage) : SBPhysicsObject(this),
 stage(stage),
 direction(BallDirection::NONE),
+horizontalMoveLocked(false),
 jumpEffectPlayedTime(0) {
 }
 
@@ -70,6 +70,8 @@ bool Ball::init() {
     
     initImage();
     initPhysics();
+    
+    schedule(CC_CALLBACK_1(Ball::moveHorizontal, this), SCHEDULER_HORIZONTAL_MOVE);
     
     return true;
 }
@@ -184,6 +186,9 @@ void Ball::setFirstPosition(const Vec2 &p) {
     // getBody()->SetLinearVelocity(b2Vec2(0, VELOCITY_BOUNCE_DOWN));
 }
 
+/**
+ * 방향을 설정합니다
+ */
 void Ball::setDirection(BallDirection direction) {
     
     this->direction = direction;
@@ -193,74 +198,56 @@ void Ball::setDirection(BallDirection direction) {
     }
 }
 
-/**
- * 왼쪽으로 이동합니다
- */
-void Ball::moveLeft() {
-    
-    stopMoveX(false);
-    
-    setDirection(BallDirection::LEFT);
-    
-    auto body = getBody();
-    // body->ApplyLinearImpulse(force, body->GetPosition(), false);
-    // body->ApplyForceToCenter(b2Vec2(100, 0), false);
-    body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_LEFT, body->GetLinearVelocity().y));
-    
-    schedule([=](float dt) {
-        body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_LEFT, body->GetLinearVelocity().y));
-    }, CONTINUOUS_X_INTERVAL, SCHEDULER_CONTINUOUS_X);
-}
+void Ball::setDirection(Touch *touch) {
+ 
+    bool isLeft = (touch->getLocation().x < SB_WIN_SIZE.width*0.5f);
 
-/**
- * 오른쪽으로 이동합니다
- */
-void Ball::moveRight() {
-    
-    stopMoveX(false);
-    
-    setDirection(BallDirection::RIGHT);
-    
-    auto body = getBody();
-    body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_RIGHT, body->GetLinearVelocity().y));
-    
-    schedule([=](float dt) {
-        body->SetLinearVelocity(b2Vec2(VELOCITY_MOVE_RIGHT, body->GetLinearVelocity().y));
-    }, CONTINUOUS_X_INTERVAL, SCHEDULER_CONTINUOUS_X);
-}
-
-/**
- * X축 움직임을 멈춥니다
- */
-void Ball::stopMoveX(bool resetVelocity) {
-    
-    setDirection(BallDirection::NONE);
-    
-    unschedule(SCHEDULER_CONTINUOUS_X);
-    unschedule(SCHEDULER_RESET_VELOCITY_X);
-    
-    if( resetVelocity ) {
-        auto body = getBody();
-        body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
-        
-        // 딜레이 후 리셋
-//        scheduleOnce([=](float dt) {
-//            auto body = getBody();
-//            body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
-//        }, RESET_X_DELAY, SCHEDULER_RESET_VELOCITY_X);
+    if( isLeft ) {
+        setDirection(BallDirection::LEFT);
+    } else {
+        setDirection(BallDirection::RIGHT);
     }
 }
 
 /**
- * 볼 & 블럭 충돌
+ * 수평 이동
  */
-void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, PhysicsCategory category) {
-
-    // 충돌 지점이 블럭의 상단이 아니면 무시
-    if( category != PhysicsCategory::BLOCK_TOP ) {
+void Ball::moveHorizontal(float dt) {
+    
+    if( direction == BallDirection::NONE ) {
         return;
     }
     
+    if( horizontalMoveLocked ) {
+        return;
+    }
+    
+    // 방향에 따른 수평 이동
+    float x = (direction == BallDirection::LEFT) ? VELOCITY_MOVE_LEFT : VELOCITY_MOVE_RIGHT;
+    
+    auto body = getBody();
+    body->SetLinearVelocity(b2Vec2(x, body->GetLinearVelocity().y));
+    
+    // body->ApplyLinearImpulse(force, body->GetPosition(), false);
+    // body->ApplyForceToCenter(b2Vec2(100, 0), false);
+}
+
+/**
+ * 수평 이동을 멈춥니다
+ */
+void Ball::stopHorizontal() {
+    
+    setDirection(BallDirection::NONE);
+    
+    auto body = getBody();
+    body->SetLinearVelocity(b2Vec2(0, body->GetLinearVelocity().y));
+}
+
+/**
+ * 볼 <-> 블럭 충돌
+ */
+void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, PhysicsCategory category) {
+
     // 충돌 잠금 상태일 경우 충돌 무시
     if( isCollisionLocked() ) {
         return;
@@ -268,8 +255,17 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
     
     auto block = (Block*)tile;
     
-    // 충돌 횟수 업데이트
-    contactCount++;
+    switch( category ) {
+        case PhysicsCategory::BLOCK_TOP:    onContactBlockTop(block);    break;
+        case PhysicsCategory::BLOCK_SIDE:   onContactBlockSide(block);   break;
+        default: break;
+    }
+}
+
+/**
+ * 볼 <-> 블럭 상단 충돌
+ */
+void Ball::onContactBlockTop(Block *block) {
     
     // 효과음
     double now = SBSystemUtils::getCurrentTimeSeconds();
@@ -290,26 +286,31 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
     
     // 중력 없이 바운스 하는 방법
     // Bounce Down
+    /*
     unschedule(SCHEDULER_BOUNCE_DOWN);
     
     scheduleOnce([=](float dt) {
-//        CCLOG("Bounce Down");
-//        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
-//                                       VELOCITY_BOUNCE_DOWN));
+        CCLOG("Bounce Down");
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x,
+                                       VELOCITY_BOUNCE_DOWN));
     }, BOUNCE_DOWN_DELAY, SCHEDULER_BOUNCE_DOWN);
+    */
 }
 
-///**
-// * 볼 & 아이템 충돌
-// */
-//void Ball::onContactItem(Ball *ball, Game::Tile *item) {
-//}
-//
-///**
-// * 볼 & 바닥 충돌
-// */
-//void Ball::onContactFloor(Ball *ball) {
-//
-//    fallToFloor();
-//}
-
+/**
+ * 볼 <-> 블럭 측면 충돌
+ */
+void Ball::onContactBlockSide(Block *block) {
+    
+    if( horizontalMoveLocked ) {
+        return;
+    }
+    
+    horizontalMoveLocked = true;
+    
+    unschedule(SCHEDULER_HORIZONTAL_MOVE_LOCKED);
+    
+    scheduleOnce([=](float dt) {
+        horizontalMoveLocked = false;
+    }, HORIZONTAL_MOVE_LOCKED_DURATION, SCHEDULER_HORIZONTAL_MOVE_LOCKED);
+}

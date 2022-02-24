@@ -16,6 +16,7 @@
 #include "../GameDefine.h"
 
 class GameTile;
+class Block;
 
 class Ball: public cocos2d::Node, public SBPhysicsObject {
 public:
@@ -37,34 +38,26 @@ public:
     
     void            setFirstPosition(const cocos2d::Vec2 &p);
     void            setDirection(BallDirection direction);
+    void            setDirection(cocos2d::Touch *touch);
     
-    void            tapMove(BallDirection direction);
-    void            pressedMove(BallDirection direction);
-    
-    void            moveLeft();
-    void            moveRight();
-    void            stopMoveX(bool resetVelocity = true);
+    void            moveHorizontal(float dt);
+    void            stopHorizontal();
     
 public:
     virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
                                 PhysicsCategory category);
-//    virtual void onContactItem(Ball *ball, Game::Tile *item);
-//    virtual void onContactFloor(Ball *ball);
+    virtual void onContactBlockTop(Block *block);
+    virtual void onContactBlockSide(Block *block);
     
 protected:
     StageData stage;
     
     cocos2d::Sprite *image;
+    
     CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
+    bool horizontalMoveLocked;      // 강제 수평 이동 잠금 Flag
     
-    double jumpEffectPlayedTime; // 점프 효과음 재생된 시간
-    
-    // 충돌 횟수
-    // 발사 후 충돌을 카운팅합니다
-    // 모든 충돌 횟수는 추락 시 리셋됩니다
-    size_t contactCount;
-    size_t brickContactCount; // 연속된 브릭 충돌 횟수
-    size_t wallContactCount;  // 연속된 벽 충돌 횟수
+    double jumpEffectPlayedTime;    // 점프 효과음 재생된 시간
 };
 
 #endif /* Ball_hpp */

@@ -59,7 +59,7 @@ bool GameScene::init() {
     initGameListener();
     
     // 멀티 터치 방지
-    addChild(SBNodeUtils::createSwallowMultiTouchNode(), INT_MAX);
+    // addChild(SBNodeUtils::createSwallowMultiTouchNode(), INT_MAX);
     
     return true;
 }

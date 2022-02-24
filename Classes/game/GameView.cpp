@@ -283,18 +283,24 @@ vector<GameTile*> GameView::getTiles(const TileId &tileId) {
 
 void GameView::onTouchBegan(Touch *touch) {
     
-    bool isLeft = (touch->getLocation().x < SB_WIN_SIZE.width*0.5f);
-
-    if( isLeft ) {
-        ball->moveLeft();
-    } else {
-        ball->moveRight();
+    if( touch->getID() >= 2 ) {
+        return;
     }
+    
+    touches.pushBack(touch);
+    
+    ball->setDirection(touch);
 }
 
 void GameView::onTouchEnded(Touch *touch) {
     
-    ball->stopMoveX();
+    touches.eraseObject(touch, true);
+    
+    if( touches.size() == 0 ) {
+        ball->stopHorizontal();
+    } else {
+        ball->setDirection(touches.at(touches.size()-1));
+    }
 }
 
 #pragma mark- Physics Event
