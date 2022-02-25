@@ -308,8 +308,6 @@ void Ball::onContactBlockSide(Block *block) {
     
     horizontalMoveLocked = true;
     
-    unschedule(SCHEDULER_HORIZONTAL_MOVE_LOCKED);
-    
     scheduleOnce([=](float dt) {
         horizontalMoveLocked = false;
     }, HORIZONTAL_MOVE_LOCKED_DURATION, SCHEDULER_HORIZONTAL_MOVE_LOCKED);
