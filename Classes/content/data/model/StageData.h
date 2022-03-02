@@ -21,7 +21,7 @@ struct StageData {
     cocos2d::Size             tileSize;                // 타일 크기
     TileDataList              tiles;                   // 타일 리스트
 
-    StageData() : stage(0) {}
+    StageData() : stage(0), world(0) {}
     
     bool isNull() const {
         return stage == 0;

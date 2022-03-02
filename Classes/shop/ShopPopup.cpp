@@ -173,9 +173,10 @@ void ShopPopup::initContentView() {
     addContentChild(characterListView);
     
     auto characters = CHARACTER_MANAGER->getCharacters();
+    auto characterOrder = CHARACTER_MANAGER->getCharacterOrder();
     
     for( int i = 0; i < characters.size() ; ++i ) {
-        auto cell = CharacterCell::create(characters[i]);
+        auto cell = CharacterCell::create(CHARACTER_MANAGER->getCharacter(characterOrder[i]));
         cell->setAnchorPoint(ANCHOR_M);
         characterListView->pushBackCustomItem(cell);
         

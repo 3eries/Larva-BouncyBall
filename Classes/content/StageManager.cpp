@@ -74,7 +74,7 @@ void StageManager::parseStageFile() {
         
         StageData stage;
         stage.stage = STAGE;
-        stage.world = ((STAGE-1) / GAME_CONFIG->getStagePerWorld()) + 1;
+        stage.world = getWorld(STAGE);
         stage.mapWidthTiles = (int)mapInfo->getMapSize().width;
         stage.mapHeightTiles = (int)mapInfo->getMapSize().height;
         stage.mapContentSize = Size(stage.mapWidthTiles * tileSize.width,
@@ -199,6 +199,13 @@ StageData StageManager::getStage(int stage) {
 StageData StageManager::getLastStage() {
     auto stages = getStages();
     return stages.size() > 0 ? stages[stages.size()-1] : StageData();
+}
+
+/**
+ * 스테이지가 속한 월드를 반환합니다
+ */
+int StageManager::getWorld(int stage) {
+    return ((stage-1) / GAME_CONFIG->getStagePerWorld()) + 1;
 }
 
 #pragma mark- UserData

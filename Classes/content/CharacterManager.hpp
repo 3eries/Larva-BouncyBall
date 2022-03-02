@@ -52,6 +52,7 @@ public:
     void                increaseViewAdsCount(const std::string &charId);
     
 private:
+    CC_SYNTHESIZE_READONLY(StringList, characterOrder, CharacterOrder);
     CC_SYNTHESIZE_READONLY(CharacterDataList, characters, Characters);
     
 #pragma mark- Character Event

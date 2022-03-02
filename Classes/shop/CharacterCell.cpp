@@ -249,11 +249,15 @@ void CharacterCell::updateUnlockAmount() {
     string unlockIconFile;
     string unlockAmountStr;
     
+    auto getAmount = [=](int current) -> int {
+        return isUnlocked ? data.unlockAmount : current;
+    };
+    
     switch( data.unlockType ) {
         case CharacterUnlockType::SAUSAGE: {
             unlockIconFile = DIR_IMG_SHOP + "shop_icon_sausage.png";
             unlockAmountStr = STR_FORMAT("%d/%d",
-                                         MIN(StageManager::getStageStarTotalCount(), data.unlockAmount),
+                                         getAmount(StageManager::getStageStarTotalCount()),
                                          data.unlockAmount);
         } break;
 
@@ -262,7 +266,7 @@ void CharacterCell::updateUnlockAmount() {
             // World 4-18 color:197,0,0 size:52 Vec2TC(36, -135) , Size(232, 29)
             unlockIconFile = DIR_IMG_SHOP + "shop_icon_stage.png";
             unlockAmountStr = STR_FORMAT("WORLD %d-%d",
-                                         MIN(StageManager::getStage(data.unlockAmount).world, data.unlockAmount),
+                                         getAmount(StageManager::getWorld(data.unlockAmount)),
                                          data.unlockAmount);
         } break;
 
@@ -271,7 +275,7 @@ void CharacterCell::updateUnlockAmount() {
             // 3/10 color:197,0,0 size:52 Vec2TC(39, -135) , Size(96, 29)
             unlockIconFile = DIR_IMG_SHOP + "shop_icon_ad.png";
             unlockAmountStr = STR_FORMAT("%d/%d",
-                                         MIN(CHARACTER_MANAGER->getViewAdsCount(data.charId), data.unlockAmount),
+                                         getAmount(CHARACTER_MANAGER->getViewAdsCount(data.charId)),
                                          data.unlockAmount);
         } break;
             

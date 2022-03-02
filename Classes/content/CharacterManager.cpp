@@ -77,10 +77,20 @@ void CharacterManager::init() {
     
     // 패키지 json 파싱
     rapidjson::Document doc = SBJSON::parse(json);
+    
+    // character order
+    auto charOrder = doc["character_order"].GetArray();
+    
+    for( int i = 0; i < charOrder.Size(); ++i ) {
+        const rapidjson::Value &v = charOrder[i];
+        characterOrder.push_back(v.GetString());
+    }
+    
+    // characters
     auto charList = doc["characters"].GetArray();
     
-    for( int j = 0; j < charList.Size(); ++j ) {
-        const rapidjson::Value &charValue = charList[j];
+    for( int i = 0; i < charList.Size(); ++i ) {
+        const rapidjson::Value &charValue = charList[i];
         
         CharacterData character;
         character.charId = charValue["char_id"].GetString();

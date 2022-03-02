@@ -35,6 +35,7 @@ public:
     static StageDataList       getStages();
     static StageData           getStage(int stage);
     static StageData           getLastStage();
+    static int                 getWorld(int stage);
 
 private:
     StageDataList stages;
