@@ -65,15 +65,14 @@ void ExitAlertPopup::initContentView() {
     // bg
     popupBg = Sprite::create(DIR_IMG_COMMON + "common_bg_exit.png");
     popupBg->setAnchorPoint(ANCHOR_M);
-    popupBg->setPosition(Vec2MC(0, 0));
+    popupBg->setPosition(Vec2MC(0, 8));
     addContentChild(popupBg);
     
     // YES
-    // common_btn_yes.png Vec2MC(-88, -76) , Size(164, 98)
-    auto yesBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_yes.png");
+    auto yesBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_exit_yes.png");
     yesBtn->setZoomScale(ButtonZoomScale::NORMAL);
     yesBtn->setAnchorPoint(ANCHOR_M);
-    yesBtn->setPosition(Vec2MC(-88, -76));
+    yesBtn->setPosition(Vec2MC(-132, -56));
     addContentChild(yesBtn);
     
     yesBtn->setOnClickListener([=](Node*) {
@@ -83,11 +82,10 @@ void ExitAlertPopup::initContentView() {
     });
     
     // NO
-    // common_btn_nope.png Vec2MC(88, -76) , Size(164, 98)
-    auto noBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_nope.png");
+    auto noBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_exit_no.png");
     noBtn->setZoomScale(ButtonZoomScale::NORMAL);
     noBtn->setAnchorPoint(ANCHOR_M);
-    noBtn->setPosition(Vec2MC(88, -76));
+    noBtn->setPosition(Vec2MC(132, -56));
     addContentChild(noBtn);
     
     noBtn->setOnClickListener([=](Node*) {
