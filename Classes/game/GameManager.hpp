@@ -97,7 +97,7 @@ public:
     
     static void onStageChanged();
     static void onStageRestart();
-    static void onStageClear(bool isSkipped = false);
+    static void onStageClear();
     
     static void onMoveNextStage();
     static void onMoveNextStageFinished();

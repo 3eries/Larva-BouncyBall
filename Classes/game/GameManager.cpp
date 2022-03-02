@@ -391,7 +391,7 @@ void GameManager::onStageRestart() {
 /**
  * 스테이지 클리어
  */
-void GameManager::onStageClear(bool isSkipped) {
+void GameManager::onStageClear() {
     
     auto stage = instance->stage;
     Log::i("GameManager::onStageClear stage: %d", stage.stage);
@@ -424,9 +424,8 @@ void GameManager::onStageClear(bool isSkipped) {
         instance->unlockCharacters = unlockCharacters;
     });
     
-    if( !isSkipped ) {
-        dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);
-    }
+    instance->addState(GameState::RESULT);
+    dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);
 }
 
 /**

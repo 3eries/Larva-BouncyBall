@@ -95,7 +95,9 @@ bool GameScene::onApplicationEnterBackground() {
         return false;
     }
     
-    GameManager::onGamePause();
+    if( GAME_MANAGER->isPlaying() ) {
+        GameManager::onGamePause();
+    }
     
     return true;
 }
