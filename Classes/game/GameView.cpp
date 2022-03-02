@@ -606,6 +606,7 @@ void GameView::initBg() {
     
     // 스테이지 진행도
     stageProgressBar = StageProgressBar::create();
+    stageProgressBar->setVisible(false);
     addChild(stageProgressBar, ZOrder::MENU);
 }
 
