@@ -95,6 +95,7 @@ private:
     void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
                         PhysicsCategory category);
     void onContactFloor(Ball *ball);
+    void onContactClearPortal(GameTile *tile, bool isContactPortalBelowTile);
     
 private:
     CC_SYNTHESIZE_READONLY(b2World*, world, World);

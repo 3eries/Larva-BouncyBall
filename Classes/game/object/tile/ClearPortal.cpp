@@ -42,7 +42,7 @@ bool ClearPortal::init() {
     }
     
     // 충돌 잠금
-    setCollisionLocked(true);
+    // setCollisionLocked(true);
     
     return true;
 }

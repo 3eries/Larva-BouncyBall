@@ -61,7 +61,7 @@ void StageManager::parseStageFile() {
     
     CCLOG("========== STAGE PARSE START ==========");
     
-    for( int i = 0; i < 18; ++i ) {
+    for( int i = 0; i < 20; ++i ) {
         const auto STAGE = i+1;
         const auto STAGE_FILE = DIR_CONTENT_STAGE + STR_FORMAT("stage_%04d.tmx", STAGE);
         
@@ -81,23 +81,8 @@ void StageManager::parseStageFile() {
                                     stage.mapHeightTiles * tileSize.height);
         stage.tileSize = tileSize;
         
-        // 타일 정보
-//        {
-//            vector<vector<int>> tiles;
-//
-//            for( int x = 0; x < stage.mapWidthTiles; x++ ) {
-//                vector<int> heightTiles;
-//
-//                for( int y = 0; y < stage.mapHeightTiles; y++ ) {
-//                    heightTiles.push_back(0);
-//                }
-//
-//                tiles.push_back(heightTiles);
-//            }
-//        }
-        
         {
-            CCLOG("=== PARSED TILES HEAD ===");
+            CCLOG("=== PARSED TILES HEAD(%d) ===", STAGE);
             
             for( int y = 0; y < stage.mapHeightTiles; y++ ) {
                 string str = "";
@@ -112,7 +97,7 @@ void StageManager::parseStageFile() {
                 CCLOG("%s", str.c_str());
             }
             
-            CCLOG("=== PARSED TILES TAIL ===");
+            CCLOG("=== PARSED TILES TAIL(%d) ===", STAGE);
         }
         
         for( int x = 0; x < stage.mapWidthTiles; x++ ) {
@@ -140,7 +125,7 @@ void StageManager::parseStageFile() {
 
         {
             CCLOG("");
-            CCLOG("=== MY TILES HEAD ===");
+            CCLOG("=== MY TILES HEAD(%d) ===", STAGE);
             
             for( int y = stage.mapHeightTiles-1; y >= 0; y-- ) {
                 string str = "";
@@ -153,7 +138,7 @@ void StageManager::parseStageFile() {
                 CCLOG("%s", str.c_str());
             }
             
-            CCLOG("=== MY TILES TAIL ===");
+            CCLOG("=== MY TILES TAIL(%d) ===", STAGE);
         }
         
         stages.push_back(stage);

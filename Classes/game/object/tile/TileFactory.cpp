@@ -24,6 +24,11 @@ PhysicsDef TileFactory::createPhysicsDef(const TileData &data) {
         case TileId::BLOCK_DEATH: {
             tileSize.width *= 0.5f;
         } break;
+            
+        case TileId::BLOCK_DEATH_4D: {
+            tileSize.width *= 0.5f;
+            tileSize.height *= 0.5f;
+        } break;
         
         default: break;
     }

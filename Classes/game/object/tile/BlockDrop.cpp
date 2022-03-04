@@ -44,6 +44,7 @@ void BlockDrop::dropEffect() {
     pos = getParent()->convertToNodeSpace(pos);
     
     auto effectImg = Sprite::createWithTexture(image->getTexture());
+    effectImg->setScale(image->getScale());
     effectImg->setAnchorPoint(ANCHOR_M);
     effectImg->setPosition(pos);
     getParent()->addChild(effectImg, getLocalZOrder());

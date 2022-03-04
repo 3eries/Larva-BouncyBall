@@ -25,13 +25,13 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define SCHEDULER_UPDATE_CAMERA             "UPDATE_CAMERA"
-#define TOUCH_TAP_DURATION                  0.1f            // 터치 탭 판정 시간
+#define SCHEDULER_UPDATE_CAMERA                     "UPDATE_CAMERA"
+#define SCHEDULER_BALL_STOP_HORIZONTAL              "BALL_STOP_HORIZONTAL"
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
 #define DEBUG_DRAW_PHYSICS                  1
 #else
-#define DEBUG_DRAW_PHYSICS                  0
+#define DEBUG_DRAW_PHYSICS                  1
 #endif // COCOS2D_DEBUG == 1
 
 GameView::GameView(): SBPhysicsObject(this),
@@ -287,6 +287,8 @@ void GameView::onTouchBegan(Touch *touch) {
         return;
     }
     
+    unschedule(SCHEDULER_BALL_STOP_HORIZONTAL);
+    
     touches.pushBack(touch);
     
     ball->setDirection(touch);
@@ -297,7 +299,9 @@ void GameView::onTouchEnded(Touch *touch) {
     touches.eraseObject(touch, true);
     
     if( touches.size() == 0 ) {
-        ball->stopHorizontal();
+        scheduleOnce([=](float dt) {
+            ball->stopHorizontal();
+        }, 0.05f, SCHEDULER_BALL_STOP_HORIZONTAL);
     } else {
         ball->setDirection(touches.at(touches.size()-1));
     }
@@ -312,10 +316,21 @@ void GameView::onContactFlag(Ball *ball, GameTile *tile) {
     
     auto flag = dynamic_cast<Flag*>(tile);
     
-    // 충돌 처리
     switch( flag->getData().tileId ) {
-        // Stage Clear
+        // 클리어 포털
         case TileId::FLAG_CLEAR_PORTAL: {
+            auto portal = dynamic_cast<ClearPortal*>(flag);
+            
+            // 웨이브 상태에서 클리어 포털과 충돌하는지 체크
+            if( portal->isOpened() && ball->hasState(Ball::State::WAVE) ) {
+                auto portalBox = SB_BOUNDING_BOX_IN_WORLD(portal);
+                auto characterBox = SB_BOUNDING_BOX_IN_WORLD(ball);
+                
+                // 클리어 포털 중점이 캐릭터 박스에 포함되면 클리어
+                if( characterBox.containsPoint(Vec2(portalBox.getMidX(), portalBox.getMidY())) ) {
+                    onContactClearPortal(portal, false);
+                }
+            }
         } break;
             
         default: break;
@@ -356,7 +371,7 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
 }
 
 /**
- * 볼 & 브릭 충돌
+ * 볼 & 블럭 충돌
  */
 void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, PhysicsCategory category) {
     
@@ -372,19 +387,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                 auto portalBelowTile = getTile(portal->getData().p + Vec2(0,-1));
                 
                 if( portal->isOpened() && portalBelowTile == block ) {
-                    ball->setCollisionLocked(true);
-                    ball->setSyncLocked(true);
-                    
-                    auto portalBox = SBNodeUtils::getBoundingBoxInWorld(portal);
-                    ball->setPositionY(portalBox.getMinY() + ball->getContentSize().height*0.5f);
-                    
-                    SBDirector::postDelayed(this, [=]() {
-                        auto fadeOut = FadeOut::create(0.3f);
-                        auto callFunc = CallFunc::create([=]() {
-                            GameManager::onStageClear();
-                        });
-                        ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
-                    }, 0.2f);
+                    onContactClearPortal(portal, true);
                 }
             }
         } break;
@@ -401,19 +404,32 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
         } break;
         
         // 데스 블럭
-        case TileId::BLOCK_DEATH: {
-            if( category == PhysicsCategory::BLOCK_TOP ||
-                category == PhysicsCategory::BLOCK_SIDE ) {
-                ball->setCollisionLocked(true);
-                ball->setSyncLocked(true);
-                
-                if( category == PhysicsCategory::BLOCK_TOP ) {
-                    ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
+        case TileId::BLOCK_DEATH:
+        case TileId::BLOCK_DEATH_4D: {
+            vector<PhysicsCategory> checkCategorys({
+                PhysicsCategory::BLOCK_TOP,
+                PhysicsCategory::BLOCK_SIDE,
+            });
+            
+            if( block->getData().tileId == TileId::BLOCK_DEATH_4D ) {
+                checkCategorys.push_back(PhysicsCategory::BLOCK_BOTTOM);
+            }
+            
+            for( auto checkCategory : checkCategorys ) {
+                if( category == checkCategory ) {
+                    ball->setCollisionLocked(true);
+                    ball->setSyncLocked(true);
+                    
+                    if( category == PhysicsCategory::BLOCK_TOP ) {
+                        ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
+                    }
+                    
+                    SBDirector::postDelayed(this, [=]() {
+                        GameManager::onGameOver(GameOverType::DEATH_BLOCK);
+                    }, 0.2f);
+                    
+                    break;
                 }
-                
-                SBDirector::postDelayed(this, [=]() {
-                    GameManager::onGameOver(GameOverType::DEATH_BLOCK);
-                }, 0.2f);
             }
         } break;
             
@@ -425,6 +441,9 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
     }
 }
 
+/**
+ * 볼 & 바닥 충돌
+ */
 void GameView::onContactFloor(Ball *ball) {
     
     ball->setCollisionLocked(true);
@@ -433,6 +452,41 @@ void GameView::onContactFloor(Ball *ball) {
     SBDirector::postDelayed(this, [=]() {
         GameManager::onGameOver(GameOverType::FALL);
     }, 0.1f);
+}
+
+/**
+ * 볼 & 클리어 포털 충돌
+ */
+void GameView::onContactClearPortal(GameTile *tile, bool isContactPortalBelowTile) {
+    
+    auto portal = dynamic_cast<ClearPortal*>(tile);
+    
+    if( !portal->isOpened() ) {
+        return;
+    }
+    
+    if( ball->isCollisionLocked() ) {
+        // 클리어 중복 방지
+        return;
+    }
+    
+    ball->setCollisionLocked(true);
+    ball->setSyncLocked(true);
+    
+    isTouchEnabled = false;
+    
+    if( isContactPortalBelowTile ) {
+        auto portalBox = SBNodeUtils::getBoundingBoxInWorld(portal);
+        ball->setPositionY(portalBox.getMinY() + ball->getContentSize().height*0.5f);
+    }
+    
+    SBDirector::postDelayed(this, [=]() {
+        auto fadeOut = FadeOut::create(0.3f);
+        auto callFunc = CallFunc::create([=]() {
+            GameManager::onStageClear();
+        });
+        ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
+    }, 0.2f);
 }
 
 #pragma mark- Initialize
@@ -639,7 +693,10 @@ void GameView::initTiles() {
                 
             case TileId::BLOCK_NORMAL:
             case TileId::BLOCK_DEATH:
-            case TileId::BLOCK_JUMP: {
+            case TileId::BLOCK_DEATH_4D:
+            case TileId::BLOCK_JUMP:
+            case TileId::BLOCK_WAVE_RIGHT:
+            case TileId::BLOCK_WAVE_LEFT: {
                 tile = Block::create(tileData);
             } break;
                 

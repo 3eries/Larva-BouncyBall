@@ -31,7 +31,11 @@ enum class TileId {
     BLOCK_DROP_1        = 10101,       // 드랍 블럭
     BLOCK_DROP_2        = 10102,
     BLOCK_DEATH         = 10201,       // 데스 블럭
+    BLOCK_DEATH_4D      = 10251,       // 4D 데스 블럭
     BLOCK_JUMP          = 10301,       // 점프 블럭
+    BLOCK_WAVE_RIGHT    = 10351,       // 웨이브 블럭 (오른쪽)
+    BLOCK_WAVE_LEFT     = 10352,       // 웨이브 블럭 (왼쪽)
+    BLOCK_MOVE          = 10401,       // 무브 블럭
 };
 
 enum class TileType {
@@ -96,7 +100,10 @@ struct TileData {
                 case TileId::BLOCK_DROP_1:
                 case TileId::BLOCK_DROP_2:        return "BLOCK_DROP";
                 case TileId::BLOCK_DEATH:         return "BLOCK_DEATH";
+                case TileId::BLOCK_DEATH_4D:      return "BLOCK_DEATH_4D";
                 case TileId::BLOCK_JUMP:          return "BLOCK_JUMP";
+                case TileId::BLOCK_WAVE_RIGHT:    return "BLOCK_WAVE_RIGHT";
+                case TileId::BLOCK_WAVE_LEFT:     return "BLOCK_WAVE_LEFT";
                 default:                          return "";
             }
         };
