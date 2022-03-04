@@ -58,12 +58,16 @@ bool CharacterCell::init() {
     bg->setPosition(Vec2MC(getContentSize(), 0, 0));
     addChild(bg);
     
-    name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 80, Size::ZERO,
+    name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 65, Size::ZERO,
                                 TextHAlignment::CENTER, TextVAlignment::CENTER);
     name->setTextColor(Color4B(27,27,27,255));
     name->setAnchorPoint(ANCHOR_M);
     name->setPosition(Vec2TC(getContentSize(), -1, -53) + Vec2(0, -2));
     addChild(name);
+    
+    if( name->getContentSize().width > 350 ) {
+        name->setScale(350 / name->getContentSize().width);
+    }
     
     // 캐릭터 이미지
     image = superbomb::EffectSprite::create(ResourceHelper::getCharacterImage(data.charId));

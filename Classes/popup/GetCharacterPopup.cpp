@@ -214,12 +214,26 @@ void GetCharacterPopup::initContentView() {
     nameEffect->setPosition(Vec2MC(0, 188) + Vec2(0, -2));
     addContentChild(nameEffect);
     
+    // text size:72 color:255,255,0 Vec2MC(0, 192) , Size(374, 41)
+    // 캐릭터 이름
+    auto name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 72, Size::ZERO,
+                                     TextHAlignment::CENTER, TextVAlignment::CENTER);
+    name->setTextColor(Color4B(255,255,0,255));
+    name->setAnchorPoint(ANCHOR_M);
+    name->setPosition(Vec2MC(0, 192) + Vec2(0, -2));
+    addContentChild(name, 1);
+    
+    if( name->getContentSize().width > 358 ) {
+        name->setScale(358 / name->getContentSize().width);
+    }
+    
     // FIXME: 테두리 효과가 렌더링이 안되면 좌표 오차가 생겨서 스케줄러로 우회 해결
     schedule([=](float dt) {
         this->unschedule("NAME_EFFECT");
     
         auto nameEffect2 = Label::createWithTTF(data.name, FONT_SUPER_STAR, 72, Size::ZERO,
                                                TextHAlignment::CENTER, TextVAlignment::CENTER);
+        nameEffect2->setScale(name->getScale());
         nameEffect2->setTextColor(nameEffect->getTextColor());
         nameEffect2->enableOutline(Color4B(91,0,155,255), 8);
         nameEffect2->setAnchorPoint(nameEffect->getAnchorPoint());
@@ -229,15 +243,6 @@ void GetCharacterPopup::initContentView() {
         nameEffect->removeFromParent();
         
     }, "NAME_EFFECT");
-    
-    // text size:72 color:255,255,0 Vec2MC(0, 192) , Size(374, 41)
-    // 캐릭터 이름
-    auto name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 72, Size::ZERO,
-                                     TextHAlignment::CENTER, TextVAlignment::CENTER);
-    name->setTextColor(Color4B(255,255,0,255));
-    name->setAnchorPoint(ANCHOR_M);
-    name->setPosition(Vec2MC(0, 192) + Vec2(0, -2));
-    addContentChild(name, 1);
     
     // red Vec2MC(0, -100) , Size(184, 216)
     auto image = Sprite::create(ResourceHelper::getCharacterImage(data.charId));
