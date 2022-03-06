@@ -597,7 +597,8 @@ void GameView::initPhysics() {
     // toggle button
     auto toggleBtn = GameUIHelper::createFontButton("DebugDraw", Size(300,200));
     toggleBtn->setAnchorPoint(ANCHOR_TL);
-    toggleBtn->setPosition(Vec2TL(10, 10));
+    toggleBtn->setPosition(Vec2TL(10, -100));
+    toggleBtn->setOpacity(255*0.3f);
     addChild(toggleBtn, SBZOrder::MIDDLE);
     
     toggleBtn->setOnClickListener([=](Node*) {
@@ -660,7 +661,6 @@ void GameView::initBg() {
     
     // 스테이지 진행도
     stageProgressBar = StageProgressBar::create();
-    stageProgressBar->setVisible(false);
     addChild(stageProgressBar, ZOrder::MENU);
 }
 

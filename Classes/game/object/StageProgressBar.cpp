@@ -39,13 +39,13 @@ void StageProgressBar::initUI() {
     
     auto starBg = Sprite::create(DIR_IMG_GAME + "game_ui_sausage_bg.png");
     starBg->setAnchorPoint(ANCHOR_M);
-    starBg->setPosition(Vec2TC(0, -76));
+    starBg->setPosition(Vec2TL(68, -36));
     addChild(starBg);
     
     Vec2 pos[] = {
-        Vec2TC(-106, -72),
-        Vec2TC(2, -72),
-        Vec2TC(110, -72),
+        Vec2MC(starBg->getContentSize(), -32, 0),
+        Vec2MC(starBg->getContentSize(), 0, 0),
+        Vec2MC(starBg->getContentSize(), 32, 0),
     };
     
     for( int i = 0; i < 3; ++i ) {
@@ -53,7 +53,7 @@ void StageProgressBar::initUI() {
         star->setVisible(false);
         star->setAnchorPoint(ANCHOR_M);
         star->setPosition(pos[i]);
-        addChild(star);
+        starBg->addChild(star);
         
         stars.push_back(star);
     }
