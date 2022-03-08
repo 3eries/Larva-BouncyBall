@@ -30,7 +30,7 @@ public:
     
 protected:
     Effect();
-    bool init(const std::string &fragmentFilename);
+    virtual bool init(const std::string &fragmentFilename);
     
 protected:
     CC_SYNTHESIZE_READONLY(cocos2d::GLProgramState*, glprogramstate, GLProgramState);
@@ -39,6 +39,30 @@ protected:
     std::string _fragSource;
     cocos2d::EventListenerCustom* _backgroundListener;
 #endif
+};
+
+class EffectOutline: public Effect {
+public:
+    static EffectOutline* create(const std::string &fragmentFilename,
+                                 const cocos2d::Vec3 &color, GLfloat radius, GLfloat threshold);
+    virtual ~EffectOutline() {};
+
+protected:
+    EffectOutline();
+    virtual bool init(const std::string &fragmentFilename,
+                      const cocos2d::Vec3 &color, GLfloat radius, GLfloat threshold);
+};
+
+class EffectOutline2: public Effect {
+public:
+    static EffectOutline2* create(const std::string &fragmentFilename,
+                                  const cocos2d::Vec3 &color, GLint thickness, cocos2d::Size size);
+    virtual ~EffectOutline2() {};
+
+protected:
+    EffectOutline2();
+    virtual bool init(const std::string &fragmentFilename,
+                      const cocos2d::Vec3 &color, GLint thickness, cocos2d::Size size);
 };
 
 #pragma mark- EffectSprite

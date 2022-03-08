@@ -75,7 +75,14 @@ void GameTile::initImage() {
     addChild(image);
     
     if( files.size() > 1 ) {
-        float interval = (files.size() == 2) ? 0.8f : 0.15f;
+        float interval = 0;
+        
+        switch( data.tileId ) {
+            case TileId::FLAG_START:            interval = 0.15f;        break;
+            case TileId::ITEM_DOUBLE_JUMP:      interval = 0.5f;         break;
+            case TileId::BLOCK_DEATH:           interval = 0.8f;         break;
+            default:                            interval = 0.5f;         break;
+        }
         
         auto animate = Animate::create(SBNodeUtils::createAnimation(files, interval));
         image->runAction(RepeatForever::create(animate));

@@ -72,6 +72,69 @@ bool Effect::init(const string &fragmentFilename)
     return glprogramstate != nullptr;
 }
 
+EffectOutline* EffectOutline::create(const string &fragmentFilename,
+                                     const Vec3 &color, GLfloat radius, GLfloat threshold) {
+    
+    auto effect = new (nothrow)EffectOutline();
+    
+    if( effect && effect->init(fragmentFilename, color, radius, threshold) ) {
+        effect->autorelease();
+        return effect;
+    }
+    
+    delete effect;
+    return nullptr;
+}
+
+EffectOutline::EffectOutline(): Effect() {
+}
+
+bool EffectOutline::init(const string &fragmentFilename,
+                         const Vec3 &color, GLfloat radius, GLfloat threshold) {
+    
+    if( !Effect::init(fragmentFilename) ) {
+        return false;
+    }
+    
+    glprogramstate->setUniformVec3("u_outlineColor", color);
+    glprogramstate->setUniformFloat("u_radius", radius);
+    glprogramstate->setUniformFloat("u_threshold", threshold);
+    
+    return true;
+}
+
+// EffectOutline2
+EffectOutline2* EffectOutline2::create(const string &fragmentFilename,
+                                       const Vec3 &color, GLint thickness, cocos2d::Size size) {
+    
+    auto effect = new (nothrow)EffectOutline2();
+    
+    if( effect && effect->init(fragmentFilename, color, thickness, size) ) {
+        effect->autorelease();
+        return effect;
+    }
+    
+    delete effect;
+    return nullptr;
+}
+
+EffectOutline2::EffectOutline2(): Effect() {
+}
+
+bool EffectOutline2::init(const string &fragmentFilename,
+                          const Vec3 &color, GLint thickness, cocos2d::Size size) {
+    
+    if( !Effect::init(fragmentFilename) ) {
+        return false;
+    }
+    
+    glprogramstate->setUniformVec3("u_outlineColor", color);
+    glprogramstate->setUniformInt("u_thickness", thickness);
+    glprogramstate->setUniformVec2("u_resolution", size);
+    
+    return true;
+}
+
 #pragma mark- EffectSprite
 
 EffectSprite* EffectSprite::create(const string &filename) {

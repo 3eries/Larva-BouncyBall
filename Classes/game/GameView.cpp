@@ -28,6 +28,9 @@ using namespace std;
 #define SCHEDULER_UPDATE_CAMERA                     "UPDATE_CAMERA"
 #define SCHEDULER_BALL_STOP_HORIZONTAL              "BALL_STOP_HORIZONTAL"
 
+#define TAP_INTERVAL                                (0.35f / 2) // 탭 판단 시간
+#define TAP_DIST                                    100         // 탭 판단 거리
+
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
 #define DEBUG_DRAW_PHYSICS                  1
 #else
@@ -35,7 +38,8 @@ using namespace std;
 #endif // COCOS2D_DEBUG == 1
 
 GameView::GameView(): SBPhysicsObject(this),
-isTouchEnabled(false) {
+isTouchEnabled(false),
+tapCount(0) {
 }
 
 GameView::~GameView() {
@@ -292,19 +296,86 @@ void GameView::onTouchBegan(Touch *touch) {
     touches.pushBack(touch);
     
     ball->setDirection(touch);
+    
+    // 탭 체크
+    if( touch->getID() == 0 ) {
+        // 첫번째 탭 터치 시작
+        if( tapCount == 0 ) {
+            firstTap.setTouchBegan(touch->getLocation());
+        }
+        // 두번째 탭 터치 시작
+        else if( tapCount == 1 ) {
+            secondTap.setTouchBegan(touch->getLocation());
+            
+            // 첫번째 탭과 이어지는지 체크
+            if( !isTap(firstTap.p2, secondTap.p1, firstTap.t2, secondTap.t1) ) {
+                CCLOG("첫번째 탭 재시작!");
+                // 첫번째 탭으로 변경
+                tapCount = 0;
+                firstTap = secondTap;
+            }
+        }
+        else {
+            CCASSERT(false, "GameView::onTouchBegan tap count error.");
+        }
+    }
 }
 
 void GameView::onTouchEnded(Touch *touch) {
     
     touches.eraseObject(touch, true);
     
+    // 탭 체크
+    bool isDoubleJump = false;
+    
+    if( touch->getID() == 0 ) {
+        // 첫번째 탭 터치 종료
+        if( tapCount == 0 ) {
+            firstTap.setTouchEnded(touch->getLocation());
+            
+            if( isTap(firstTap.p1, firstTap.p2, firstTap.t1, firstTap.t2) ) {
+                CCLOG("첫번째 탭!");
+                tapCount++;
+            }
+        }
+        // 두번째 탭 터치 종료
+        else if( tapCount == 1 ) {
+            secondTap.setTouchEnded(touch->getLocation());
+            
+            if( isTap(secondTap.p1, secondTap.p2, secondTap.t1, secondTap.t2) ) {
+                CCLOG("두번째 탭!");
+                tapCount++;
+            } else {
+                CCLOG("두번째 탭 취소!");
+                tapCount = 0;
+            }
+        }
+        else {
+            CCASSERT(false, "GameView::onTouchEnded tap count error.");
+        }
+        
+        if( tapCount == 2 ) {
+            tapCount = 0;
+            
+            // 더블 점프
+            if( ball->hasState(Ball::State::DOUBLE_JUMP_READY) ) {
+                isDoubleJump = true;
+                ball->doubleJumpStart();
+            }
+        }
+    }
+    
     if( touches.size() == 0 ) {
         scheduleOnce([=](float dt) {
             ball->stopHorizontal();
-        }, 0.05f, SCHEDULER_BALL_STOP_HORIZONTAL);
+        }, 0.1f, SCHEDULER_BALL_STOP_HORIZONTAL);
     } else {
         ball->setDirection(touches.at(touches.size()-1));
     }
+}
+
+bool GameView::isTap(const Vec2 &p1, const Vec2 &p2, double t1, double t2) {
+    return t2 - t1 <= TAP_INTERVAL && p2.getDistance(p1) <= TAP_DIST;
 }
 
 #pragma mark- Physics Event
@@ -347,7 +418,6 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
     // 아이템 삭제
     removeTile(item);
     
-    // 충돌 처리
     switch( item->getData().tileId ) {
         // 소시지
         case TileId::ITEM_SAUSAGE: {
@@ -595,9 +665,9 @@ void GameView::initPhysics() {
     minVelocity = Vec2(INT_MAX, INT_MAX);
     
     // toggle button
-    auto toggleBtn = GameUIHelper::createFontButton("DebugDraw", Size(300,200));
+    auto toggleBtn = GameUIHelper::createFontButton("DebugDraw", Size(300,180));
     toggleBtn->setAnchorPoint(ANCHOR_TL);
-    toggleBtn->setPosition(Vec2TL(10, -100));
+    toggleBtn->setPosition(Vec2TL(10, -40));
     toggleBtn->setOpacity(255*0.3f);
     addChild(toggleBtn, SBZOrder::MIDDLE);
     

@@ -13,23 +13,26 @@
 #include "../GameManager.hpp"
 #include "../GameView.hpp"
 
+#include "tile/Item.hpp"
 #include "tile/Block.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define VELOCITY_BOUNCE_UP                     (22 * GAME_MANAGER->getMapScaleFactor())
-#define VELOCITY_JUMP_UP                       (37 * GAME_MANAGER->getMapScaleFactor())
-#define VELOCITY_BOUNCE_DOWN                   (-15 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_BOUNCE_UP                     (22 * GAME_MANAGER->getMapScaleFactor())     // 1.3B
+// #define VELOCITY_BOUNCE_UP                     (13 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_JUMP_UP                       (37 * GAME_MANAGER->getMapScaleFactor())     // 3.25B
 
-#define VELOCITY_MOVE_LEFT                     (-13 * GAME_MANAGER->getMapScaleFactor())
-#define VELOCITY_MOVE_RIGHT                    (13 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_MOVE_LEFT                     (-13 * GAME_MANAGER->getMapScaleFactor())    // 2.5B
+#define VELOCITY_MOVE_RIGHT                    (13 * GAME_MANAGER->getMapScaleFactor())     // 2.5B
+
+#define VELOCITY_DOUBLE_JUMP_LEFT              (-16 * GAME_MANAGER->getMapScaleFactor())    // 3B
+#define VELOCITY_DOUBLE_JUMP_RIGHT             (16 * GAME_MANAGER->getMapScaleFactor())     // 3B
+#define VELOCITY_DOUBLE_JUMP_UP                (3 * GAME_MANAGER->getMapScaleFactor())      // +0.3B
 
 #define VELOCITY_WAVE_MOVE_LEFT                (-30 * GAME_MANAGER->getMapScaleFactor())
 #define VELOCITY_WAVE_MOVE_RIGHT               (30 * GAME_MANAGER->getMapScaleFactor())
-
-#define BOUNCE_DOWN_DELAY                      0.5f
 
 #define SCHEDULER_HORIZONTAL_MOVE              "SCHEDULER_HORIZONTAL_MOVE"          // 수평 이동
 #define SCHEDULER_HORIZONTAL_MOVE_LOCKED       "SCHEDULER_HORIZONTAL_MOVE_LOCKED"   // 수평 이동 잠금
@@ -99,19 +102,38 @@ void Ball::initImage() {
     image->setPosition(Vec2BC(getContentSize(), 0, 0));
     addChild(image);
     
-    /*
-    auto outline = superbomb::EffectSprite::create(image->getTexture());
-    outline->setScale(image->getScale());
-    outline->setAnchorPoint(image->getAnchorPoint());
-    outline->setPosition(image->getPosition());
-    addChild(outline);
+    // 더블 점프 효과에 필요한 아웃라인 이미지 생성
+    const int OUTLINE_PIXEL = 4;
     
-    Vec3 color(0 / 255.0f, 255 / 255.0f, 255 / 255.0f);
-    GLfloat radius = 0.01f;
-    GLfloat threshold = 1.75;
+    auto createTexture = [=]() -> cocos2d::Texture2D* {
+      
+        auto img = Sprite::createWithTexture(image->getTexture());
+        img->setAnchorPoint(ANCHOR_MB);
+        img->setPosition(Vec2BC(img->getContentSize(), 0, OUTLINE_PIXEL));
+        
+        auto rt = RenderTexture::create(img->getContentSize().width,
+                                        img->getContentSize().height + OUTLINE_PIXEL);
+        rt->begin();
+        img->visit();
+        rt->end();
+        
+        return rt->getSprite()->getTexture();
+    };
     
-    outline->setEffect(EffectOutline::create("shaders/example_Outline.fsh", color, radius, threshold));
-    */
+    outlineImage = superbomb::EffectSprite::create(createTexture());
+    outlineImage->setVisible(false);
+    outlineImage->setFlippedY(true); // for RenderTexture
+    outlineImage->setAnchorPoint(ANCHOR_M);
+    outlineImage->setPosition(Vec2MC(image->getContentSize(), 0, 0));
+    image->addChild(outlineImage);
+
+    Vec3 color(0, 255, 255);
+    color = color / 255.0f;
+
+    GLfloat radius = OUTLINE_PIXEL / 255.0f;
+    GLfloat threshold = 1;
+
+    outlineImage->setEffect(EffectOutline::create("shaders/example_Outline.fsh", color, radius, threshold));
 }
 
 /**
@@ -124,7 +146,7 @@ void Ball::initPhysics() {
     listener->setTarget(this);
     listener->setContactTarget(this);
     listener->onContactBlock        = CC_CALLBACK_4(Ball::onContactBlock, this);
-//    listener->onContactItem         = CC_CALLBACK_2(Ball::onContactItem, this);
+    listener->onContactItem         = CC_CALLBACK_2(Ball::onContactItem, this);
 //    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
     PHYSICS_MANAGER->addListener(listener);
     
@@ -211,6 +233,7 @@ void Ball::setImageDirection(BallDirection direction) {
     
     if( direction != BallDirection::NONE ) {
         image->setFlippedX(direction == BallDirection::LEFT);
+        outlineImage->setFlippedX(image->isFlippedX());
     }
 }
 
@@ -248,11 +271,9 @@ void Ball::moveHorizontal(float dt) {
         return;
     }
     
-    CCLOG("Ball::moveHorizontal: %d", hasState(State::WAVE));
-    
     // 웨이브 상태 체크
     if( hasState(State::WAVE) ) {
-        onWaveEnd(false);
+        waveEnd(false);
         return;
     }
     
@@ -268,15 +289,17 @@ void Ball::moveHorizontal(float dt) {
  * 수평 이동 잠금
  * @param duration 잠금 시간
  */
-void Ball::moveHorizontalLock(float duration) {
+void Ball::moveHorizontalLock(float duration, bool infinity) {
     
     moveHorizontalUnlock();
     
     horizontalMoveLocked = true;
     
-    schedule([=](float dt) {
-        this->moveHorizontalUnlock();
-    }, duration, SCHEDULER_HORIZONTAL_MOVE_LOCKED);
+    if( !infinity ) {
+        schedule([=](float dt) {
+            this->moveHorizontalUnlock();
+        }, duration, SCHEDULER_HORIZONTAL_MOVE_LOCKED);
+    }
 }
 
 /**
@@ -304,9 +327,46 @@ void Ball::stopHorizontal() {
 }
 
 /**
+ * 더블 점프 시작
+ */
+void Ball::doubleJumpStart() {
+    
+    removeState(State::DOUBLE_JUMP_READY);
+    addState(State::DOUBLE_JUMP);
+    
+    // 아웃 라인 제거
+    outlineImage->setVisible(false);
+    
+    // 가속도 잠금
+    velocityLocked = true;
+    moveHorizontalLock(0, true);
+    
+    // 가속도 강제 변경
+    setLinearVelocityX(isLeftDirection() ? VELOCITY_DOUBLE_JUMP_LEFT : VELOCITY_DOUBLE_JUMP_RIGHT, true);
+    setLinearVelocityY(fabsf(getLinearVelocityY()) + VELOCITY_DOUBLE_JUMP_UP, true);
+}
+
+/**
+ * 더블 점프 종료
+ */
+void Ball::doubleJumpEnd() {
+    
+    removeState(State::DOUBLE_JUMP);
+    
+    velocityLocked = false;
+    moveHorizontalUnlock();
+    
+    if( direction == BallDirection::NONE ) {
+        setLinearVelocityX(0);
+    } else {
+        moveHorizontal(0);
+    }
+}
+
+/**
  * 웨이브 시작
  */
-void Ball::onWaveStart(Block *block) {
+void Ball::waveStart(Block *block) {
 
     bool isLeft = (block->getData().tileId == TileId::BLOCK_WAVE_LEFT);
     setImageDirection(isLeft ? BallDirection::LEFT : BallDirection::RIGHT);
@@ -339,17 +399,19 @@ void Ball::onWaveStart(Block *block) {
     }, SCHEDULER);
     
     // 수평 이동 잠금
-    moveHorizontalLock(0.1f);
+    const float horizontalLockDuration = 0.1f;
+    
+    moveHorizontalLock(horizontalLockDuration);
     
     SBDirector::postDelayed(this, [=] {
         this->updateImageDirection();
-    }, 0.1f, false);
+    }, horizontalLockDuration, false);
 }
 
 /**
  * 웨이브 종료
  */
-void Ball::onWaveEnd(bool isContactBlock) {
+void Ball::waveEnd(bool isContactBlock) {
     
     CCLOG("Ball::onWaveEnd: %s", isContactBlock ? "contact block" : "touch");
     
@@ -395,6 +457,26 @@ void Ball::onWaveEnd(bool isContactBlock) {
 }
 
 /**
+ * 볼 <-> 아이템 충돌
+ */
+void Ball::onContactItem(Ball *ball, GameTile *tile) {
+    
+    auto item = dynamic_cast<Item*>(tile);
+   
+    switch( item->getData().tileId ) {
+        // 더블 점프
+        case TileId::ITEM_DOUBLE_JUMP: {
+            addState(State::DOUBLE_JUMP_READY);
+            
+            // 아웃 라인 생성
+            outlineImage->setVisible(true);
+        } break;
+            
+        default: break;
+    }
+}
+
+/**
  * 볼 <-> 블럭 충돌
  */
 void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, PhysicsCategory category) {
@@ -406,9 +488,13 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
     
     auto block = (Block*)tile;
     
-    // 웨이브 진행중에 블럭과 충돌 시 웨이브 상태 제거
+    // 웨이브 종료
     if( hasState(State::WAVE) ) {
-        onWaveEnd(true);
+        waveEnd(true);
+    }
+    // 더블 점프 종료
+    else if( hasState(State::DOUBLE_JUMP) ) {
+        doubleJumpEnd();
     }
     
     switch( category ) {
@@ -441,7 +527,7 @@ void Ball::onContactBlockTop(Block *block) {
         // 웨이브 블럭
         case TileId::BLOCK_WAVE_RIGHT:
         case TileId::BLOCK_WAVE_LEFT: {
-            onWaveStart(block);
+            waveStart(block);
         } break;
             
         // 기본 점프
@@ -509,9 +595,11 @@ void Ball::setLinearVelocityY(float y, bool force) {
 void Ball::setLinearVelocityWithAction(float duration, float from, float to,
                                        bool isHorizontal) {
     
+    stopActionByTag(ActionTag::VELOCITY);
+    
     velocityLocked = true;
     
-    auto action = ActionFloat::create(duration, from, to, [=](float v) {
+    auto valueChanged = ActionFloat::create(duration, from, to, [=](float v) {
         if( isHorizontal ) {
             this->setLinearVelocityX(v, true);
         } else {
@@ -521,7 +609,10 @@ void Ball::setLinearVelocityWithAction(float duration, float from, float to,
     auto callFunc = CallFunc::create([=]() {
         velocityLocked = false;
     });
-    runAction(Sequence::create(action, callFunc, nullptr));
+    
+    auto action = Sequence::create(valueChanged, callFunc, nullptr);
+    action->setTag(ActionTag::VELOCITY);
+    runAction(action);
 }
 
 float Ball::getLinearVelocityX() {

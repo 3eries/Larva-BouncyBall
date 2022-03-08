@@ -20,6 +20,11 @@ PhysicsDef TileFactory::createPhysicsDef(const TileData &data) {
         case TileId::ITEM_SAUSAGE: {
             tileSize.width *= 0.7f;
         } break;
+        
+        case TileId::ITEM_DOUBLE_JUMP: {
+            tileSize.width *= 0.7f;
+            tileSize.height *= 0.7f;
+        } break;
             
         case TileId::BLOCK_DEATH: {
             tileSize.width *= 0.5f;

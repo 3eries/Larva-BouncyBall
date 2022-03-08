@@ -21,9 +21,14 @@ class Block;
 class Ball: public cocos2d::Node, public SBPhysicsObject {
 public:
     enum State {
-        NONE            = (1 << 0),
-        DOUBLE_JUMP     = (1 << 1),     // 더블 점프
-        WAVE            = (1 << 2),     // 웨이브 진행중
+        NONE                  = (1 << 0),
+        DOUBLE_JUMP_READY     = (1 << 1),     // 더블 점프 대기
+        DOUBLE_JUMP           = (1 << 2),     // 더블 점프 발동됨
+        WAVE                  = (1 << 3),     // 웨이브 진행중
+    };
+    
+    enum ActionTag {
+        VELOCITY = 10,
     };
     
 public:
@@ -56,17 +61,22 @@ public:
     
     void            setDirection(BallDirection direction);
     void            setDirection(cocos2d::Touch *touch);
+    bool            isLeftDirection() { return direction == BallDirection::LEFT; }
     
     void            moveHorizontal(float dt);
-    void            moveHorizontalLock(float duration);
+    void            moveHorizontalLock(float duration, bool infinity = false);
     void            moveHorizontalUnlock();
     void            stopHorizontal();
     
 public:
-    void            onWaveStart(Block *block);
-    void            onWaveEnd(bool isContactBlock);
+    void            doubleJumpStart();
+    void            doubleJumpEnd();
+    
+    void            waveStart(Block *block);
+    void            waveEnd(bool isContactBlock);
     
 public:
+    virtual void onContactItem(Ball *ball, GameTile *tile);
     virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
                                 PhysicsCategory category);
     virtual void onContactBlockTop(Block *block);
@@ -77,6 +87,7 @@ protected:
     StageData stage;
     
     cocos2d::Sprite *image;
+    superbomb::EffectSprite *outlineImage;
     
     CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
 

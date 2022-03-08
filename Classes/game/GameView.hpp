@@ -79,24 +79,6 @@ public:
     GameTile*              getTile(const TilePosition &p);
     std::vector<GameTile*> getTiles(const TileId &tileId);
     
-#pragma mark- Touch Event
-private:
-    void onTouchBegan(cocos2d::Touch *touch);
-    void onTouchEnded(cocos2d::Touch *touch);
-    
-private:
-    bool isTouchEnabled;
-    cocos2d::Vector<cocos2d::Touch*> touches;
-    
-#pragma mark- Contact
-private:
-    void onContactFlag(Ball *ball, GameTile *tile);
-    void onContactItem(Ball *ball, GameTile *tile);
-    void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
-                        PhysicsCategory category);
-    void onContactFloor(Ball *ball);
-    void onContactClearPortal(GameTile *tile, bool isContactPortalBelowTile);
-    
 private:
     CC_SYNTHESIZE_READONLY(b2World*, world, World);
     Ball *ball;
@@ -116,6 +98,46 @@ private:
     
     cocos2d::Vec2 maxVelocity;
     cocos2d::Vec2 minVelocity;
+    
+#pragma mark- Touch Event
+private:
+    void onTouchBegan(cocos2d::Touch *touch);
+    void onTouchEnded(cocos2d::Touch *touch);
+    bool isTap(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, double t1, double t2);
+    
+private:
+    bool isTouchEnabled;
+    cocos2d::Vector<cocos2d::Touch*> touches;
+    
+    struct TapInfo {
+        cocos2d::Vec2 p1;   // 터치 시작 좌표
+        cocos2d::Vec2 p2;   // 터치 종료 좌표
+        double t1;          // 터치 시작 시간
+        double t2;          // 터치 종료 시간
+        
+        void setTouchBegan(const cocos2d::Vec2 &p) {
+            p1 = p;
+            t1 = SBSystemUtils::getCurrentTimeSeconds();
+        }
+        
+        void setTouchEnded(const cocos2d::Vec2 &p) {
+            p2 = p;
+            t2 = SBSystemUtils::getCurrentTimeSeconds();
+        }
+    };
+    
+    int tapCount;
+    TapInfo firstTap;
+    TapInfo secondTap;
+    
+#pragma mark- Contact
+private:
+    void onContactFlag(Ball *ball, GameTile *tile);
+    void onContactItem(Ball *ball, GameTile *tile);
+    void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
+                        PhysicsCategory category);
+    void onContactFloor(Ball *ball);
+    void onContactClearPortal(GameTile *tile, bool isContactPortalBelowTile);
 };
 
 #endif /* GameView_hpp */

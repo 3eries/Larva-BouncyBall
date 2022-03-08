@@ -494,7 +494,7 @@ void PhysicsManager::dispatchOnContactFlag(Ball *ball, GameTile *flag) {
     auto copyListeners = listeners;
     
     for( auto listener : copyListeners ) {
-        if( listener->onContactItem ) {
+        if( listener->onContactFlag ) {
             auto contactTarget = listener->getContactTarget();
             
             if( contactTarget ) {
