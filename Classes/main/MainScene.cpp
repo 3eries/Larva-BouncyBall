@@ -256,7 +256,7 @@ void MainScene::initWorlds() {
     // pageView->setIndicatorIndexNodesScale(0.55f);
     pageView->setIndicatorIndexNodesColor(Color3B(0, 0, 0));
     pageView->setIndicatorIndexNodesOpacity(255*0.5f);
-    pageView->setIndicatorSelectedIndexColor(Color3B(39, 163, 255));
+    pageView->setIndicatorSelectedIndexColor(Color3B(29, 226, 255));
     pageView->setIndicatorSelectedIndexOpacity(255);
     pageView->setIndicatorSpaceBetweenIndexNodes(28);
     
