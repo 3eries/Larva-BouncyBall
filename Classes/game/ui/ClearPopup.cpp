@@ -138,6 +138,8 @@ void ClearPopup::initContentView() {
 
 void ClearPopup::runStarAnimation(int i) {
     
+    SBAudioEngine::playEffect(SOUND_GAME_CLEAR_STAR);
+    
     // 연출이 진행되는 동안 터치 방지
     SBDirector::getInstance()->setScreenTouchLocked(true);
     

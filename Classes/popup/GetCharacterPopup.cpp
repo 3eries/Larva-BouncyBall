@@ -101,7 +101,7 @@ void GetCharacterPopup::show(const CharacterDataList &characters) {
 //        powder->setAnimation(0, ANIM_NAME_RUN, true);
         
         // 효과음
-        SBAudioEngine::playEffect(DIR_SOUND + "fanfare.mp3");
+        SBAudioEngine::playEffect(SOUND_GET_CHARACTER);
     });
     
     // 배경 등장 연출

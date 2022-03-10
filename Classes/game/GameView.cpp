@@ -418,6 +418,9 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
             portal->setStar(star);
             
+            // 효과음
+            SBAudioEngine::playEffect(SOUND_SAUSAGE);
+            
             // 튜토리얼, 소시지 획득 시 오른쪽 터치로 변경
             if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_CONTROL ) {
                 tutorialAnimation->removeFromParent();
@@ -432,6 +435,9 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             
         // 더블 점프
         case TileId::ITEM_DOUBLE_JUMP: {
+            // 효과음
+            SBAudioEngine::playEffect(SOUND_DOUBLE_JUMP_GET);
+            
             // 튜토리얼, 물리 세계 일시정지
             if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP ) {
                 PHYSICS_MANAGER->pauseScheduler();
@@ -495,6 +501,8 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
             
             for( auto checkCategory : checkCategorys ) {
                 if( category == checkCategory ) {
+                    SBAudioEngine::playEffect(SOUND_GAME_OVER_DEATH_BLOCK);
+                    
                     ball->setCollisionLocked(true);
                     ball->setSyncLocked(true);
                     
@@ -523,6 +531,8 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
  * 볼 & 바닥 충돌
  */
 void GameView::onContactFloor(Ball *ball) {
+    
+    SBAudioEngine::playEffect(SOUND_GAME_OVER_FALL);
     
     ball->setCollisionLocked(true);
     ball->setSyncLocked(true);
@@ -559,6 +569,8 @@ void GameView::onContactClearPortal(GameTile *tile, bool isContactPortalBelowTil
     }
     
     SBDirector::postDelayed(this, [=]() {
+        SBAudioEngine::playEffect(SOUND_CLEAR_PORTAL);
+        
         auto fadeOut = FadeOut::create(0.3f);
         auto callFunc = CallFunc::create([=]() {
             GameManager::onStageClear();

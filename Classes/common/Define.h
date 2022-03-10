@@ -120,9 +120,17 @@ static const std::string DIR_SOUND                  = "sounds/";
 static const std::string SOUND_BGM_MAIN             = DIR_SOUND + "";
 static const std::string SOUND_BGM_GAME             = DIR_SOUND + "";
 
-static const std::string SOUND_BUTTON_CLICK         = DIR_SOUND + "effect_01.mp3";
-static const std::string SOUND_JUMP                 = DIR_SOUND + "effect_01.mp3";
-static const std::string SOUND_LEVEL_CLEAR          = DIR_SOUND + "effect_05.mp3";
+static const std::string SOUND_BUTTON_CLICK          = DIR_SOUND + "effect_01.mp3";
+static const std::string SOUND_GET_CHARACTER         = DIR_SOUND + "effect_02.mp3";
+static const std::string SOUND_GAME_CLEAR_STAR       = DIR_SOUND + "effect_03.mp3";
+static const std::string SOUND_JUMP                  = DIR_SOUND + "effect_05.mp3";
+static const std::string SOUND_SAUSAGE               = DIR_SOUND + "effect_06.mp3";
+static const std::string SOUND_WAVE                  = DIR_SOUND + "effect_08.mp3";
+static const std::string SOUND_DOUBLE_JUMP_GET       = DIR_SOUND + "effect_09.mp3";
+static const std::string SOUND_DOUBLE_JUMP           = DIR_SOUND + "effect_10.mp3";
+static const std::string SOUND_GAME_OVER_FALL        = DIR_SOUND + "effect_11.mp3";
+static const std::string SOUND_GAME_OVER_DEATH_BLOCK = DIR_SOUND + "effect_12.mp3";
+static const std::string SOUND_CLEAR_PORTAL          = DIR_SOUND + "effect_13.mp3";
 
 // 좌표 및 크기
 #define BANNER_HEIGHT           superbomb::AdsHelper::getBannerHeight()

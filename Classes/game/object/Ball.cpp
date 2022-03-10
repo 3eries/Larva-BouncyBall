@@ -331,8 +331,13 @@ void Ball::stopHorizontal() {
  */
 void Ball::doubleJumpStart() {
     
+    CCLOG("더블 점프!");
+    
     removeState(State::DOUBLE_JUMP_READY);
     addState(State::DOUBLE_JUMP);
+    
+    // 효과음
+    SBAudioEngine::playEffect(SOUND_DOUBLE_JUMP);
     
     // 아웃 라인 제거
     outlineImage->setVisible(false);
@@ -368,6 +373,8 @@ void Ball::doubleJumpEnd() {
  */
 void Ball::waveStart(Block *block) {
 
+    SBAudioEngine::playEffect(SOUND_WAVE);
+    
     bool isLeft = (block->getData().tileId == TileId::BLOCK_WAVE_LEFT);
     setImageDirection(isLeft ? BallDirection::LEFT : BallDirection::RIGHT);
     
@@ -509,14 +516,6 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
  */
 void Ball::onContactBlockTop(Block *block) {
     
-    // 효과음
-    double now = SBSystemUtils::getCurrentTimeSeconds();
-    
-    if( now - jumpEffectPlayedTime > 0.1f ) {
-        jumpEffectPlayedTime = now;
-        // SBAudioEngine::playEffect(SOUND_JUMP);
-    }
-    
     // 캐릭터 작용
     switch( block->getData().tileId ) {
         // 점프 블럭
@@ -533,6 +532,15 @@ void Ball::onContactBlockTop(Block *block) {
         // 기본 점프
         default: {
             setLinearVelocityY(VELOCITY_BOUNCE_UP);
+            
+            // 효과음
+            double now = SBSystemUtils::getCurrentTimeSeconds();
+            
+            if( now - jumpEffectPlayedTime > 0.1f ) {
+                jumpEffectPlayedTime = now;
+                SBAudioEngine::playEffect(SOUND_JUMP);
+            }
+            
         } break;
     }
     
