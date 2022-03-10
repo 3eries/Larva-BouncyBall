@@ -29,7 +29,7 @@ using namespace std;
 #define SCHEDULER_BALL_STOP_HORIZONTAL              "BALL_STOP_HORIZONTAL"
 
 #define TAP_INTERVAL                                (0.35f / 2) // 탭 판단 시간
-#define TAP_DIST                                    100         // 탭 판단 거리
+#define TAP_DIST                                    200         // 탭 판단 거리
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
 #define DEBUG_DRAW_PHYSICS                  1
@@ -38,6 +38,7 @@ using namespace std;
 #endif // COCOS2D_DEBUG == 1
 
 GameView::GameView(): SBPhysicsObject(this),
+tutorialAnimation(nullptr),
 isTouchEnabled(false),
 tapCount(0) {
 }
@@ -285,6 +286,8 @@ void GameView::onTouchBegan(Touch *touch) {
     
     ball->setDirection(touch);
     
+    CCLOG("터치 시작: %s", (ball->isLeftDirection() ? "LEFT" : "RIGHT"));
+    
     // 탭 체크
     if( touch->getID() == 0 ) {
         // 첫번째 탭 터치 시작
@@ -310,6 +313,8 @@ void GameView::onTouchBegan(Touch *touch) {
 }
 
 void GameView::onTouchEnded(Touch *touch) {
+    
+    CCLOG("터치 종료");
     
     touches.eraseObject(touch, true);
     
@@ -348,6 +353,15 @@ void GameView::onTouchEnded(Touch *touch) {
             // 더블 점프
             if( ball->hasState(Ball::State::DOUBLE_JUMP_READY) ) {
                 isDoubleJump = true;
+                
+                if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP && tutorialAnimation ) {
+                    ball->resume();
+                    PHYSICS_MANAGER->resumeScheduler();
+                    
+                    tutorialAnimation->removeFromParent();
+                    tutorialAnimation = nullptr;
+                }
+                
                 ball->doubleJumpStart();
             }
         }
@@ -440,7 +454,10 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             
             // 튜토리얼, 물리 세계 일시정지
             if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP ) {
-                PHYSICS_MANAGER->pauseScheduler();
+                SBDirector::postDelayed(this, [=]() {
+                    PHYSICS_MANAGER->pauseScheduler();
+                    ball->pause();
+                }, 0.1f, true);
                 
                 tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
                 tutorialAnimation->setPosition(Vec2MC(0,0));
@@ -512,7 +529,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                     
                     SBDirector::postDelayed(this, [=]() {
                         GameManager::onGameOver(GameOverType::DEATH_BLOCK);
-                    }, 0.2f);
+                    }, 0.2f, true);
                     
                     break;
                 }
@@ -539,7 +556,7 @@ void GameView::onContactFloor(Ball *ball) {
     
     SBDirector::postDelayed(this, [=]() {
         GameManager::onGameOver(GameOverType::FALL);
-    }, 0.1f);
+    }, 0.1f, true);
 }
 
 /**
@@ -576,7 +593,7 @@ void GameView::onContactClearPortal(GameTile *tile, bool isContactPortalBelowTil
             GameManager::onStageClear();
         });
         ball->runAction(Sequence::create(fadeOut, callFunc, nullptr));
-    }, 0.2f);
+    }, 0.2f, true);
 }
 
 #pragma mark- Initialize

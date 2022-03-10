@@ -98,12 +98,14 @@ protected:
 #pragma mark- LinearVelocity
 private:
     void            setLinearVelocity(const b2Vec2 &v, bool force = false);
+    void            setLinearVelocity(float x, float y, bool force = false);
     void            setLinearVelocityX(float x, bool force = false);
     void            setLinearVelocityY(float y, bool force = false);
     void            setLinearVelocityWithAction(float duration, float from, float to,
                                                 bool isHorizontal);
     float           getLinearVelocityX();
     float           getLinearVelocityY();
+    float           getMoveVelocityX();
     
     bool velocityLocked; // 가속도 잠금 Flag
 };

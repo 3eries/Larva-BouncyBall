@@ -27,8 +27,8 @@ using namespace std;
 #define VELOCITY_MOVE_LEFT                     (-13 * GAME_MANAGER->getMapScaleFactor())    // 2.5B
 #define VELOCITY_MOVE_RIGHT                    (13 * GAME_MANAGER->getMapScaleFactor())     // 2.5B
 
-#define VELOCITY_DOUBLE_JUMP_LEFT              (-16 * GAME_MANAGER->getMapScaleFactor())    // 3B
-#define VELOCITY_DOUBLE_JUMP_RIGHT             (16 * GAME_MANAGER->getMapScaleFactor())     // 3B
+#define VELOCITY_DOUBLE_JUMP_LEFT              (-25 * GAME_MANAGER->getMapScaleFactor())    // 6B
+#define VELOCITY_DOUBLE_JUMP_RIGHT             (25 * GAME_MANAGER->getMapScaleFactor())     // 6B
 #define VELOCITY_DOUBLE_JUMP_UP                (3 * GAME_MANAGER->getMapScaleFactor())      // +0.3B
 
 #define VELOCITY_WAVE_MOVE_LEFT                (-30 * GAME_MANAGER->getMapScaleFactor())
@@ -36,6 +36,7 @@ using namespace std;
 
 #define SCHEDULER_HORIZONTAL_MOVE              "SCHEDULER_HORIZONTAL_MOVE"          // 수평 이동
 #define SCHEDULER_HORIZONTAL_MOVE_LOCKED       "SCHEDULER_HORIZONTAL_MOVE_LOCKED"   // 수평 이동 잠금
+#define SCHEDULER_DOUBLE_JUMP_END              "SCHEDULER_DOUBLE_JUMP_END"          // 더블 점프 종료
 #define SCHEDULER_BOUNCE_DOWN                  "SCHEDULER_BOUNCE_DOWN"
 
 Ball* Ball::create(const StageData &stage) {
@@ -157,13 +158,13 @@ void Ball::initPhysics() {
     bodyDef.fixedRotation = true;
     bodyDef.userData = (SBPhysicsObject*)this;
     
+    auto body = PHYSICS_MANAGER->getWorld()->CreateBody(&bodyDef);
+    setBody(body);
+    
 //    b2CircleShape shape;
 //    shape.m_radius = PTM(getContentSize().height*0.5f);
     b2PolygonShape shape;
     shape.SetAsBox(PTM(getContentSize().width*0.5f), PTM(getContentSize().height*0.5f));
-    
-    auto body = PHYSICS_MANAGER->getWorld()->CreateBody(&bodyDef);
-    setBody(body);
     
     b2Filter filter;
     filter.categoryBits = PhysicsCategory::BALL;
@@ -176,6 +177,21 @@ void Ball::initPhysics() {
     fixtureDef.friction = 0;        // 마찰력
     fixtureDef.filter = filter;
     body->CreateFixture(&fixtureDef);
+    
+    // 자연스로운 충돌을 위한 Shape
+    {
+//        auto boxSize = Size(stage.tileSize.width * 0.7f, getContentSize().height * 0.5f);
+//
+//        b2PolygonShape shape2;
+////        shape2.SetAsBox(PTM(boxSize.width * 0.5f), PTM(boxSize.height * 0.5f),
+////                        PTM(Vec2(0, (getContentSize().height * 0.5f) + (boxSize.height * 0.5f))), 0);
+//        shape2.SetAsBox(PTM(boxSize.width * 0.5f), PTM(boxSize.height * 0.5f),
+//                        PTM(Vec2(0, 0)), 0);
+//
+//        b2FixtureDef fixtureDef2 = fixtureDef;
+//        fixtureDef2.shape = &shape2;
+//        body->CreateFixture(&fixtureDef2);
+    }
 }
 
 /**
@@ -244,6 +260,8 @@ void Ball::setDirection(BallDirection direction) {
     
     this->direction = direction;
     
+    CCLOG("방향 설정: %s", (isLeftDirection() ? "LEFT" : "RIGHT"));
+    
     setImageDirection(direction);
 }
 
@@ -277,9 +295,10 @@ void Ball::moveHorizontal(float dt) {
         return;
     }
     
+    // CCLOG("Ball::moveHorizontal: %f, (%f)", getLinearVelocityX(), body->GetAngularVelocity());
+    
     // 방향에 따른 수평 이동
-    float x = (direction == BallDirection::LEFT) ? VELOCITY_MOVE_LEFT : VELOCITY_MOVE_RIGHT;
-    setLinearVelocityX(x);
+    setLinearVelocityX(getMoveVelocityX());
     
     // body->ApplyLinearImpulse(force, body->GetPosition(), false);
     // body->ApplyForceToCenter(b2Vec2(100, 0), false);
@@ -331,7 +350,7 @@ void Ball::stopHorizontal() {
  */
 void Ball::doubleJumpStart() {
     
-    CCLOG("더블 점프!");
+    CCLOG("더블 점프! %f", body->GetAngularVelocity());
     
     removeState(State::DOUBLE_JUMP_READY);
     addState(State::DOUBLE_JUMP);
@@ -347,8 +366,17 @@ void Ball::doubleJumpStart() {
     moveHorizontalLock(0, true);
     
     // 가속도 강제 변경
-    setLinearVelocityX(isLeftDirection() ? VELOCITY_DOUBLE_JUMP_LEFT : VELOCITY_DOUBLE_JUMP_RIGHT, true);
-    setLinearVelocityY(fabsf(getLinearVelocityY()) + VELOCITY_DOUBLE_JUMP_UP, true);
+    float x = isLeftDirection() ? VELOCITY_DOUBLE_JUMP_LEFT : VELOCITY_DOUBLE_JUMP_RIGHT;
+    float y = fabsf(getLinearVelocityY()) + VELOCITY_DOUBLE_JUMP_UP;
+    setLinearVelocity(x, y, true);
+    
+    // 더블 점프 종료
+    unschedule(SCHEDULER_DOUBLE_JUMP_END);
+    
+    schedule([=](float dt) {
+        CCLOG("더블 점프 종료 시간~!");
+        this->doubleJumpEnd();
+    }, 0.7f, SCHEDULER_DOUBLE_JUMP_END);
 }
 
 /**
@@ -356,13 +384,20 @@ void Ball::doubleJumpStart() {
  */
 void Ball::doubleJumpEnd() {
     
+    if( !hasState(State::DOUBLE_JUMP) ) {
+        return;
+    }
+    
+    CCLOG("더블 점프 종료");
+    unschedule(SCHEDULER_DOUBLE_JUMP_END);
+    
     removeState(State::DOUBLE_JUMP);
     
     velocityLocked = false;
     moveHorizontalUnlock();
     
     if( direction == BallDirection::NONE ) {
-        setLinearVelocityX(0);
+        // setLinearVelocityX(0);
     } else {
         moveHorizontal(0);
     }
@@ -520,7 +555,7 @@ void Ball::onContactBlockTop(Block *block) {
     switch( block->getData().tileId ) {
         // 점프 블럭
         case TileId::BLOCK_JUMP: {
-            setLinearVelocityY(VELOCITY_JUMP_UP);
+            setLinearVelocity(getMoveVelocityX(), VELOCITY_JUMP_UP);
         } break;
             
         // 웨이브 블럭
@@ -531,7 +566,7 @@ void Ball::onContactBlockTop(Block *block) {
             
         // 기본 점프
         default: {
-            setLinearVelocityY(VELOCITY_BOUNCE_UP);
+            setLinearVelocity(getMoveVelocityX(), VELOCITY_BOUNCE_UP);
             
             // 효과음
             double now = SBSystemUtils::getCurrentTimeSeconds();
@@ -582,8 +617,26 @@ void Ball::onContactBlockSide(Block *block) {
 void Ball::setLinearVelocity(const b2Vec2 &v, bool force) {
     
     if( body && (force || !velocityLocked) ) {
+        // CCLOG("setLinearVelocity: %f,%f", v.x, v.y);
+        
+        if( direction == BallDirection::LEFT ) {
+            if( v.x > 0 ) {
+                CCLOG("왼쪽 방향인데 오른쪽으로 힘 가해졌당");
+            }
+        }
+        else if( direction == BallDirection::RIGHT ){
+            if( v.x < 0 ) {
+                CCLOG("오른쪽 방향인데 왼쪽으로 힘 가해졌당");
+            }
+        }
+        
         body->SetLinearVelocity(v);
     }
+}
+
+void Ball::setLinearVelocity(float x, float y, bool force) {
+    
+    setLinearVelocity(b2Vec2(x,y), force);
 }
 
 void Ball::setLinearVelocityX(float x, bool force) {
@@ -629,4 +682,12 @@ float Ball::getLinearVelocityX() {
 
 float Ball::getLinearVelocityY() {
     return body ? body->GetLinearVelocity().y : 0;
+}
+
+float Ball::getMoveVelocityX() {
+    switch( direction ) {
+        case BallDirection::LEFT:       return VELOCITY_MOVE_LEFT;
+        case BallDirection::RIGHT:      return VELOCITY_MOVE_RIGHT;
+        default:                        return 0;
+    }
 }
