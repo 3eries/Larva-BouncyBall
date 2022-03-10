@@ -80,7 +80,12 @@ void GameView::onEnterTransitionDidFinish() {
     Node::onEnterTransitionDidFinish();
     
     // 튜토리얼
-    if( GAME_MANAGER->getStage().stage == 1 ) {
+    if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_CONTROL ) {
+        tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
+        tutorialAnimation->setPosition(Vec2MC(0,0));
+        addChild(tutorialAnimation, SBZOrder::BOTTOM);
+
+        tutorialAnimation->setAnimation(0, "touch_left", true);
     }
     
     // 카메라 업데이트 스케줄러 실행
@@ -175,23 +180,6 @@ void GameView::onStageRestart(const StageData &stage) {
  * 스테이지 클리어
  */
 void GameView::onStageClear(const StageData &stage) {
-}
-
-/**
- * 다음 스테이지로 이동
- */
-void GameView::onMoveNextStage() {
-    
-    // 연출 완료
-    SBDirector::postDelayed(this, [=]() {
-        GameManager::onMoveNextStageFinished();
-    }, MOVE_NEXT_LEVEL_DURATION, true);
-}
-
-/**
- * 다음 스테이지로 이동 완료
- */
-void GameView::onMoveNextStageFinished() {
 }
 
 /**
@@ -429,11 +417,31 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             
             auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
             portal->setStar(star);
+            
+            // 튜토리얼, 소시지 획득 시 오른쪽 터치로 변경
+            if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_CONTROL ) {
+                tutorialAnimation->removeFromParent();
+                
+                tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
+                tutorialAnimation->setPosition(Vec2MC(0,0));
+                addChild(tutorialAnimation, SBZOrder::BOTTOM);
+                
+                tutorialAnimation->setAnimation(0, "touch_right", true);
+            }
         } break;
             
         // 더블 점프
         case TileId::ITEM_DOUBLE_JUMP: {
-            
+            // 튜토리얼, 물리 세계 일시정지
+            if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP ) {
+                PHYSICS_MANAGER->pauseScheduler();
+                
+                tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
+                tutorialAnimation->setPosition(Vec2MC(0,0));
+                addChild(tutorialAnimation, SBZOrder::BOTTOM);
+                
+                tutorialAnimation->setAnimation(0, "touch_double", true);
+            }
         } break;
             
         default: break;
@@ -815,8 +823,6 @@ void GameView::initGameListener() {
         GameEvent::STAGE_CHANGED,
         GameEvent::STAGE_RESTART,
         GameEvent::STAGE_CLEAR,
-        GameEvent::MOVE_NEXT_STAGE,
-        GameEvent::MOVE_NEXT_STAGE_FINISHED,
     });
     
     GameManager::addEventListener(events, [=](GameEvent event, void *userData) {
@@ -841,9 +847,6 @@ void GameView::initGameListener() {
                 auto stage = (StageData*)userData;
                 this->onStageClear(*stage);
             } break;
-                
-            case GameEvent::MOVE_NEXT_STAGE:            this->onMoveNextStage();          break;
-            case GameEvent::MOVE_NEXT_STAGE_FINISHED:   this->onMoveNextStageFinished();  break;
                 
             default: break;
         }

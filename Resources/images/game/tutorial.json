@@ -1,0 +1,298 @@
+{
+"skeleton": { "hash": "wibsEmyHPPTZbT5Ex+iPfttikKA", "spine": "3.7.94", "width": 284, "height": 244, "images": "./tutorial/", "audio": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "touch_right", "parent": "root", "x": 500 },
+	{ "name": "finger_right", "parent": "touch_right" },
+	{ "name": "effect_circle", "parent": "touch_right", "x": -90, "y": 56 },
+	{ "name": "effect_circle2", "parent": "touch_right", "x": -90, "y": 56 }
+],
+"slots": [
+	{ "name": "circle_effect", "bone": "effect_circle", "attachment": "circle_effect" },
+	{ "name": "circle_effect2", "bone": "effect_circle2", "attachment": "circle_effect" },
+	{ "name": "finger_1", "bone": "finger_right", "attachment": "finger_2" }
+],
+"skins": {
+	"default": {
+		"circle_effect": {
+			"circle_effect": { "width": 172, "height": 172 }
+		},
+		"circle_effect2": {
+			"circle_effect": { "width": 172, "height": 172 }
+		},
+		"finger_1": {
+			"finger_1": { "width": 216, "height": 204 },
+			"finger_2": { "width": 216, "height": 204 }
+		}
+	}
+},
+"animations": {
+	"clear": {
+		"slots": {
+			"circle_effect": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"circle_effect2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"finger_1": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"touch_double": {
+		"slots": {
+			"circle_effect": {
+				"color": [
+					{ "time": 0.3667, "color": "ffffffff", "curve": "stepped" },
+					{
+						"time": 0.5667,
+						"color": "ffffffff",
+						"curve": [ 0.467, 0, 0.533, 1 ]
+					},
+					{ "time": 0.7333, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": null },
+					{ "time": 0.3667, "name": "circle_effect" },
+					{ "time": 0.7333, "name": null }
+				]
+			},
+			"circle_effect2": {
+				"color": [
+					{ "time": 0.6333, "color": "ffffffff", "curve": "stepped" },
+					{
+						"time": 0.8333,
+						"color": "ffffffff",
+						"curve": [ 0.453, 0, 0.529, 1 ]
+					},
+					{ "time": 1, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": null },
+					{ "time": 0.6333, "name": "circle_effect" },
+					{ "time": 1, "name": null }
+				]
+			},
+			"finger_1": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.1667, "color": "ffffffff" },
+					{ "time": 1.3, "color": "ffffff00", "curve": "stepped" },
+					{ "time": 2, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "finger_1" },
+					{ "time": 0.3667, "name": "finger_2" },
+					{ "time": 0.5, "name": "finger_1" },
+					{ "time": 0.6333, "name": "finger_2" },
+					{ "time": 0.7667, "name": "finger_1" }
+				]
+			}
+		},
+		"bones": {
+			"effect_circle": {
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{
+						"time": 0.3667,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{ "time": 0.7333, "x": 2, "y": 2 }
+				]
+			},
+			"effect_circle2": {
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{
+						"time": 0.6333,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{ "time": 1, "x": 2, "y": 2 }
+				]
+			}
+		}
+	},
+	"touch_left": {
+		"slots": {
+			"circle_effect": {
+				"color": [
+					{ "time": 0.3667, "color": "ffffff00" },
+					{ "time": 0.5, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ffffffff" },
+					{ "time": 1.9667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": null },
+					{ "time": 0.3667, "name": "circle_effect" }
+				]
+			},
+			"circle_effect2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"finger_1": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ffffffff" },
+					{ "time": 1.9667, "color": "ffffff00", "curve": "stepped" },
+					{ "time": 2.6667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "finger_1" },
+					{ "time": 0.3333, "name": "finger_1" },
+					{ "time": 0.3667, "name": "finger_2" },
+					{ "time": 1.8333, "name": "finger_2" },
+					{ "time": 1.8667, "name": "finger_1" }
+				]
+			}
+		},
+		"bones": {
+			"effect_circle": {
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{
+						"time": 0.3667,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 0.8333,
+						"x": 0.8,
+						"y": 0.8,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 1.1667,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 1.5,
+						"x": 0.8,
+						"y": 0.8,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 1.8333,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{ "time": 1.9667, "x": 0, "y": 0 }
+				]
+			},
+			"touch_right": {
+				"translate": [
+					{ "time": 0, "x": -1000, "y": 0 }
+				],
+				"scale": [
+					{ "time": 0, "x": -1, "y": 1 }
+				]
+			}
+		}
+	},
+	"touch_right": {
+		"slots": {
+			"circle_effect": {
+				"color": [
+					{ "time": 0.3667, "color": "ffffff00" },
+					{ "time": 0.5, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ffffffff" },
+					{ "time": 1.9667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": null },
+					{ "time": 0.3667, "name": "circle_effect" }
+				]
+			},
+			"circle_effect2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"finger_1": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ffffffff" },
+					{ "time": 1.9667, "color": "ffffff00", "curve": "stepped" },
+					{ "time": 2.6667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "finger_1" },
+					{ "time": 0.3333, "name": "finger_1" },
+					{ "time": 0.3667, "name": "finger_2" },
+					{ "time": 1.8333, "name": "finger_2" },
+					{ "time": 1.8667, "name": "finger_1" }
+				]
+			}
+		},
+		"bones": {
+			"effect_circle": {
+				"scale": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{
+						"time": 0.3667,
+						"x": 0,
+						"y": 0,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 0.8333,
+						"x": 0.8,
+						"y": 0.8,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 1.1667,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 1.5,
+						"x": 0.8,
+						"y": 0.8,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{
+						"time": 1.8333,
+						"x": 1,
+						"y": 1,
+						"curve": [ 0.46, 0, 0.543, 1 ]
+					},
+					{ "time": 1.9667, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}

@@ -66,16 +66,16 @@ enum GameOverType {
     DEATH_BLOCK,
 };
 
+// Tutorial Stage
+#define                TUTORIAL_STAGE_CONTROL            1
+#define                TUTORIAL_STAGE_DOUBLE_JUMP        20
+
 // In Game
 enum class BallDirection {
     NONE,
     LEFT,
     RIGHT,
 };
-
-#define                 GAME_BG_COLOR                   cocos2d::Color3B(0, 17, 17)
-#define                 LEVEL_REFRESH_DURATION          1.7f
-#define                 MOVE_NEXT_LEVEL_DURATION        0.5f
 
 // Physics
 #define                PHYSICS_FPS                        (1 / 60.0f)

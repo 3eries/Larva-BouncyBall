@@ -68,9 +68,6 @@ public:
     void onStageChanged(const StageData &stage);
     void onStageRestart(const StageData &stage);
     void onStageClear(const StageData &stage);
-    
-    void onMoveNextStage();
-    void onMoveNextStageFinished();
 
     void updateCamera(float dt);
     
@@ -84,6 +81,7 @@ private:
     Ball *ball;
     std::vector<GameTile*> tiles;
     StageProgressBar *stageProgressBar;
+    SBSkeletonAnimation *tutorialAnimation;
     
     struct MapCameraInfo {
         cocos2d::Camera *camera;

@@ -1,0 +1,27 @@
+
+tutorial.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+circle_effect
+  rotate: false
+  xy: 438, 34
+  size: 172, 172
+  orig: 172, 172
+  offset: 0, 0
+  index: -1
+finger_1
+  rotate: false
+  xy: 2, 2
+  size: 216, 204
+  orig: 216, 204
+  offset: 0, 0
+  index: -1
+finger_2
+  rotate: false
+  xy: 220, 2
+  size: 216, 204
+  orig: 216, 204
+  offset: 0, 0
+  index: -1
