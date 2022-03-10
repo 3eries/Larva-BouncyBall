@@ -20,8 +20,10 @@ struct StageData {
     int                       mapHeightTiles;          // 맵 세로 타일 수
     cocos2d::Size             tileSize;                // 타일 크기
     TileDataList              tiles;                   // 타일 리스트
+    int                       blockMoveWidth;          // 가로 무브 블럭 타일 수
+    int                       blockMoveHeight;         // 세로 무브 블럭 타일 수
 
-    StageData() : stage(0), world(0) {}
+    StageData() : stage(0), world(0), blockMoveWidth(0), blockMoveHeight(0) {}
     
     bool isNull() const {
         return stage == 0;
@@ -53,6 +55,7 @@ struct StageData {
         std::string str = "StageData {\n";
         str += STR_FORMAT("\t stage: %d\n", stage);
         str += STR_FORMAT("\t tileSize: %dx%d\n", (int)tileSize.width, (int)tileSize.height);
+        str += STR_FORMAT("\t blockMoveWidth: %d, blockMoveHeight: %d\n", blockMoveWidth, blockMoveHeight);
         
 //        str += "\tnumbers: ";
 //        for( int n : numbers ) {
@@ -66,27 +69,6 @@ struct StageData {
 //        }
 //        str += "\n";
 //        str += "}";
-        
-        return str;
-    }
-    
-    std::string getTileMapString() {
-        std::string str = STR_FORMAT("LEVEL %d\n", stage);
-        
-//        for( int y = tileRows-1; y >= 0; --y ) {
-//            str += "[";
-//
-//            for( int x = 0; x < tileColumns; ++x ) {
-//                auto tile = getTile(TilePosition(x,y));
-//                str += STR_FORMAT("%d", !tile.isEmpty ? 1 : 0);
-//            }
-//
-//            str += "]";
-//
-//            if( y > 0 ) {
-//                str += "\n";
-//            }
-//        }
         
         return str;
     }

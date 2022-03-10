@@ -67,6 +67,7 @@ void StageManager::parseStageFile() {
         
         // 맵 정보
         auto mapInfo = TMXMapInfo::create(STAGE_FILE);
+        auto mapProperties = mapInfo->getProperties();
         auto layerInfo = SBCollection::find(mapInfo->getLayers(), [](TMXLayerInfo *info) -> bool {
             return info->_name == "TileLayer";
         }).at(0);
@@ -80,6 +81,15 @@ void StageManager::parseStageFile() {
         stage.mapContentSize = Size(stage.mapWidthTiles * tileSize.width,
                                     stage.mapHeightTiles * tileSize.height);
         stage.tileSize = tileSize;
+        
+        // 맵 프로퍼티 설정
+        if( mapProperties.find("block_move_width") != mapProperties.end() ) {
+            stage.blockMoveWidth = mapProperties.at("block_move_width").asInt();
+        }
+        
+        if( mapProperties.find("block_move_height") != mapProperties.end() ) {
+            stage.blockMoveHeight = mapProperties.at("block_move_height").asInt();
+        }
         
         {
             CCLOG("=== PARSED TILES HEAD(%d) ===", STAGE);
@@ -155,7 +165,6 @@ void StageManager::parseStageFile() {
     // log
     for( auto stage : stages ) {
         CCLOG("%s", stage.toString().c_str());
-        CCLOG("%s", stage.getTileMapString().c_str());
     }
 }
 
