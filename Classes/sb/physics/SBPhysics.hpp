@@ -18,6 +18,7 @@
 static inline float  PTM(float v)                 { return v / PTM_RATIO; }
 static inline b2Vec2 PTM(float x, float y)        { return b2Vec2(PTM(x), PTM(y)); }
 static inline b2Vec2 PTM(const cocos2d::Vec2 &p)  { return PTM(p.x, p.y); }
+static inline b2Vec2 PTM(const cocos2d::Size &s)  { return PTM(s.width, s.height); }
 
 static inline float         MTP(float v)          { return v * PTM_RATIO; }
 static inline cocos2d::Vec2 MTP(float x, float y) { return cocos2d::Vec2(MTP(x), MTP(y)); }
