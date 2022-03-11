@@ -70,7 +70,7 @@ public:
     
 public:
     void            doubleJumpStart();
-    void            doubleJumpEnd();
+    void            doubleJumpEnd(bool isContactBlock);
     
     void            waveStart(Block *block);
     void            waveEnd(bool isContactBlock);

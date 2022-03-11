@@ -68,7 +68,7 @@ enum GameOverType {
 
 // Tutorial Stage
 #define                TUTORIAL_STAGE_CONTROL            1
-#define                TUTORIAL_STAGE_DOUBLE_JUMP        20
+#define                TUTORIAL_STAGE_DOUBLE_JUMP        21
 
 // In Game
 enum class BallDirection {

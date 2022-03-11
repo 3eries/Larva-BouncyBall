@@ -21,15 +21,15 @@ USING_NS_SB;
 using namespace std;
 
 #define VELOCITY_BOUNCE_UP                     (22 * GAME_MANAGER->getMapScaleFactor())     // 1.3B
-// #define VELOCITY_BOUNCE_UP                     (13 * GAME_MANAGER->getMapScaleFactor())
 #define VELOCITY_JUMP_UP                       (37 * GAME_MANAGER->getMapScaleFactor())     // 3.25B
 
 #define VELOCITY_MOVE_LEFT                     (-13 * GAME_MANAGER->getMapScaleFactor())    // 2.5B
 #define VELOCITY_MOVE_RIGHT                    (13 * GAME_MANAGER->getMapScaleFactor())     // 2.5B
 
-#define VELOCITY_DOUBLE_JUMP_LEFT              (-25 * GAME_MANAGER->getMapScaleFactor())    // 6B
-#define VELOCITY_DOUBLE_JUMP_RIGHT             (25 * GAME_MANAGER->getMapScaleFactor())     // 6B
-#define VELOCITY_DOUBLE_JUMP_UP                (3 * GAME_MANAGER->getMapScaleFactor())      // +0.3B
+#define VELOCITY_DOUBLE_JUMP_LEFT              (-28 * GAME_MANAGER->getMapScaleFactor())    // 6B
+#define VELOCITY_DOUBLE_JUMP_RIGHT             (28 * GAME_MANAGER->getMapScaleFactor())     // 6B
+// #define VELOCITY_DOUBLE_JUMP_UP                (3 * GAME_MANAGER->getMapScaleFactor())
+#define VELOCITY_DOUBLE_JUMP_UP                (12 * GAME_MANAGER->getMapScaleFactor())     // 0.B
 
 #define VELOCITY_WAVE_MOVE_LEFT                (-30 * GAME_MANAGER->getMapScaleFactor())
 #define VELOCITY_WAVE_MOVE_RIGHT               (30 * GAME_MANAGER->getMapScaleFactor())
@@ -295,8 +295,6 @@ void Ball::moveHorizontal(float dt) {
         return;
     }
     
-    // CCLOG("Ball::moveHorizontal: %f, (%f)", getLinearVelocityX(), body->GetAngularVelocity());
-    
     // 방향에 따른 수평 이동
     setLinearVelocityX(getMoveVelocityX());
     
@@ -367,7 +365,8 @@ void Ball::doubleJumpStart() {
     
     // 가속도 강제 변경
     float x = isLeftDirection() ? VELOCITY_DOUBLE_JUMP_LEFT : VELOCITY_DOUBLE_JUMP_RIGHT;
-    float y = fabsf(getLinearVelocityY()) + VELOCITY_DOUBLE_JUMP_UP;
+    // float y = fabsf(getLinearVelocityY()) + VELOCITY_DOUBLE_JUMP_UP;
+    float y = VELOCITY_DOUBLE_JUMP_UP;
     setLinearVelocity(x, y, true);
     
     // 더블 점프 종료
@@ -375,14 +374,14 @@ void Ball::doubleJumpStart() {
     
     schedule([=](float dt) {
         CCLOG("더블 점프 종료 시간~!");
-        this->doubleJumpEnd();
+        this->doubleJumpEnd(false);
     }, 0.7f, SCHEDULER_DOUBLE_JUMP_END);
 }
 
 /**
  * 더블 점프 종료
  */
-void Ball::doubleJumpEnd() {
+void Ball::doubleJumpEnd(bool isContactBlock) {
     
     if( !hasState(State::DOUBLE_JUMP) ) {
         return;
@@ -396,10 +395,13 @@ void Ball::doubleJumpEnd() {
     velocityLocked = false;
     moveHorizontalUnlock();
     
-    if( direction == BallDirection::NONE ) {
-        // setLinearVelocityX(0);
+    // 블럭과 충돌 시 가속도 제거
+    if( isContactBlock ) {
+        setLinearVelocityX(0);
     } else {
-        moveHorizontal(0);
+        if( direction != BallDirection::NONE ) {
+            moveHorizontal(0);
+        }
     }
 }
 
@@ -536,7 +538,7 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
     }
     // 더블 점프 종료
     else if( hasState(State::DOUBLE_JUMP) ) {
-        doubleJumpEnd();
+        doubleJumpEnd(true);
     }
     
     switch( category ) {
