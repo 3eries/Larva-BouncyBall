@@ -17,6 +17,7 @@
 
 class TileFactory {
 public:
+    static PhysicsDef createPhysicsDef(const cocos2d::Size &tileSize);
     static PhysicsDef createPhysicsDef(const TileData &data);
 };
 

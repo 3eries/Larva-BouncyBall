@@ -43,6 +43,7 @@ public:
     
 protected:
     CC_SYNTHESIZE_READONLY(TileData, data, Data);
+    CC_SYNTHESIZE_READONLY(StageData, stage, StageData);
     CC_SYNTHESIZE_READONLY(PhysicsDef, physicsDef, PhysicsDef);
     cocos2d::Sprite *image;
 };

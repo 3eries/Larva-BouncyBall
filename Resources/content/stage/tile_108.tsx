@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.5" tiledversion="1.7.0" name="tile_108" tilewidth="108" tileheight="108" tilecount="12" columns="12">
- <image source="tile_108.png" width="1296" height="108"/>
+<tileset version="1.5" tiledversion="1.7.0" name="tile_108" tilewidth="108" tileheight="108" tilecount="14" columns="14">
+ <image source="tile_108.png" width="1512" height="108"/>
  <tile id="0">
   <properties>
    <property name="tile_id" value="00001"/>
@@ -59,6 +59,16 @@
  <tile id="11">
   <properties>
    <property name="tile_id" value="10352"/>
+  </properties>
+ </tile>
+ <tile id="12">
+  <properties>
+   <property name="tile_id" value="10401"/>
+  </properties>
+ </tile>
+ <tile id="13">
+  <properties>
+   <property name="tile_id" value="10402"/>
   </properties>
  </tile>
 </tileset>

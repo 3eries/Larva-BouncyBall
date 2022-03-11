@@ -10,6 +10,18 @@
 USING_NS_CC;
 using namespace std;
 
+PhysicsDef TileFactory::createPhysicsDef(const Size &tileSize) {
+    
+    PhysicsDef def;
+    def.size   = PTM(tileSize);
+    def.left   = PTM(-tileSize.width*0.5f);
+    def.right  = PTM( tileSize.width*0.5f);
+    def.bottom = PTM(-tileSize.height*0.5f);
+    def.top    = PTM( tileSize.height*0.5f);
+    
+    return def;
+}
+    
 PhysicsDef TileFactory::createPhysicsDef(const TileData &data) {
     
     auto stage = StageManager::getStage(data.stage);
@@ -38,12 +50,7 @@ PhysicsDef TileFactory::createPhysicsDef(const TileData &data) {
         default: break;
     }
     
-    PhysicsDef def;
-    def.size   = PTM(tileSize);
-    def.left   = PTM(-tileSize.width*0.5f);
-    def.right  = PTM( tileSize.width*0.5f);
-    def.bottom = PTM(-tileSize.height*0.5f);
-    def.top    = PTM( tileSize.height*0.5f);
+    PhysicsDef def = createPhysicsDef(tileSize);
     
     if( data.tileId == TileId::BLOCK_DROP_1 ||
         data.tileId == TileId::BLOCK_DROP_2 ) {

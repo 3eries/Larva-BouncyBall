@@ -23,6 +23,7 @@ public:
     
     static std::string getCharacterImage(const std::string &charId);
     static std::string getWorldBackgroundImage(int world);
+    
     static StringList  getTileImage(const TileId &tileId);
     static std::string getTileSkeletonJsonFile(const TileId &tileId);
 };

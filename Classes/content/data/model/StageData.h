@@ -51,6 +51,31 @@ struct StageData {
         });
     }
     
+    TileData getPairMoveEndBlock(const TileData &moveStartBlock) const {
+        auto endBlocks = getTiles(TileId::BLOCK_MOVE_END);
+        
+        if( endBlocks.size() == 0 ) {
+            return TileData(TileId::INVALID);
+        }
+        
+        int min = INT_MAX;
+        TileData pairBlock(TileId::INVALID);
+        
+        for( auto block : endBlocks ) {
+            // FIXME: 가로 무브만 하드코딩
+            if( moveStartBlock.y == block.y ) {
+                int dist = (int)abs(moveStartBlock.x - block.x);
+                
+                if( dist < min ) {
+                    min = dist;
+                    pairBlock = block;
+                }
+            }
+        }
+        
+        return pairBlock;
+    }
+    
     std::string toString() {
         std::string str = "StageData {\n";
         str += STR_FORMAT("\t stage: %d\n", stage);

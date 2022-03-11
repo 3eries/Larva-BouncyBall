@@ -15,7 +15,7 @@
 #include "Block.hpp"
 
 /** @class BlockDrop
- * @brief 데스 블럭
+ * @brief 드랍 블럭
  */
 class BlockDrop: public Block {
 public:

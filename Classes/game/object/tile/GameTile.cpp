@@ -18,6 +18,7 @@ using namespace std;
 
 GameTile::GameTile(const TileData &data) : SBPhysicsObject(this),
 data(data),
+stage(StageManager::getStage(data.stage)),
 physicsDef(TileFactory::createPhysicsDef(data)),
 image(nullptr) {
 }

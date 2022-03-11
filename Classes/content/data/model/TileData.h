@@ -35,7 +35,10 @@ enum class TileId {
     BLOCK_JUMP          = 10301,       // 점프 블럭
     BLOCK_WAVE_RIGHT    = 10351,       // 웨이브 블럭 (오른쪽)
     BLOCK_WAVE_LEFT     = 10352,       // 웨이브 블럭 (왼쪽)
-    BLOCK_MOVE          = 10401,       // 무브 블럭
+    
+    BLOCK_MOVE          = 10400,       // 무브 블럭
+    BLOCK_MOVE_START    = 10401,       // 무브 블럭 (시작)
+    BLOCK_MOVE_END      = 10402,       // 무브 블럭 (종료)
 };
 
 enum class TileType {
@@ -83,7 +86,7 @@ struct TileData {
         return tileId != TileId::INVALID;
     }
     
-    bool isBlockType() const {
+    bool isBlock() const {
         return (int)tileId >= (int)TileId::BLOCK_NORMAL;
     }
     
@@ -104,6 +107,8 @@ struct TileData {
                 case TileId::BLOCK_JUMP:          return "BLOCK_JUMP";
                 case TileId::BLOCK_WAVE_RIGHT:    return "BLOCK_WAVE_RIGHT";
                 case TileId::BLOCK_WAVE_LEFT:     return "BLOCK_WAVE_LEFT";
+                case TileId::BLOCK_MOVE_START:    return "BLOCK_MOVE_START";
+                case TileId::BLOCK_MOVE_END:      return "BLOCK_MOVE_END";
                 default:                          return "";
             }
         };

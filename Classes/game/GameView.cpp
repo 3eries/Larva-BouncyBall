@@ -18,6 +18,8 @@
 #include "object/tile/Item.hpp"
 #include "object/tile/Block.hpp"
 #include "object/tile/BlockDrop.hpp"
+#include "object/tile/BlockMove.hpp"
+#include "object/tile/BlockMoveRail.hpp"
 
 #include "object/StageProgressBar.hpp"
 
@@ -228,7 +230,7 @@ void GameView::addTile(GameTile *tile) {
     switch( tile->getData().type ) {
         case TileType::FLAG:    z = ZOrder::TILE_FLAG;      break;
         case TileType::ITEM:    z = ZOrder::TILE_ITEM;      break;
-        case TileType::BLOCK:   z = ZOrder::TILE_BLOCK;      break;
+        case TileType::BLOCK:   z = ZOrder::TILE_BLOCK;     break;
         default: break;
     }
     
@@ -810,6 +812,20 @@ void GameView::initTiles() {
             case TileId::BLOCK_DROP_1:
             case TileId::BLOCK_DROP_2: {
                 tile = BlockDrop::create(tileData);
+            } break;
+                
+            case TileId::BLOCK_MOVE_START:
+            case TileId::BLOCK_MOVE_END: {
+                tile = BlockMoveRail::create(tileData);
+                
+                // START 블럭일 때 무브 블럭도 생성
+                if( tileData.tileId == TileId::BLOCK_MOVE_START ) {
+                    auto moveBlock = BlockMove::create(tileData, stage.getPairMoveEndBlock(tileData));
+                    addTile(moveBlock);
+                    
+                    // ZOrder 변경
+                    moveBlock->setLocalZOrder(ZOrder::TILE_BLOCK + 1);
+                }
             } break;
                 
             default: break;
