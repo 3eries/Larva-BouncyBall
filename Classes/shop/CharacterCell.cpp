@@ -270,7 +270,7 @@ void CharacterCell::updateUnlockAmount() {
             // World 4-18 color:197,0,0 size:52 Vec2TC(36, -135) , Size(232, 29)
             unlockIconFile = DIR_IMG_SHOP + "shop_icon_stage.png";
             unlockAmountStr = STR_FORMAT("WORLD %d-%d",
-                                         getAmount(StageManager::getWorld(data.unlockAmount)),
+                                         StageManager::getWorld(data.unlockAmount),
                                          data.unlockAmount);
         } break;
 
@@ -323,7 +323,12 @@ void CharacterCell::updateViewAdsButton() {
         return;
     }
     
+    // iOS, 테스트 코드
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    const bool isAdLoaded = true;
+#else
     const bool isAdLoaded = superbomb::AdsHelper::isRewardedVideoLoaded();
+#endif
     
     viewAdsButton->setVisible(isAdLoaded);
     viewAdsDisabledImage->setVisible(!isAdLoaded);

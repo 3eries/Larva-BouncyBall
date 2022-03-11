@@ -52,24 +52,13 @@ void User::init() {
     if( isRemovedAds() ) {
         removeAds();
     }
-    
-    // IAP 리스너 초기화
-    auto onRemoveAds = [=]() {
-        this->removeAds();
-    };
-    
-    // purchase listener
-    /*
-    auto purchaseListener = iap::PurchaseListener::create();
-    purchaseListener->setForever(true);
-    purchaseListener->onRemoveAds = onRemoveAds;
-    iap::IAPHelper::getInstance()->addListener(this, purchaseListener);
-    */
-     
+        
     // restore listener
     auto restoreListener = iap::RestoreListener::create();
     restoreListener->setForever(true);
-    restoreListener->onRemoveAds = onRemoveAds;
+    restoreListener->onRemoveAds = [=]() {
+        this->removeAds();
+    };
     iap::IAPHelper::getInstance()->addListener(this, restoreListener);
 }
 

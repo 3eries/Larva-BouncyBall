@@ -30,6 +30,22 @@
           }
         },
         {
+          "client_id": "926305691868-fclvmk4glmnppiqf150gpauj7qegqsp9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuban.LarvaBouncyBall",
+            "certificate_hash": "77e39be551aaee2c92cb0af609876e32c020f275"
+          }
+        },
+        {
+          "client_id": "926305691868-getfaoss1cb41k7on5eksg18d8j9qqot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tuban.LarvaBouncyBall",
+            "certificate_hash": "c0c8e7a040a8599e1f462b73a6a431bbad3218cf"
+          }
+        },
+        {
           "client_id": "926305691868-r1o4uvg518e47n7eut2n43ulfgkbemso.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -53,6 +69,14 @@
             {
               "client_id": "926305691868-rmu4e3r2me99s7bl2j528f8es2s49r25.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "926305691868-0phomign15t80vfie77d6415sh9brt7q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tuban.LarvaBouncyBall",
+                "app_store_id": "1606840858"
+              }
             }
           ]
         }

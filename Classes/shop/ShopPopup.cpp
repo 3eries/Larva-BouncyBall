@@ -16,6 +16,7 @@
 #include "CharacterCell.hpp"
 
 USING_NS_CC;
+USING_NS_SB;
 using namespace cocos2d::ui;
 using namespace std;
 
@@ -30,7 +31,9 @@ using namespace std;
 #define CHARACTER_LIST_CELL_SIZE            Size(384, 736)
 #define CHARACTER_LIST_CELL_PADDING         32
 
-ShopPopup::ShopPopup(): BasePopup(PopupType::SHOP) {
+ShopPopup::ShopPopup(): BasePopup(PopupType::SHOP),
+iapCell(nullptr),
+characterListView(nullptr) {
 }
 
 ShopPopup::~ShopPopup() {
@@ -42,6 +45,8 @@ bool ShopPopup::init() {
     if( !BasePopup::init() ) {
         return false;
     }
+    
+    initCharacterList();
     
     return true;
 }
@@ -70,7 +75,7 @@ bool ShopPopup::onBackKeyReleased() {
     
     SBDirector::postDelayed(this, [=]() {
         this->dismiss();
-    }, 0.1f);
+    }, 0.1f, true);
 
     return true;
 }
@@ -108,6 +113,12 @@ void ShopPopup::initContentView() {
         SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         this->dismissWithAction();
     });
+}
+
+void ShopPopup::initCharacterList() {
+    
+    if( iapCell )           iapCell->removeFromParent();
+    if( characterListView ) characterListView->removeFromParent();
     
     // IAP Cell
     const bool ownIAPItem = User::isRemovedAds();
@@ -118,41 +129,21 @@ void ShopPopup::initContentView() {
     characterListPos.y = SB_WIN_SIZE.height*0.5f - 48;
     
     if( !ownIAPItem ) {
-        // 가운데 정렬을 위한 좌표 계산
-        // float firstCellX = (SB_WIN_SIZE.width - CHARACTER_LIST_SIZE_2.width) / 2;
-        
-        auto iapCell = IAPCell::create();
+        iapCell = IAPCell::create();
         iapCell->setAnchorPoint(ANCHOR_ML);
         iapCell->setPosition(characterListPos);
         addContentChild(iapCell);
 
         iapCell->setOnClickListener([=]() {
-            // TODO: IAP Purchase, Restore
-            CCLOG("상품 구매");
-    //        SBDirector::getInstance()->setScreenTouchLocked(true);
-    //
-    //        auto listener = iap::PurchaseListener::create();
-    //        listener->setTarget(this);
-    //        listener->onPurchased = [=](const iap::Item &item) {
-    //            User::removeAds();
-    //            this->dismissWithAction();
-    //        };
-    //
-    //        listener->onFinished = [=](bool result) {
-    //            SBDirector::postDelayed(this, [=]() {
-    //                SBDirector::getInstance()->setScreenTouchLocked(false);
-    //            }, 0.2f);
-    //        };
-    //
-    //        iap::IAPHelper::purchaseRemoveAds(listener);
+            this->onClickIAP();
         });
         
         characterListSize = CHARACTER_LIST_SIZE_1;
         characterListPos.x = SBNodeUtils::getBoundingBoxInWorld(iapCell).getMaxX() + CHARACTER_LIST_CELL_PADDING;
     }
     
-    // ScrollView - CharacterList
-    auto characterListView = ListView::create();
+    // ListView - CharacterList
+    characterListView = ListView::create();
     characterListView->setDirection(ui::ScrollView::Direction::HORIZONTAL);
     // characterListView->setPadding(50, 0, 0, 0);
     characterListView->setGravity(ListView::Gravity::CENTER_VERTICAL);
@@ -161,7 +152,7 @@ void ShopPopup::initContentView() {
     characterListView->setScrollBarEnabled(false);
     characterListView->setAnchorPoint(ANCHOR_ML);
     characterListView->setPosition(characterListPos);
-    characterListView->setContentSize(CHARACTER_LIST_SIZE_1);
+    characterListView->setContentSize(characterListSize);
     characterListView->addEventListener([=](Ref*, ScrollView::EventType eventType) {
       
         if( eventType == ScrollView::EventType::AUTOSCROLL_ENDED ) {
@@ -228,6 +219,23 @@ void ShopPopup::onCharacterSelect(ListView *listView, CharacterCell *cell) {
  */
 void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
 
+    // iOS, 테스트 코드
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
+    cell->updateUnlockAmount();
+    
+    // 잠금 해제 체크
+    CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
+        
+        cell->unlock();
+        
+        // 캐릭터 획득 팝업
+        GetCharacterPopup::show(unlockCharacters);
+    });
+    
+    return;
+#endif // iOS
+    
     if( !superbomb::AdsHelper::isRewardedVideoLoaded() ) {
         return;
     }
@@ -266,4 +274,53 @@ void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
 
         SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK, params);
     }
+}
+
+/**
+ * IAP 아이템 클릭
+ */
+void ShopPopup::onClickIAP() {
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    // 광고 제거
+    User::removeAds();
+    
+    // 모든 캐릭터 획득
+    CHARACTER_MANAGER->unlockAll([=](CharacterDataList unlockCharacters) {
+        // 캐릭터 획득 팝업
+        GetCharacterPopup::show(unlockCharacters);
+    });
+    
+    // UI 업데이트
+    initCharacterList();
+    
+    return;
+#endif // iOS
+    
+    SBDirector::getInstance()->setScreenTouchLocked(true);
+
+    auto listener = iap::PurchaseListener::create();
+    listener->setTarget(this);
+    listener->onPurchased = [=](const iap::Item &item) {
+        
+        // 광고 제거
+        User::removeAds();
+        
+        // 모든 캐릭터 획득
+        CHARACTER_MANAGER->unlockAll([=](CharacterDataList unlockCharacters) {
+            // 캐릭터 획득 팝업
+            GetCharacterPopup::show(unlockCharacters);
+        });
+        
+        // UI 업데이트
+        initCharacterList();
+    };
+
+    listener->onFinished = [=](bool result) {
+        SBDirector::postDelayed(this, [=]() {
+            SBDirector::getInstance()->setScreenTouchLocked(false);
+        }, 0.2f);
+    };
+
+    iap::IAPHelper::purchaseRemoveAds(listener);
 }

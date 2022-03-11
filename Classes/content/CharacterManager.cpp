@@ -45,7 +45,7 @@ CharacterManager::CharacterManager() {
 
 CharacterManager::~CharacterManager() {
  
-    iap::IAPHelper::getInstance()->removeListener(this);
+    removeListener(this);
     
     listeners.clear();
 }
@@ -55,11 +55,10 @@ CharacterManager::~CharacterManager() {
  */
 void CharacterManager::initIAPListener() {
     
-    // restore listener
     auto restoreListener = iap::RestoreListener::create();
     restoreListener->setForever(true);
     restoreListener->onRemoveAds = [=]() {
-        // TODO: 모든 캐릭터 잠금 해제
+        this->unlockAll();
     };
     iap::IAPHelper::getInstance()->addListener(this, restoreListener);
 }
@@ -166,6 +165,24 @@ void CharacterManager::setSelected(const string &charId) {
     USER_DEFAULT->flush();
     
     onCharacterSelected(getCharacter(charId));
+}
+
+void CharacterManager::unlockAll(OnCharacterListListener onUnlocked) {
+ 
+    CharacterDataList newUnlockList;
+    
+    for( auto charId : characterOrder ) {
+        if( isCharacterUnlocked(charId) ) {
+            continue;
+        }
+        
+        unlock(charId);
+        newUnlockList.push_back(getCharacter(charId));
+    }
+    
+    if( onUnlocked ) {
+        onUnlocked(newUnlockList);
+    }
 }
 
 /**

@@ -44,6 +44,8 @@ public:
     bool                isCharacterUnlocked(const std::string &charId);
     
     void                setSelected(const std::string &charId);
+    
+    void                unlockAll(OnCharacterListListener onUnlocked = nullptr);
     void                unlock(const std::string &charId, bool isRestored = false);
     
     void                checkUnlock(OnCharacterListListener onUnlocked);

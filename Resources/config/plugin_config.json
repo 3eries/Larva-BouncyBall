@@ -14,12 +14,12 @@
             "items": {
                 "remove_ads": {
                     "type": "remove_ads",
-                    "id": "thirteen_remove_ads",
+                    "id": "remove_ads",
                     "amount": 0,
                     "price": ""
                 }
             },
-            "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsfecftrhwsSbJFs8thUPuCUldM1J4MdRnzXqXE7htXY2Y1woprHYU+KujGc1Z3vYFXEUb6W/YGjvSaSowy/OK4K0lVumsMdf9mlBMXqOAheHY1cmb+tx6TG0Kdjdywn+4CATAod6jWI6CcjOiKsj8qK07YF0LEgHO7bcXDTWYxwc9hpUkIcT5eu0Q9NgVz2+88jIWkwfk5gtSGNZSZBQLVQdjR0E1Chgwxm5h5wkdpb2czdXmQDs283EA19YkanigJ1hofTXRmNIeHfqb0QjWOg+EyPRwCGJ7z74KWKqxQrYssk0EJYPdsAA+GoA6OMEvn0UIxrZzhwX2iewUf0cJwIDAQAB"
+            "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo2moHfRaRd5OLzeOcS2hW0q0BtIPgoManSSHh0PCUZstte3Kb700w4DgfQHxx3SQFTXKl5l2AS7m6P1N87+QqEvZkH99pEVfZLb8sytX6dh4bcIkwKp72aJRYjlgLz68H9WyB/TzQGYW8A8an1xa24n0HR933+pdreN8A7tc+xyWEnxSQjNnGMdvQPpoeBadDcHMHKebfh3bNZAiZA6YBxf35tAr/KM1soe5VhXG19qDfSBagtVqQjSP9W5xOw5g3eKzHvbskME5Lm4gu8aKgw7UU8DNXtx0gkdXssn/K4mpmvSEoqRvYho1bNEXVZkp0PuD+ujvtsnOdPQDJ5hkKQIDAQAB"
         }
     },
     "ios": {
@@ -37,7 +37,7 @@
             "items": {
                 "remove_ads": {
                     "type": "remove_ads",
-                    "id": "thirteen_remove_ads",
+                    "id": "remove_ads",
                     "amount": 0,
                     "price": ""
                 }

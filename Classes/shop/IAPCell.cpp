@@ -51,7 +51,7 @@ bool IAPCell::init() {
     auto tag = Sprite::create(DIR_IMG_SHOP + "shop_column_deal_tag.png");
     tag->setAnchorPoint(ANCHOR_M);
     tag->setPosition(Vec2TC(getContentSize(), 0, 20));
-    addChild(tag);
+    addChild(tag, -1);
     
     // BUY 버튼
     auto buyBtn = SBButton::create(DIR_IMG_SHOP + "shop_btn_buy.png");

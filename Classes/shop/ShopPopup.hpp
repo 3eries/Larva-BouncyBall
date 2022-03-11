@@ -14,6 +14,7 @@
 #include "superbomb.h"
 #include "PopupManager.hpp"
 
+class IAPCell;
 class CharacterCell;
 
 class ShopPopup: public BasePopup {
@@ -30,10 +31,16 @@ private:
     
     void initBackgroundView() override;
     void initContentView() override;
+    void initCharacterList();
     
 private:
     void onCharacterSelect(cocos2d::ui::ListView *listView, CharacterCell *cell);
     void onCharacterViewAds(CharacterCell *cell);
+    void onClickIAP();
+    
+private:
+    IAPCell *iapCell;
+    cocos2d::ui::ListView *characterListView;
 };
 
 #endif /* ShopPopup_hpp */
