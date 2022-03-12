@@ -372,7 +372,7 @@ void GameView::onTouchEnded(Touch *touch) {
     if( touches.size() == 0 ) {
         scheduleOnce([=](float dt) {
             ball->stopHorizontal();
-        }, 0.1f, SCHEDULER_BALL_STOP_HORIZONTAL);
+        }, 0.05f, SCHEDULER_BALL_STOP_HORIZONTAL);
     } else {
         ball->setDirection(touches.at(touches.size()-1));
     }
