@@ -115,10 +115,10 @@ static const std::string FONT_SUPER_STAR            = DIR_FONT + "superstar_meme
 static const std::string FONT_ROBOTO_BLACK          = DIR_FONT + "Roboto-Black.ttf";
 
 // 사운드 경로
-static const std::string DIR_SOUND                  = "sounds/";
+static const std::string DIR_SOUND                   = "sounds/";
 
-static const std::string SOUND_BGM_MAIN             = DIR_SOUND + "";
-static const std::string SOUND_BGM_GAME             = DIR_SOUND + "";
+static const std::string SOUND_BGM_MAIN              = DIR_SOUND + "bgm_02.mp3";
+static const std::string SOUND_BGM_GAME              = DIR_SOUND + "bgm_02.mp3";
 
 static const std::string SOUND_BUTTON_CLICK          = DIR_SOUND + "effect_01.mp3";
 static const std::string SOUND_GET_CHARACTER         = DIR_SOUND + "effect_02.mp3";
