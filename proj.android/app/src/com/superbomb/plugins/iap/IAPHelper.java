@@ -532,6 +532,8 @@ public class IAPHelper implements PluginListener, BillingManager.BillingUpdatesL
      */
     public static void restore(final PurchasesUpdatedListener listener) {
 
+        Log.i(TAG, "restore");
+
         getInstance().updateInventory(new PurchasesUpdatedListener() {
 
             @Override
@@ -574,6 +576,8 @@ public class IAPHelper implements PluginListener, BillingManager.BillingUpdatesL
     }
 
     public static void consumeAll() {
+
+        Log.i(TAG, "consumeAll");
 
         getInstance().updateInventory(new PurchasesUpdatedListener() {
 

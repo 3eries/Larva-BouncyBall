@@ -48,6 +48,14 @@ bool ShopPopup::init() {
     
     initCharacterList();
     
+    // IAP 복원 리스너 등록
+    auto restoreListener = iap::RestoreListener::create();
+    restoreListener->setForever(true);
+    restoreListener->onRemoveAds = [=]() {
+        this->initCharacterList();
+    };
+    iap::IAPHelper::getInstance()->addListener(this, restoreListener);
+    
     return true;
 }
 
