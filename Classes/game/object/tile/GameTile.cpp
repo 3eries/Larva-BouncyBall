@@ -78,11 +78,17 @@ void GameTile::initImage() {
     if( files.size() > 1 ) {
         float interval = 0;
         
-        switch( data.tileId ) {
-            case TileId::FLAG_START:            interval = 0.15f;        break;
-            case TileId::ITEM_DOUBLE_JUMP:      interval = 0.5f;         break;
-            case TileId::BLOCK_DEATH:           interval = 0.8f;         break;
-            default:                            interval = 0.5f;         break;
+        if( data.isBlock() ) {
+            switch( data.blockType ) {
+                case BlockType::DEATH:              interval = 0.8f;         break;
+                default:                            interval = 0.5f;         break;
+            }
+        } else {
+            switch( data.tileId ) {
+                case TileId::FLAG_START:            interval = 0.15f;        break;
+                case TileId::ITEM_DOUBLE_JUMP:      interval = 0.5f;         break;
+                default:                            interval = 0.5f;         break;
+            }
         }
         
         auto animate = Animate::create(SBNodeUtils::createAnimation(files, interval));

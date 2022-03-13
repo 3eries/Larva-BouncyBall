@@ -28,15 +28,17 @@ enum class TileId {
     // Block
     BLOCK               = 10000,
     BLOCK_NORMAL        = 10001,       // 기본 블럭
-    BLOCK_DROP_1        = 10101,       // 드랍 블럭
-    BLOCK_DROP_2        = 10102,
+    
+    BLOCK_DROP          = 10101,       // 드랍 블럭
+    
     BLOCK_DEATH         = 10201,       // 데스 블럭
     BLOCK_DEATH_4D      = 10251,       // 4D 데스 블럭
-    BLOCK_JUMP          = 10301,       // 점프 블럭
-    BLOCK_WAVE_RIGHT    = 10351,       // 웨이브 블럭 (오른쪽)
-    BLOCK_WAVE_LEFT     = 10352,       // 웨이브 블럭 (왼쪽)
     
-    BLOCK_MOVE          = 10400,       // 무브 블럭
+    BLOCK_JUMP          = 10301,       // 점프 블럭
+    
+    BLOCK_WAVE          = 10351,
+    
+    BLOCK_MOVE          = 10400,       // 무브 블럭, 코드로 생성됨 (타일셋에 정의되지 않음)
     BLOCK_MOVE_START    = 10401,       // 무브 블럭 (시작)
     BLOCK_MOVE_END      = 10402,       // 무브 블럭 (종료)
 };
@@ -48,6 +50,16 @@ enum class TileType {
     BLOCK,
 };
 
+enum class BlockType {
+    NONE = 0,
+    NORMAL,
+    DROP,
+    DEATH,
+    JUMP,
+    WAVE,
+    MOVE,
+};
+
 #define INVALID_TILE_NUMBER         0
 
 typedef cocos2d::Vec2 TilePosition;
@@ -56,12 +68,13 @@ typedef std::vector<TilePosition> TilePositionList;
 struct TileData {
     TileId tileId;
     TileType type;
+    BlockType blockType;
     int stage;
     int x;
     int y;
     TilePosition p;
     
-    TileData(TileId _tileId): tileId(_tileId), type(TileType::NONE) {
+    TileData(TileId _tileId): tileId(_tileId), type(TileType::NONE), blockType(BlockType::NONE) {
         setTileId(_tileId);
     }
     
@@ -74,6 +87,16 @@ struct TileData {
         if( i > (int)TileId::BLOCK )           type = TileType::BLOCK;
         else if( i > (int)TileId::ITEM )       type = TileType::ITEM;
         else if( i > (int)TileId::FLAG )       type = TileType::FLAG;
+        
+        // 블럭 타입 설정
+        if( isBlock() ) {
+            if( i >= (int)TileId::BLOCK_MOVE )          blockType = BlockType::MOVE;
+            else if( i >= (int)TileId::BLOCK_WAVE )     blockType = BlockType::WAVE;
+            else if( i >= (int)TileId::BLOCK_JUMP )     blockType = BlockType::JUMP;
+            else if( i >= (int)TileId::BLOCK_DEATH )    blockType = BlockType::DEATH;
+            else if( i >= (int)TileId::BLOCK_DROP )     blockType = BlockType::DROP;
+            else                                        blockType = BlockType::NORMAL;
+        }
     }
     
     void setPosition(int _x, int _y) {
@@ -87,33 +110,11 @@ struct TileData {
     }
     
     bool isBlock() const {
-        return (int)tileId >= (int)TileId::BLOCK_NORMAL;
+        return type == TileType::BLOCK;
     }
     
     std::string toString() {
-        auto getIdStr = [](TileId tileId) -> std::string {
-            switch( tileId ) {
-                case TileId::INVALID:             return "INVALID";
-                case TileId::NONE:                return "NONE";
-                case TileId::FLAG_START:          return "FLAG_START";
-                case TileId::FLAG_CLEAR_PORTAL:   return "FLAG_CLEAR_PORTAL";
-                case TileId::ITEM_SAUSAGE:        return "ITEM_SAUSAGE";
-                case TileId::ITEM_DOUBLE_JUMP:    return "ITEM_DOUBLE_JUMP";
-                case TileId::BLOCK_NORMAL:        return "BLOCK_NORMAL";
-                case TileId::BLOCK_DROP_1:
-                case TileId::BLOCK_DROP_2:        return "BLOCK_DROP";
-                case TileId::BLOCK_DEATH:         return "BLOCK_DEATH";
-                case TileId::BLOCK_DEATH_4D:      return "BLOCK_DEATH_4D";
-                case TileId::BLOCK_JUMP:          return "BLOCK_JUMP";
-                case TileId::BLOCK_WAVE_RIGHT:    return "BLOCK_WAVE_RIGHT";
-                case TileId::BLOCK_WAVE_LEFT:     return "BLOCK_WAVE_LEFT";
-                case TileId::BLOCK_MOVE_START:    return "BLOCK_MOVE_START";
-                case TileId::BLOCK_MOVE_END:      return "BLOCK_MOVE_END";
-                default:                          return "";
-            }
-        };
-        
-        auto getTypeStr = [](TileType type) -> std::string {
+        auto getTypeStr = [=]() -> std::string {
             switch( type ) {
                 case TileType::NONE:              return "NONE";
                 case TileType::FLAG:              return "FLAG";
@@ -123,8 +124,21 @@ struct TileData {
             }
         };
         
-        return STR_FORMAT("TileData { %s, type=%s, x,y=(%d,%d) }",
-                          getIdStr(tileId).c_str(), getTypeStr(type).c_str(), x, y);
+        auto getBlockTypeStr = [=]() -> std::string {
+            switch( blockType ) {
+                case BlockType::NORMAL:           return "NORMAL";
+                case BlockType::DROP:             return "DROP";
+                case BlockType::DEATH:            return "DEATH";
+                case BlockType::JUMP:             return "JUMP";
+                case BlockType::WAVE:             return "WAVE";
+                case BlockType::MOVE:             return "MOVE";
+                default:                          return "";
+            }
+        };
+        
+        return STR_FORMAT("TileData { %d, type=%s, blockType=%s, x,y=(%d,%d) }",
+                          (int)tileId, getTypeStr().c_str(), getBlockTypeStr().c_str(),
+                          x, y);
     }
 };
 

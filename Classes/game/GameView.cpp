@@ -480,10 +480,9 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
     
     auto block = dynamic_cast<Block*>(tile);
     
-    // 충돌 처리
-    switch( block->getData().tileId ) {
+    switch( block->getData().blockType ) {
         // Normal
-        case TileId::BLOCK_NORMAL: {
+        case BlockType::NORMAL: {
             if( category == PhysicsCategory::BLOCK_TOP ) {
                 // 포털 오픈됨 && 포털 아래칸 충돌 => 스테이지 클리어
                 auto portal = dynamic_cast<ClearPortal*>(getTiles(TileId::FLAG_CLEAR_PORTAL)[0]);
@@ -496,8 +495,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
         } break;
             
         // 드랍 블럭
-        case TileId::BLOCK_DROP_1:
-        case TileId::BLOCK_DROP_2: {
+        case BlockType::DROP: {
             if( category == PhysicsCategory::BLOCK_TOP ) {
                 auto dropBlock = dynamic_cast<BlockDrop*>(block);
                 dropBlock->dropEffect();
@@ -507,8 +505,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
         } break;
         
         // 데스 블럭
-        case TileId::BLOCK_DEATH:
-        case TileId::BLOCK_DEATH_4D: {
+        case BlockType::DEATH: {
             vector<PhysicsCategory> checkCategorys({
                 PhysicsCategory::BLOCK_TOP,
                 PhysicsCategory::BLOCK_SIDE,
@@ -536,10 +533,6 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                     break;
                 }
             }
-        } break;
-            
-        // 점프 블럭
-        case TileId::BLOCK_JUMP: {
         } break;
             
         default: break;
@@ -787,48 +780,53 @@ void GameView::initTiles() {
         
         GameTile *tile = nullptr;
         
-        switch( tileData.tileId ) {
-            case TileId::FLAG_START: {
-                tile = Flag::create(tileData);
-            } break;
-            case TileId::FLAG_CLEAR_PORTAL: {
-                tile = ClearPortal::create(tileData);
-            } break;
-                
-            case TileId::ITEM_SAUSAGE:
-            case TileId::ITEM_DOUBLE_JUMP: {
-                tile = Item::create(tileData);
-            } break;
-                
-            case TileId::BLOCK_NORMAL:
-            case TileId::BLOCK_DEATH:
-            case TileId::BLOCK_DEATH_4D:
-            case TileId::BLOCK_JUMP:
-            case TileId::BLOCK_WAVE_RIGHT:
-            case TileId::BLOCK_WAVE_LEFT: {
-                tile = Block::create(tileData);
-            } break;
-                
-            case TileId::BLOCK_DROP_1:
-            case TileId::BLOCK_DROP_2: {
-                tile = BlockDrop::create(tileData);
-            } break;
-                
-            case TileId::BLOCK_MOVE_START:
-            case TileId::BLOCK_MOVE_END: {
-                tile = BlockMoveRail::create(tileData);
-                
-                // START 블럭일 때 무브 블럭도 생성
-                if( tileData.tileId == TileId::BLOCK_MOVE_START ) {
-                    auto moveBlock = BlockMove::create(tileData, stage.getPairMoveEndBlock(tileData));
-                    addTile(moveBlock);
+        // Block
+        if( tileData.isBlock() ) {
+            switch( tileData.blockType ) {
+                case BlockType::NORMAL:
+                case BlockType::DEATH:
+                case BlockType::JUMP:
+                case BlockType::WAVE: {
+                    tile = Block::create(tileData);
+                } break;
                     
-                    // ZOrder 변경
-                    moveBlock->setLocalZOrder(ZOrder::TILE_BLOCK + 1);
-                }
-            } break;
-                
-            default: break;
+                case BlockType::DROP: {
+                    tile = BlockDrop::create(tileData);
+                } break;
+                    
+                case BlockType::MOVE: {
+                    tile = BlockMoveRail::create(tileData);
+                    
+                    // START 블럭일 때 무브 블럭도 생성
+                    if( tileData.tileId == TileId::BLOCK_MOVE_START ) {
+                        auto moveBlock = BlockMove::create(tileData, stage.getPairMoveEndBlock(tileData));
+                        addTile(moveBlock);
+                        
+                        // ZOrder 변경
+                        moveBlock->setLocalZOrder(ZOrder::TILE_BLOCK + 1);
+                    }
+                } break;
+                    
+                default: break;
+            }
+        }
+        // Flag & Item
+        else {
+            switch( tileData.tileId ) {
+                case TileId::FLAG_START: {
+                    tile = Flag::create(tileData);
+                } break;
+                case TileId::FLAG_CLEAR_PORTAL: {
+                    tile = ClearPortal::create(tileData);
+                } break;
+                    
+                case TileId::ITEM_SAUSAGE:
+                case TileId::ITEM_DOUBLE_JUMP: {
+                    tile = Item::create(tileData);
+                } break;
+                    
+                default: break;
+            }
         }
         
         if( tile ) {

@@ -91,6 +91,7 @@ void StageManager::parseStageFile() {
             stage.blockMoveHeight = mapProperties.at("block_move_height").asInt();
         }
         
+        // 파싱된 타일 배치 확인 로그
         {
             CCLOG("=== PARSED TILES HEAD(%d) ===", STAGE);
             
@@ -129,10 +130,12 @@ void StageManager::parseStageFile() {
                     tile.setTileId((TileId)tileId);
                 }
                 
+                // CCLOG("%s", tile.toString().c_str());
                 stage.tiles.push_back(tile);
             }
         }
 
+        // 타일 배치 확인 로그
         {
             CCLOG("");
             CCLOG("=== MY TILES HEAD(%d) ===", STAGE);

@@ -412,7 +412,7 @@ void Ball::waveStart(Block *block) {
 
     SBAudioEngine::playEffect(SOUND_WAVE);
     
-    bool isLeft = (block->getData().tileId == TileId::BLOCK_WAVE_LEFT);
+    bool isLeft = ((int)block->getData().tileId % 2 == 0);
     setImageDirection(isLeft ? BallDirection::LEFT : BallDirection::RIGHT);
     
     // 웨이브 상태 추가
@@ -553,31 +553,31 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
  */
 void Ball::onContactBlockTop(Block *block) {
     
-    // 캐릭터 작용
-    switch( block->getData().tileId ) {
+    auto playEffectSound = [=]() {
+        double now = SBSystemUtils::getCurrentTimeSeconds();
+        
+        if( now - jumpEffectPlayedTime > 0.1f ) {
+            jumpEffectPlayedTime = now;
+            SBAudioEngine::playEffect(SOUND_JUMP);
+        }
+    };
+    
+    switch( block->getData().blockType ) {
         // 점프 블럭
-        case TileId::BLOCK_JUMP: {
+        case BlockType::JUMP: {
+            playEffectSound();
             setLinearVelocity(getMoveVelocityX(), VELOCITY_JUMP_UP);
         } break;
             
         // 웨이브 블럭
-        case TileId::BLOCK_WAVE_RIGHT:
-        case TileId::BLOCK_WAVE_LEFT: {
+        case BlockType::WAVE: {
             waveStart(block);
         } break;
             
         // 기본 점프
         default: {
+            playEffectSound();
             setLinearVelocity(getMoveVelocityX(), VELOCITY_BOUNCE_UP);
-            
-            // 효과음
-            double now = SBSystemUtils::getCurrentTimeSeconds();
-            
-            if( now - jumpEffectPlayedTime > 0.1f ) {
-                jumpEffectPlayedTime = now;
-                SBAudioEngine::playEffect(SOUND_JUMP);
-            }
-            
         } break;
     }
     
