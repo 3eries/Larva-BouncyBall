@@ -81,6 +81,7 @@ public:
                                 PhysicsCategory category);
     virtual void onContactBlockTop(Block *block);
     virtual void onContactBlockSide(Block *block);
+    virtual void onContactWall(Ball *ball, PhysicsCategory category);
     
 protected:
     CC_SYNTHESIZE_READONLY(State, state, State);

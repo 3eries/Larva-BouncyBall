@@ -37,8 +37,7 @@ public:
     std::function<void(Ball*,GameTile*,
                        cocos2d::Vec2,PhysicsCategory)>       onContactBlock;
     
-//    std::function<void(Ball*,PhysicsCategory)>               onContactWall;
-    std::function<void(Ball*)>                               onContactWall;
+    std::function<void(Ball*,PhysicsCategory)>               onContactWall;
     std::function<void(Ball*)>                               onContactFloor;
     
 private:

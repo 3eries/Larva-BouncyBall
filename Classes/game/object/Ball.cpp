@@ -148,7 +148,7 @@ void Ball::initPhysics() {
     listener->setContactTarget(this);
     listener->onContactBlock        = CC_CALLBACK_4(Ball::onContactBlock, this);
     listener->onContactItem         = CC_CALLBACK_2(Ball::onContactItem, this);
-//    listener->onContactWall         = CC_CALLBACK_1(Ball::onContactWall, this);
+    listener->onContactWall         = CC_CALLBACK_2(Ball::onContactWall, this);
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
@@ -609,6 +609,25 @@ void Ball::onContactBlockSide(Block *block) {
     }
     
     moveHorizontalLock(0.1f * GAME_MANAGER->getMapScaleFactor());
+}
+
+/**
+ * 볼 <-> 벽 충돌
+ */
+void Ball::onContactWall(Ball *ball, PhysicsCategory category) {
+    
+    if( category != PhysicsCategory::WALL_LEFT && category != PhysicsCategory::WALL_RIGHT ) {
+        return;
+    }
+    
+    // 웨이브 종료
+    if( hasState(State::WAVE) ) {
+        waveEnd(true);
+    }
+    // 더블 점프 종료
+    else if( hasState(State::DOUBLE_JUMP) ) {
+        doubleJumpEnd(true);
+    }
 }
 
 #pragma mark- LinearVelocity

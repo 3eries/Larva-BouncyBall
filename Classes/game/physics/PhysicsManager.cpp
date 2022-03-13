@@ -193,7 +193,7 @@ void PhysicsManager::BeginContact(b2Contact *contact) {
             auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, wallCategory, fixtureA, fixtureB);
             
             if( objs.obj1 && objs.obj2 ) {
-                dispatchOnContactWall((Ball*)objs.obj1);
+                dispatchOnContactWall((Ball*)objs.obj1, wallCategory);
                 return;
             }
         }
@@ -583,7 +583,7 @@ void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 co
     }
 }
 
-void PhysicsManager::dispatchOnContactWall(Ball *ball) {
+void PhysicsManager::dispatchOnContactWall(Ball *ball, PhysicsCategory category) {
     
     auto copyListeners = listeners;
     
@@ -593,10 +593,10 @@ void PhysicsManager::dispatchOnContactWall(Ball *ball) {
             
             if( contactTarget ) {
                 if( contactTarget == ball ) {
-                    listener->onContactWall(ball);
+                    listener->onContactWall(ball, category);
                 }
             } else {
-                listener->onContactWall(ball);
+                listener->onContactWall(ball, category);
             }
         }
     }
