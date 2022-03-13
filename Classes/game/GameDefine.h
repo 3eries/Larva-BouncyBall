@@ -59,6 +59,7 @@ enum GameState {
     GAME_OVER       = (1 << 6),     // 게임 오버
     CONTINUE        = (1 << 7),     // 이어하기
     RESULT          = (1 << 8),     // 결과 화면
+    TUTORIAL_PAUSE  = (1 << 9),     // 튜토리얼 진행으로 일시정지
 };
 
 enum GameOverType {

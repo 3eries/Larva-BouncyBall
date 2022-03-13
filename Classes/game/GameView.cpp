@@ -152,6 +152,12 @@ void GameView::onGameExit() {
  */
 void GameView::onGamePause() {
     
+    ball->pause();
+    
+    for( auto tile : tiles ) {
+        SBNodeUtils::recursivePause(tile);
+    }
+    
     getScheduler()->pauseTarget(this);
     getActionManager()->pauseTarget(this);
 }
@@ -163,6 +169,12 @@ void GameView::onGameResume() {
     
     getScheduler()->resumeTarget(this);
     getActionManager()->resumeTarget(this);
+    
+    ball->resume();
+    
+    for( auto tile : tiles ) {
+        SBNodeUtils::recursiveResume(tile);
+    }
 }
 
 /**
@@ -357,6 +369,8 @@ void GameView::onTouchEnded(Touch *touch) {
                 isDoubleJump = true;
                 
                 if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP && tutorialAnimation ) {
+                    GAME_MANAGER->removeState(GameState::TUTORIAL_PAUSE);
+                    
                     ball->resume();
                     PHYSICS_MANAGER->resumeScheduler();
                     
@@ -457,6 +471,8 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             // 튜토리얼, 물리 세계 일시정지
             if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP ) {
                 SBDirector::postDelayed(this, [=]() {
+                    GAME_MANAGER->addState(GameState::TUTORIAL_PAUSE);
+                    
                     PHYSICS_MANAGER->pauseScheduler();
                     ball->pause();
                 }, 0.1f, true);

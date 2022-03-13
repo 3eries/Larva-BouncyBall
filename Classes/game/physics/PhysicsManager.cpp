@@ -77,7 +77,9 @@ void PhysicsManager::pauseScheduler() {
  * 스케줄러 재게
  */
 void PhysicsManager::resumeScheduler() {
-    SBScheduleHelper::resume(this);
+    if( !GAME_MANAGER->hasState(GameState::TUTORIAL_PAUSE) ) {
+        SBScheduleHelper::resume(this);
+    }
 }
 
 /**

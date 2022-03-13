@@ -213,6 +213,13 @@ bool Ball::hasState(State state) {
     return (this->state & state) == state;
 }
 
+void Ball::resume() {
+    
+    if( !GAME_MANAGER->hasState(GameState::TUTORIAL_PAUSE) ) {
+        Node::resume();
+    }
+}
+
 bool Ball::beforeStep() {
     return true;
 }

@@ -51,6 +51,7 @@ public:
     bool            hasState(State state);
     
 public:
+    virtual void    resume() override;
     virtual bool    beforeStep() override;
     virtual bool    afterStep() override;
     
