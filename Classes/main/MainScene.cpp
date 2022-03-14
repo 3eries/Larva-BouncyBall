@@ -262,7 +262,7 @@ void MainScene::initWorlds() {
     auto onPageChanged = [=](size_t page) {
         
         this->pageIndex = page;
-        int world = page + 1;
+        int world = (int)page + 1;
         
         worldTitle->setTexture(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png", world));
         

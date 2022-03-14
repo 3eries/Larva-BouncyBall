@@ -31,7 +31,7 @@ using namespace std;
 #define SCHEDULER_BALL_STOP_HORIZONTAL              "BALL_STOP_HORIZONTAL"
 
 #define TAP_INTERVAL                                (0.35f / 2) // 탭 판단 시간
-#define TAP_DIST                                    200         // 탭 판단 거리
+#define TAP_DIST                                    300         // 탭 판단 거리
 
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
 #define DEBUG_DRAW_PHYSICS                  1
