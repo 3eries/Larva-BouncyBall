@@ -56,8 +56,11 @@ private:
     void onStageClear(const StageData &stage);
 
 public:
+    
     void replaceMainScene();
     void replaceGameScene(int stage);
+    
+    void showInterstitial(SBCallback onAdClosed);
     
     void onClick(cocos2d::Node *sender) override;
     

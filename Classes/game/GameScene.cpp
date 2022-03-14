@@ -136,7 +136,9 @@ void GameScene::onGamePause() {
     // 일시정지 팝업 생성
     auto popup = PausePopup::create();
     popup->setOnHomeListener([=]() {
-        this->replaceMainScene();
+        this->showInterstitial([=]() {
+            this->replaceMainScene();
+        });
     });
     popup->setOnRetryListener([=]() {
         this->replaceGameScene(GAME_MANAGER->getStage().stage);
@@ -186,10 +188,14 @@ void GameScene::onStageClear(const StageData &stage) {
         this->replaceMainScene();
     });
     popup->setOnRetryListener([=]() {
-        this->replaceGameScene(stage.stage);
+        this->showInterstitial([=]() {
+            this->replaceGameScene(stage.stage);
+        });
     });
     popup->setOnNextListener([=]() {
-        this->replaceGameScene(stage.stage+1);
+        this->showInterstitial([=]() {
+            this->replaceGameScene(stage.stage+1);
+        });
     });
     popup->setOnShopListener([=]() {
         auto shopPopup = ShopPopup::create();
@@ -226,6 +232,24 @@ void GameScene::replaceGameScene(int stage) {
     GAME_MANAGER->setStage(stage);
     
     replaceScene(SceneType::GAME);
+}
+
+/**
+ * 전면 광고 노출
+ */
+void GameScene::showInterstitial(SBCallback onAdClosed) {
+    
+    if( !User::isRemovedAds() && AdsHelper::isInterstitialLoaded() ) {
+        SBDirector::getInstance()->setScreenTouchLocked(true);
+        
+        auto listener = AdListener::create(AdType::INTERSTITIAL);
+        listener->setTarget(this);
+        listener->onAdClosed = onAdClosed;
+        AdsHelper::showInterstitial(listener);
+        
+    } else {
+        onAdClosed();
+    }
 }
 
 /**

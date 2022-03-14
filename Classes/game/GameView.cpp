@@ -368,6 +368,7 @@ void GameView::onTouchEnded(Touch *touch) {
             if( ball->hasState(Ball::State::DOUBLE_JUMP_READY) ) {
                 isDoubleJump = true;
                 
+                // 튜토리얼 제거
                 if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP && tutorialAnimation ) {
                     GAME_MANAGER->removeState(GameState::TUTORIAL_PAUSE);
                     

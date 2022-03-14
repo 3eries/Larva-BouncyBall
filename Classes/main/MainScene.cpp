@@ -146,26 +146,10 @@ void MainScene::replaceGameScene(int stage) {
     SB_SAFE_HIDE(getChildByTag(Tag::BTN_SHOP));
     SB_SAFE_HIDE(getChildByTag(Tag::BTN_SETTING));
     
-    auto onAdClosed = [=]() {
-        GAME_MANAGER->init();
-        GAME_MANAGER->setStage(stage);
-        
-        replaceScene(SceneType::GAME);
-    };
+    GAME_MANAGER->init();
+    GAME_MANAGER->setStage(stage);
     
-    // 최초 실행이 아닐때 전면 광고 노출
-    if( !SBDirector::isFirstRun() &&
-        !User::isRemovedAds() && AdsHelper::isInterstitialLoaded() ) {
-        SBDirector::getInstance()->setScreenTouchLocked(true);
-        
-        auto listener = AdListener::create(AdType::INTERSTITIAL);
-        listener->setTarget(this);
-        listener->onAdClosed = onAdClosed;
-        AdsHelper::showInterstitial(listener);
-        
-    } else {
-        onAdClosed();
-    }
+    replaceScene(SceneType::GAME);
 }
 
 /**
