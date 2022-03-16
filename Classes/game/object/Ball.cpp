@@ -35,7 +35,7 @@ using namespace std;
 #define VELOCITY_WAVE_MOVE_RIGHT               (30 * GAME_MANAGER->getMapScaleFactor())
 
 #define SCHEDULER_HORIZONTAL_MOVE              "SCHEDULER_HORIZONTAL_MOVE"          // 수평 이동
-#define SCHEDULER_HORIZONTAL_MOVE_LOCKED       "SCHEDULER_HORIZONTAL_MOVE_LOCKED"   // 수평 이동 잠금
+#define SCHEDULER_HORIZONTAL_STOP              "SCHEDULER_HORIZONTAL_STOP"          // 수평 이동 정지
 #define SCHEDULER_DOUBLE_JUMP_END              "SCHEDULER_DOUBLE_JUMP_END"          // 더블 점프 종료
 #define SCHEDULER_BOUNCE_DOWN                  "SCHEDULER_BOUNCE_DOWN"
 
@@ -56,8 +56,7 @@ Ball::Ball(const StageData &stage) : SBPhysicsObject(this),
 state(State::NONE),
 stage(stage),
 direction(BallDirection::NONE),
-velocityLocked(false),
-horizontalMoveLocked(false),
+contactBlockSideTime(0),
 jumpEffectPlayedTime(0) {
 }
 
@@ -80,7 +79,7 @@ bool Ball::init() {
     initImage();
     initPhysics();
     
-    schedule(CC_CALLBACK_1(Ball::moveHorizontal, this), SCHEDULER_HORIZONTAL_MOVE);
+    scheduleMoveHorizontal();
     
     return true;
 }
@@ -250,6 +249,14 @@ void Ball::setFirstPosition(const Vec2 &p) {
 }
 
 /**
+ * 터치 이벤트를 준비합니다
+ */
+void Ball::prepareTouch() {
+    
+    unschedule(SCHEDULER_HORIZONTAL_STOP);
+}
+
+/**
  * 이미지 방향을 설정합니다
  */
 void Ball::setImageDirection(BallDirection direction) {
@@ -266,21 +273,24 @@ void Ball::setImageDirection(BallDirection direction) {
 void Ball::setDirection(BallDirection direction) {
     
     this->direction = direction;
-    
-    CCLOG("방향 설정: %s", (isLeftDirection() ? "LEFT" : "RIGHT"));
-    
     setImageDirection(direction);
 }
 
-void Ball::setDirection(Touch *touch) {
- 
-    bool isLeft = (touch->getLocation().x < SB_WIN_SIZE.width*0.5f);
+/**
+ * 수평 이동 스케줄러 시작
+ */
+void Ball::scheduleMoveHorizontal() {
+    
+    unscheduleMoveHorizontal();
+    schedule(CC_CALLBACK_1(Ball::moveHorizontal, this), SCHEDULER_HORIZONTAL_MOVE);
+}
 
-    if( isLeft ) {
-        setDirection(BallDirection::LEFT);
-    } else {
-        setDirection(BallDirection::RIGHT);
-    }
+/**
+ * 수평 이동 스케줄러 종료
+ */
+void Ball::unscheduleMoveHorizontal() {
+    
+    unschedule(SCHEDULER_HORIZONTAL_MOVE);
 }
 
 /**
@@ -292,7 +302,8 @@ void Ball::moveHorizontal(float dt) {
         return;
     }
     
-    if( horizontalMoveLocked ) {
+    // 가속도 액션 체크
+    if( getActionByTag(ActionTag::VELOCITY) ) {
         return;
     }
     
@@ -310,44 +321,39 @@ void Ball::moveHorizontal(float dt) {
 }
 
 /**
- * 수평 이동 잠금
- * @param duration 잠금 시간
+ * 수평 이동 정지
  */
-void Ball::moveHorizontalLock(float duration, bool infinity) {
+void Ball::stopHorizontal(float delay) {
     
-    moveHorizontalUnlock();
+    CCLOG("Ball::stopHorizontal delay: %f", delay);
+    unschedule(SCHEDULER_HORIZONTAL_STOP);
     
-    horizontalMoveLocked = true;
+    const bool isDoubleJump = hasState(State::DOUBLE_JUMP);
+    const bool isWaveHorizontalLocked = hasState(State::WAVE_HORIZONTAL_LOCK);
     
-    if( !infinity ) {
-        schedule([=](float dt) {
-            this->moveHorizontalUnlock();
-        }, duration, SCHEDULER_HORIZONTAL_MOVE_LOCKED);
-    }
-}
-
-/**
- * 수평 이동 잠금 해제
- * @param duration 잠금 시간
- */
-void Ball::moveHorizontalUnlock() {
-    
-    if( !horizontalMoveLocked ) {
+    if( isWaveHorizontalLocked ) {
+        setDirection(BallDirection::NONE);
+        setImageDirection(hasState(State::WAVE_LEFT) ? BallDirection::LEFT : BallDirection::RIGHT);
         return;
     }
     
-    horizontalMoveLocked = false;
-    unschedule(SCHEDULER_HORIZONTAL_MOVE_LOCKED);
-}
-
-/**
- * 수평 이동을 멈춥니다
- */
-void Ball::stopHorizontal() {
+    auto stop = [=]() {
+        this->setDirection(BallDirection::NONE);
     
-    setDirection(BallDirection::NONE);
+        if( !isDoubleJump && !this->getActionByTag(ActionTag::VELOCITY) ) {
+            this->setLinearVelocityX(0);
+        }
+    };
     
-    setLinearVelocityX(0);
+    if( delay == 0.0f || getScheduler()->isTargetPaused(this) ) {
+        stop();
+        return;
+    }
+    
+    schedule([=](float dt) {
+        this->unschedule(SCHEDULER_HORIZONTAL_STOP); // schedule once
+        stop();
+    }, SCHEDULER_HORIZONTAL_STOP);
 }
 
 /**
@@ -366,15 +372,16 @@ void Ball::doubleJumpStart() {
     // 아웃 라인 제거
     outlineImage->setVisible(false);
     
-    // 가속도 잠금
-    velocityLocked = true;
-    moveHorizontalLock(0, true);
+    // 수평 이동 정지
+    unscheduleMoveHorizontal();
     
     // 가속도 강제 변경
+    stopActionByTag(ActionTag::VELOCITY);
+    
     float x = isLeftDirection() ? VELOCITY_DOUBLE_JUMP_LEFT : VELOCITY_DOUBLE_JUMP_RIGHT;
     // float y = fabsf(getLinearVelocityY()) + VELOCITY_DOUBLE_JUMP_UP;
     float y = VELOCITY_DOUBLE_JUMP_UP;
-    setLinearVelocity(x, y, true);
+    setLinearVelocity(x, y);
     
     // 더블 점프 종료
     unschedule(SCHEDULER_DOUBLE_JUMP_END);
@@ -396,11 +403,10 @@ void Ball::doubleJumpEnd(bool isContactBlock) {
     
     CCLOG("더블 점프 종료");
     unschedule(SCHEDULER_DOUBLE_JUMP_END);
-    
     removeState(State::DOUBLE_JUMP);
     
-    velocityLocked = false;
-    moveHorizontalUnlock();
+    // 수평 이동 시작
+    scheduleMoveHorizontal();
     
     // 블럭과 충돌 시 가속도 제거
     if( isContactBlock ) {
@@ -417,6 +423,9 @@ void Ball::doubleJumpEnd(bool isContactBlock) {
  */
 void Ball::waveStart(Block *block) {
 
+    CCASSERT(!hasState(State::WAVE), "Ball::waveStart error: already started.");
+    CCLOG("웨이브 시작");
+    
     SBAudioEngine::playEffect(SOUND_WAVE);
     
     bool isLeft = ((int)block->getData().tileId % 2 == 0);
@@ -424,6 +433,7 @@ void Ball::waveStart(Block *block) {
     
     // 웨이브 상태 추가
     addState(State::WAVE);
+    addState(isLeft ? State::WAVE_LEFT : State::WAVE_RIGHT);
     
     // 중력 제거
     PHYSICS_MANAGER->getWorld()->SetGravity(b2Vec2(0,0));
@@ -436,6 +446,8 @@ void Ball::waveStart(Block *block) {
     auto SCHEDULER = "AFTER_STEP";
     
     schedule([=](float dt) {
+        CCLOG("웨이브 - 발사 시작");
+        
         this->unschedule(SCHEDULER);
         this->setCollisionLocked(false);
         
@@ -446,16 +458,25 @@ void Ball::waveStart(Block *block) {
         
         // 캐릭터 발사
         float velocityX = isLeft ? VELOCITY_WAVE_MOVE_LEFT : VELOCITY_WAVE_MOVE_RIGHT;
-        setLinearVelocity(b2Vec2(velocityX, 0), true);
+        this->setLinearVelocity(b2Vec2(velocityX, 0));
     }, SCHEDULER);
     
     // 수평 이동 잠금
+    addState(State::WAVE_HORIZONTAL_LOCK);
+    unscheduleMoveHorizontal();
+    
     const float horizontalLockDuration = 0.1f;
     
-    moveHorizontalLock(horizontalLockDuration);
-    
     SBDirector::postDelayed(this, [=] {
-        this->updateImageDirection();
+        CCLOG("웨이브 - 수평 이동 가능");
+        this->removeState(State::WAVE_HORIZONTAL_LOCK);
+        this->scheduleMoveHorizontal();
+        
+        if( this->direction != BallDirection::NONE ) {
+            this->setImageDirection(this->direction);
+        } else {
+            this->setImageDirection(isLeft ? BallDirection::LEFT : BallDirection::RIGHT);
+        }
     }, horizontalLockDuration, false);
 }
 
@@ -464,9 +485,11 @@ void Ball::waveStart(Block *block) {
  */
 void Ball::waveEnd(bool isContactBlock) {
     
-    CCLOG("Ball::onWaveEnd: %s", isContactBlock ? "contact block" : "touch");
+    CCLOG("웨이브 종료 - %s", isContactBlock ? "contact block" : "touch");
     
     removeState(State::WAVE);
+    removeState(State::WAVE_LEFT);
+    removeState(State::WAVE_RIGHT);
     
     // 중력 생성
     PHYSICS_MANAGER->getWorld()->SetGravity(PHYSICS_GRAVITY);
@@ -479,6 +502,13 @@ void Ball::waveEnd(bool isContactBlock) {
     else {
         bool isLeft = (body->GetLinearVelocity().x < 0);
         
+        auto setVelocityZeroWithAction = [=]() {
+            
+            float duration = 0.3f * GAME_MANAGER->getMapScaleFactor();
+            setLinearVelocityXWithAction(duration, getLinearVelocityX(), 0, [=]() {
+            });
+        };
+        
         if( isLeft ) {
             // Wave Left && Touch Left
             if( direction == BallDirection::LEFT ) {
@@ -486,18 +516,12 @@ void Ball::waveEnd(bool isContactBlock) {
             }
             // Wave Left && Touch Right
             else {
-                float duration = 0.3f * GAME_MANAGER->getMapScaleFactor();
-                
-                setLinearVelocityWithAction(duration, getLinearVelocityX(), 0, true);
-                moveHorizontalLock(duration);
+                setVelocityZeroWithAction();
             }
         } else {
             // Wave Right && Touch Left
             if( direction == BallDirection::LEFT ) {
-                float duration = 0.3f * GAME_MANAGER->getMapScaleFactor();
-                
-                setLinearVelocityWithAction(duration, getLinearVelocityX(), 0, true);
-                moveHorizontalLock(duration);
+                setVelocityZeroWithAction();
             }
             // Wave Right && Touch Right
             else {
@@ -537,6 +561,8 @@ void Ball::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Physics
         return;
     }
     
+    stopActionByTag(ActionTag::VELOCITY);
+    
     auto block = (Block*)tile;
     
     // 웨이브 종료
@@ -572,6 +598,7 @@ void Ball::onContactBlockTop(Block *block) {
     switch( block->getData().blockType ) {
         // 점프 블럭
         case BlockType::JUMP: {
+            CCLOG("점프 블럭");
             playEffectSound();
             setLinearVelocity(getMoveVelocityX(), VELOCITY_JUMP_UP);
         } break;
@@ -583,6 +610,7 @@ void Ball::onContactBlockTop(Block *block) {
             
         // 기본 점프
         default: {
+            CCLOG("기본 점프");
             playEffectSound();
             setLinearVelocity(getMoveVelocityX(), VELOCITY_BOUNCE_UP);
         } break;
@@ -610,12 +638,26 @@ void Ball::onContactBlockTop(Block *block) {
  */
 void Ball::onContactBlockSide(Block *block) {
     
-    // 벽에 튕기는 거리 조절을 위해 n초간 수평 이동 잠금
-    if( horizontalMoveLocked ) {
-        return;
-    }
+//    // 벽에 튕기는 거리 조절을 위해 n초간 수평 이동 잠금
+//    if( horizontalMoveLocked ) {
+//        return;
+//    }
+//
+//    moveHorizontalLock(0.1f * GAME_MANAGER->getMapScaleFactor());
     
-    moveHorizontalLock(0.1f * GAME_MANAGER->getMapScaleFactor());
+    //
+    double moveLockDuration = 0.1f * GAME_MANAGER->getMapScaleFactor();
+    double nowTime = SBSystemUtils::getCurrentTimeMillis();
+    
+    // 수평 이동 잠금
+    if( nowTime - contactBlockSideTime > moveLockDuration ) {
+        contactBlockSideTime = nowTime;
+        unscheduleMoveHorizontal();
+        
+        SBDirector::postDelayed(this, [=]() {
+            this->scheduleMoveHorizontal();
+        }, moveLockDuration, false);
+    }
 }
 
 /**
@@ -642,66 +684,22 @@ void Ball::onContactWall(Ball *ball, PhysicsCategory category) {
 /**
  * Body 가속도를 설정합니다
  */
-void Ball::setLinearVelocity(const b2Vec2 &v, bool force) {
+void Ball::setLinearVelocity(const b2Vec2 &v) {
     
-    if( body && (force || !velocityLocked) ) {
-        // CCLOG("setLinearVelocity: %f,%f", v.x, v.y);
-        
-        if( direction == BallDirection::LEFT ) {
-            if( v.x > 0 ) {
-                CCLOG("왼쪽 방향인데 오른쪽으로 힘 가해졌당");
-            }
-        }
-        else if( direction == BallDirection::RIGHT ){
-            if( v.x < 0 ) {
-                CCLOG("오른쪽 방향인데 왼쪽으로 힘 가해졌당");
-            }
-        }
-        
-        body->SetLinearVelocity(v);
-    }
+    // CCLOG("setLinearVelocity: %f,%f", v.x, v.y);
+    body->SetLinearVelocity(v);
 }
 
-void Ball::setLinearVelocity(float x, float y, bool force) {
-    
-    setLinearVelocity(b2Vec2(x,y), force);
+void Ball::setLinearVelocity(float x, float y) {
+    setLinearVelocity(b2Vec2(x,y));
 }
 
-void Ball::setLinearVelocityX(float x, bool force) {
-    
-    if( body ) {
-        setLinearVelocity(b2Vec2(x, body->GetLinearVelocity().y), force);
-    }
+void Ball::setLinearVelocityX(float x) {
+    setLinearVelocity(b2Vec2(x, body->GetLinearVelocity().y));
 }
 
-void Ball::setLinearVelocityY(float y, bool force) {
-    
-    if( body ) {
-        setLinearVelocity(b2Vec2(body->GetLinearVelocity().x, y), force);
-    }
-}
-
-void Ball::setLinearVelocityWithAction(float duration, float from, float to,
-                                       bool isHorizontal) {
-    
-    stopActionByTag(ActionTag::VELOCITY);
-    
-    velocityLocked = true;
-    
-    auto valueChanged = ActionFloat::create(duration, from, to, [=](float v) {
-        if( isHorizontal ) {
-            this->setLinearVelocityX(v, true);
-        } else {
-            this->setLinearVelocityY(v, true);
-        }
-    });
-    auto callFunc = CallFunc::create([=]() {
-        velocityLocked = false;
-    });
-    
-    auto action = Sequence::create(valueChanged, callFunc, nullptr);
-    action->setTag(ActionTag::VELOCITY);
-    runAction(action);
+void Ball::setLinearVelocityY(float y) {
+    setLinearVelocity(b2Vec2(body->GetLinearVelocity().x, y));
 }
 
 float Ball::getLinearVelocityX() {
@@ -718,4 +716,39 @@ float Ball::getMoveVelocityX() {
         case BallDirection::RIGHT:      return VELOCITY_MOVE_RIGHT;
         default:                        return 0;
     }
+}
+
+void Ball::setLinearVelocityWithAction(float duration, float from, float to,
+                                       function<void(float)> onValueChanged,
+                                       SBCallback onFinished) {
+    
+    CCLOG("setLinearVelocityWithAction 시작");
+    
+    stopActionByTag(ActionTag::VELOCITY);
+    
+    auto actionFloat = ActionFloat::create(duration, from, to, onValueChanged);
+    auto callFunc = CallFunc::create([=]() {
+        CCLOG("setLinearVelocityWithAction 종료");
+        SB_SAFE_PERFORM_LISTENER(this, onFinished);
+    });
+    
+    auto action = Sequence::create(actionFloat, callFunc, nullptr);
+    action->setTag(ActionTag::VELOCITY);
+    runAction(action);
+}
+
+void Ball::setLinearVelocityXWithAction(float duration, float from, float to,
+                                        SBCallback onFinished) {
+    
+    setLinearVelocityWithAction(duration, from, to, [=](float v) {
+        body->SetLinearVelocity(b2Vec2(v, body->GetLinearVelocity().y));
+    }, onFinished);
+}
+
+void Ball::setLinearVelocityYWithAction(float duration, float from, float to,
+                                        SBCallback onFinished) {
+    
+    setLinearVelocityWithAction(duration, from, to, [=](float v) {
+        body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, v));
+    }, onFinished);
 }

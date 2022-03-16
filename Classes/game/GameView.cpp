@@ -27,8 +27,7 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define SCHEDULER_UPDATE_CAMERA                     "UPDATE_CAMERA"
-#define SCHEDULER_BALL_STOP_HORIZONTAL              "BALL_STOP_HORIZONTAL"
+#define SCHEDULER_UPDATE_CAMERA                     "SCHEDULER_UPDATE_CAMERA"
 
 #define TAP_INTERVAL                                (0.35f / 2) // 탭 판단 시간
 #define TAP_DIST                                    300         // 탭 판단 거리
@@ -294,13 +293,13 @@ void GameView::onTouchBegan(Touch *touch) {
         return;
     }
     
-    unschedule(SCHEDULER_BALL_STOP_HORIZONTAL);
-    
     touches.pushBack(touch);
     
-    ball->setDirection(touch);
+    auto direction = getBallDirection(touch);
+    CCLOG("터치 시작: %s", toString(direction).c_str());
     
-    CCLOG("터치 시작: %s", (ball->isLeftDirection() ? "LEFT" : "RIGHT"));
+    ball->prepareTouch();
+    ball->setDirection(direction);
     
     // 탭 체크
     if( touch->getID() == 0 ) {
@@ -328,7 +327,7 @@ void GameView::onTouchBegan(Touch *touch) {
 
 void GameView::onTouchEnded(Touch *touch) {
     
-    CCLOG("터치 종료");
+    CCLOG("터치 종료: %d", (int)touches.size());
     
     touches.eraseObject(touch, true);
     
@@ -385,16 +384,21 @@ void GameView::onTouchEnded(Touch *touch) {
     }
     
     if( touches.size() == 0 ) {
-        scheduleOnce([=](float dt) {
-            ball->stopHorizontal();
-        }, 0.05f, SCHEDULER_BALL_STOP_HORIZONTAL);
+        ball->stopHorizontal(0.05f);
     } else {
-        ball->setDirection(touches.at(touches.size()-1));
+        CCLOG("잔여 터치");
+        auto remainTouch = touches.at(touches.size()-1);
+        ball->setDirection(getBallDirection(remainTouch));
     }
 }
 
 bool GameView::isTap(const Vec2 &p1, const Vec2 &p2, double t1, double t2) {
     return t2 - t1 <= TAP_INTERVAL && p2.getDistance(p1) <= TAP_DIST;
+}
+
+BallDirection GameView::getBallDirection(cocos2d::Touch *touch) {
+    bool isLeft = (touch->getLocation().x < SB_WIN_SIZE.width*0.5f);
+    return isLeft ? BallDirection::LEFT : BallDirection::RIGHT;
 }
 
 #pragma mark- Physics Event

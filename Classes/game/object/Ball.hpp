@@ -24,7 +24,11 @@ public:
         NONE                  = (1 << 0),
         DOUBLE_JUMP_READY     = (1 << 1),     // 더블 점프 대기
         DOUBLE_JUMP           = (1 << 2),     // 더블 점프 발동됨
-        WAVE                  = (1 << 3),     // 웨이브 진행중
+        
+        WAVE                  = (1 << 3),     // 웨이브
+        WAVE_LEFT             = (1 << 4),     // 왼쪽 웨이브
+        WAVE_RIGHT            = (1 << 5),     // 오른쪽 웨이브
+        WAVE_HORIZONTAL_LOCK  = (1 << 6),     // 웨이브 중 수평 이동 잠금
     };
     
     enum ActionTag {
@@ -57,17 +61,16 @@ public:
     
     void            setFirstPosition(const cocos2d::Vec2 &p);
     
-    void            setImageDirection(BallDirection direction);
-    void            updateImageDirection() { setImageDirection(direction); }
+    void            prepareTouch();
     
+    void            setImageDirection(BallDirection direction);
     void            setDirection(BallDirection direction);
-    void            setDirection(cocos2d::Touch *touch);
     bool            isLeftDirection() { return direction == BallDirection::LEFT; }
     
+    void            scheduleMoveHorizontal();
+    void            unscheduleMoveHorizontal();
     void            moveHorizontal(float dt);
-    void            moveHorizontalLock(float duration, bool infinity = false);
-    void            moveHorizontalUnlock();
-    void            stopHorizontal();
+    void            stopHorizontal(float delay);
     
 public:
     void            doubleJumpStart();
@@ -77,12 +80,12 @@ public:
     void            waveEnd(bool isContactBlock);
     
 public:
-    virtual void onContactItem(Ball *ball, GameTile *tile);
-    virtual void onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
+    void            onContactItem(Ball *ball, GameTile *tile);
+    void            onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
                                 PhysicsCategory category);
-    virtual void onContactBlockTop(Block *block);
-    virtual void onContactBlockSide(Block *block);
-    virtual void onContactWall(Ball *ball, PhysicsCategory category);
+    void            onContactBlockTop(Block *block);
+    void            onContactBlockSide(Block *block);
+    void            onContactWall(Ball *ball, PhysicsCategory category);
     
 protected:
     CC_SYNTHESIZE_READONLY(State, state, State);
@@ -93,23 +96,26 @@ protected:
     
     CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
 
-    bool horizontalMoveLocked;      // 수평 이동 잠금 Flag
-    
-    double jumpEffectPlayedTime;    // 점프 효과음 재생된 시간
+    double contactBlockSideTime;      // 블럭 측면 충돌 시간
+    double jumpEffectPlayedTime;      // 점프 효과음 재생된 시간
     
 #pragma mark- LinearVelocity
 private:
-    void            setLinearVelocity(const b2Vec2 &v, bool force = false);
-    void            setLinearVelocity(float x, float y, bool force = false);
-    void            setLinearVelocityX(float x, bool force = false);
-    void            setLinearVelocityY(float y, bool force = false);
-    void            setLinearVelocityWithAction(float duration, float from, float to,
-                                                bool isHorizontal);
+    void            setLinearVelocity(const b2Vec2 &v);
+    void            setLinearVelocity(float x, float y);
+    void            setLinearVelocityX(float x);
+    void            setLinearVelocityY(float y);
     float           getLinearVelocityX();
     float           getLinearVelocityY();
     float           getMoveVelocityX();
     
-    bool velocityLocked; // 가속도 잠금 Flag
+    void            setLinearVelocityWithAction(float duration, float from, float to,
+                                                std::function<void(float)> onValueChanged,
+                                                SBCallback onFinished = nullptr);
+    void            setLinearVelocityXWithAction(float duration, float from, float to,
+                                                 SBCallback onFinished = nullptr);
+    void            setLinearVelocityYWithAction(float duration, float from, float to,
+                                                 SBCallback onFinished = nullptr);
 };
 
 #endif /* Ball_hpp */

@@ -78,6 +78,14 @@ enum class BallDirection {
     RIGHT,
 };
 
+static inline std::string toString(BallDirection dir) {
+    switch( dir ) {
+        case BallDirection::LEFT:       return "LEFT";
+        case BallDirection::RIGHT:      return "RIGHT";
+        default:                        return "NONE";
+    }
+}
+
 // Physics
 #define                PHYSICS_FPS                        (1 / 60.0f)
 #define                PHYSICS_GRAVITY                    b2Vec2(0, -60 * GAME_MANAGER->getMapScaleFactor())

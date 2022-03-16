@@ -101,7 +101,9 @@ private:
 private:
     void onTouchBegan(cocos2d::Touch *touch);
     void onTouchEnded(cocos2d::Touch *touch);
-    bool isTap(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, double t1, double t2);
+    
+    static bool isTap(const cocos2d::Vec2 &p1, const cocos2d::Vec2 &p2, double t1, double t2);
+    static BallDirection getBallDirection(cocos2d::Touch *touch);
     
 private:
     bool isTouchEnabled;
