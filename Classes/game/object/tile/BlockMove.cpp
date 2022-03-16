@@ -108,8 +108,9 @@ void BlockMove::moveStart() {
     
     auto moveStartPos = getPositionX();
     auto moveEndPos = (endBlockPos + stage.tileSize.width/2) - getContentSize().width/2;
+    auto moveRange = (endBlock.x - startBlock.x + 1) - stage.blockMoveWidth; // 움직이는 칸 수
     
-    auto duration = 1.5f / GAME_MANAGER->getMapScaleFactor();
+    auto duration = (moveRange * 0.5f) / GAME_MANAGER->getMapScaleFactor();
     auto move = Sequence::create(MoveTo::create(duration, Vec2(moveEndPos, getPositionY())),
                                  MoveTo::create(duration, Vec2(moveStartPos, getPositionY())), nullptr);
     runAction(RepeatForever::create(move));

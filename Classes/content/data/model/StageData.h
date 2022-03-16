@@ -58,8 +58,18 @@ struct StageData {
             return TileData(TileId::INVALID);
         }
         
-        int min = INT_MAX;
         TileData pairBlock(TileId::INVALID);
+        
+        for( int x = moveStartBlock.x+1; x < mapWidthTiles; ++x ) {
+            auto endBlock = getTile(x, moveStartBlock.y);
+            
+            if( endBlock.tileId == TileId::BLOCK_MOVE_END ) {
+                return endBlock;
+            }
+        }
+        
+        /*
+        int min = INT_MAX;
         
         for( auto block : endBlocks ) {
             // FIXME: 가로 무브만 하드코딩
@@ -72,6 +82,7 @@ struct StageData {
                 }
             }
         }
+        */
         
         return pairBlock;
     }
