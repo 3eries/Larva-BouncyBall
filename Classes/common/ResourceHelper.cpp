@@ -88,6 +88,13 @@ string ResourceHelper::getCharacterImage(const string &charId) {
 }
 
 /**
+ * 월드 배경음을 반환합니다
+ */
+string ResourceHelper::getWorldBackgroundMusic(int world) {
+    return DIR_SOUND + STR_FORMAT("bgm_%02d.mp3", world+1);
+}
+
+/**
  * 월드 배경 이미지를 반환합니다
  */
 string ResourceHelper::getWorldBackgroundImage(int world) {

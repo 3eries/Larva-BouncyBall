@@ -22,6 +22,8 @@ public:
     static std::string getLocalizedImage(const std::string &image);
     
     static std::string getCharacterImage(const std::string &charId);
+    
+    static std::string getWorldBackgroundMusic(int world);
     static std::string getWorldBackgroundImage(int world);
     
     static StringList  getTileImage(const TileId &tileId);

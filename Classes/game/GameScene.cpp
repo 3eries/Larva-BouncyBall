@@ -6,6 +6,7 @@
 
 #include "GameScene.hpp"
 #include "Define.h"
+#include "ResourceHelper.hpp"
 #include "User.hpp"
 #include "SceneManager.h"
 #include "PopupManager.hpp"
@@ -73,7 +74,7 @@ void GameScene::onEnterTransitionDidFinish() {
     
     BaseScene::onEnterTransitionDidFinish();
     
-    SBAudioEngine::playBGM(SOUND_BGM_GAME);
+    SBAudioEngine::playBGM(ResourceHelper::getWorldBackgroundMusic(GAME_MANAGER->getStage().world));
     
     GameManager::onGameEnter();
     GameManager::onGameStart();
