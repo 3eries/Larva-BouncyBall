@@ -130,6 +130,8 @@
 		50861EBA27BE245B00181A3D /* CharacterListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50861EB827BE245B00181A3D /* CharacterListener.cpp */; };
 		50861EBD27BE29B800181A3D /* CharacterManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50861EBB27BE29B800181A3D /* CharacterManager.cpp */; };
 		50861EC027BE8A2B00181A3D /* StageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50861EBE27BE8A2B00181A3D /* StageManager.cpp */; };
+		509465F327E2FF6500CFE6D4 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F227E2FF6500CFE6D4 /* AVKit.framework */; };
+		509465F527E2FFBE00CFE6D4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
 		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
@@ -416,6 +418,8 @@
 		50861EBF27BE8A2B00181A3D /* StageManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StageManager.hpp; sourceTree = "<group>"; };
 		5087E78817EB974C00C73F5D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		509465F227E2FF6500CFE6D4 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
+		509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		50A8E40B2701ECDC002732F8 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
 		50B5735A27032C09009F3240 /* PhysicsManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsManager.cpp; sourceTree = "<group>"; };
@@ -461,10 +465,12 @@
 				ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */,
 				50DAE4AB269AEB3400592A9C /* GameController.framework in Frameworks */,
 				52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */,
+				509465F527E2FFBE00CFE6D4 /* CoreMedia.framework in Frameworks */,
 				1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */,
 				D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				50C1C48C26B8F72C003BF8FD /* WebKit.framework in Frameworks */,
+				509465F327E2FF6500CFE6D4 /* AVKit.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
 				BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */,
@@ -555,6 +561,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */,
+				509465F227E2FF6500CFE6D4 /* AVKit.framework */,
 				50C1C48B26B8F72C003BF8FD /* WebKit.framework */,
 				50C1C48926B8F725003BF8FD /* MediaPlayer.framework */,
 				50DAE4AA269AEB3400592A9C /* GameController.framework */,
