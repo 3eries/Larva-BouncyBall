@@ -10,14 +10,15 @@
 #include "Define.h"
 
 USING_NS_CC;
+using namespace cocos2d::ui;
 using namespace std;
 
 static const string FINISHED_SCHEDULER        = "FINISHED_SCHEDULER";
 
 LogoView::LogoView() :
 onFinishedListener(nullptr),
-anim(nullptr) {
-    
+videoPlayer(nullptr),
+videoPlayTime(0) {
 }
 
 LogoView::~LogoView() {
@@ -34,30 +35,78 @@ bool LogoView::init() {
     setPosition(Vec2::ZERO);
     setContentSize(Size::ZERO);
     
-    addChild(LayerColor::create(Color4B::WHITE));
+    // addChild(LayerColor::create(Color4B::WHITE));
     addChild(SBNodeUtils::createTouchNode());
     
-    // 스파인 애니메이션 생성
-    auto anim = SBSkeletonAnimation::create(ANIM_LOGO);
-    anim->setVisible(false);
-    anim->setAnchorPoint(Vec2::ZERO);
-    anim->setPosition(Vec2(SB_WIN_SIZE*0.5f));
-    anim->setScale(1.5f);
-    addChild(anim);
+    showVideo();
+
+    // 백그라운드 전환 이벤트 리스너 등록
+    {
+        auto listener = EventListenerCustom::create(superbomb::EVENT_ENTER_BACKGROUND, [=](EventCustom *event) {
+            this->removeVideo();
+        });
+        getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+    }
     
-    anim->setEndListener([=](spine::TrackEntry *entry) {
-        
-        CCLOG("logo anim end");
-    });
-    
-    anim->setCompleteListener([=](spine::TrackEntry *entry) {
-        
-        CCLOG("logo anim completed");
-    });
-    
-    this->anim = anim;
+    // 포어그라운드 전환 이벤트 리스너 등록
+    {
+        auto listener = EventListenerCustom::create(superbomb::EVENT_ENTER_FOREGROUND, [=](EventCustom *event) {
+            this->showVideo();
+        });
+        getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+    }
     
     return true;
+}
+
+#define SCHEDULER_VIDEO_PLAY            "SCHEDULER_VIDEO_PLAY"
+
+void LogoView::showVideo() {
+    
+    CCLOG("showVideo");
+    
+    removeVideo();
+    
+    videoPlayer = VideoPlayer::create();
+    videoPlayer->setFileName(DIR_IMG_SPLASH + "intro.mp4");
+    videoPlayer->setAnchorPoint(ANCHOR_M);
+    videoPlayer->setPosition(Vec2MC(0,0));
+    videoPlayer->setContentSize(SB_WIN_SIZE);
+    videoPlayer->setKeepAspectRatioEnabled(true);
+    videoPlayer->setFullScreenEnabled(true);
+    videoPlayer->setUserInputEnabled(false);
+    videoPlayer->setStyle(VideoPlayer::StyleType::NONE);
+    addChild(videoPlayer);
+
+    videoPlayer->addEventListener([=](Ref* sender, VideoPlayer::EventType eventType) {
+        if( eventType == VideoPlayer::EventType::COMPLETED ) {
+            this->logoFinished();
+        }
+    });
+    
+    if( videoPlayTime > 0 ) {
+        videoPlayer->seekTo(videoPlayTime);
+        videoPlayer->play();
+    }
+    
+    // 플레이 시간 업데이트
+    schedule([=](float dt) {
+        if( videoPlayer ) {
+            videoPlayTime += dt;
+        }
+    }, SCHEDULER_VIDEO_PLAY);
+}
+
+void LogoView::removeVideo() {
+    
+    CCLOG("removeVideo");
+    
+    unschedule(SCHEDULER_VIDEO_PLAY);
+    
+    if( videoPlayer ) {
+        videoPlayer->removeFromParent();
+        videoPlayer = nullptr;
+    }
 }
 
 void LogoView::logoFinished() {
@@ -69,26 +118,5 @@ void LogoView::logoFinished() {
 
 void LogoView::run() {
     
-    auto skeletonAnim = dynamic_cast<SBSkeletonAnimation*>(anim);
-    
-    const float ANIM_DURATION = skeletonAnim->getAnimationDuration(ANIM_NAME_RUN);
-    CCLOG("logo anim duration: %f", ANIM_DURATION);
-    
-    auto track = skeletonAnim->setAnimation(0, ANIM_NAME_RUN, false);
-    skeletonAnim->update(0);
-
-    skeletonAnim->setTrackEndListener(track, [=](spine::TrackEntry *entry) {
-        
-        CCLOG("track logo anim end");
-    });
-    
-    skeletonAnim->setTrackCompleteListener(track, [=](spine::TrackEntry *entry) {
-        
-        CCLOG("track logo anim completed");
-    });
-    
-    // scheduler
-    scheduleOnce([=](float dt) {
-        this->logoFinished();
-    }, 1.5f/*ANIM_DURATION*/, FINISHED_SCHEDULER);
+    videoPlayer->play();
 }

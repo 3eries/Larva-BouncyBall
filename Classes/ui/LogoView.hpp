@@ -21,6 +21,10 @@ private:
     LogoView();
     
     bool init() override;
+    
+    void showVideo();
+    void removeVideo();
+    
     void logoFinished();
     
 public:
@@ -28,7 +32,8 @@ public:
     
 private:
     CC_SYNTHESIZE(SBCallback, onFinishedListener, OnFinishedListener);
-    cocos2d::Node *anim;
+    cocos2d::ui::VideoPlayer *videoPlayer;
+    float videoPlayTime;
 };
 
 #endif /* LogoView_hpp */
