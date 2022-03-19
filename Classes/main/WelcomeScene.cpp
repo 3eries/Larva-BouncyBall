@@ -164,7 +164,9 @@ void WelcomeScene::initBg() {
     int latestPlayWorld = StageManager::getLatestPlayStage().world;
     
     auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(latestPlayWorld));
-    bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
+    // bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
+    bg->setScaleX(SB_WIN_SIZE.width / bg->getContentSize().width);
+    bg->setScaleY(SB_WIN_SIZE.height / bg->getContentSize().height);
     bg->setAnchorPoint(ANCHOR_M);
     bg->setPosition(Vec2MC(0,0));
     addChild(bg);

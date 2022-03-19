@@ -51,10 +51,17 @@ bool WorldPage::init() {
     setPosition(Vec2::ZERO);
     setContentSize(SB_WIN_SIZE);
     
+    // 커밍순
+    // main_coming_soon.png Vec2MC(0, -82) , Size(1320, 612)
+    if( world > GAME_CONFIG->getWorldCount() ) {
+        auto comingsoon = Sprite::create(DIR_IMG_MAIN + "main_coming_soon.png");
+        comingsoon->setAnchorPoint(ANCHOR_M);
+        comingsoon->setPosition(Vec2MC(0, -82));
+        addChild(comingsoon);
+        return true;
+    }
+    
     // 스테이지 Cell 생성
-    // main_box_stage.png Vec2MC(-560, 74) , Size(184, 172)
-    // main_box_stage.png Vec2MC(-336, 74) , Size(184, 172)
-    // main_box_stage.png Vec2MC(-560, -138) , Size(184, 172)
     const int STAGE_COUNT = GAME_CONFIG->getStagePerWorld();
     const int STAGE_WIDTH_COUNT = 6;
     const Vec2 PADDING(40, 40);
@@ -65,9 +72,10 @@ bool WorldPage::init() {
         return w;
     };
     
+    // main_box_stage.png Vec2MC(-560, 134) , Size(184, 172)
     Vec2 origin;
     origin.x = ((SB_WIN_SIZE.width - getStageWidth()) / 2) + CELL_SIZE.width*0.5f;
-    origin.y = SB_WIN_SIZE.height*0.5f + 74;
+    origin.y = SB_WIN_SIZE.height*0.5f + 134;
     
     Vec2 pos = origin;
     

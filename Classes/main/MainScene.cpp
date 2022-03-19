@@ -167,15 +167,21 @@ void MainScene::showSettingPopup() {
 
 void MainScene::initBg() {
     
-    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(StageManager::getLatestPlayStage().world));
+    int latestPlayWorld = StageManager::getLatestPlayStage().world;
+    
+    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(latestPlayWorld));
     bg->setTag(Tag::BG);
-    bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
+    // bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
+    bg->setScaleX(SB_WIN_SIZE.width / bg->getContentSize().width);
+    bg->setScaleY(SB_WIN_SIZE.height / bg->getContentSize().height);
     bg->setAnchorPoint(ANCHOR_M);
     bg->setPosition(Vec2MC(0,0));
     addChild(bg);
     
     auto cover = Sprite::create(DIR_IMG_MAIN + "main_bg_cover.png");
-    cover->setScale(SB_WIN_SIZE.width / cover->getContentSize().width);
+    // cover->setScale(SB_WIN_SIZE.width / cover->getContentSize().width);
+    cover->setScaleX(SB_WIN_SIZE.width / cover->getContentSize().width);
+    cover->setScaleY(SB_WIN_SIZE.height / cover->getContentSize().height);
     cover->setAnchorPoint(ANCHOR_M);
     cover->setPosition(Vec2MC(0,0));
     addChild(cover);
@@ -186,8 +192,6 @@ void MainScene::initBg() {
  */
 void MainScene::initMenu() {
     
-    // main_btn_shop.png Vec2TL(224, -104) , Size(368, 192)
-    // main_btn_menu.png Vec2TR(-104, -104) , Size(128, 128)
     SBUIInfo infos[] = {
         SBUIInfo(Tag::BTN_SHOP,    ANCHOR_M, Vec2TL(224, -104),  DIR_IMG_MAIN + "main_btn_shop.png"),
         SBUIInfo(Tag::BTN_SETTING, ANCHOR_M, Vec2TR(-104, -104), DIR_IMG_MAIN + "main_btn_menu.png"),
@@ -216,7 +220,7 @@ void MainScene::initWorlds() {
                                                                latestPlayWorld));
     worldTitle->setTag(Tag::WORLD_TITLE);
     worldTitle->setAnchorPoint(ANCHOR_M);
-    worldTitle->setPosition(Vec2TC(0, -184));
+    worldTitle->setPosition(Vec2TC(0, -124));
     addChild(worldTitle);
     
     auto pageView = PageView::create();
@@ -231,7 +235,7 @@ void MainScene::initWorlds() {
     pageView->setIndicatorEnabled(false);
     pageView->setIndicatorEnabled(true);
     pageView->setIndicatorIndexNodesTexture(DIR_IMG_MAIN + "main_indicator_dot.png");
-    pageView->setIndicatorPosition(Vec2TC(0, -308) + Vec2(0, -32 / 2));
+    pageView->setIndicatorPosition(Vec2TC(0, -248) + Vec2(0, -32 / 2));
     // pageView->setIndicatorIndexNodesScale(0.55f);
     pageView->setIndicatorIndexNodesColor(Color3B(0, 0, 0));
     pageView->setIndicatorIndexNodesOpacity(255*0.5f);
@@ -242,7 +246,7 @@ void MainScene::initWorlds() {
     // SBNodeUtils::recursiveCascadeOpacityEnabled(pageView, true);
     
     // 월드 페이지 생성
-    for( int i = 0; i < GAME_CONFIG->getWorldCount(); ++i ) {
+    for( int i = 0; i < GAME_CONFIG->getWorldCount()+1; ++i ) {
         auto page = WorldPage::create(i+1);
         page->setOnClickListener([=](StageCell *cell) {
             this->replaceGameScene(cell->getStage());
