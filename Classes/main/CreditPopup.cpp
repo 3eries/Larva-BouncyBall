@@ -24,11 +24,10 @@ struct Member {
 };
 
 static const vector<Member> MEMBERS = {
-    Member("main_character_01.png", "GMACHINEE", "PROGRAMMING"),
-    Member("main_character_02.png", "W0N",       "DESIGN"),
-    Member("main_character_03.png", "B3O",       "ART"),
-//    Member("main_character_04.png", "naconeee",  "TRANSLATION"),
-//    Member("main_character_05.png", "JUNN",      "PROMOTIONAL VIDEO"),
+    Member("lobby_icon_w0n.png", "W0N",       "DESIGN"),
+    Member("lobby_icon_b30.png", "B3O",       "ART"),
+    Member("lobby_icon_kon.png", "KON",       "ART"),
+    Member("lobby_icon_mw9.png", "GMACHINEE", "PROGRAMMING"),
 };
 
 CreditPopup::CreditPopup() : BasePopup(PopupType::CREDIT) {
@@ -108,14 +107,17 @@ void CreditPopup::initBackgroundView() {
 
 void CreditPopup::initCredit() {
     
-    // 배너 영역을 고려하여 컨텐트뷰를 높인다
-    // getContentView()->setPosition(getContentView()->getPosition() + Vec2(0,60));
-    
     // Title
-    auto title = Sprite::create(DIR_IMG_MAIN + "main_title_3eries.png");
+    auto title = Sprite::create(DIR_IMG_MAIN + "lobby_3eries_logo.png");
     title->setAnchorPoint(ANCHOR_M);
-    title->setPosition(Vec2TC(0, -211));
+    title->setPosition(Vec2TL(438, -198));
     addContentChild(title);
+    
+    // Peace
+    auto peace = Sprite::create(DIR_IMG_MAIN + "lobby_text_peace.png");
+    peace->setAnchorPoint(ANCHOR_M);
+    peace->setPosition(Vec2TR(-406, -180));
+    addContentChild(peace);
     
     // Member
     auto members = MEMBERS;
@@ -125,30 +127,27 @@ void CreditPopup::initCredit() {
     shuffle(members.begin(), members.end(), engine);
     
     Vec2 iconPos[] = {
-        Vec2MC(-246, 237),
-        Vec2MC(-246, 65),
-        Vec2MC(-246, -106),
-        Vec2MC(-246, -278),
-        Vec2MC(-246, -449),
+        Vec2ML(182, 128),
+        Vec2ML(182, -34),
+        Vec2ML(182, -200),
+        Vec2ML(182, -362),
     };
     
     Vec2 jobPos[] = {
-        Vec2MC(18, 262),
-        Vec2MC(18, 90),
-        Vec2MC(18, -80),
-        Vec2MC(18, -252),
-        Vec2MC(18, -423),
+        Vec2ML(266, 156),
+        Vec2ML(266, -6),
+        Vec2ML(266, -170),
+        Vec2ML(266, -334),
     };
     
     Vec2 namePos[] = {
-        Vec2MC(10, 209),
-        Vec2MC(10, 37),
-        Vec2MC(10, -133),
-        Vec2MC(10, -305),
-        Vec2MC(10, -476),
+        Vec2ML(266, 98),
+        Vec2ML(266, -64),
+        Vec2ML(266, -228),
+        Vec2ML(266, -392),
     };
     
-    Vec2 temp(0,-100);
+    Vec2 temp(0,0);
     
     for( int i = 0; i < MEMBERS.size(); ++i ) {
         auto member = members[i];
@@ -168,21 +167,20 @@ void CreditPopup::initCredit() {
             icon->runAction(RepeatForever::create(seq));
         }
         
-        auto job = Label::createWithTTF(member.job, FONT_COMMODORE, 45, Size(485, 60),
+        auto job = Label::createWithTTF(member.job, FONT_SUPER_STAR, 76, Size::ZERO,
                                         TextHAlignment::LEFT, TextVAlignment::CENTER);
         job->setTextColor(Color4B(255,211,0,255));
-        job->enableOutline(Color4B(0,0,0,255), 4);
-        job->setOverflow(Label::Overflow::SHRINK);
+        // job->enableOutline(Color4B(0,0,0,255), 4);
         job->setAnchorPoint(ANCHOR_ML);
-        job->setPosition(jobPos[i] + Vec2(-355*0.5f, 4) + temp);
+        job->setPosition(jobPos[i] + temp + Vec2(0, -2));
         addContentChild(job);
         
-        auto name = Label::createWithTTF(member.name, FONT_RETRO, 45, job->getDimensions(),
+        auto name = Label::createWithTTF(member.name, FONT_SUPER_STAR, 76, Size::ZERO,
                                          TextHAlignment::LEFT, TextVAlignment::CENTER);
         name->setTextColor(Color4B(255,255,255,255));
-        name->enableOutline(Color4B(0,0,0,255), 4);
+        // name->enableOutline(Color4B(0,0,0,255), 4);
         name->setAnchorPoint(ANCHOR_ML);
-        name->setPosition(Vec2(job->getPosition().x, namePos[i].y) + Vec2(0, 4) + temp);
+        name->setPosition(Vec2(job->getPosition().x, namePos[i].y) + temp + Vec2(0, -2));
         addContentChild(name);
     }
 }

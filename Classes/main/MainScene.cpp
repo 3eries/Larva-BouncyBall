@@ -70,11 +70,6 @@ void MainScene::onEnterTransitionDidFinish() {
     
     BaseScene::onEnterTransitionDidFinish();
     
-    // 자동 씬 전환
-    scheduleOnce([=](float dt) {
-        // replaceGameScene(1);
-    }, 0.1f, "AUTO_REPLACE");
-    
     // 캐릭터 잠금 해제 체크
     CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
         

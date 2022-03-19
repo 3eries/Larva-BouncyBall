@@ -106,10 +106,10 @@ void WelcomeScene::onClick(Node *sender) {
         case Tag::BTN_CREDIT: {
             SBAnalytics::logEvent(ANALYTICS_EVENT_CREDIT);
             
-//            auto popup = PopupManager::show(PopupType::CREDIT);
-//            popup->setLocalZOrder(ZOrder::POPUP_TOP);
-//            popup->setOnDismissListener([=](Node*) {
-//            });
+            auto popup = PopupManager::show(PopupType::CREDIT);
+            popup->setLocalZOrder(ZOrder::POPUP_TOP);
+            popup->setOnDismissListener([=](Node*) {
+            });
         } break;
             
         // 게임 시작
@@ -179,8 +179,8 @@ void WelcomeScene::initBg() {
     auto creditBtn = SBNodeUtils::createTouchNode();
     creditBtn->setTag(Tag::BTN_CREDIT);
     creditBtn->setAnchorPoint(ANCHOR_M);
-    creditBtn->setPosition(Vec2MC(0, 50));
-    creditBtn->setContentSize(Size(title->getContentSize().width * 0.7f, 250));
+    creditBtn->setPosition(Vec2MC(0, 30));
+    creditBtn->setContentSize(Size(title->getContentSize().width*0.5f, 180));
     addChild(creditBtn, SBZOrder::MIDDLE);
     
     creditBtn->addClickEventListener([=](Ref*) {
@@ -189,7 +189,6 @@ void WelcomeScene::initBg() {
     
     // 크레딧 영역 확인용
     // creditBtn->addChild(SBNodeUtils::createBackgroundNode(creditBtn, Color4B(255,0,0,255*0.5f)));
-    //
 }
 
 void WelcomeScene::initTitle() {
