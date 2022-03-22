@@ -289,10 +289,6 @@ vector<GameTile*> GameView::getTiles(const TileId &tileId) {
 
 void GameView::onTouchBegan(Touch *touch) {
     
-    if( touch->getID() >= 2 ) {
-        return;
-    }
-    
     touches.pushBack(touch);
     
     auto direction = getBallDirection(touch);
@@ -924,6 +920,10 @@ void GameView::initTouchListener() {
     touchListener->onTouchBegan = [=](Touch *touch, Event *unusedEvent) -> bool {
         
         if( !isTouchEnabled ) {
+            return false;
+        }
+        
+        if( touch->getID() >= 2 ) {
             return false;
         }
         
