@@ -465,7 +465,7 @@ void Ball::waveStart(Block *block) {
     addState(State::WAVE_HORIZONTAL_LOCK);
     unscheduleMoveHorizontal();
     
-    const float horizontalLockDuration = 0.1f;
+    const float horizontalLockDuration = 0.1f * GAME_MANAGER->getMapScaleFactor();
     
     SBDirector::postDelayed(this, [=] {
         CCLOG("웨이브 - 수평 이동 가능");

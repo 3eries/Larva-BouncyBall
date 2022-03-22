@@ -63,8 +63,21 @@ void ResourceHelper::preload() {
     
     // sound
     SBAudioEngine::preload(SOUND_BGM_MAIN);
-    SBAudioEngine::preload(SOUND_BGM_GAME);
-    SBAudioEngine::preload(SOUND_BUTTON_CLICK);
+    
+    string effectFiles[] = {
+        SOUND_BUTTON_CLICK,
+        SOUND_GAME_CLEAR_STAR,
+        SOUND_JUMP,
+        SOUND_SAUSAGE,
+        SOUND_WAVE,
+        SOUND_DOUBLE_JUMP_GET,
+        SOUND_DOUBLE_JUMP,
+        SOUND_CLEAR_PORTAL,
+    };
+    
+    for( string file : effectFiles ) {
+        SBAudioEngine::preload(file);
+    }
 }
 
 string ResourceHelper::getLocalizedImage(const string &image) {

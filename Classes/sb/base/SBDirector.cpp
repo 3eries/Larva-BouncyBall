@@ -74,7 +74,7 @@ void SBDirector::init() {
 
 void SBDirector::end() {
 
-    SBAudioEngine::getInstance()->destroyInstance();
+    SBAudioEngine::destroyInstance();
     
     destroyInstance();
 }
