@@ -28,8 +28,20 @@
 USING_NS_CC;
 USING_NS_SB;
 using namespace cocos2d::ui;
-using namespace spine;
 using namespace std;
+
+MainScene* MainScene::create(int selectedWorld) {
+    
+    auto scene = new MainScene();
+    
+    if( scene && scene->init(selectedWorld) ) {
+        scene->autorelease();
+        return scene;
+    }
+    
+    CC_SAFE_DELETE(scene);
+    return nullptr;
+}
 
 MainScene::MainScene():
 pageIndex(0),
@@ -41,7 +53,7 @@ MainScene::~MainScene() {
     
 }
 
-bool MainScene::init() {
+bool MainScene::init(int selectedWorld) {
     
     if( !BaseScene::init() ) {
         return false;
@@ -49,9 +61,14 @@ bool MainScene::init() {
     
     SBAnalytics::setCurrentScreen(ANALYTICS_SCREEN_MAIN);
     
-    initBg();
+    if( selectedWorld <= 0 ) {
+        // 기본값 - 마지막으로 플레이한 월드
+        selectedWorld = StageManager::getLatestPlayWorld();
+    }
+    
+    initBg(selectedWorld);
     initMenu();
-    initWorlds();
+    initWorlds(selectedWorld);
     
     return true;
 }
@@ -165,11 +182,9 @@ void MainScene::showSettingPopup() {
     SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
 }
 
-void MainScene::initBg() {
+void MainScene::initBg(int selectedWorld) {
     
-    int latestPlayWorld = StageManager::getLatestPlayStage().world;
-    
-    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(latestPlayWorld));
+    auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(selectedWorld));
     bg->setTag(Tag::BG);
     // bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
     bg->setScaleX(SB_WIN_SIZE.width / bg->getContentSize().width);
@@ -212,12 +227,10 @@ void MainScene::initMenu() {
 /**
  * 월드 페이지 초기화
  */
-void MainScene::initWorlds() {
-    
-    int latestPlayWorld = StageManager::getLatestPlayStage().world;
+void MainScene::initWorlds(int selectedWorld) {
     
     auto worldTitle = Sprite::create(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png",
-                                                               latestPlayWorld));
+                                                               selectedWorld));
     worldTitle->setTag(Tag::WORLD_TITLE);
     worldTitle->setAnchorPoint(ANCHOR_M);
     worldTitle->setPosition(Vec2TC(0, -124));
@@ -255,7 +268,7 @@ void MainScene::initWorlds() {
     }
     
     // 마지막으로 플레이한 월드로 포커스
-    pageView->setCurrentPageIndex(latestPlayWorld-1);
+    pageView->setCurrentPageIndex(selectedWorld-1);
     
     // 페이지 전환 시 타이틀 업데이트
     auto onPageChanged = [=](size_t page) {

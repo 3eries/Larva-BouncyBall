@@ -11,6 +11,7 @@
 #include "SceneManager.h"
 #include "PopupManager.hpp"
 #include "BannerView.hpp"
+#include "../main/MainScene.hpp"
 
 #include "GameManager.hpp"
 #include "GameView.hpp"
@@ -195,7 +196,15 @@ void GameScene::onStageClear(const StageData &stage) {
     });
     popup->setOnNextListener([=]() {
         this->showInterstitial([=]() {
-            this->replaceGameScene(stage.stage+1);
+            // 마지막 스테이지는 메인 화면으로 이동
+            if( stage.stage == StageManager::getLastStage().stage ) {
+                // 커밍순 월드로 포커스
+                this->replaceMainScene(stage.world+1);
+            }
+            // 다음 스테이지 진행
+            else {
+                this->replaceGameScene(stage.stage+1);
+            }
         });
     });
     popup->setOnShopListener([=]() {
@@ -208,13 +217,15 @@ void GameScene::onStageClear(const StageData &stage) {
 /**
  * Scene 전환
  */
-void GameScene::replaceMainScene() {
+void GameScene::replaceMainScene(int selectedWorld) {
     
     GameManager::onGameExit();
     GameManager::destroyInstance();
     removeListeners(this);
     
-    replaceScene(SceneType::MAIN);
+    SceneManager::getInstance()->replace(SceneType::MAIN, [=]() -> MainScene* {
+        return MainScene::create(selectedWorld);
+    });
 }
 
 void GameScene::replaceGameScene(int stage) {

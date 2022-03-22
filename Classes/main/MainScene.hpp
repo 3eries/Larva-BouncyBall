@@ -25,21 +25,21 @@ private:
     };
     
 public:
-    CREATE_FUNC(MainScene);
+    static MainScene* create(int selectedWorld = 0);
     ~MainScene();
     
 private:
     MainScene();
     
-    bool init() override;
+    bool init(int selectedWorld);
     void onEnter() override;
     void onEnterTransitionDidFinish() override;
     void onExit() override;
     bool onBackKeyReleased() override;
     
-    void initBg();
+    void initBg(int selectedWorld);
     void initMenu();
-    void initWorlds();
+    void initWorlds(int selectedWorld);
     
 private:
     void onClick(cocos2d::Node *sender) override;

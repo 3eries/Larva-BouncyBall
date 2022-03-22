@@ -57,7 +57,7 @@ private:
 
 public:
     
-    void replaceMainScene();
+    void replaceMainScene(int selectedWorld = 0);
     void replaceGameScene(int stage);
     
     void showInterstitial(SBCallback onAdClosed);

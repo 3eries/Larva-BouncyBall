@@ -52,7 +52,7 @@ void StageManager::init() {
     unlockStage(1);
     
     CCLOG("StageManager {");
-    CCLOG("\t latest play stage: %d", getLatestPlayStage().stage);
+    CCLOG("\t latest play stage: %d", getLatestPlayStage());
     CCLOG("\t top unlocked stage: %d", getTopUnlockedStage());
     CCLOG("}");
 }
@@ -281,11 +281,17 @@ bool StageManager::isStageLocked(int stage) {
 }
 
 /**
+ * 마지막으로 플레이한 월드를 반환합니다.
+ */
+int StageManager::getLatestPlayWorld() {
+    return getWorld(getLatestPlayStage());
+}
+
+/**
  * 마지막으로 플레이한 스테이지를 반환합니다.
  */
-StageData StageManager::getLatestPlayStage() {
-    int stage = USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, getTopUnlockedStage());
-    return StageManager::getStage(stage);
+int StageManager::getLatestPlayStage() {
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, getTopUnlockedStage());
 }
 
 void StageManager::setLatestPlayStage(int stage) {

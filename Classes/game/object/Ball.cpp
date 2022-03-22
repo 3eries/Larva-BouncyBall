@@ -503,7 +503,6 @@ void Ball::waveEnd(bool isContactBlock) {
         bool isLeft = (body->GetLinearVelocity().x < 0);
         
         auto setVelocityZeroWithAction = [=]() {
-            
             float duration = 0.3f * GAME_MANAGER->getMapScaleFactor();
             setLinearVelocityXWithAction(duration, getLinearVelocityX(), 0, [=]() {
             });

@@ -50,7 +50,8 @@ public:
     static void             unlockStage(int stage);
     static bool             isStageLocked(int stage);
     
-    static StageData        getLatestPlayStage();
+    static int              getLatestPlayWorld();
+    static int              getLatestPlayStage();
     static void             setLatestPlayStage(int stage);
     
     static int              getTopUnlockedStage();

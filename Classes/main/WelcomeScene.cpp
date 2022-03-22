@@ -161,7 +161,7 @@ void WelcomeScene::showSettingPopup() {
 
 void WelcomeScene::initBg() {
     
-    int latestPlayWorld = StageManager::getLatestPlayStage().world;
+    int latestPlayWorld = StageManager::getLatestPlayWorld();
     
     auto bg = Sprite::create(ResourceHelper::getWorldBackgroundImage(latestPlayWorld));
     // bg->setScale(SB_WIN_SIZE.width / bg->getContentSize().width);
