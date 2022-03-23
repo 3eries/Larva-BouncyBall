@@ -51,6 +51,19 @@ void StageManager::init() {
     // 1스테이지 잠금 해제
     unlockStage(1);
     
+    // 스테이지 강제 오픈 코드
+//    {
+//        int topClear = 18 * 4;
+//        
+//        for( int i = 1; i <= topClear; ++i ) {
+//            StageManager::unlockStage(i);
+//            // StageManager::setStageStarCount(i,3);
+//        }
+//        
+//        StageManager::unlockStage(topClear);
+//    }
+    //
+    
     CCLOG("StageManager {");
     CCLOG("\t latest play stage: %d", getLatestPlayStage());
     CCLOG("\t top unlocked stage: %d", getTopUnlockedStage());

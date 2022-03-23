@@ -21,6 +21,7 @@ import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
@@ -35,6 +36,7 @@ import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AdsManager implements PluginListener {
     private static AdsManager instance = null;
@@ -132,12 +134,16 @@ public class AdsManager implements PluginListener {
                 MobileAds.initialize(ctx, new OnInitializationCompleteListener() {
                     @Override
                     public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+                        RequestConfiguration configuration = new RequestConfiguration.Builder().
+                                setTestDeviceIds(Arrays.asList("1BF60EA93EF22304AE5AFF19442DB1C4")).build();
+                        MobileAds.setRequestConfiguration(configuration);
+
+                        mgr.initBanner(bannerUnitId);
+                        mgr.initInterstitial(interstitialUnitId);
+                        mgr.initRewardedVideo(rewardedVideoUnitId);
                     }
                 });
-
-                mgr.initBanner(bannerUnitId);
-                mgr.initInterstitial(interstitialUnitId);
-                mgr.initRewardedVideo(rewardedVideoUnitId);
             }
         });
     }
@@ -358,6 +364,7 @@ public class AdsManager implements PluginListener {
                     public void onAdFailedToLoad(final LoadAdError loadAdError) {
                         mgr.isInterstitialLoading = false;
                         mgr.interstitialAd = null;
+                        Log.i(TAG, "InterstitialOnAdFailedToLoad: " + loadAdError.getMessage());
 
                         Cocos2dxHelper.runOnGLThread(new Runnable() {
                             @Override

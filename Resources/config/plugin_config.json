@@ -2,7 +2,7 @@
     "android": {
         "firebase": {},
         "ads": {
-            "test": 1,
+            "test": 0,
             "test_devices": ["0A16B70F54452DD393143983A218FB9A"],
             "auto_load_interval": 5,
             "app_id": "ca-app-pub-1272300599065219~3986702699",

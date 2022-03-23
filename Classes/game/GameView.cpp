@@ -328,8 +328,6 @@ void GameView::onTouchEnded(Touch *touch) {
     touches.eraseObject(touch, true);
     
     // 탭 체크
-    bool isDoubleJump = false;
-    
     if( touch->getID() == 0 ) {
         // 첫번째 탭 터치 종료
         if( tapCount == 0 ) {
@@ -361,8 +359,6 @@ void GameView::onTouchEnded(Touch *touch) {
             
             // 더블 점프
             if( ball->hasState(Ball::State::DOUBLE_JUMP_READY) ) {
-                isDoubleJump = true;
-                
                 // 튜토리얼 제거
                 if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP && tutorialAnimation ) {
                     GAME_MANAGER->removeState(GameState::TUTORIAL_PAUSE);
