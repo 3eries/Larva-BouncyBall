@@ -226,23 +226,6 @@ void ShopPopup::onCharacterSelect(ListView *listView, CharacterCell *cell) {
  * 광고 보기
  */
 void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
-
-    // iOS, 테스트 코드
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
-    cell->updateUnlockAmount();
-    
-    // 잠금 해제 체크
-    CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-        
-        cell->unlock();
-        
-        // 캐릭터 획득 팝업
-        GetCharacterPopup::show(unlockCharacters);
-    });
-    
-    return;
-#endif // iOS
     
     if( !superbomb::AdsHelper::isRewardedVideoLoaded() ) {
         return;
@@ -288,22 +271,6 @@ void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
  * IAP 아이템 클릭
  */
 void ShopPopup::onClickIAP() {
-    
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // 광고 제거
-    User::removeAds();
-    
-    // 모든 캐릭터 획득
-    CHARACTER_MANAGER->unlockAll([=](CharacterDataList unlockCharacters) {
-        // 캐릭터 획득 팝업
-        GetCharacterPopup::show(unlockCharacters);
-    });
-    
-    // UI 업데이트
-    initCharacterList();
-    
-    return;
-#endif // iOS
     
     SBDirector::getInstance()->setScreenTouchLocked(true);
 

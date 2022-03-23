@@ -7,6 +7,8 @@
 #ifndef IAPManager_h
 #define IAPManager_h
 
+#include "../../SBPluginConfig.h"
+
 #if SB_PLUGIN_USE_IAP
 
 #import <Foundation/Foundation.h>
@@ -14,7 +16,7 @@
 #import <StoreKit/StoreKit.h>
 
 #include "cocos2d.h"
-#include "IAPHelper.hpp"
+#include "../IAPHelper.hpp"
 
 @interface IAPManager : NSObject<SKProductsRequestDelegate, SKPaymentTransactionObserver> {
 }

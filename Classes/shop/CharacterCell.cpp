@@ -323,12 +323,7 @@ void CharacterCell::updateViewAdsButton() {
         return;
     }
     
-    // iOS, 테스트 코드
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    const bool isAdLoaded = true;
-#else
     const bool isAdLoaded = superbomb::AdsHelper::isRewardedVideoLoaded();
-#endif
     
     viewAdsButton->setVisible(isAdLoaded);
     viewAdsDisabledImage->setVisible(!isAdLoaded);

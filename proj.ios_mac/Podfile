@@ -1,0 +1,9 @@
+platform :ios, '10.0'
+
+target 'LarvaBouncyBall-mobile' do
+
+pod 'Firebase/Analytics'
+pod 'Firebase/Crashlytics'
+pod 'Google-Mobile-Ads-SDK'
+
+end

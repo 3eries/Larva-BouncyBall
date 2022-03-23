@@ -76,6 +76,7 @@ using namespace std;
     // Initialize the Google Mobile Ads SDK.
     // [GADMobileAds configureWithApplicationID:NS_STRING(config.appId.c_str())];
     [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
+    [[[GADMobileAds sharedInstance] requestConfiguration] setTestDeviceIdentifiers:@[@"61c628bd0aa3248a2dce9ca6d8cd6ec6"]];
     
     // 광고 단위 초기화
     [self initBanner:config.bannerUnitId];

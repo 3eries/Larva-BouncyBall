@@ -25,12 +25,15 @@
 		1DEB5554279A732B00699529 /* Flag.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB5552279A732A00699529 /* Flag.cpp */; };
 		1DEB5559279A7B3900699529 /* ClearPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1DEB5557279A7B3900699529 /* ClearPopup.cpp */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		1EFCFE9E2F389D80D79CA293 /* libPods-LarvaBouncyBall-mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16818EE4B3C7B9948446D9 /* libPods-LarvaBouncyBall-mobile.a */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		294D0D641D0D56D500F7F5D4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 294D0D631D0D56D500F7F5D4 /* CoreText.framework */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
 		50484C1627DA52040026FD94 /* BlockMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50484C1427DA52040026FD94 /* BlockMove.cpp */; };
 		50617DA327144C58005CE3EF /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50617DA227144C58005CE3EF /* Block.cpp */; };
 		506A352C27DAF7CD00A22A2F /* BlockMoveRail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506A352A27DAF7CD00A22A2F /* BlockMoveRail.cpp */; };
+		507BC92327EB1D8F0089CF39 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 507BC92227EB1D8F0089CF39 /* GoogleService-Info.plist */; };
+		507BC92827EB3A9B0089CF39 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 507BC92727EB3A9B0089CF39 /* StoreKit.framework */; };
 		507BF6ED26834A0B0037F28C /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 507BF6E726834A0A0037F28C /* fonts */; };
 		507BF6EE26834A0B0037F28C /* content in Resources */ = {isa = PBXBuildFile; fileRef = 507BF6E826834A0A0037F28C /* content */; };
 		507BF6EF26834A0B0037F28C /* config in Resources */ = {isa = PBXBuildFile; fileRef = 507BF6E926834A0B0037F28C /* config */; };
@@ -174,6 +177,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0304A745906C05CCC8AF2C87 /* Pods-LarvaBouncyBall-mobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LarvaBouncyBall-mobile.release.xcconfig"; path = "Target Support Files/Pods-LarvaBouncyBall-mobile/Pods-LarvaBouncyBall-mobile.release.xcconfig"; sourceTree = "<group>"; };
 		1A88B2631FC3D9C9005C14AE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
@@ -225,6 +229,8 @@
 		50617DA227144C58005CE3EF /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
 		506A352A27DAF7CD00A22A2F /* BlockMoveRail.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockMoveRail.cpp; sourceTree = "<group>"; };
 		506A352B27DAF7CD00A22A2F /* BlockMoveRail.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockMoveRail.hpp; sourceTree = "<group>"; };
+		507BC92227EB1D8F0089CF39 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		507BC92727EB3A9B0089CF39 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		507BF6E726834A0A0037F28C /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		507BF6E826834A0A0037F28C /* content */ = {isa = PBXFileReference; lastKnownFileType = folder; path = content; sourceTree = "<group>"; };
 		507BF6E926834A0B0037F28C /* config */ = {isa = PBXFileReference; lastKnownFileType = folder; path = config; sourceTree = "<group>"; };
@@ -444,6 +450,7 @@
 		50DAE4B1269AEC7900592A9C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		50DAE4B3269AEC7F00592A9C /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		5A16818EE4B3C7B9948446D9 /* libPods-LarvaBouncyBall-mobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LarvaBouncyBall-mobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -454,6 +461,7 @@
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		ED545A7B1B68A1F400C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libiconv.dylib; sourceTree = DEVELOPER_DIR; };
 		ED545A7D1B68A1FA00C3958E /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		EF386D565AB4FBC9DE6BE4EF /* Pods-LarvaBouncyBall-mobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LarvaBouncyBall-mobile.debug.xcconfig"; path = "Target Support Files/Pods-LarvaBouncyBall-mobile/Pods-LarvaBouncyBall-mobile.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,6 +469,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				507BC92827EB3A9B0089CF39 /* StoreKit.framework in Frameworks */,
 				294D0D641D0D56D500F7F5D4 /* CoreText.framework in Frameworks */,
 				ED545A7C1B68A1F400C3958E /* libiconv.dylib in Frameworks */,
 				50DAE4AB269AEB3400592A9C /* GameController.framework in Frameworks */,
@@ -480,6 +489,7 @@
 				D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */,
 				50C1C48A26B8F725003BF8FD /* MediaPlayer.framework in Frameworks */,
 				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
+				1EFCFE9E2F389D80D79CA293 /* libPods-LarvaBouncyBall-mobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +517,7 @@
 			children = (
 				1AF87B471F6F77D6007BE51C /* AppController.h */,
 				1AF87B481F6F77D6007BE51C /* AppController.mm */,
+				507BC92227EB1D8F0089CF39 /* GoogleService-Info.plist */,
 				1A88B2631FC3D9C9005C14AE /* Images.xcassets */,
 				1AF87B581F6F77D6007BE51C /* Info.plist */,
 				50DAE4B2269AEC7900592A9C /* InfoPlist.strings */,
@@ -554,6 +565,7 @@
 				1AF87B461F6F77D6007BE51C /* ios */,
 				503AE10617EB990700D1A890 /* mac */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				EDE0D504050AECB88B512FBF /* Pods */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -561,6 +573,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				507BC92727EB3A9B0089CF39 /* StoreKit.framework */,
 				509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */,
 				509465F227E2FF6500CFE6D4 /* AVKit.framework */,
 				50C1C48B26B8F72C003BF8FD /* WebKit.framework */,
@@ -586,6 +599,7 @@
 				BF170DB012928DE900B8313A /* OpenGLES.framework */,
 				BF1C47EA1293683800B63C5D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				5A16818EE4B3C7B9948446D9 /* libPods-LarvaBouncyBall-mobile.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1191,6 +1205,15 @@
 			path = tile;
 			sourceTree = "<group>";
 		};
+		EDE0D504050AECB88B512FBF /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EF386D565AB4FBC9DE6BE4EF /* Pods-LarvaBouncyBall-mobile.debug.xcconfig */,
+				0304A745906C05CCC8AF2C87 /* Pods-LarvaBouncyBall-mobile.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1198,6 +1221,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "LarvaBouncyBall-mobile" */;
 			buildPhases = (
+				66FD37BD393E70D0EF13E476 /* [CP] Check Pods Manifest.lock */,
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
@@ -1221,7 +1245,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = 4AFC962N95;
+						DevelopmentTeam = 44LU9SL7Q6;
 					};
 				};
 			};
@@ -1235,6 +1259,7 @@
 				ko,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			productRefGroup = 19C28FACFE9D520D11CA2CBB /* Products */;
 			projectDirPath = "";
 			projectReferences = (
 				{
@@ -1272,12 +1297,38 @@
 				507BF6F226834A0B0037F28C /* sounds in Resources */,
 				507BF6ED26834A0B0037F28C /* fonts in Resources */,
 				507BF6EF26834A0B0037F28C /* config in Resources */,
+				507BC92327EB1D8F0089CF39 /* GoogleService-Info.plist in Resources */,
 				507BF6EE26834A0B0037F28C /* content in Resources */,
 				50DAE4B0269AEC7900592A9C /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		66FD37BD393E70D0EF13E476 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-LarvaBouncyBall-mobile-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
@@ -1430,13 +1481,14 @@
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EF386D565AB4FBC9DE6BE4EF /* Pods-LarvaBouncyBall-mobile.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				CURRENT_PROJECT_VERSION = 0.2.4;
-				DEVELOPMENT_TEAM = 4AFC962N95;
+				DEVELOPMENT_TEAM = 44LU9SL7Q6;
 				ENABLE_BITCODE = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1459,7 +1511,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.3eries.LarvaBouncyBall;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tuban.LarvaBouncyBall;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1470,13 +1522,14 @@
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0304A745906C05CCC8AF2C87 /* Pods-LarvaBouncyBall-mobile.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				CURRENT_PROJECT_VERSION = 0.2.4;
-				DEVELOPMENT_TEAM = 4AFC962N95;
+				DEVELOPMENT_TEAM = 44LU9SL7Q6;
 				ENABLE_BITCODE = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1498,7 +1551,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.3eries.LarvaBouncyBall;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tuban.LarvaBouncyBall;
 				SDKROOT = iphoneos;
 				STRIP_PNG_TEXT = NO;
 				TARGETED_DEVICE_FAMILY = "1,2";
