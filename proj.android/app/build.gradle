@@ -10,8 +10,8 @@ android {
         applicationId "com.tuban.LarvaBouncyBall"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
-        versionCode 4
-        versionName "0.2.5"
+        versionCode 5
+        versionName "0.2.6"
         multiDexEnabled true
 
         externalNativeBuild {
