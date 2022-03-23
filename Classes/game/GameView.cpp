@@ -35,7 +35,7 @@ using namespace std;
 #if defined(COCOS2D_DEBUG) && COCOS2D_DEBUG == 1
 #define DEBUG_DRAW_PHYSICS                  1
 #else
-#define DEBUG_DRAW_PHYSICS                  1
+#define DEBUG_DRAW_PHYSICS                  0
 #endif // COCOS2D_DEBUG == 1
 
 GameView::GameView(): SBPhysicsObject(this),
