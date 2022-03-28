@@ -59,6 +59,8 @@ using namespace std;
     
 #if SB_PLUGIN_USE_IAP
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+    
+    iap::IAPHelper::restore(nullptr);
 #endif
 }
 
