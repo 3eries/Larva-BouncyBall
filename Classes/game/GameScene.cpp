@@ -183,7 +183,9 @@ void GameScene::onStageClear(const StageData &stage) {
         auto characters = GAME_MANAGER->getUnlockCharacters();
         
         if( characters.size() > 0 ) {
-            GetCharacterPopup::show(characters);
+            SBDirector::getInstance()->postDelayed(this, [=]() {
+                GetCharacterPopup::show(characters);
+            }, 0.5f, true);
         }
     });
     popup->setOnHomeListener([=]() {

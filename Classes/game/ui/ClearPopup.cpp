@@ -162,10 +162,7 @@ void ClearPopup::runStarAnimation(int i) {
     if( i == GAME_MANAGER->getStar()-1 ) {
         // 터치 재개
         SBDirector::getInstance()->setScreenTouchLocked(false);
-        
-        SBDirector::getInstance()->postDelayed(this, [=]() {
-            SB_SAFE_PERFORM_LISTENER(this, onStarEffectFinishedListener);
-        }, 0.5f);
+        SB_SAFE_PERFORM_LISTENER(this, onStarEffectFinishedListener);
     }
     // 다음 별 애니메이션
     else {
