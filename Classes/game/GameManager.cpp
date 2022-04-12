@@ -241,14 +241,14 @@ void GameManager::onGameStart() {
  */
 void GameManager::onGameRestart() {
     
-    CCLOG("GameManager::onGameRestart start");
+    Log::i("GameManager::onGameRestart start");
     
     instance->reset();
     dispatchCustomEvent(GameEvent::RESTART);
     
     onGameStart();
     
-    CCLOG("GameManager::onGameRestart end");
+    Log::i("GameManager::onGameRestart end");
 }
 
 /**
@@ -256,7 +256,7 @@ void GameManager::onGameRestart() {
  */
 void GameManager::onGamePause() {
     
-    CCLOG("GameManager::onGamePause state is paused: %d", instance->hasState(GameState::PAUSED));
+    Log::i("GameManager::onGamePause state is paused: %d", instance->hasState(GameState::PAUSED));
     
     if( instance->hasState(GameState::PAUSED) ) {
         return;
@@ -273,7 +273,7 @@ void GameManager::onGamePause() {
  */
 void GameManager::onGameResume() {
     
-    CCLOG("GameManager::onGameResume state is paused: %d", instance->hasState(GameState::PAUSED));
+    Log::i("GameManager::onGameResume state is paused: %d", instance->hasState(GameState::PAUSED));
     
     if( !instance->hasState(GameState::PAUSED) ) {
         return;
@@ -318,18 +318,6 @@ void GameManager::onGameOver(GameOverType type) {
     
     instance->addState(GameState::GAME_OVER);
     dispatchCustomEvent(GameEvent::OVER);
-    
-    // 통계 이벤트
-//    int stage = instance->stage.stage;
-//    string overType = isTimeout ? "timeout" : "draw_miss";
-//
-//    SBAnalytics::EventParams params;
-//    params[FA_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage));
-//    params[FA_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage, 1, 5, 5));
-//    params[FA_EVENT_PARAM_GAME_OVER_TYPE] = Value(overType);
-//    params[FA_EVENT_PARAM_STAGE_GAME_OVER_TYPE] = Value(STR_FORMAT("%d-%s", stage, overType.c_str()));
-//
-//    SBAnalytics::logEvent(FA_EVENT_GAME_OVER, params);
 }
 
 /**

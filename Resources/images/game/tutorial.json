@@ -1,19 +1,35 @@
 {
-"skeleton": { "hash": "wibsEmyHPPTZbT5Ex+iPfttikKA", "spine": "3.7.94", "width": 284, "height": 244, "images": "./tutorial/", "audio": "" },
+"skeleton": { "hash": "RjmYiMzR+GkXyFsn+38CnRWDsjY", "spine": "3.7.94", "width": 1888, "height": 1048, "images": "./tutorial/", "audio": "" },
 "bones": [
 	{ "name": "root" },
-	{ "name": "touch_right", "parent": "root", "x": 500 },
+	{ "name": "touch_right", "parent": "root", "x": 570 },
 	{ "name": "finger_right", "parent": "touch_right" },
 	{ "name": "effect_circle", "parent": "touch_right", "x": -90, "y": 56 },
-	{ "name": "effect_circle2", "parent": "touch_right", "x": -90, "y": 56 }
+	{ "name": "effect_circle2", "parent": "touch_right", "x": -90, "y": 56 },
+	{ "name": "text_move_left", "parent": "root", "x": -500, "y": 300 },
+	{ "name": "text_move_right", "parent": "root", "x": 500, "y": 300 },
+	{ "name": "area_left", "parent": "root", "x": -480, "scaleX": 4, "scaleY": 4 },
+	{ "name": "area_right", "parent": "root", "x": 480, "scaleX": 4, "scaleY": 4 },
+	{ "name": "text_double_jump", "parent": "root", "x": 480, "y": 320 }
 ],
 "slots": [
 	{ "name": "circle_effect", "bone": "effect_circle", "attachment": "circle_effect" },
 	{ "name": "circle_effect2", "bone": "effect_circle2", "attachment": "circle_effect" },
-	{ "name": "finger_1", "bone": "finger_right", "attachment": "finger_2" }
+	{ "name": "finger_1", "bone": "finger_right", "attachment": "finger_2" },
+	{ "name": "text_move_left", "bone": "text_move_left", "attachment": "text_move_left" },
+	{ "name": "text_move_right", "bone": "text_move_right", "attachment": "text_move_right" },
+	{ "name": "area", "bone": "area_left", "color": "ecff00ff", "attachment": "area" },
+	{ "name": "area2", "bone": "area_right", "color": "00ff00ff", "attachment": "area" },
+	{ "name": "text_double_jump", "bone": "text_double_jump", "attachment": "text_double_jump" }
 ],
 "skins": {
 	"default": {
+		"area": {
+			"area": { "width": 232, "height": 262 }
+		},
+		"area2": {
+			"area": { "width": 232, "height": 262 }
+		},
 		"circle_effect": {
 			"circle_effect": { "width": 172, "height": 172 }
 		},
@@ -23,12 +39,31 @@
 		"finger_1": {
 			"finger_1": { "width": 216, "height": 204 },
 			"finger_2": { "width": 216, "height": 204 }
+		},
+		"text_double_jump": {
+			"text_double_jump": { "width": 580, "height": 304 }
+		},
+		"text_move_left": {
+			"text_move_left": { "width": 584, "height": 256 }
+		},
+		"text_move_right": {
+			"text_move_right": { "width": 608, "height": 256 }
 		}
 	}
 },
 "animations": {
 	"clear": {
 		"slots": {
+			"area": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"area2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
 			"circle_effect": {
 				"attachment": [
 					{ "time": 0, "name": null }
@@ -43,11 +78,36 @@
 				"attachment": [
 					{ "time": 0, "name": null }
 				]
+			},
+			"text_double_jump": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"text_move_left": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"text_move_right": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
 			}
 		}
 	},
 	"touch_double": {
 		"slots": {
+			"area": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"area2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
 			"circle_effect": {
 				"color": [
 					{ "time": 0.3667, "color": "ffffffff", "curve": "stepped" },
@@ -95,6 +155,27 @@
 					{ "time": 0.6333, "name": "finger_2" },
 					{ "time": 0.7667, "name": "finger_1" }
 				]
+			},
+			"text_double_jump": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.1667, "color": "ffffffff" },
+					{ "time": 1.3, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "text_double_jump" }
+				]
+			},
+			"text_move_left": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"text_move_right": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
 			}
 		},
 		"bones": {
@@ -126,6 +207,22 @@
 	},
 	"touch_left": {
 		"slots": {
+			"area": {
+				"color": [
+					{ "time": 0, "color": "ebff0000" },
+					{ "time": 0.1667, "color": "ecff00ff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ecff00ff" },
+					{ "time": 1.9667, "color": "ebff0000" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "area" }
+				]
+			},
+			"area2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
 			"circle_effect": {
 				"color": [
 					{ "time": 0.3667, "color": "ffffff00" },
@@ -157,6 +254,27 @@
 					{ "time": 0.3667, "name": "finger_2" },
 					{ "time": 1.8333, "name": "finger_2" },
 					{ "time": 1.8667, "name": "finger_1" }
+				]
+			},
+			"text_double_jump": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"text_move_left": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ffffffff" },
+					{ "time": 1.9667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "text_move_left" }
+				]
+			},
+			"text_move_right": {
+				"attachment": [
+					{ "time": 0, "name": null }
 				]
 			}
 		},
@@ -205,7 +323,7 @@
 			},
 			"touch_right": {
 				"translate": [
-					{ "time": 0, "x": -1000, "y": 0 }
+					{ "time": 0, "x": -1140, "y": 0 }
 				],
 				"scale": [
 					{ "time": 0, "x": -1, "y": 1 }
@@ -215,6 +333,22 @@
 	},
 	"touch_right": {
 		"slots": {
+			"area": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"area2": {
+				"color": [
+					{ "time": 0, "color": "00ff0000" },
+					{ "time": 0.1667, "color": "00ff00ff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "00ff00ff" },
+					{ "time": 1.9667, "color": "00ff0000" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "area" }
+				]
+			},
 			"circle_effect": {
 				"color": [
 					{ "time": 0.3667, "color": "ffffff00" },
@@ -246,6 +380,27 @@
 					{ "time": 0.3667, "name": "finger_2" },
 					{ "time": 1.8333, "name": "finger_2" },
 					{ "time": 1.8667, "name": "finger_1" }
+				]
+			},
+			"text_double_jump": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"text_move_left": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"text_move_right": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.8333, "color": "ffffffff" },
+					{ "time": 1.9667, "color": "ffffff00" }
+				],
+				"attachment": [
+					{ "time": 0, "name": "text_move_right" }
 				]
 			}
 		},

@@ -39,12 +39,13 @@ using namespace std;
 #endif // COCOS2D_DEBUG == 1
 
 GameView::GameView(): SBPhysicsObject(this),
-tutorialAnimation(nullptr),
 isTouchEnabled(false),
 tapCount(0) {
 }
 
 GameView::~GameView() {
+    
+    touches.clear();
 }
 
 bool GameView::init() {
@@ -63,7 +64,6 @@ bool GameView::init() {
     initTiles();
     initBall();
     initGameListener();
-    initTouchListener();
     
     return true;
 }
@@ -73,21 +73,58 @@ void GameView::onEnter() {
     Log::i("GameView::onEnter");
     
     Node::onEnter();
-    
-    onStageChanged(GAME_MANAGER->getStage());
 }
 
 void GameView::onEnterTransitionDidFinish() {
     
     Node::onEnterTransitionDidFinish();
     
+    initTouchListener();
+    
     // 튜토리얼
-    if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_CONTROL ) {
-        tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
-        tutorialAnimation->setPosition(Vec2MC(0,0));
-        addChild(tutorialAnimation, SBZOrder::BOTTOM);
+    auto stage = GAME_MANAGER->getStage();
+    
+    switch( stage.stage ) {
+        case TUTORIAL_STAGE_TOUCH: {
+            auto anim = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
+            anim->setTag(Tag::TUTORIAL);
+            anim->setPosition(Vec2MC(0,0));
+            addChild(anim, SBZOrder::BOTTOM);
 
-        tutorialAnimation->setAnimation(0, "touch_left", true);
+            anim->setAnimation(0, "touch_left", true);
+        } break;
+            
+        case TUTORIAL_STAGE_JUMP: {
+            auto startFlag = stage.getTiles(TileId::FLAG_START)[0];
+            
+            auto img = Sprite::create(DIR_IMG_GAME + "tutorial_jump.png");
+            img->setTag(Tag::TUTORIAL);
+            img->setAnchorPoint(ANCHOR_BL);
+            img->setPosition(convertTilePosition(stage, startFlag.x+1, startFlag.y+2) +
+                             Vec2(-14, -30));
+            addChild(img, SBZOrder::BOTTOM);
+            
+            auto move = Sequence::create(MoveTo::create(1.0f, img->getPosition() + Vec2(0, 10)),
+                                         MoveTo::create(1.0f, img->getPosition()),
+                                         nullptr);
+            img->runAction(RepeatForever::create(move));
+        } break;
+            
+        case TUTORIAL_STAGE_DEATH_BLOCK: {
+            auto startFlag = stage.getTiles(TileId::FLAG_START)[0];
+            
+            auto img = Sprite::create(DIR_IMG_GAME + "tutorial_warning.png");
+            img->setTag(Tag::TUTORIAL);
+            img->setAnchorPoint(ANCHOR_MT);
+            img->setPosition(convertTilePosition(stage, startFlag.x+3, startFlag.y-1) +
+                             Vec2(-8, -64));
+            addChild(img, SBZOrder::BOTTOM);
+            
+            auto move = Sequence::create(MoveTo::create(1.0f, img->getPosition() + Vec2(0, -10)),
+                                         MoveTo::create(1.0f, img->getPosition()),
+                                         nullptr);
+            img->runAction(RepeatForever::create(move));
+        } break;
     }
     
     // 카메라 업데이트 스케줄러 실행
@@ -132,6 +169,8 @@ void GameView::cleanup() {
  * 게임 리셋
  */
 void GameView::onGameReset() {
+    
+    isTouchEnabled = true;
 }
 
 /**
@@ -144,6 +183,7 @@ void GameView::onGameExit() {
 #endif
     
     SBNodeUtils::recursivePauseSchedulerAndActions(this);
+    removeListeners(this);
 }
 
 /**
@@ -177,23 +217,17 @@ void GameView::onGameResume() {
 }
 
 /**
- * 스테이지 변경
+ * 게임 오버 전
  */
-void GameView::onStageChanged(const StageData &stage) {
+void GameView::onPreGameOver() {
     
-    isTouchEnabled = true;
-}
-
-/**
- * 스테이지 재시작
- */
-void GameView::onStageRestart(const StageData &stage) {
-}
-
-/**
- * 스테이지 클리어
- */
-void GameView::onStageClear(const StageData &stage) {
+    ball->setCollisionLocked(true);
+    ball->setSyncLocked(true);
+    
+    isTouchEnabled = false;
+    touches.clear();
+    
+    // removeListeners(this);
 }
 
 /**
@@ -360,14 +394,15 @@ void GameView::onTouchEnded(Touch *touch) {
             // 더블 점프
             if( ball->hasState(Ball::State::DOUBLE_JUMP_READY) ) {
                 // 튜토리얼 제거
-                if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP && tutorialAnimation ) {
+                auto tutorial = getChildByTag<SBSkeletonAnimation*>(Tag::TUTORIAL);
+                
+                if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_DOUBLE_JUMP && tutorial ) {
                     GAME_MANAGER->removeState(GameState::TUTORIAL_PAUSE);
                     
                     ball->resume();
                     PHYSICS_MANAGER->resumeScheduler();
                     
-                    tutorialAnimation->removeFromParent();
-                    tutorialAnimation = nullptr;
+                    tutorial->removeFromParent();
                 }
                 
                 ball->doubleJumpStart();
@@ -448,15 +483,35 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
             // 효과음
             SBAudioEngine::playEffect(SOUND_SAUSAGE);
             
-            // 튜토리얼, 소시지 획득 시 오른쪽 터치로 변경
-            if( GAME_MANAGER->getStage().stage == TUTORIAL_STAGE_CONTROL ) {
-                tutorialAnimation->removeFromParent();
-                
-                tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
-                tutorialAnimation->setPosition(Vec2MC(0,0));
-                addChild(tutorialAnimation, SBZOrder::BOTTOM);
-                
-                tutorialAnimation->setAnimation(0, "touch_right", true);
+            // 튜토리얼 업데이트
+            switch( GAME_MANAGER->getStage().stage ) {
+                // 터치 튜토리얼
+                case TUTORIAL_STAGE_TOUCH: {
+                    // 첫번째 소시지 획득 시 오른쪽 터치로 변경
+                    if( star == 1 ) {
+                        removeChildByTag(Tag::TUTORIAL);
+                        
+                        auto tutorial = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
+                        tutorial->setTag(Tag::TUTORIAL);
+                        tutorial->setPosition(Vec2MC(0,0));
+                        addChild(tutorial, SBZOrder::BOTTOM);
+                        
+                        tutorial->setAnimation(0, "touch_right", true);
+                    }
+                } break;
+                    
+                // 점프, 데스블럭 튜토리얼
+                case TUTORIAL_STAGE_JUMP:
+                case TUTORIAL_STAGE_DEATH_BLOCK: {
+                    // 두번째 소시지 획득 시 튜토리얼 제거
+                    if( star == 2 ) {
+                        auto tutorial = getChildByTag(Tag::TUTORIAL);
+                        tutorial->stopAllActions();
+                        
+                        tutorial->runAction(Sequence::create(FadeOut::create(0.4f),
+                                                             RemoveSelf::create(), nullptr));
+                    }
+                } break;
             }
         } break;
             
@@ -474,11 +529,12 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
                     ball->pause();
                 }, 0.1f, true);
                 
-                tutorialAnimation = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
-                tutorialAnimation->setPosition(Vec2MC(0,0));
-                addChild(tutorialAnimation, SBZOrder::BOTTOM);
+                auto tutorial = SBSkeletonAnimation::create(DIR_IMG_GAME + "tutorial.json");
+                tutorial->setTag(Tag::TUTORIAL);
+                tutorial->setPosition(Vec2MC(0,0));
+                addChild(tutorial, SBZOrder::BOTTOM);
                 
-                tutorialAnimation->setAnimation(0, "touch_double", true);
+                tutorial->setAnimation(0, "touch_double", true);
             }
         } break;
             
@@ -532,8 +588,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                 if( category == checkCategory ) {
                     SBAudioEngine::playEffect(SOUND_GAME_OVER_DEATH_BLOCK);
                     
-                    ball->setCollisionLocked(true);
-                    ball->setSyncLocked(true);
+                    onPreGameOver();
                     
                     if( category == PhysicsCategory::BLOCK_TOP ) {
                         ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
@@ -559,8 +614,7 @@ void GameView::onContactFloor(Ball *ball) {
     
     SBAudioEngine::playEffect(SOUND_GAME_OVER_FALL);
     
-    ball->setCollisionLocked(true);
-    ball->setSyncLocked(true);
+    onPreGameOver();
     
     SBDirector::postDelayed(this, [=]() {
         GameManager::onGameOver(GameOverType::FALL);
@@ -876,34 +930,15 @@ void GameView::initGameListener() {
         GameEvent::EXIT,
         GameEvent::PAUSE,
         GameEvent::RESUME,
-        GameEvent::STAGE_CHANGED,
-        GameEvent::STAGE_RESTART,
-        GameEvent::STAGE_CLEAR,
     });
     
     GameManager::addEventListener(events, [=](GameEvent event, void *userData) {
         
         switch( event ) {
             case GameEvent::RESET:     this->onGameReset();         break;
-            case GameEvent::EXIT:      this->onGameExit();         break;
+            case GameEvent::EXIT:      this->onGameExit();          break;
             case GameEvent::PAUSE:     this->onGamePause();         break;
             case GameEvent::RESUME:    this->onGameResume();        break;
-                
-            case GameEvent::STAGE_CHANGED: {
-                auto stage = (StageData*)userData;
-                this->onStageChanged(*stage);
-            } break;
-                
-            case GameEvent::STAGE_RESTART: {
-                auto stage = (StageData*)userData;
-                this->onStageRestart(*stage);
-            } break;
-                
-            case GameEvent::STAGE_CLEAR: {
-                auto stage = (StageData*)userData;
-                this->onStageClear(*stage);
-            } break;
-                
             default: break;
         }
     }, this);

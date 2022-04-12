@@ -21,6 +21,7 @@ class StageProgressBar;
 class GameView: public cocos2d::Node, public SBPhysicsObject {
 private:
     enum Tag {
+        TUTORIAL = 10,
         DEBUG_DRAW_VIEW = 1000,
     };
     
@@ -64,11 +65,9 @@ public:
     void onGameExit();
     void onGamePause();
     void onGameResume();
-    
-    void onStageChanged(const StageData &stage);
-    void onStageRestart(const StageData &stage);
-    void onStageClear(const StageData &stage);
 
+    void onPreGameOver();
+    
     void updateCamera(float dt);
     
     void addTile(GameTile *tile);
@@ -81,7 +80,6 @@ private:
     Ball *ball;
     std::vector<GameTile*> tiles;
     StageProgressBar *stageProgressBar;
-    SBSkeletonAnimation *tutorialAnimation;
     
     struct MapCameraInfo {
         cocos2d::Camera *camera;

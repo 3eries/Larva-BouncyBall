@@ -68,7 +68,9 @@ enum GameOverType {
 };
 
 // Tutorial Stage
-#define                TUTORIAL_STAGE_CONTROL            1
+#define                TUTORIAL_STAGE_TOUCH              1
+#define                TUTORIAL_STAGE_JUMP               4
+#define                TUTORIAL_STAGE_DEATH_BLOCK        5
 #define                TUTORIAL_STAGE_DOUBLE_JUMP        25
 
 // In Game

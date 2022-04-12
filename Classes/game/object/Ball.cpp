@@ -609,7 +609,7 @@ void Ball::onContactBlockTop(Block *block) {
             
         // 기본 점프
         default: {
-            CCLOG("기본 점프");
+            // CCLOG("기본 점프");
             playEffectSound();
             setLinearVelocity(getMoveVelocityX(), VELOCITY_BOUNCE_UP);
         } break;
