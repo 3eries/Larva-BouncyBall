@@ -955,15 +955,15 @@ void GameView::initTouchListener() {
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->setSwallowTouches(true);
     touchListener->onTouchBegan = [=](Touch *touch, Event *unusedEvent) -> bool {
-        
+
         if( !isTouchEnabled ) {
             return false;
         }
-        
+
         if( touch->getID() >= 2 ) {
             return false;
         }
-        
+
         this->onTouchBegan(touch);
         return true;
     };

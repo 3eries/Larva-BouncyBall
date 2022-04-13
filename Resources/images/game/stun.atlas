@@ -1,0 +1,20 @@
+
+stun.png
+size: 256,64
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+stun_circle
+  rotate: false
+  xy: 2, 2
+  size: 104, 48
+  orig: 104, 48
+  offset: 0, 0
+  index: -1
+stun_star
+  rotate: false
+  xy: 108, 6
+  size: 44, 44
+  orig: 44, 44
+  offset: 0, 0
+  index: -1

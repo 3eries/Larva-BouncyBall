@@ -133,6 +133,7 @@
 		50861EBA27BE245B00181A3D /* CharacterListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50861EB827BE245B00181A3D /* CharacterListener.cpp */; };
 		50861EBD27BE29B800181A3D /* CharacterManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50861EBB27BE29B800181A3D /* CharacterManager.cpp */; };
 		50861EC027BE8A2B00181A3D /* StageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50861EBE27BE8A2B00181A3D /* StageManager.cpp */; };
+		508F883028068D9E008469B9 /* StageSkipPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508F882E28068D9E008469B9 /* StageSkipPopup.cpp */; };
 		509465F327E2FF6500CFE6D4 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F227E2FF6500CFE6D4 /* AVKit.framework */; };
 		509465F527E2FFBE00CFE6D4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
@@ -424,6 +425,8 @@
 		50861EBF27BE8A2B00181A3D /* StageManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = StageManager.hpp; sourceTree = "<group>"; };
 		5087E78817EB974C00C73F5D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		5087E78A17EB975400C73F5D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		508F882E28068D9E008469B9 /* StageSkipPopup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StageSkipPopup.cpp; sourceTree = "<group>"; };
+		508F882F28068D9E008469B9 /* StageSkipPopup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StageSkipPopup.hpp; sourceTree = "<group>"; };
 		509465F227E2FF6500CFE6D4 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
@@ -538,6 +541,8 @@
 				1DEB5558279A7B3900699529 /* ClearPopup.hpp */,
 				50B685A527BBDAC70022C45D /* PausePopup.cpp */,
 				50B685A627BBDAC70022C45D /* PausePopup.hpp */,
+				508F882E28068D9E008469B9 /* StageSkipPopup.cpp */,
+				508F882F28068D9E008469B9 /* StageSkipPopup.hpp */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -1363,6 +1368,7 @@
 				507BF7FD26834EF30037F28C /* FirebaseManager-ios.mm in Sources */,
 				1DEB5559279A7B3900699529 /* ClearPopup.cpp in Sources */,
 				507BF82E26834EF30037F28C /* SettingPopup.cpp in Sources */,
+				508F883028068D9E008469B9 /* StageSkipPopup.cpp in Sources */,
 				507BF7FE26834EF30037F28C /* FirebaseAnalytics-android.cpp in Sources */,
 				507BF80926834EF30037F28C /* SBEffect.cpp in Sources */,
 				507BF83626834EF30037F28C /* SplashScene.cpp in Sources */,

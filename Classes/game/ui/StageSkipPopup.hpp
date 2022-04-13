@@ -1,12 +1,12 @@
 //
-//  PausePopup.hpp
+//  StageSkipPopup.hpp
 //  LarvaBouncyBall-mobile
 //
-//  Created by ace on 2022/02/15.
+//  Created by ace on 2022/04/13.
 //
 
-#ifndef PausePopup_hpp
-#define PausePopup_hpp
+#ifndef StageSkipPopup_hpp
+#define StageSkipPopup_hpp
 
 #include <stdio.h>
 
@@ -16,13 +16,13 @@
 
 #include "BasePopup.hpp"
 
-class PausePopup : public BasePopup {
+class StageSkipPopup : public BasePopup {
 public:
-    CREATE_FUNC(PausePopup);
-    ~PausePopup();
+    CREATE_FUNC(StageSkipPopup);
+    ~StageSkipPopup();
     
 private:
-    PausePopup();
+    StageSkipPopup();
     
     bool init() override;
     void onEnter() override;
@@ -38,8 +38,7 @@ private:
     
 private:
     cocos2d::Sprite *popupBg;
-    CC_SYNTHESIZE(SBCallback, onHomeListener, OnHomeListener);
-    CC_SYNTHESIZE(SBCallback, onRetryListener, OnRetryListener);
+    CC_SYNTHESIZE(std::function<void(bool)>, onSkipListener, OnSkipListener);
 };
 
-#endif /* PausePopup_hpp */
+#endif /* StageSkipPopup_hpp */

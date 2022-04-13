@@ -34,6 +34,9 @@ public:
     // in game
     static void             setTutorialCompleted(bool isCompleted);
     static bool             isTutorialCompleted();
+    
+    static void             setGameOverCountForSkipStage(int count);
+    static int              getGameOverCountForSkipStage();
 };
 
 #endif /* User_hpp */

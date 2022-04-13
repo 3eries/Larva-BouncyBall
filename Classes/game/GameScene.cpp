@@ -21,6 +21,7 @@
 #include "ShopPopup.hpp"
 #include "ui/PausePopup.hpp"
 #include "ui/ClearPopup.hpp"
+#include "ui/StageSkipPopup.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
@@ -162,7 +163,31 @@ void GameScene::onGameResume() {
  */
 void GameScene::onGameOver() {
     
-    replaceGameScene(GAME_MANAGER->getStage().stage);
+    // 스테이지 스킵 팝업
+    if( User::getGameOverCountForSkipStage() >= 3 && AdsHelper::isRewardedVideoLoaded() ) {
+        // 게임 오버 횟수 리셋
+        User::setGameOverCountForSkipStage(0);
+        
+        auto popup = StageSkipPopup::create();
+        popup->setOnSkipListener([=](bool isSkip) {
+            popup->dismiss();
+            
+            // 스테이지 클리어
+            if( isSkip ) {
+                GAME_MANAGER->setStar(3);
+                GameManager::onStageClear();
+            }
+            // 스테이지 재시작
+            else {
+                replaceGameScene(GAME_MANAGER->getStage().stage);
+            }
+        });
+        SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
+    }
+    // 스테이지 재시작
+    else {
+        replaceGameScene(GAME_MANAGER->getStage().stage);
+    }
 }
 
 /**

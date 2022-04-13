@@ -314,6 +314,9 @@ void GameManager::onGameOver(GameOverType type) {
         SBAnalytics::logEvent(ANALYTICS_EVENT_GAME_OVER, params);
     }
     
+    // 게임 오버 횟수 업데이트
+    User::setGameOverCountForSkipStage(User::getGameOverCountForSkipStage()+1);
+    
     getPhysicsManager()->stopScheduler();
     
     instance->addState(GameState::GAME_OVER);
@@ -411,6 +414,9 @@ void GameManager::onStageClear() {
     CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
         instance->unlockCharacters = unlockCharacters;
     });
+    
+    // 게임 오버 횟수 리셋
+    User::setGameOverCountForSkipStage(0);
     
     instance->addState(GameState::RESULT);
     dispatchCustomEvent(GameEvent::STAGE_CLEAR, &stage);

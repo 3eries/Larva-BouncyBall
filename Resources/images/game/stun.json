@@ -1,0 +1,178 @@
+{
+"skeleton": { "hash": "NWMtv+rETvtbGj1IRFvTtvbR+QI", "spine": "3.7.94", "width": 104, "height": 65.01, "images": "./stun/", "audio": "" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "stun_group", "parent": "root", "x": 8, "y": 35 },
+	{ "name": "circle", "parent": "stun_group" },
+	{ "name": "star_path", "parent": "stun_group", "y": -15 },
+	{ "name": "star1", "parent": "stun_group", "y": -15 },
+	{ "name": "star2", "parent": "stun_group", "y": -15 }
+],
+"slots": [
+	{ "name": "stun_circle", "bone": "circle", "attachment": "stun_circle" },
+	{ "name": "stun_star2", "bone": "star1", "attachment": "stun_star" },
+	{ "name": "stun_star3", "bone": "star2", "attachment": "stun_star" },
+	{ "name": "stun_group_move", "bone": "star_path", "attachment": "stun_group_move" }
+],
+"path": [
+	{
+		"name": "stun_group_move",
+		"order": 0,
+		"bones": [ "star1" ],
+		"target": "stun_group_move"
+	},
+	{
+		"name": "stun_group_move2",
+		"order": 1,
+		"bones": [ "star2" ],
+		"target": "stun_group_move"
+	}
+],
+"skins": {
+	"default": {
+		"stun_circle": {
+			"stun_circle": { "width": 104, "height": 48 }
+		},
+		"stun_group_move": {
+			"stun_group_move": {
+				"type": "path",
+				"closed": true,
+				"lengths": [ 54.97, 109.93, 165.37, 200.95 ],
+				"vertexCount": 12,
+				"vertices": [ 19.49, -3.46, 0.15, -3.72, -18.32, -3.96, -48.25, 2.53, -48.34, 15.15, -48.43, 27.77, -25.61, 33.12, -0.23, 33.12, 25.14, 33.12, 47.65, 28.78, 47.65, 14.61, 47.65, 0.45 ]
+			}
+		},
+		"stun_star2": {
+			"stun_star": { "width": 44, "height": 44 }
+		},
+		"stun_star3": {
+			"stun_star": { "width": 44, "height": 44 }
+		}
+	}
+},
+"animations": {
+	"clear": {
+		"slots": {
+			"stun_circle": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"stun_group_move": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"stun_star2": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			},
+			"stun_star3": {
+				"attachment": [
+					{ "time": 0, "name": null }
+				]
+			}
+		}
+	},
+	"stun": {
+		"slots": {
+			"stun_circle": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 0.8333, "color": "ffffffff" },
+					{ "time": 1, "color": "ffffff00" }
+				]
+			},
+			"stun_star2": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 0.8333, "color": "ffffffff" },
+					{ "time": 1, "color": "ffffff00" }
+				]
+			},
+			"stun_star3": {
+				"color": [
+					{ "time": 0, "color": "ffffff00" },
+					{ "time": 0.1667, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 0.8333, "color": "ffffffff" },
+					{ "time": 1, "color": "ffffff00" }
+				]
+			}
+		},
+		"bones": {
+			"circle": {
+				"rotate": [
+					{
+						"time": 0,
+						"angle": -5,
+						"curve": [ 0.444, 0, 0.553, 1 ]
+					},
+					{
+						"time": 0.5,
+						"angle": 5,
+						"curve": [ 0.444, 0, 0.553, 1 ]
+					},
+					{ "time": 1, "angle": -5 }
+				]
+			},
+			"star1": {
+				"scale": [
+					{
+						"time": 0,
+						"x": 1.2,
+						"y": 1.2,
+						"curve": [ 0.527, 0, 0.538, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 0.8,
+						"y": 0.8,
+						"curve": [ 0.527, 0, 0.538, 1 ]
+					},
+					{ "time": 1, "x": 1.2, "y": 1.2 }
+				]
+			},
+			"star2": {
+				"scale": [
+					{
+						"time": 0,
+						"x": 0.8,
+						"y": 0.8,
+						"curve": [ 0.527, 0, 0.538, 1 ]
+					},
+					{
+						"time": 0.5,
+						"x": 1.2,
+						"y": 1.2,
+						"curve": [ 0.527, 0, 0.538, 1 ]
+					},
+					{ "time": 1, "x": 0.8, "y": 0.8 }
+				]
+			}
+		},
+		"paths": {
+			"stun_group_move": {
+				"position": [
+					{ "time": 0 },
+					{ "time": 1, "position": 1 }
+				],
+				"mix": [
+					{ "time": 0, "rotateMix": 0 }
+				]
+			},
+			"stun_group_move2": {
+				"position": [
+					{ "time": 0, "position": 0.5 },
+					{ "time": 1, "position": 1.5 }
+				],
+				"mix": [
+					{ "time": 0, "rotateMix": 0 }
+				]
+			}
+		}
+	}
+}
+}

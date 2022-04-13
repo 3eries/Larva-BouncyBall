@@ -17,8 +17,9 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace std;
 
-#define USER_DEFAULT_KEY_REMOVE_ADS                     "USER_REMOVE_ADS"
-#define USER_DEFAULT_KEY_TUTORIAL_COMPLETED             "USER_TUTORIAL_COMPLETED"
+#define USER_DEFAULT_KEY_REMOVE_ADS                      "USER_REMOVE_ADS"
+#define USER_DEFAULT_KEY_TUTORIAL_COMPLETED              "USER_TUTORIAL_COMPLETED"
+#define USER_DEFAULT_KEY_GAME_OVER_COUNT_FOR_SKIP_STAGE  "USER_GAME_OVER_COUNT_FOR_SKIP_STAGE"
 
 static User *instance = nullptr;
 User* User::getInstance() {
@@ -72,7 +73,6 @@ void User::setRemoveAds(bool isRemoveAds) {
     
     AdsHelper::getInstance()->setBannerEnabled(!isRemoveAds);
     AdsHelper::getInstance()->setInterstitialEnabled(!isRemoveAds);
-    AdsHelper::getInstance()->setRewardedVideoEnabled(!isRemoveAds);
     
     if( isRemoveAds ) {
         AdsHelper::hideBanner();
@@ -92,7 +92,6 @@ void User::removeAds() {
  * 광고 제거 여부
  */
 bool User::isRemovedAds() {
-    
     return USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_REMOVE_ADS, false);
 }
 
@@ -100,7 +99,6 @@ bool User::isRemovedAds() {
  * 튜토리얼 완료 여부를 설정합니다
  */
 void User::setTutorialCompleted(bool isCompleted) {
-    
     USER_DEFAULT->setBoolForKey(USER_DEFAULT_KEY_TUTORIAL_COMPLETED, isCompleted);
     USER_DEFAULT->flush();
 }
@@ -109,7 +107,20 @@ void User::setTutorialCompleted(bool isCompleted) {
  * 튜토리얼 완료 여부를 반환합니다
  */
 bool User::isTutorialCompleted() {
-    
     return USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_TUTORIAL_COMPLETED, false);
 }
 
+/**
+ * 게임 오버 횟수를 설정합니다
+ */
+void User::setGameOverCountForSkipStage(int count) {
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_GAME_OVER_COUNT_FOR_SKIP_STAGE, count);
+    USER_DEFAULT->flush();
+}
+
+/**
+ * 튜토리얼 완료 여부를 반환합니다
+ */
+int User::getGameOverCountForSkipStage() {
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_GAME_OVER_COUNT_FOR_SKIP_STAGE, 0);
+}
