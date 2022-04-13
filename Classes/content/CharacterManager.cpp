@@ -167,6 +167,15 @@ void CharacterManager::setSelected(const string &charId) {
     onCharacterSelected(getCharacter(charId));
 }
 
+/**
+ * 잠금 해제된 캐릭터 리스트를 반환합니다
+ */
+CharacterDataList CharacterManager::getUnlockedCharacters() {
+    return SBCollection::find(characters, [=](const CharacterData &chc) -> bool {
+        return this->isCharacterUnlocked(chc.charId);
+    });
+}
+
 void CharacterManager::unlockAll(OnCharacterListListener onUnlocked) {
  
     CharacterDataList newUnlockList;

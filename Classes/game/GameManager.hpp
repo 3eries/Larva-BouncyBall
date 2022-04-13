@@ -91,7 +91,8 @@ public:
     static void onGameRestart();
     static void onGamePause();
     static void onGameResume();
-    static void onGameOver(GameOverType type);
+    static void onGameOver(GameOverType type,
+                           const TilePosition &tilePos = INVALID_TILE_POSITION);
     static void onGameContinue();
     static void onGameResult();
     

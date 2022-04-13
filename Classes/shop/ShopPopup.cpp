@@ -251,6 +251,14 @@ void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
                 // 캐릭터 획득 팝업
                 GetCharacterPopup::show(unlockCharacters);
             });
+            
+            // 통계 이벤트
+            {
+                SBAnalytics::EventParams params;
+                params[ANALYTICS_EVENT_PARAM_TYPE] = SBAnalytics::EventParam("character");
+                
+                SBAnalytics::logEvent(ANALYTICS_EVENT_SB_AD_REWARD, params);
+            }
         }
         
         cell->updateViewAdsButton();
@@ -277,6 +285,15 @@ void ShopPopup::onClickIAP() {
     auto listener = iap::PurchaseListener::create();
     listener->setTarget(this);
     listener->onPurchased = [=](const iap::Item &item) {
+        
+        // 통계 이벤트
+        {
+            SBAnalytics::EventParams params;
+            params[ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE] = SBAnalytics::EventParam(TO_STRING(StageManager::getTopUnlockedStage()));
+            params[ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT] = SBAnalytics::EventParam(TO_STRING(CHARACTER_MANAGER->getUnlockedCharacters().size()));
+
+            SBAnalytics::logEvent(ANALYTICS_EVENT_IAP_REMOVE_ADS, params);
+        }
         
         // 광고 제거
         User::removeAds();

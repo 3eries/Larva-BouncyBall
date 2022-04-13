@@ -600,7 +600,7 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                     ball->effectStun([=]() {
                         SBDirector::postDelayed(this, [=]() {
                             SBDirector::getInstance()->setScreenTouchLocked(false);
-                            GameManager::onGameOver(GameOverType::DEATH_BLOCK);
+                            GameManager::onGameOver(GameOverType::DEATH_BLOCK, block->getData().p);
                         }, 0.1f, false);
                     });
                     

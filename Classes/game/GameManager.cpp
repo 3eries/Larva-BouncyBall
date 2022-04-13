@@ -288,7 +288,7 @@ void GameManager::onGameResume() {
 /**
  * 게임 오버
  */
-void GameManager::onGameOver(GameOverType type) {
+void GameManager::onGameOver(GameOverType type, const TilePosition &tilePos) {
     
     Log::i("GameManager::onGameOver type: %d", (int)type);
     
@@ -310,7 +310,16 @@ void GameManager::onGameOver(GameOverType type) {
         params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
         params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
         params[ANALYTICS_EVENT_PARAM_TYPE] = SBAnalytics::EventParam(gameOverType);
+        params[ANALYTICS_EVENT_PARAM_SUMMARY] = SBAnalytics::EventParam(STR_FORMAT("%d-%s", stage.stage, gameOverType.c_str()));
 
+        if( tilePos == INVALID_TILE_POSITION ) {
+            params[ANALYTICS_EVENT_PARAM_TILE_POSITION] = SBAnalytics::EventParam(STR_FORMAT("%d-%s", stage.stage, gameOverType.c_str()));
+        } else {
+            auto str = STR_FORMAT("%d-[%d,%d]", stage.stage,
+                                  (int)tilePos.x, stage.mapHeightTiles - (int)tilePos.y - 1);
+            params[ANALYTICS_EVENT_PARAM_TILE_POSITION] = SBAnalytics::EventParam(str);
+        }
+        
         SBAnalytics::logEvent(ANALYTICS_EVENT_GAME_OVER, params);
     }
     
@@ -395,7 +404,8 @@ void GameManager::onStageClear() {
         params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
         params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
         params[ANALYTICS_EVENT_PARAM_STAR] = SBAnalytics::EventParam(TO_STRING(instance->star));
-
+        params[ANALYTICS_EVENT_PARAM_SUMMARY] = SBAnalytics::EventParam(STR_FORMAT("%d-%d", stage.stage, instance->star));
+        
         if( StageManager::isStageCleared(stage.stage) ) {
             SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_CLEAR_RE, params);
         } else {

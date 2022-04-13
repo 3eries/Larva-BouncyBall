@@ -41,6 +41,9 @@ static const std::string ANALYTICS_SCREEN_WELCOME                   = "welcome";
 static const std::string ANALYTICS_SCREEN_MAIN                      = "main";
 static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 
+static const std::string ANALYTICS_EVENT_SB_AD_REWARD               = "sb_ad_reward";
+static const std::string ANALYTICS_EVENT_IAP_REMOVE_ADS             = "in_app_purchase_remove_ads";
+
 static const std::string ANALYTICS_EVENT_CREDIT                     = "credit";                     // 크레딧 화면 진입
 static const std::string ANALYTICS_EVENT_SHOP                       = "shop";                       // 상점 팝업 진입
 
@@ -61,6 +64,9 @@ static const std::string ANALYTICS_EVENT_PARAM_STAGE                = "stage";
 static const std::string ANALYTICS_EVENT_PARAM_STAGE_RANGE          = "stage_range";
 static const std::string ANALYTICS_EVENT_PARAM_STAR                 = "star";
 static const std::string ANALYTICS_EVENT_PARAM_TYPE                 = "type";
+static const std::string ANALYTICS_EVENT_PARAM_TILE_POSITION        = "tile_position";
+static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE       = "unlocked_stage";
+static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT   = "unlocked_character_count";
 
 // Leaderboard
 static const std::string LEADER_BOARD_TOP_LEVEL                     = "CgkI3oP_ia0VEAIQAQ";

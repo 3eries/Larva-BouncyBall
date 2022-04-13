@@ -60,10 +60,11 @@ enum class BlockType {
     MOVE,
 };
 
-#define INVALID_TILE_NUMBER         0
-
 typedef cocos2d::Vec2 TilePosition;
 typedef std::vector<TilePosition> TilePositionList;
+
+#define INVALID_TILE_NUMBER         0
+#define INVALID_TILE_POSITION       TilePosition(-1,-1)
 
 struct TileData {
     TileId tileId;

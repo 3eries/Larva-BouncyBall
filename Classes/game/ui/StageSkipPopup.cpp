@@ -67,14 +67,12 @@ void StageSkipPopup::initContentView() {
     
     BasePopup::initContentView();
     
-    // game_skip_bg.png Vec2MC(0, 8) , Size(784, 552)
     popupBg = Sprite::create(DIR_IMG_GAME + "game_skip_bg.png");
     popupBg->setAnchorPoint(ANCHOR_M);
     popupBg->setPosition(Vec2MC(0, 8));
     addContentChild(popupBg);
     
     // SKIP 버튼
-    // game_btn_skip.png Vec2MC(0, -236) , Size(456, 144)
     auto skipBtn = SBButton::create(DIR_IMG_GAME + "game_btn_skip.png");
     skipBtn->setZoomScale(ButtonZoomScale::NORMAL);
     skipBtn->setAnchorPoint(ANCHOR_M);
@@ -91,6 +89,14 @@ void StageSkipPopup::initContentView() {
             SBDirector::getInstance()->setScreenTouchLocked(false);
         };
         listener->onAdClosed = [=]() {
+            // 통계 이벤트
+            if( listener->isRewarded() ) {
+                SBAnalytics::EventParams params;
+                params[ANALYTICS_EVENT_PARAM_TYPE] = SBAnalytics::EventParam("stage_skip");
+                
+                SBAnalytics::logEvent(ANALYTICS_EVENT_SB_AD_REWARD, params);
+            }
+            
             this->retain();
             onSkipListener(listener->isRewarded());
             this->release();
