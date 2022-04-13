@@ -59,8 +59,9 @@ using namespace std;
     
 #if SB_PLUGIN_USE_IAP
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-    
+#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
     iap::IAPHelper::restore(nullptr);
+#endif
 #endif
 }
 
