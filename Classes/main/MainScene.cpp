@@ -70,6 +70,9 @@ bool MainScene::init(int selectedWorld) {
     initMenu();
     initWorlds(selectedWorld);
     
+    // 게임 오버 횟수 리셋
+    User::setGameOverCountForSkipStage(0);
+    
     return true;
 }
 
