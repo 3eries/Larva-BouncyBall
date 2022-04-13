@@ -531,6 +531,50 @@ void Ball::waveEnd(bool isContactBlock) {
 }
 
 /**
+ * 스턴 이펙트 시작
+ */
+void Ball::effectStun(SBCallback onFinished) {
+    
+    auto stun = SBSkeletonAnimation::create(DIR_IMG_GAME + "stun.json");
+    stun->setScale(GAME_MANAGER->getMapScaleFactor());
+    stun->setPosition(image->getPosition() +
+                      Vec2(0, image->getContentSize().height*image->getScaleY()*0.5f));
+    addChild(stun);
+
+    stun->runAnimation("stun", false, [=](spine::TrackEntry *entry) {
+        onFinished();
+    });
+    
+    //// 캐릭터 연출
+    // Move
+    {
+        auto moveDist = 10 * GAME_MANAGER->getMapScaleFactor();
+        auto move = Sequence::create(MoveBy::create(2*(1.0f/30), Vec2(moveDist, 0)),
+                                     MoveBy::create(2*(1.0f/30), Vec2(-moveDist, 0)),
+                                     nullptr);
+        image->runAction(Repeat::create(move, 3));
+    }
+    
+    // Tint
+    {
+        auto tint = Sequence::create(DelayTime::create(5*(1.0f/30)),
+                                     TintTo::create(0, Color3B::BLACK),
+                                     DelayTime::create(5*(1.0f/30)),
+                                     TintTo::create(0, Color3B::WHITE),
+                                     nullptr);
+        image->runAction(Repeat::create(tint, 2));
+    }
+    
+    // Fade
+    {
+        auto fade = Sequence::create(DelayTime::create(20*(1.0f/30)),
+                                     FadeOut::create(10*(1.0f/30)),
+                                     nullptr);
+        image->runAction(fade);
+    }
+}
+
+/**
  * 볼 <-> 아이템 충돌
  */
 void Ball::onContactItem(Ball *ball, GameTile *tile) {

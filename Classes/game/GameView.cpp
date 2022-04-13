@@ -588,15 +588,21 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
                 if( category == checkCategory ) {
                     SBAudioEngine::playEffect(SOUND_GAME_OVER_DEATH_BLOCK);
                     
-                    onPreGameOver();
-                    
                     if( category == PhysicsCategory::BLOCK_TOP ) {
                         ball->setPositionY(SB_BOUNDING_BOX_IN_WORLD(block).getMaxY() + ball->getContentSize().height*0.5f);
                     }
                     
-                    SBDirector::postDelayed(this, [=]() {
-                        GameManager::onGameOver(GameOverType::DEATH_BLOCK);
-                    }, 0.2f, true);
+                    onPreGameOver();
+                    
+                    // 스턴 연출
+                    SBDirector::getInstance()->setScreenTouchLocked(true);
+  
+                    ball->effectStun([=]() {
+                        SBDirector::postDelayed(this, [=]() {
+                            SBDirector::getInstance()->setScreenTouchLocked(false);
+                            GameManager::onGameOver(GameOverType::DEATH_BLOCK);
+                        }, 0.1f, false);
+                    });
                     
                     break;
                 }

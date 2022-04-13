@@ -79,6 +79,8 @@ public:
     void            waveStart(Block *block);
     void            waveEnd(bool isContactBlock);
     
+    void            effectStun(SBCallback onFinished);
+    
 public:
     void            onContactItem(Ball *ball, GameTile *tile);
     void            onContactBlock(Ball *ball, GameTile *tile, cocos2d::Vec2 contactPoint,
@@ -91,7 +93,7 @@ protected:
     CC_SYNTHESIZE_READONLY(State, state, State);
     StageData stage;
     
-    cocos2d::Sprite *image;
+    CC_SYNTHESIZE_READONLY(cocos2d::Sprite*, image, Image);
     superbomb::EffectSprite *outlineImage;
     
     CC_SYNTHESIZE_READONLY(BallDirection, direction, Direction);
