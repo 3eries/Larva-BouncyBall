@@ -221,7 +221,7 @@ void GameScene::onStageClear(const StageData &stage) {
         });
     });
     popup->setOnNextListener([=]() {
-        this->showInterstitial([=]() {
+        auto onAdClosed = [=]() {
             // 마지막 스테이지는 메인 화면으로 이동
             if( stage.stage == StageManager::getLastStage().stage ) {
                 // 커밍순 월드로 포커스
@@ -231,7 +231,14 @@ void GameScene::onStageClear(const StageData &stage) {
             else {
                 this->replaceGameScene(stage.stage+1);
             }
-        });
+        };
+        
+        if( stage.stage >= 10 ) {
+            // 10 스테이지부터 전면 광고 노출
+            this->showInterstitial(onAdClosed);
+        } else {
+            onAdClosed();
+        }
     });
     popup->setOnShopListener([=]() {
         auto shopPopup = ShopPopup::create();
