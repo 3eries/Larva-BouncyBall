@@ -163,6 +163,8 @@ void GameScene::onGameResume() {
  */
 void GameScene::onGameOver() {
     
+    auto stage = GAME_MANAGER->getStage();
+    
     // 스테이지 스킵 팝업
     if( User::getGameOverCountForSkipStage() >= 3 && AdsHelper::isRewardedVideoLoaded() ) {
         // 게임 오버 횟수 리셋
@@ -174,19 +176,28 @@ void GameScene::onGameOver() {
             
             // 스테이지 클리어
             if( isSkip ) {
+                // 통계 이벤트
+                {
+                    SBAnalytics::EventParams params;
+                    params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
+                    params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
+                    
+                    SBAnalytics::logEvent(ANALYTICS_EVENT_STAGE_SKIP, params);
+                }
+                
                 GAME_MANAGER->setStar(3);
                 GameManager::onStageClear();
             }
             // 스테이지 재시작
             else {
-                replaceGameScene(GAME_MANAGER->getStage().stage);
+                replaceGameScene(stage.stage);
             }
         });
         SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
     }
     // 스테이지 재시작
     else {
-        replaceGameScene(GAME_MANAGER->getStage().stage);
+        replaceGameScene(stage.stage);
     }
 }
 

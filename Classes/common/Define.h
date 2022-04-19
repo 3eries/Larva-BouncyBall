@@ -51,6 +51,7 @@ static const std::string ANALYTICS_EVENT_STAGE_PLAY                 = "stage_pla
 static const std::string ANALYTICS_EVENT_STAGE_CLEAR                = "stage_clear";
 static const std::string ANALYTICS_EVENT_STAGE_PLAY_RE              = "stage_play_re";
 static const std::string ANALYTICS_EVENT_STAGE_CLEAR_RE             = "stage_clear_re";
+static const std::string ANALYTICS_EVENT_STAGE_SKIP                 = "stage_skip";
 
 static const std::string ANALYTICS_EVENT_GAME_OVER                  = "game_over";
 
