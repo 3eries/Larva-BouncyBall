@@ -88,8 +88,8 @@ void PhysicsManager::resumeScheduler() {
 void PhysicsManager::update(float dt) {
     
     SBPhysics::loopObjects(world, [](SBPhysicsObject *obj) { obj->beforeStep(); });
-    // world->Step(PHYSICS_FPS, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
-    world->Step(MIN(dt, PHYSICS_FPS), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+    world->Step(PHYSICS_FPS, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+    // world->Step(MIN(dt, PHYSICS_FPS), VELOCITY_ITERATIONS, POSITION_ITERATIONS);
     SBPhysics::loopObjects(world, [](SBPhysicsObject *obj) { obj->afterStep(); });
     
     dispatchOnUpdate();

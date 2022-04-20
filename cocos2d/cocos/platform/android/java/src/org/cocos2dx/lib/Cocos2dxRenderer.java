@@ -25,6 +25,7 @@ THE SOFTWARE.
 package org.cocos2dx.lib;
 
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -87,25 +88,42 @@ public class Cocos2dxRenderer implements GLSurfaceView.Renderer {
          * No need to use algorithm in default(60 FPS) situation,
          * since onDrawFrame() was called by system 60 times per second by default.
          */
+        // cocos2d-x original - start
+//        if (Cocos2dxRenderer.sAnimationInterval <= 1.0f / 60f * Cocos2dxRenderer.NANOSECONDSPERSECOND) {
+//            Cocos2dxRenderer.nativeRender();
+//        } else {
+//            final long now = System.nanoTime();
+//            final long interval = now - this.mLastTickInNanoSeconds;
+//
+//            if (interval < Cocos2dxRenderer.sAnimationInterval) {
+//                try {
+//                    Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval) / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);
+//                } catch (final Exception e) {
+//                }
+//            }
+//            /*
+//             * Render time MUST be counted in, or the FPS will slower than appointed.
+//            */
+//            this.mLastTickInNanoSeconds = System.nanoTime();
+//            Cocos2dxRenderer.nativeRender();
+//        }
+        // cocos2d-x original - end
 
-        if (Cocos2dxRenderer.sAnimationInterval <= 1.0f / 60f * Cocos2dxRenderer.NANOSECONDSPERSECOND) {
-            Cocos2dxRenderer.nativeRender();
-        } else {
-            final long now = System.nanoTime();
-            final long interval = now - this.mLastTickInNanoSeconds;
-        
-            if (interval < Cocos2dxRenderer.sAnimationInterval) {
-                try {
-                    Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval) / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);
-                } catch (final Exception e) {
-                }
+        final long now = System.nanoTime();
+        final long interval = now - this.mLastTickInNanoSeconds;
+
+        if (interval < Cocos2dxRenderer.sAnimationInterval) {
+            try {
+                Thread.sleep((Cocos2dxRenderer.sAnimationInterval - interval) / Cocos2dxRenderer.NANOSECONDSPERMICROSECOND);
+            } catch (final Exception e) {
             }
-            /*
-             * Render time MUST be counted in, or the FPS will slower than appointed.
-            */
-            this.mLastTickInNanoSeconds = System.nanoTime();
-            Cocos2dxRenderer.nativeRender();
         }
+
+        /*
+         * Render time MUST be counted in, or the FPS will slower than appointed.
+         */
+        this.mLastTickInNanoSeconds = System.nanoTime();
+        Cocos2dxRenderer.nativeRender();
     }
 
     // ===========================================================
