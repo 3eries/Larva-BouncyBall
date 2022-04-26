@@ -100,7 +100,7 @@ void GameView::onEnterTransitionDidFinish() {
             auto img = Sprite::create(DIR_IMG_GAME + "tutorial_jump.png");
             img->setTag(Tag::TUTORIAL);
             img->setAnchorPoint(ANCHOR_BL);
-            img->setPosition(convertTilePosition(stage, startFlag.x+1, startFlag.y+2) +
+            img->setPosition(convertTilePosition(stage, startFlag.x+4, startFlag.y+3) +
                              Vec2(-14, -30));
             addChild(img, SBZOrder::BOTTOM);
             
@@ -116,7 +116,7 @@ void GameView::onEnterTransitionDidFinish() {
             auto img = Sprite::create(DIR_IMG_GAME + "tutorial_warning.png");
             img->setTag(Tag::TUTORIAL);
             img->setAnchorPoint(ANCHOR_MT);
-            img->setPosition(convertTilePosition(stage, startFlag.x+3, startFlag.y-1) +
+            img->setPosition(convertTilePosition(stage, startFlag.x+6, startFlag.y-1) +
                              Vec2(-8, -64));
             addChild(img, SBZOrder::BOTTOM);
             
