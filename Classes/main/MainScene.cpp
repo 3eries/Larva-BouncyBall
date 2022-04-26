@@ -211,7 +211,7 @@ void MainScene::initBg(int selectedWorld) {
 void MainScene::initMenu() {
     
     SBUIInfo infos[] = {
-        SBUIInfo(Tag::BTN_SHOP,    ANCHOR_M, Vec2TL(224, -104),  DIR_IMG_MAIN + "main_btn_shop.png"),
+        SBUIInfo(Tag::BTN_SHOP,    ANCHOR_M, Vec2TL(210, -104),  DIR_IMG_MAIN + "main_btn_shop.png"),
         SBUIInfo(Tag::BTN_SETTING, ANCHOR_M, Vec2TR(-104, -104), DIR_IMG_MAIN + "main_btn_menu.png"),
     };
     
@@ -225,6 +225,25 @@ void MainScene::initMenu() {
         
         btn->setOnClickListener(CC_CALLBACK_1(MainScene::onClick, this));
     }
+    
+    // 상점 버튼 - 캐릭터 로테이션 연출
+    auto shopBtn = getChildByTag<SBButton*>(Tag::BTN_SHOP);
+
+    auto chcImage = Sprite::create();
+    chcImage->setAnchorPoint(ANCHOR_M);
+    chcImage->setPosition(shopBtn->getContentsLayer()->convertToNodeSpace(Vec2TL(111, -46)));
+    shopBtn->getContentsLayer()->addChild(chcImage);
+
+    StringList charImageList;
+
+    for( int i = 0; i < 8; ++i ) {
+        charImageList.push_back(ResourceHelper::getCharacterImage(CHARACTER_MANAGER->getCharacters()[i].charId));
+    }
+
+    random_shuffle(charImageList.begin(), charImageList.end());
+
+    auto anims = SBNodeUtils::createAnimation(charImageList, 0.4f);
+    chcImage->runAction(RepeatForever::create(Animate::create(anims)));
 }
 
 /**

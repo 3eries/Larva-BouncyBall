@@ -9,6 +9,7 @@
 
 #include "Define.h"
 #include "GameUIHelper.hpp"
+#include "ResourceHelper.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -91,13 +92,36 @@ void ClearPopup::initContentView() {
     auto shopBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_shop.png");
     shopBtn->setZoomScale(ButtonZoomScale::NORMAL);
     shopBtn->setAnchorPoint(ANCHOR_M);
-    shopBtn->setPosition(Vec2TL(130, -102));
+    shopBtn->setPosition(Vec2TL(130, -112));
     addContentChild(shopBtn);
     
     shopBtn->setOnClickListener([=](Node*) {
         SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER(this, onShopListener);
     });
+    
+    // 상점 버튼 - 캐릭터 로테이션 연출
+    auto chcImage = Sprite::create();
+    chcImage->setAnchorPoint(ANCHOR_M);
+    chcImage->setPosition(shopBtn->getContentsLayer()->convertToNodeSpace(Vec2TL(130, -39)));
+    shopBtn->getContentsLayer()->addChild(chcImage);
+
+    StringList charImageList;
+
+    for( int i = 0; i < 8; ++i ) {
+        charImageList.push_back(ResourceHelper::getCharacterImage(CHARACTER_MANAGER->getCharacters()[i].charId));
+    }
+
+    random_shuffle(charImageList.begin(), charImageList.end());
+
+    auto anims = SBNodeUtils::createAnimation(charImageList, 0.4f);
+    chcImage->runAction(RepeatForever::create(Animate::create(anims)));
+    
+    // 상점 버튼 - 타이틀
+    auto shopTitle = Sprite::create(DIR_IMG_RESULT + "result_btn_shop_text.png");
+    shopTitle->setAnchorPoint(ANCHOR_M);
+    shopTitle->setPosition(shopBtn->getContentsLayer()->convertToNodeSpace(Vec2TL(128, -142)));
+    shopBtn->getContentsLayer()->addChild(shopTitle);
     
     // Home
     auto homeBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_home.png");
