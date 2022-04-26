@@ -65,6 +65,7 @@ static const std::string ANALYTICS_EVENT_PARAM_STAGE                = "stage";
 static const std::string ANALYTICS_EVENT_PARAM_STAGE_RANGE          = "stage_range";
 static const std::string ANALYTICS_EVENT_PARAM_STAR                 = "star";
 static const std::string ANALYTICS_EVENT_PARAM_TYPE                 = "type";
+static const std::string ANALYTICS_EVENT_PARAM_POPUP                = "popup";
 static const std::string ANALYTICS_EVENT_PARAM_TILE_POSITION        = "tile_position";
 static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE       = "unlocked_stage";
 static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT   = "unlocked_character_count";

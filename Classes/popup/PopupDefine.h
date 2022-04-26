@@ -26,6 +26,7 @@ enum class PopupType {
     GAME_RESULT,
     CONTINUE,
     STAGE_SKIP,
+    SALE,
 };
 
 #endif /* PopupDefine_h */

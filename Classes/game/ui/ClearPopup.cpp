@@ -40,6 +40,7 @@ void ClearPopup::onEnter() {
     BasePopup::onEnter();
     
     runEnterAction();
+    runStarAnimation(0);
 }
 
 bool ClearPopup::onBackKeyReleased() {
@@ -85,8 +86,6 @@ void ClearPopup::initContentView() {
         
         starBgs.push_back(starBg);
     }
-    
-    runStarAnimation(0);
     
     // Shop
     auto shopBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_shop.png");

@@ -7,11 +7,15 @@
 #include "SceneManager.h"
 
 #include "Define.h"
+#include "StageManager.hpp"
+#include "User.hpp"
 
 #include "../splash/SplashScene.hpp"
 #include "../main/WelcomeScene.hpp"
 #include "../main/MainScene.hpp"
 #include "../game/GameScene.hpp"
+
+#include "SalePopup.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -112,6 +116,16 @@ void SceneManager::replace(SceneType type, function<Scene*()> createSceneFunc) {
             
         case SceneType::MAIN: {
             trans = TransitionFade::create(REPLACE_DURATION_MAIN, scene);
+            
+            // 이전 씬이 게임인 경우 세일 팝업 노출
+            if( prevSceneType == SceneType::GAME &&
+                !User::isRemovedAds() && StageManager::getTopUnlockedStage() >= 11 ) {
+                
+                SBDirector::postDelayed(scene, [=]() {
+                    auto popup = SalePopup::create();
+                    scene->addChild(popup, ZOrder::POPUP_MIDDLE);
+                }, REPLACE_DURATION_MAIN, false);
+            }
         } break;
             
         case SceneType::GAME: {

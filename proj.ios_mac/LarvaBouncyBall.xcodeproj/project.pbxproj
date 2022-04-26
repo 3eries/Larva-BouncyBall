@@ -137,6 +137,7 @@
 		509465F327E2FF6500CFE6D4 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F227E2FF6500CFE6D4 /* AVKit.framework */; };
 		509465F527E2FFBE00CFE6D4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
+		50B4DDBF2816ACB000968AB4 /* SalePopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B4DDBD2816ACB000968AB4 /* SalePopup.cpp */; };
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
 		50B5736327033346009F3240 /* GameTile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736127033346009F3240 /* GameTile.cpp */; };
 		50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736427033665009F3240 /* PhysicsListener.cpp */; };
@@ -431,6 +432,8 @@
 		509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		50A8E40B2701ECDC002732F8 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
+		50B4DDBD2816ACB000968AB4 /* SalePopup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SalePopup.cpp; sourceTree = "<group>"; };
+		50B4DDBE2816ACB000968AB4 /* SalePopup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SalePopup.hpp; sourceTree = "<group>"; };
 		50B5735A27032C09009F3240 /* PhysicsManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhysicsManager.cpp; sourceTree = "<group>"; };
 		50B5735B27032C09009F3240 /* PhysicsManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PhysicsManager.hpp; sourceTree = "<group>"; };
 		50B5736127033346009F3240 /* GameTile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTile.cpp; sourceTree = "<group>"; };
@@ -554,6 +557,8 @@
 				1DBD57FD279E43D000F07409 /* CharacterCell.hpp */,
 				1DBD57F7279E439600F07409 /* IAPCell.cpp */,
 				1DBD57F8279E439600F07409 /* IAPCell.hpp */,
+				50B4DDBD2816ACB000968AB4 /* SalePopup.cpp */,
+				50B4DDBE2816ACB000968AB4 /* SalePopup.hpp */,
 				1DBD57F2279E307600F07409 /* ShopPopup.cpp */,
 				1DBD57F3279E307600F07409 /* ShopPopup.hpp */,
 			);
@@ -1387,6 +1392,7 @@
 				507BF81726834EF30037F28C /* ConsentForm.cpp in Sources */,
 				507BF82A26834EF30037F28C /* ReviewPopup.cpp in Sources */,
 				507BF80C26834EF30037F28C /* SBMath.cpp in Sources */,
+				50B4DDBF2816ACB000968AB4 /* SalePopup.cpp in Sources */,
 				507BF7E326834EF30037F28C /* SBAnimationSprite.cpp in Sources */,
 				507BF81D26834EF30037F28C /* SBScheduleHelper.cpp in Sources */,
 				50861EBA27BE245B00181A3D /* CharacterListener.cpp in Sources */,

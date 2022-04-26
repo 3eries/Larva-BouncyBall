@@ -19,6 +19,7 @@
 #include "CommonLoadingBar.hpp"
 #include "GetCharacterPopup.hpp"
 #include "ShopPopup.hpp"
+#include "SalePopup.hpp"
 #include "ui/PausePopup.hpp"
 #include "ui/ClearPopup.hpp"
 #include "ui/StageSkipPopup.hpp"
@@ -215,11 +216,20 @@ void GameScene::onStageClear(const StageData &stage) {
     // 클리어 팝업
     auto popup = ClearPopup::create();
     popup->setOnStarEffectFinishedListener([=]() {
+        
         auto characters = GAME_MANAGER->getUnlockCharacters();
         
+        // 캐릭터 획득 팝업
         if( characters.size() > 0 ) {
             SBDirector::getInstance()->postDelayed(this, [=]() {
                 GetCharacterPopup::show(characters);
+            }, 0.5f, true);
+        }
+        // 세일 팝업, 월드의 마지막 스테이지 클리어
+        else if( !User::isRemovedAds() && stage.stage % GAME_CONFIG->getStagePerWorld() == 0 ) {
+            SBDirector::getInstance()->postDelayed(this, [=]() {
+                auto popup = SalePopup::create();
+                SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
             }, 0.5f, true);
         }
     });

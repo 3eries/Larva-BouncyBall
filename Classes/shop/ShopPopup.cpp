@@ -291,6 +291,7 @@ void ShopPopup::onClickIAP() {
             SBAnalytics::EventParams params;
             params[ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE] = SBAnalytics::EventParam(TO_STRING(StageManager::getTopUnlockedStage()));
             params[ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT] = SBAnalytics::EventParam(TO_STRING(CHARACTER_MANAGER->getUnlockedCharacters().size()));
+            params[ANALYTICS_EVENT_PARAM_POPUP] = SBAnalytics::EventParam("shop");
 
             SBAnalytics::logEvent(ANALYTICS_EVENT_IAP_REMOVE_ADS, params);
         }
