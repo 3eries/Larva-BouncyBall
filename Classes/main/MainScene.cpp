@@ -92,10 +92,17 @@ void MainScene::onEnterTransitionDidFinish() {
     
     // 캐릭터 잠금 해제 체크
     CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-        
         // 캐릭터 획득 팝업
         GetCharacterPopup::show(unlockCharacters);
     });
+    
+    // 네트워크 연결 상태 체크
+    bool isNetworkOnline = SBPlatformHelper::isNetworkOnline();
+    
+    SBAnalytics::EventParams params;
+    params[ANALYTICS_EVENT_PARAM_STATUS] = SBAnalytics::EventParam(isNetworkOnline ? "online" : "offline");
+    
+    SBAnalytics::logEvent(ANALYTICS_EVENT_SB_NETWORK_STATUS, params);
 }
 
 void MainScene::onExit() {

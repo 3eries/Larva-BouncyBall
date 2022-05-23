@@ -29,6 +29,8 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		294D0D641D0D56D500F7F5D4 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 294D0D631D0D56D500F7F5D4 /* CoreText.framework */; };
 		46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 46880B8419C43A87006E1F66 /* AppDelegate.cpp */; };
+		503A7945283B950A00D3AE9D /* SBPlatformHelper-android.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503A7943283B950900D3AE9D /* SBPlatformHelper-android.cpp */; };
+		503A7946283B950A00D3AE9D /* SBPlatformHelper-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 503A7944283B950900D3AE9D /* SBPlatformHelper-ios.mm */; };
 		50484C1627DA52040026FD94 /* BlockMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50484C1427DA52040026FD94 /* BlockMove.cpp */; };
 		50617DA327144C58005CE3EF /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50617DA227144C58005CE3EF /* Block.cpp */; };
 		506A352C27DAF7CD00A22A2F /* BlockMoveRail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506A352A27DAF7CD00A22A2F /* BlockMoveRail.cpp */; };
@@ -82,7 +84,6 @@
 		507BF80226834EF30037F28C /* GameCenterHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 507BF74E26834EF20037F28C /* GameCenterHelper.mm */; };
 		507BF80326834EF30037F28C /* PluginPlay-android.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF75026834EF20037F28C /* PluginPlay-android.cpp */; };
 		507BF80426834EF30037F28C /* SBAnalytics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF75426834EF20037F28C /* SBAnalytics.cpp */; };
-		507BF80526834EF30037F28C /* SBPlatformHelper-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 507BF75926834EF20037F28C /* SBPlatformHelper-ios.mm */; };
 		507BF80626834EF30037F28C /* SBJniHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF75C26834EF20037F28C /* SBJniHelper.cpp */; };
 		507BF80726834EF30037F28C /* SBHttp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF76026834EF20037F28C /* SBHttp.cpp */; };
 		507BF80826834EF30037F28C /* SBAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507BF76226834EF20037F28C /* SBAction.cpp */; };
@@ -219,6 +220,8 @@
 		294D0D631D0D56D500F7F5D4 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		46880B8419C43A87006E1F66 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		46880B8519C43A87006E1F66 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		503A7943283B950900D3AE9D /* SBPlatformHelper-android.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "SBPlatformHelper-android.cpp"; sourceTree = "<group>"; };
+		503A7944283B950900D3AE9D /* SBPlatformHelper-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "SBPlatformHelper-ios.mm"; sourceTree = "<group>"; };
 		503AE0F617EB97AB00D1A890 /* Icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Icon.icns; sourceTree = "<group>"; };
 		503AE0F717EB97AB00D1A890 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		503AE10317EB98FF00D1A890 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = mac/main.cpp; sourceTree = "<group>"; };
@@ -319,7 +322,6 @@
 		507BF75426834EF20037F28C /* SBAnalytics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SBAnalytics.cpp; sourceTree = "<group>"; };
 		507BF75526834EF20037F28C /* SBAnalytics.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SBAnalytics.hpp; sourceTree = "<group>"; };
 		507BF75726834EF20037F28C /* SBPlatformHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBPlatformHelper.h; sourceTree = "<group>"; };
-		507BF75926834EF20037F28C /* SBPlatformHelper-ios.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "SBPlatformHelper-ios.mm"; sourceTree = "<group>"; };
 		507BF75B26834EF20037F28C /* SBJniHelper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SBJniHelper.hpp; sourceTree = "<group>"; };
 		507BF75C26834EF20037F28C /* SBJniHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SBJniHelper.cpp; sourceTree = "<group>"; };
 		507BF75D26834EF20037F28C /* SBPlatformMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBPlatformMacros.h; sourceTree = "<group>"; };
@@ -873,19 +875,12 @@
 			isa = PBXGroup;
 			children = (
 				507BF75A26834EF20037F28C /* android */,
-				507BF75826834EF20037F28C /* ios */,
+				503A7943283B950900D3AE9D /* SBPlatformHelper-android.cpp */,
+				503A7944283B950900D3AE9D /* SBPlatformHelper-ios.mm */,
 				507BF75726834EF20037F28C /* SBPlatformHelper.h */,
 				507BF75D26834EF20037F28C /* SBPlatformMacros.h */,
 			);
 			path = platform;
-			sourceTree = "<group>";
-		};
-		507BF75826834EF20037F28C /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				507BF75926834EF20037F28C /* SBPlatformHelper-ios.mm */,
-			);
-			path = ios;
 			sourceTree = "<group>";
 		};
 		507BF75A26834EF20037F28C /* android */ = {
@@ -1373,6 +1368,7 @@
 				507BF7FD26834EF30037F28C /* FirebaseManager-ios.mm in Sources */,
 				1DEB5559279A7B3900699529 /* ClearPopup.cpp in Sources */,
 				507BF82E26834EF30037F28C /* SettingPopup.cpp in Sources */,
+				503A7945283B950A00D3AE9D /* SBPlatformHelper-android.cpp in Sources */,
 				508F883028068D9E008469B9 /* StageSkipPopup.cpp in Sources */,
 				507BF7FE26834EF30037F28C /* FirebaseAnalytics-android.cpp in Sources */,
 				507BF80926834EF30037F28C /* SBEffect.cpp in Sources */,
@@ -1463,8 +1459,8 @@
 				507BF83526834EF30037F28C /* LogoView.cpp in Sources */,
 				5081109D279D2D4200FC9577 /* ClearPortal.cpp in Sources */,
 				50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */,
-				507BF80526834EF30037F28C /* SBPlatformHelper-ios.mm in Sources */,
 				507BF82426834EF30037F28C /* MainScene.cpp in Sources */,
+				503A7946283B950A00D3AE9D /* SBPlatformHelper-ios.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

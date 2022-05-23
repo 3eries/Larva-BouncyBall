@@ -42,6 +42,7 @@ static const std::string ANALYTICS_SCREEN_MAIN                      = "main";
 static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 
 static const std::string ANALYTICS_EVENT_SB_AD_REWARD               = "sb_ad_reward";
+static const std::string ANALYTICS_EVENT_SB_NETWORK_STATUS          = "sb_network_status";
 static const std::string ANALYTICS_EVENT_IAP_REMOVE_ADS             = "in_app_purchase_remove_ads";
 
 static const std::string ANALYTICS_EVENT_CREDIT                     = "credit";                     // 크레딧 화면 진입
@@ -60,11 +61,12 @@ static const std::string ANALYTICS_EVENT_CHARACTER_SELECT           = "character
 static const std::string ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK   = "character_view_ads_click";   // 캐릭터 광고 보기 클릭
 
 static const std::string ANALYTICS_EVENT_PARAM_SUMMARY              = "summary";                    // 요약
+static const std::string ANALYTICS_EVENT_PARAM_TYPE                 = "type";
+static const std::string ANALYTICS_EVENT_PARAM_STATUS               = "status";
 static const std::string ANALYTICS_EVENT_PARAM_CHAR_ID              = "char_id";                    // 캐릭터 아이디
 static const std::string ANALYTICS_EVENT_PARAM_STAGE                = "stage";
 static const std::string ANALYTICS_EVENT_PARAM_STAGE_RANGE          = "stage_range";
 static const std::string ANALYTICS_EVENT_PARAM_STAR                 = "star";
-static const std::string ANALYTICS_EVENT_PARAM_TYPE                 = "type";
 static const std::string ANALYTICS_EVENT_PARAM_POPUP                = "popup";
 static const std::string ANALYTICS_EVENT_PARAM_TILE_POSITION        = "tile_position";
 static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE       = "unlocked_stage";

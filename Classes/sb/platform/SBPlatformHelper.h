@@ -12,12 +12,9 @@
 #include "../base/SBMacros.h"
 #include "../base/SBTypes.hpp"
 
-NS_SB_BEGIN;
-
-class PlatformHelper {
+class SBPlatformHelper {
 public:
+    static bool isNetworkOnline();
 };
-
-NS_SB_END;
 
 #endif /* SBPlatformHelper_h */
