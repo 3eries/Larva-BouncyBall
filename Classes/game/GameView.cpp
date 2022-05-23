@@ -100,7 +100,7 @@ void GameView::onEnterTransitionDidFinish() {
             auto img = Sprite::create(DIR_IMG_GAME + "tutorial_jump.png");
             img->setTag(Tag::TUTORIAL);
             img->setAnchorPoint(ANCHOR_BL);
-            img->setPosition(convertTilePosition(stage, startFlag.x+4, startFlag.y+3) +
+            img->setPosition(convertTilePosition(stage, startFlag.x+3, startFlag.y+3) +
                              Vec2(-14, -30));
             addChild(img, SBZOrder::BOTTOM);
             
@@ -116,11 +116,11 @@ void GameView::onEnterTransitionDidFinish() {
             auto img = Sprite::create(DIR_IMG_GAME + "tutorial_warning.png");
             img->setTag(Tag::TUTORIAL);
             img->setAnchorPoint(ANCHOR_MT);
-            img->setPosition(convertTilePosition(stage, startFlag.x+6, startFlag.y-1) +
+            img->setPosition(convertTilePosition(stage, startFlag.x+6, startFlag.y-3) +
                              Vec2(-8, -64));
             addChild(img, SBZOrder::BOTTOM);
             
-            auto move = Sequence::create(MoveTo::create(1.0f, img->getPosition() + Vec2(0, -10)),
+            auto move = Sequence::create(MoveTo::create(1.0f, img->getPosition() + Vec2(0, 10)),
                                          MoveTo::create(1.0f, img->getPosition()),
                                          nullptr);
             img->runAction(RepeatForever::create(move));
@@ -500,9 +500,8 @@ void GameView::onContactItem(Ball *ball, GameTile *tile) {
                     }
                 } break;
                     
-                // 점프, 데스블럭 튜토리얼
-                case TUTORIAL_STAGE_JUMP:
-                case TUTORIAL_STAGE_DEATH_BLOCK: {
+                // 점프 튜토리얼
+                case TUTORIAL_STAGE_JUMP: {
                     // 두번째 소시지 획득 시 튜토리얼 제거
                     if( star == 2 ) {
                         auto tutorial = getChildByTag(Tag::TUTORIAL);
