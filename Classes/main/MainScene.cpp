@@ -103,6 +103,10 @@ void MainScene::onEnterTransitionDidFinish() {
     params[ANALYTICS_EVENT_PARAM_STATUS] = SBAnalytics::EventParam(isNetworkOnline ? "online" : "offline");
     
     SBAnalytics::logEvent(ANALYTICS_EVENT_SB_NETWORK_STATUS, params);
+    
+    if( !isNetworkOnline ) {
+        SBAnalytics::logEvent(ANALYTICS_EVENT_SB_NETWORK_STATUS_OFFLINE);
+    }
 }
 
 void MainScene::onExit() {

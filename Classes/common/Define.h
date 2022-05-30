@@ -43,6 +43,7 @@ static const std::string ANALYTICS_SCREEN_GAME                      = "game";
 
 static const std::string ANALYTICS_EVENT_SB_AD_REWARD               = "sb_ad_reward";
 static const std::string ANALYTICS_EVENT_SB_NETWORK_STATUS          = "sb_network_status";
+static const std::string ANALYTICS_EVENT_SB_NETWORK_STATUS_OFFLINE  = "sb_network_status_offline";
 static const std::string ANALYTICS_EVENT_IAP_REMOVE_ADS             = "in_app_purchase_remove_ads";
 
 static const std::string ANALYTICS_EVENT_CREDIT                     = "credit";                     // 크레딧 화면 진입
