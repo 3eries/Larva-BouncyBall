@@ -11,10 +11,13 @@
 
 #include "../base/SBMacros.h"
 #include "../base/SBTypes.hpp"
+#include "../utils/SBSystemUtils.h"
+#include "SBPlatformMacros.h"
 
 class SBPlatformHelper {
 public:
     static bool isNetworkOnline();
+    static void showNetworkErrorPopup();
 };
 
 #endif /* SBPlatformHelper_h */

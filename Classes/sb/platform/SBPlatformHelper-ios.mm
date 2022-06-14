@@ -8,8 +8,12 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <netinet/in.h>
+#import "AppController.h"
+#import "RootViewController.h"
 
 USING_NS_CC;
 using namespace std;
@@ -39,6 +43,20 @@ bool SBPlatformHelper::isNetworkOnline() {
     }
     
     return false;
+}
+
+void SBPlatformHelper::showNetworkErrorPopup() {
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"No internet Connetion"
+                                                                   message:@"Please play to online"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"OK"
+                                              style:UIAlertActionStyleDefault
+                                            handler:^(UIAlertAction *action) {
+        SBSystemUtils::exitApp();
+    }]];
+
+    [ROOT_VIEW_CONTROLLER presentViewController:alert animated:YES completion:^{}];
 }
 
 #endif // CC_PLATFORM_IOS

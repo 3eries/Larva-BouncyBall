@@ -256,7 +256,13 @@ void GameScene::onStageClear(const StageData &stage) {
         
         if( stage.stage >= 10 ) {
             // 10 스테이지부터 전면 광고 노출
-            this->showInterstitial(onAdClosed);
+            if( SBPlatformHelper::isNetworkOnline() ) {
+                this->showInterstitial(onAdClosed);
+            }
+            // 네크워크 오프라인 에러
+            else {
+                SBPlatformHelper::showNetworkErrorPopup();
+            }
         } else {
             onAdClosed();
         }
