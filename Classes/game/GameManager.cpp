@@ -302,6 +302,7 @@ void GameManager::onGameOver(GameOverType type, const TilePosition &tilePos) {
             switch( type ) {
                 case GameOverType::FALL:        return "fall";
                 case GameOverType::DEATH_BLOCK: return "death_block";
+                case GameOverType::CANNON_BALL: return "cannon_ball";
                 default:                        return "none";
             }
         }();

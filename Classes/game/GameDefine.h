@@ -65,6 +65,7 @@ enum GameState {
 enum GameOverType {
     FALL = 0,
     DEATH_BLOCK,
+    CANNON_BALL,
 };
 
 // Tutorial Stage

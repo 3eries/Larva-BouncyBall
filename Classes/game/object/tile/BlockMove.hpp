@@ -38,6 +38,7 @@ protected:
     static std::string getMoveBlockBodyImage(int world);
     
 protected:
+    bool isHorizontal;
     TileData startBlock;
     TileData endBlock;
 };

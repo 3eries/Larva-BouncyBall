@@ -20,6 +20,8 @@
 #include "object/tile/BlockDrop.hpp"
 #include "object/tile/BlockMove.hpp"
 #include "object/tile/BlockMoveRail.hpp"
+#include "object/tile/BlockCannon.hpp"
+#include "object/tile/BlockCannonBall.hpp"
 
 #include "object/StageProgressBar.hpp"
 
@@ -275,7 +277,18 @@ void GameView::addTile(GameTile *tile) {
     switch( tile->getData().type ) {
         case TileType::FLAG:    z = ZOrder::TILE_FLAG;      break;
         case TileType::ITEM:    z = ZOrder::TILE_ITEM;      break;
-        case TileType::BLOCK:   z = ZOrder::TILE_BLOCK;     break;
+        case TileType::BLOCK: {
+            z = ZOrder::TILE_BLOCK;
+            
+            if( tile->getData().blockType == BlockType::MOVE ) {
+                if( tile->getData().tileId == TileId::BLOCK_MOVE ) {
+                    z = ZOrder::TILE_BLOCK + 1;
+                } else {
+                    z = ZOrder::TILE_ITEM - 1;
+                }
+            }
+        } break;
+            
         default: break;
     }
     
@@ -608,7 +621,26 @@ void GameView::onContactBlock(Ball *ball, GameTile *tile, Vec2 contactPoint, Phy
             }
         } break;
             
-        default: break;
+        default: {
+            // 캐논볼
+            switch( block->getData().tileId ) {
+                case TileId::BLOCK_CANNON_BALL: {
+                    onPreGameOver();
+                    
+                    // 스턴 연출
+                    SBDirector::getInstance()->setScreenTouchLocked(true);
+  
+                    ball->effectStun([=]() {
+                        SBDirector::postDelayed(this, [=]() {
+                            SBDirector::getInstance()->setScreenTouchLocked(false);
+                            GameManager::onGameOver(GameOverType::CANNON_BALL, block->getData().p);
+                        }, 0.1f, false);
+                    });
+                } break;
+                    
+                default: break;
+            }
+        } break;
     }
 }
 
@@ -870,13 +902,19 @@ void GameView::initTiles() {
                     tile = BlockMoveRail::create(tileData);
                     
                     // START 블럭일 때 무브 블럭도 생성
-                    if( tileData.tileId == TileId::BLOCK_MOVE_START ) {
+                    if( tileData.tileId == TileId::BLOCK_MOVE_HORIZONTAL_START ||
+                        tileData.tileId == TileId::BLOCK_MOVE_VERTICAL_START ) {
                         auto moveBlock = BlockMove::create(tileData, stage.getPairMoveEndBlock(tileData));
                         addTile(moveBlock);
-                        
-                        // ZOrder 변경
-                        moveBlock->setLocalZOrder(ZOrder::TILE_BLOCK + 1);
                     }
+                } break;
+                    
+                case BlockType::CANNON: {
+                    tile = BlockCannon::create(tileData);
+                    
+                    // 캐논볼 생성
+                    auto cannonBall = BlockCannonBall::create((BlockCannon*)tile);
+                    addTile(cannonBall);
                 } break;
                     
                 default: break;

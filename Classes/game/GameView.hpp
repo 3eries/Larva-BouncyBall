@@ -26,12 +26,12 @@ private:
     };
     
     enum ZOrder {
-        TILE_FLAG = 1,
+        TILE_FLAG = 10,
         TILE_ITEM,
         TILE_BLOCK,
         BALL,
         
-        MENU = 10,
+        MENU = 20,
     };
     
     static const cocos2d::CameraFlag CAMERA_FLAG_BG  = cocos2d::CameraFlag::USER1;

@@ -38,9 +38,18 @@ enum class TileId {
     
     BLOCK_WAVE          = 10351,
     
-    BLOCK_MOVE          = 10400,       // 무브 블럭, 코드로 생성됨 (타일셋에 정의되지 않음)
-    BLOCK_MOVE_START    = 10401,       // 무브 블럭 (시작)
-    BLOCK_MOVE_END      = 10402,       // 무브 블럭 (종료)
+    BLOCK_MOVE                  = 10400, // 무브 블럭, 코드로 생성됨 (타일셋에 정의되지 않음)
+    BLOCK_MOVE_HORIZONTAL_START = 10401, // 무브 블럭 (시작)
+    BLOCK_MOVE_HORIZONTAL_END   = 10402, // 무브 블럭 (종료)
+    BLOCK_MOVE_VERTICAL_START   = 10403, // 무브 블럭 (시작)
+    BLOCK_MOVE_VERTICAL_END     = 10404, // 무브 블럭 (종료)
+    
+    BLOCK_CANNON        = 10500,       // 발사대 블럭, 코드로 생성됨 (타일셋에 정의되지 않음)
+    BLOCK_CANNON_BALL   = BLOCK_CANNON,
+    BLOCK_CANNON_UP     = 10511,       // 발사대 블럭 - 상
+    BLOCK_CANNON_DOWN   = 10512,       // 발사대 블럭 - 하
+    BLOCK_CANNON_LEFT   = 10513,       // 발사대 블럭 - 좌
+    BLOCK_CANNON_RIGHT  = 10514,       // 발사대 블럭 - 우
 };
 
 enum class TileType {
@@ -58,6 +67,7 @@ enum class BlockType {
     JUMP,
     WAVE,
     MOVE,
+    CANNON,
 };
 
 typedef cocos2d::Vec2 TilePosition;
@@ -91,7 +101,8 @@ struct TileData {
         
         // 블럭 타입 설정
         if( isBlock() ) {
-            if( i >= (int)TileId::BLOCK_MOVE )          blockType = BlockType::MOVE;
+            if( i >= (int)TileId::BLOCK_CANNON )        blockType = BlockType::CANNON;
+            else if( i >= (int)TileId::BLOCK_MOVE )     blockType = BlockType::MOVE;
             else if( i >= (int)TileId::BLOCK_WAVE )     blockType = BlockType::WAVE;
             else if( i >= (int)TileId::BLOCK_JUMP )     blockType = BlockType::JUMP;
             else if( i >= (int)TileId::BLOCK_DEATH )    blockType = BlockType::DEATH;
@@ -133,6 +144,7 @@ struct TileData {
                 case BlockType::JUMP:             return "JUMP";
                 case BlockType::WAVE:             return "WAVE";
                 case BlockType::MOVE:             return "MOVE";
+                case BlockType::CANNON:           return "CANNON";
                 default:                          return "";
             }
         };

@@ -34,6 +34,7 @@ BlockMove* BlockMove::create(const TileData &startBlock, const TileData &endBloc
 
 BlockMove::BlockMove(const TileData &data,
                      const TileData &startBlock, const TileData &endBlock): Block(data),
+isHorizontal(startBlock.tileId == TileId::BLOCK_MOVE_HORIZONTAL_START),
 startBlock(startBlock),
 endBlock(endBlock) {
 }
@@ -60,26 +61,53 @@ bool BlockMove::init() {
  */
 void BlockMove::initImage() {
     
-    auto width = stage.blockMoveWidth * stage.tileSize.width;
-    
-    setPosition(Vec2((getPositionX() - getContentSize().width/2) + width/2,
-                     getPositionY()));
-    setContentSize(Size(width, getContentSize().height));
-    
-    // head
-    auto head = Sprite::create(getMoveBlockHeadImage(stage.world));
-    head->setScale(GAME_MANAGER->getMapScaleFactor());
-    head->setAnchorPoint(ANCHOR_ML);
-    head->setPosition(Vec2ML(getContentSize(), 0, 0));
-    addChild(head);
-    
-    // body
-    for( int i = 0; i < stage.blockMoveWidth-1; ++i ) {
-        auto body = Sprite::create(getMoveBlockBodyImage(stage.world));
-        body->setScale(GAME_MANAGER->getMapScaleFactor());
-        body->setAnchorPoint(ANCHOR_ML);
-        body->setPosition(Vec2ML(getContentSize(), (i+1) * stage.tileSize.width, 0));
-        addChild(body);
+    // 가로 무브 블럭
+    if( isHorizontal ) {
+        auto width = stage.blockMoveWidth * stage.tileSize.width;
+        
+        setPosition(Vec2((getPositionX() - getContentSize().width/2) + width/2,
+                         getPositionY()));
+        setContentSize(Size(width, getContentSize().height));
+        
+        // head
+        auto head = Sprite::create(getMoveBlockHeadImage(stage.world));
+        head->setScale(GAME_MANAGER->getMapScaleFactor());
+        head->setAnchorPoint(ANCHOR_ML);
+        head->setPosition(Vec2ML(getContentSize(), 0, 0));
+        addChild(head);
+        
+        // body
+        for( int i = 0; i < stage.blockMoveWidth-1; ++i ) {
+            auto body = Sprite::create(getMoveBlockBodyImage(stage.world));
+            body->setScale(GAME_MANAGER->getMapScaleFactor());
+            body->setAnchorPoint(ANCHOR_ML);
+            body->setPosition(Vec2ML(getContentSize(), (i+1) * stage.tileSize.width, 0));
+            addChild(body);
+        }
+    }
+    // 세로 무브 블럭
+    else {
+        auto width = stage.blockMoveHeight * stage.tileSize.width;
+        
+//        setPosition(Vec2((getPositionX() - getContentSize().width/2) + width/2,
+//                         getPositionY()));
+        setContentSize(Size(width, getContentSize().height));
+        
+        // head
+        auto head = Sprite::create(getMoveBlockHeadImage(stage.world));
+        head->setScale(GAME_MANAGER->getMapScaleFactor());
+        head->setAnchorPoint(ANCHOR_ML);
+        head->setPosition(Vec2ML(getContentSize(), 0, 0));
+        addChild(head);
+        
+        // body
+        for( int i = 0; i < stage.blockMoveHeight-1; ++i ) {
+            auto body = Sprite::create(getMoveBlockBodyImage(stage.world));
+            body->setScale(GAME_MANAGER->getMapScaleFactor());
+            body->setAnchorPoint(ANCHOR_ML);
+            body->setPosition(Vec2ML(getContentSize(), (i+1) * stage.tileSize.width, 0));
+            addChild(body);
+        }
     }
 }
 
@@ -104,16 +132,30 @@ void BlockMove::update(float dt) {
  */
 void BlockMove::moveStart() {
 
-    auto endBlockPos = convertTilePosition(stage, endBlock).x;
-    
-    auto moveStartPos = getPositionX();
-    auto moveEndPos = (endBlockPos + stage.tileSize.width/2) - getContentSize().width/2;
-    auto moveRange = (endBlock.x - startBlock.x + 1) - stage.blockMoveWidth; // 움직이는 칸 수
-    
-    auto duration = (moveRange * 0.6f) * GAME_MANAGER->getMapScaleFactor();
-    auto move = Sequence::create(MoveTo::create(duration, Vec2(moveEndPos, getPositionY())),
-                                 MoveTo::create(duration, Vec2(moveStartPos, getPositionY())), nullptr);
-    runAction(RepeatForever::create(move));
+    // 가로 무브 블럭
+    if( isHorizontal ) {
+        auto endBlockPos = convertTilePosition(stage, endBlock).x;
+        
+        auto moveStartPos = getPositionX();
+        auto moveEndPos = (endBlockPos + stage.tileSize.width/2) - getContentSize().width/2;
+        auto moveRange = (endBlock.x - startBlock.x + 1) - stage.blockMoveWidth; // 움직이는 칸 수
+        
+        auto duration = (moveRange * 0.6f) * GAME_MANAGER->getMapScaleFactor();
+        auto move = Sequence::create(MoveTo::create(duration, Vec2(moveEndPos, getPositionY())),
+                                     MoveTo::create(duration, Vec2(moveStartPos, getPositionY())), nullptr);
+        runAction(RepeatForever::create(move));
+    }
+    // 세로 무브 블럭
+    else {
+        auto moveStartPos = getPositionY();
+        auto moveEndPos = convertTilePosition(stage, endBlock).y - getContentSize().height/2;
+        auto moveRange = startBlock.y - endBlock.y; // 움직이는 칸 수
+        
+        auto duration = (moveRange * 0.6f) * GAME_MANAGER->getMapScaleFactor();
+        auto move = Sequence::create(MoveTo::create(duration, Vec2(getPositionX(), moveEndPos)),
+                                     MoveTo::create(duration, Vec2(getPositionX(), moveStartPos)), nullptr);
+        runAction(RepeatForever::create(move));
+    }
 }
 
 /**

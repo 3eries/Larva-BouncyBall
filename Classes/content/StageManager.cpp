@@ -73,8 +73,9 @@ void StageManager::init() {
 void StageManager::parseStageFile() {
     
     CCLOG("========== STAGE PARSE START ==========");
+    const auto STAGE_COUNT = GAME_CONFIG->getWorldCount() * GAME_CONFIG->getStagePerWorld();
     
-    for( int i = 0; i < 72; ++i ) {
+    for( int i = 0; i < STAGE_COUNT; ++i ) {
         const auto STAGE = i+1;
         const auto STAGE_FILE = DIR_CONTENT_STAGE + STR_FORMAT("stage_%04d.tmx", STAGE);
         

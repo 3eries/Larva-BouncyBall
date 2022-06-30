@@ -1,12 +1,12 @@
 //
-//  BlockMoveRailRail.hpp
+//  BlockMoveRail.hpp
 //  LarvaBouncyBall-mobile
 //
 //  Created by ace on 2022/03/11.
 //
 
-#ifndef BlockMoveRailRail_hpp
-#define BlockMoveRailRail_hpp
+#ifndef BlockMoveRail_hpp
+#define BlockMoveRail_hpp
 
 #include <stdio.h>
 
@@ -15,8 +15,8 @@
 #include "Block.hpp"
 
 /** @class BlockMoveRail
- * @brief 무브 블럭 - 레일
- * 중간 레일은 START 블럭에 포함됩니다
+ * @brief 무브 블럭 - 레일 (START, END)
+ * 중간 레일 이미지는 START 블럭에 포함됩니다
  */
 class BlockMoveRail: public Block {
 public:
@@ -30,7 +30,7 @@ protected:
     virtual void initImage() override;
     virtual void initPhysics() override;
     
-    static std::string getMoveBlockMiddleRailImage();
+    static std::string getMoveBlockMiddleRailImage(const TileData &data);
 };
 
-#endif /* BlockMoveRailRail_hpp */
+#endif /* BlockMoveRail_hpp */

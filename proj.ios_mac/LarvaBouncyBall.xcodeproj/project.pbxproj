@@ -32,6 +32,8 @@
 		503A7945283B950A00D3AE9D /* SBPlatformHelper-android.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503A7943283B950900D3AE9D /* SBPlatformHelper-android.cpp */; };
 		503A7946283B950A00D3AE9D /* SBPlatformHelper-ios.mm in Sources */ = {isa = PBXBuildFile; fileRef = 503A7944283B950900D3AE9D /* SBPlatformHelper-ios.mm */; };
 		50484C1627DA52040026FD94 /* BlockMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50484C1427DA52040026FD94 /* BlockMove.cpp */; };
+		50537B14286C3BEC00B4F2C1 /* BlockCannon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50537B11286C3BEC00B4F2C1 /* BlockCannon.cpp */; };
+		50537B15286C3BEC00B4F2C1 /* BlockCannonBall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50537B13286C3BEC00B4F2C1 /* BlockCannonBall.cpp */; };
 		50617DA327144C58005CE3EF /* Block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50617DA227144C58005CE3EF /* Block.cpp */; };
 		506A352C27DAF7CD00A22A2F /* BlockMoveRail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506A352A27DAF7CD00A22A2F /* BlockMoveRail.cpp */; };
 		507BC92327EB1D8F0089CF39 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 507BC92227EB1D8F0089CF39 /* GoogleService-Info.plist */; };
@@ -230,6 +232,10 @@
 		503AE11A17EB9C5A00D1A890 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		50484C1427DA52040026FD94 /* BlockMove.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockMove.cpp; sourceTree = "<group>"; };
 		50484C1527DA52040026FD94 /* BlockMove.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockMove.hpp; sourceTree = "<group>"; };
+		50537B10286C3BEC00B4F2C1 /* BlockCannonBall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BlockCannonBall.hpp; sourceTree = "<group>"; };
+		50537B11286C3BEC00B4F2C1 /* BlockCannon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockCannon.cpp; sourceTree = "<group>"; };
+		50537B12286C3BEC00B4F2C1 /* BlockCannon.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BlockCannon.hpp; sourceTree = "<group>"; };
+		50537B13286C3BEC00B4F2C1 /* BlockCannonBall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlockCannonBall.cpp; sourceTree = "<group>"; };
 		50617DA127144C58005CE3EF /* Block.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Block.hpp; sourceTree = "<group>"; };
 		50617DA227144C58005CE3EF /* Block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Block.cpp; sourceTree = "<group>"; };
 		506A352A27DAF7CD00A22A2F /* BlockMoveRail.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockMoveRail.cpp; sourceTree = "<group>"; };
@@ -1190,6 +1196,10 @@
 			children = (
 				50617DA227144C58005CE3EF /* Block.cpp */,
 				50617DA127144C58005CE3EF /* Block.hpp */,
+				50537B11286C3BEC00B4F2C1 /* BlockCannon.cpp */,
+				50537B12286C3BEC00B4F2C1 /* BlockCannon.hpp */,
+				50537B13286C3BEC00B4F2C1 /* BlockCannonBall.cpp */,
+				50537B10286C3BEC00B4F2C1 /* BlockCannonBall.hpp */,
 				50B685A227BBD6790022C45D /* BlockDrop.cpp */,
 				50B685A327BBD6790022C45D /* BlockDrop.hpp */,
 				50484C1427DA52040026FD94 /* BlockMove.cpp */,
@@ -1374,6 +1384,7 @@
 				507BF80926834EF30037F28C /* SBEffect.cpp in Sources */,
 				507BF83626834EF30037F28C /* SplashScene.cpp in Sources */,
 				507BF80826834EF30037F28C /* SBAction.cpp in Sources */,
+				50537B15286C3BEC00B4F2C1 /* BlockCannonBall.cpp in Sources */,
 				1DBD57F9279E439600F07409 /* IAPCell.cpp in Sources */,
 				5083565C27BBCFAF0063258C /* TileFactory.cpp in Sources */,
 				507BF7E226834EF30037F28C /* SBUIInfo.cpp in Sources */,
@@ -1452,6 +1463,7 @@
 				507BF7E026834EF30037F28C /* ResourceHelper.cpp in Sources */,
 				507BF980268364E40037F28C /* StageProgressBar.cpp in Sources */,
 				1DBD57F4279E307600F07409 /* ShopPopup.cpp in Sources */,
+				50537B14286C3BEC00B4F2C1 /* BlockCannon.cpp in Sources */,
 				507BF7FF26834EF30037F28C /* FirebaseManager-android.cpp in Sources */,
 				507BF7F926834EF30037F28C /* IAPHelper-ios.mm in Sources */,
 				507BF80B26834EF30037F28C /* SBTransition.cpp in Sources */,

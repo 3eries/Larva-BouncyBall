@@ -65,6 +65,7 @@ void Item::initImage() {
     // 소시지 파티클
     if( data.tileId == TileId::ITEM_SAUSAGE ) {
         auto particle = ParticleSystemQuad::create(DIR_CONTENT_TILE + "steam_particle_texture.plist");
+        particle->setScale(GAME_MANAGER->getMapScaleFactor());
         particle->setAnchorPoint(ANCHOR_M);
         particle->setPosition(Vec2MC(getContentSize(), 0, 25));
         addChild(particle);

@@ -52,39 +52,31 @@ struct StageData {
     }
     
     TileData getPairMoveEndBlock(const TileData &moveStartBlock) const {
-        auto endBlocks = getTiles(TileId::BLOCK_MOVE_END);
-        
-        if( endBlocks.size() == 0 ) {
-            return TileData(TileId::INVALID);
-        }
-        
-        TileData pairBlock(TileId::INVALID);
-        
-        for( int x = moveStartBlock.x+1; x < mapWidthTiles; ++x ) {
-            auto endBlock = getTile(x, moveStartBlock.y);
-            
-            if( endBlock.tileId == TileId::BLOCK_MOVE_END ) {
-                return endBlock;
-            }
-        }
-        
-        /*
-        int min = INT_MAX;
-        
-        for( auto block : endBlocks ) {
-            // FIXME: 가로 무브만 하드코딩
-            if( moveStartBlock.y == block.y ) {
-                int dist = (int)abs(moveStartBlock.x - block.x);
-                
-                if( dist < min ) {
-                    min = dist;
-                    pairBlock = block;
+        switch( moveStartBlock.tileId ) {
+            case TileId::BLOCK_MOVE_HORIZONTAL_START: {
+                for( int x = moveStartBlock.x+1; x < mapWidthTiles; ++x ) {
+                    auto block = getTile(x, moveStartBlock.y);
+                    
+                    if( block.tileId == TileId::BLOCK_MOVE_HORIZONTAL_END ) {
+                        return block;
+                    }
                 }
-            }
+            } break;
+                
+            case TileId::BLOCK_MOVE_VERTICAL_START: {
+                for( int y = moveStartBlock.y-1; y >= 0; --y ) {
+                    auto block = getTile(moveStartBlock.x, y);
+                    
+                    if( block.tileId == TileId::BLOCK_MOVE_VERTICAL_END ) {
+                        return block;
+                    }
+                }
+            } break;
+                
+            default: break;
         }
-        */
         
-        return pairBlock;
+        return TileData(TileId::INVALID);
     }
     
     std::string toString() {
