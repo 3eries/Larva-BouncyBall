@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="26" height="15" tilewidth="72" tileheight="72" infinite="0" nextlayerid="2" nextobjectid="1">
+ <properties>
+  <property name="block_move_width" value="2"/>
+ </properties>
  <tileset firstgid="1" source="tile_72.tsx"/>
  <layer id="1" name="TileLayer" width="26" height="15">
+  <properties>
+   <property name="block_move_width" value="3"/>
+  </properties>
   <data encoding="csv">
 0,0,0,32,32,32,0,0,0,32,32,32,0,0,0,32,32,32,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
