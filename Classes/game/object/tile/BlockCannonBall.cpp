@@ -125,7 +125,15 @@ void BlockCannonBall::moveStart() {
     auto onEnd = CallFunc::create([=] {
         
         this->setCollisionLocked(true); // 충돌 OFF
-        image->runAction(FadeOut::create(0.5f));
+        image->runAction(FadeOut::create(0.2f));
+        
+        // 파티클
+        auto particle = ParticleSystemQuad::create(DIR_CONTENT_TILE + "cannon_end.plist");
+        particle->setScale(GAME_MANAGER->getMapScaleFactor());
+        particle->setAnchorPoint(ANCHOR_M);
+        particle->setPosition(moveEndPos);
+        particle->setAutoRemoveOnFinish(true);
+        getParent()->addChild(particle, getLocalZOrder());
     });
     
     auto action = Sequence::create(onStart,
