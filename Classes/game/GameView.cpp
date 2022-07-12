@@ -282,7 +282,7 @@ void GameView::addTile(GameTile *tile) {
             
             if( tile->getData().blockType == BlockType::MOVE ) {
                 if( tile->getData().tileId == TileId::BLOCK_MOVE ) {
-                    z = ZOrder::TILE_BLOCK + 1;
+                    z = ZOrder::TILE_BLOCK - 1;
                 } else {
                     z = ZOrder::TILE_ITEM - 1;
                 }
@@ -316,9 +316,12 @@ GameTile* GameView::getTile(const TilePosition &p) {
     vector<GameTile*> foundTiles = SBCollection::find(tiles, [=](GameTile *tile) -> bool {
         return tile->getData().p == p;
     });
-    CCASSERT(foundTiles.size() <= 1, "GameView::getTile error.");
     
-    return foundTiles[0];
+    if( foundTiles.size() > 0 ) {
+        return foundTiles[0];
+    }
+
+    return nullptr;
 }
 
 /**
