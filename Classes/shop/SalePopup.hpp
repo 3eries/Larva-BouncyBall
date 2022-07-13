@@ -18,6 +18,9 @@
 
 class SalePopup : public BasePopup {
 public:
+    static bool isTodayOpened();
+    
+public:
     CREATE_FUNC(SalePopup);
     ~SalePopup();
     

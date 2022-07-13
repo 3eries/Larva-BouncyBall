@@ -23,6 +23,17 @@ using namespace std;
 static const float FADE_DURATION    = 0.1f;
 static const float SLIDE_DURATION   = EffectDuration::POPUP_SLIDE_FAST;
 
+#define USER_DEFAULT_KEY_SALE_POPUP_OPEN_DATE        "SALE_POPUP_OPEN_DATE"
+
+/**
+ * 오늘 팝업이 오픈됐는지 반환합니다
+ */
+bool SalePopup::isTodayOpened() {
+    
+    auto openDate = USER_DEFAULT->getStringForKey(USER_DEFAULT_KEY_SALE_POPUP_OPEN_DATE, "");
+    return openDate == SBDirector::getTodayDate();
+}
+
 SalePopup::SalePopup(): BasePopup(PopupType::SALE) {
 }
 
@@ -34,6 +45,10 @@ bool SalePopup::init() {
     if( !BasePopup::init() ) {
         return false;
     }
+    
+    // 오픈 시간 저장
+    USER_DEFAULT->setStringForKey(USER_DEFAULT_KEY_SALE_POPUP_OPEN_DATE, SBDirector::getTodayDate());
+    USER_DEFAULT->flush();
     
     return true;
 }

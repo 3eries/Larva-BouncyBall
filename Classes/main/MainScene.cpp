@@ -23,6 +23,7 @@
 #include "GetCharacterPopup.hpp"
 #include "ShopPopup.hpp"
 #include "SettingPopup.hpp"
+#include "SalePopup.hpp"
 #include "BannerView.hpp"
 
 USING_NS_CC;
@@ -95,6 +96,16 @@ void MainScene::onEnterTransitionDidFinish() {
         // 캐릭터 획득 팝업
         GetCharacterPopup::show(unlockCharacters);
     });
+    
+    // 세일 팝업
+    if( !User::isRemovedAds() /* 아이템 없음 */ &&
+        !SalePopup::isTodayOpened() /* 하루 1회 */ &&
+        SceneManager::getPreviousSceneType() == SceneType::GAME /* 이전 씬이 게임 */ &&
+        StageManager::getTopUnlockedStage() >= 11 /* 10스테이지까지 클리어됨 */ ) {
+        
+        auto popup = SalePopup::create();
+        addChild(popup, ZOrder::POPUP_MIDDLE);
+    }
     
     // 네트워크 연결 상태 체크
     bool isNetworkOnline = SBPlatformHelper::isNetworkOnline();
