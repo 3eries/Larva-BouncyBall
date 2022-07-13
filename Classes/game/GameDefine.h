@@ -102,20 +102,44 @@ static inline std::string toString(BallDirection dir) {
 
 // 천장 - ceiling
 enum PhysicsCategory {
-    WALL_LEFT    = (1 << 0),     // 왼쪽 벽
-    WALL_RIGHT   = (1 << 1),     // 오른쪽 벽
-    WALL_TOP     = (1 << 2),     // 천장
-    FLOOR        = (1 << 3),     // 바닥
-    BALL         = (1 << 4),
-    FLAG         = (1 << 5),
-    ITEM         = (1 << 6),
-    BLOCK_TOP    = (1 << 7),     // 블럭 상단
-    BLOCK_SIDE   = (1 << 8),     // 블럭 측면
-    BLOCK_BOTTOM = (1 << 9),     // 블럭 하단
+    WALL_LEFT       = (1 << 0),     // 왼쪽 벽
+    WALL_RIGHT      = (1 << 1),     // 오른쪽 벽
+    WALL_TOP        = (1 << 2),     // 천장
+    FLOOR           = (1 << 3),     // 바닥
+    BALL            = (1 << 4),
+    FLAG            = (1 << 5),
+    ITEM            = (1 << 6),
+    BLOCK_TOP       = (1 << 7),     // 블럭 상단
+    BLOCK_SIDE      = (1 << 8),     // 블럭 측면
+    BLOCK_BOTTOM    = (1 << 9),     // 블럭 하단
+    BLOCK_DYNAMIC   = (1 << 10),    // 동적 블럭, 볼외에 충돌이 필요한 경우 사용
 };
 
+static const std::vector<PhysicsCategory> PHYSICS_BLOCK_CATEGORYS({
+    PhysicsCategory::BLOCK_TOP,
+    PhysicsCategory::BLOCK_SIDE,
+    PhysicsCategory::BLOCK_BOTTOM,
+    PhysicsCategory::BLOCK_DYNAMIC,
+});
+
 static const uint16 PHYSICS_MASK_BITS_WALL = (PhysicsCategory::BALL);
-static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT | PhysicsCategory::WALL_RIGHT | PhysicsCategory::WALL_TOP | PhysicsCategory::FLOOR | PhysicsCategory::FLAG | PhysicsCategory::ITEM | PhysicsCategory::BLOCK_TOP | PhysicsCategory::BLOCK_SIDE | PhysicsCategory::BLOCK_BOTTOM);
+static const uint16 PHYSICS_MASK_BITS_BLOCK = (PhysicsCategory::BALL |
+                                               PhysicsCategory::BLOCK_DYNAMIC);
+static const uint16 PHYSICS_MASK_BITS_BLOCK_DYNAMIC = (PhysicsCategory::BALL |
+                                                       PhysicsCategory::BLOCK_TOP |
+                                                       PhysicsCategory::BLOCK_SIDE |
+                                                       PhysicsCategory::BLOCK_BOTTOM |
+                                                       PhysicsCategory::BLOCK_DYNAMIC);
+static const uint16 PHYSICS_MASK_BITS_BALL = (PhysicsCategory::WALL_LEFT |
+                                              PhysicsCategory::WALL_RIGHT |
+                                              PhysicsCategory::WALL_TOP |
+                                              PhysicsCategory::FLOOR |
+                                              PhysicsCategory::FLAG |
+                                              PhysicsCategory::ITEM |
+                                              PhysicsCategory::BLOCK_TOP |
+                                              PhysicsCategory::BLOCK_SIDE |
+                                              PhysicsCategory::BLOCK_BOTTOM |
+                                              PhysicsCategory::BLOCK_DYNAMIC);
 
 /**
  * PhysicsDef

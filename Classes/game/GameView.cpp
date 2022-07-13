@@ -229,6 +229,17 @@ void GameView::onPreGameOver() {
     isTouchEnabled = false;
     touches.clear();
     
+    // 캐논 블록 정지
+    for( auto tile : tiles ) {
+        auto cannonBall = dynamic_cast<BlockCannonBall*>(tile);
+        
+        if( cannonBall ) {
+            cannonBall->setCollisionLocked(true);
+            cannonBall->setVisible(false);
+            cannonBall->stopAllActions();
+        }
+    }
+    
     // removeListeners(this);
 }
 

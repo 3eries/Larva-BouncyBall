@@ -31,9 +31,20 @@ protected:
     virtual bool init() override;
     virtual void initImage() override;
     virtual void initPhysics() override;
-    virtual void update(float dt) override;
     
-    virtual void moveStart();
+    virtual b2BodyDef createBodyDef() override;
+    virtual b2Filter  createPhysicsFilter() override;
+    
+    virtual void update(float dt) override;
+    virtual void move();
+    
+    virtual void onMoveStart();
+    virtual void onMoveEnd(bool nextMove);
+    
+    virtual void onPreSolve(b2Contact *contact, const b2Manifold *oldManifold);
+    virtual void onContactBlockAndBlock(GameTile *block1, GameTile *block2,
+                                        cocos2d::Vec2 contactPoint,
+                                        PhysicsCategory category1, PhysicsCategory category2) override;
     
     cocos2d::Vec2 getCannonBallStartPos();
     cocos2d::Vec2 getCannonBallEndPos();

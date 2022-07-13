@@ -36,6 +36,9 @@ public:
     std::function<void(Ball*,GameTile*)>                     onContactItem;
     std::function<void(Ball*,GameTile*,
                        cocos2d::Vec2,PhysicsCategory)>       onContactBlock;
+    std::function<void(GameTile*, GameTile*,
+                       cocos2d::Vec2,
+                       PhysicsCategory, PhysicsCategory)>    onContactBlockAndBlock;
     
     std::function<void(Ball*,PhysicsCategory)>               onContactWall;
     std::function<void(Ball*)>                               onContactFloor;
@@ -44,7 +47,7 @@ private:
     PhysicsListener() : target(nullptr), contactTarget(nullptr),
     onUpdate(nullptr),
     onBeginContact(nullptr), onEndContact(nullptr), onPreSolve(nullptr), onPostSolve(nullptr),
-    onContactFlag(nullptr), onContactItem(nullptr), onContactBlock(nullptr),
+    onContactFlag(nullptr), onContactItem(nullptr), onContactBlock(nullptr), onContactBlockAndBlock(nullptr),
     onContactWall(nullptr), onContactFloor(nullptr) {}
     
     CC_SYNTHESIZE(cocos2d::Ref*, target, Target);

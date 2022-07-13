@@ -64,6 +64,9 @@ private:
     void dispatchOnContactFlag(Ball *ball, GameTile *item);
     void dispatchOnContactItem(Ball *ball, GameTile *item);
     void dispatchOnContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint, PhysicsCategory category);
+    void dispatchOnContactBlockAndBlock(GameTile *block1, GameTile *block2,
+                                        cocos2d::Vec2 contactPoint,
+                                        PhysicsCategory category1, PhysicsCategory category2);
     
     void dispatchOnContactWall(Ball *ball, PhysicsCategory category);
     void dispatchOnContactFloor(Ball *ball);

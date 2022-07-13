@@ -304,15 +304,9 @@ void PhysicsManager::PostSolve(b2Contact *contact, const b2ContactImpulse *impul
     
     dispatchOnPostSolve(contact, impulse);
     
-    // 블럭 체크
+    // 블럭 & 볼 체크
     {
-        PhysicsCategory categorys[] = {
-            PhysicsCategory::BLOCK_TOP,
-            PhysicsCategory::BLOCK_SIDE,
-            PhysicsCategory::BLOCK_BOTTOM,
-        };
-        
-        for( auto category : categorys ) {
+        for( auto category : PHYSICS_BLOCK_CATEGORYS ) {
             auto objs = SBPhysics::findCollisionObjects(PhysicsCategory::BALL, category, contact);
             
             if( objs.obj1 && objs.obj2 ) {
@@ -322,6 +316,28 @@ void PhysicsManager::PostSolve(b2Contact *contact, const b2ContactImpulse *impul
                 dispatchOnContactBlock(ball, block, SBPhysics::getContactPoint(contact), category);
 
                 return;
+            }
+        }
+    }
+    
+    // 블럭 & 블럭 체크
+    {
+        for( int i = 0; i < PHYSICS_BLOCK_CATEGORYS.size(); ++i ) {
+            auto category1 = PHYSICS_BLOCK_CATEGORYS[i];
+            
+            for( int j = 0; j < PHYSICS_BLOCK_CATEGORYS.size(); ++j ) {
+                auto category2 = PHYSICS_BLOCK_CATEGORYS[j];
+                auto objs = SBPhysics::findCollisionObjects(category1, category2, contact);
+                
+                if( objs.obj1 && objs.obj2 ) {
+                    auto block1 = (Block*)objs.obj1;
+                    auto block2 = (Block*)objs.obj2;
+                    
+                    dispatchOnContactBlockAndBlock(block1, block2,
+                                                   SBPhysics::getContactPoint(contact),
+                                                   category1, category2);
+                    return;
+                }
             }
         }
     }
@@ -581,6 +597,35 @@ void PhysicsManager::dispatchOnContactBlock(Ball *ball, GameTile *block, Vec2 co
                 }
             } else {
                 listener->onContactBlock(ball, block, contactPoint, category);
+            }
+        }
+    }
+}
+
+/**
+ * 블록 간 충돌을 전달합니다
+ * @param block1 블록1
+ * @param block2 블록2
+ * @param contactPoint 충돌 좌표
+ * @param category1 블록1의 카테고리
+ * @param category2 블록2의 카테고리
+ */
+void PhysicsManager::dispatchOnContactBlockAndBlock(GameTile *block1, GameTile *block2,
+                                                    Vec2 contactPoint,
+                                                    PhysicsCategory category1, PhysicsCategory category2) {
+
+    auto copyListeners = listeners;
+    
+    for( auto listener : copyListeners ) {
+        if( listener->onContactBlockAndBlock ) {
+            auto contactTarget = listener->getContactTarget();
+            
+            if( contactTarget ) {
+                if( contactTarget == block1 || contactTarget == block2 ) {
+                    listener->onContactBlockAndBlock(block1, block2, contactPoint, category1, category2);
+                }
+            } else {
+                listener->onContactBlockAndBlock(block1, block2, contactPoint, category1, category2);
             }
         }
     }

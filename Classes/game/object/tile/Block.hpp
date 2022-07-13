@@ -31,9 +31,15 @@ protected:
     virtual bool init() override;
     virtual void initPhysics() override;
     
+    virtual b2BodyDef createBodyDef();
+    virtual b2Filter  createPhysicsFilter();
+    
 public:
     virtual void onContactBlock(Ball *ball, GameTile *block, cocos2d::Vec2 contactPoint,
                                 PhysicsCategory category);
+    virtual void onContactBlockAndBlock(GameTile *block1, GameTile *block2,
+                                        cocos2d::Vec2 contactPoint,
+                                        PhysicsCategory category1, PhysicsCategory category2);
 };
 
 #endif /* Block_hpp */

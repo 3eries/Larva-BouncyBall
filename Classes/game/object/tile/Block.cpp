@@ -52,10 +52,11 @@ void Block::initPhysics() {
     listener->setTarget(this);
     listener->setContactTarget(this);
     listener->onContactBlock = CC_CALLBACK_4(Block::onContactBlock, this);
+    listener->onContactBlockAndBlock = CC_CALLBACK_5(Block::onContactBlockAndBlock, this);
     PHYSICS_MANAGER->addListener(listener);
     
     // Body
-    b2BodyDef bodyDef;
+    b2BodyDef bodyDef = createBodyDef();
     bodyDef.userData = (SBPhysicsObject*)this;
     
     auto body = PHYSICS_MANAGER->getWorld()->CreateBody(&bodyDef);
@@ -87,9 +88,8 @@ void Block::initPhysics() {
         b2EdgeShape shape;
         shape.Set(v1, v2);
         
-        b2Filter filter;
+        b2Filter filter = createPhysicsFilter();
         filter.categoryBits = categorys[i];
-        filter.maskBits = PhysicsCategory::BALL;
         
         b2FixtureDef fixtureDef;
         fixtureDef.shape = &shape;
@@ -101,19 +101,30 @@ void Block::initPhysics() {
     }
 }
 
-/**
- * 볼 & 벽돌 충돌
- */
-void Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint, PhysicsCategory category) {
+b2BodyDef Block::createBodyDef() {
     
-    // image->setVisible(!image->isVisible());
-    
-//    if( isBroken() ) {
-//        Log::w("이미 깨진 브릭에 충돌 이벤트 발생!!").showMessageBox();
-//        return false;
-//    }
-//
-//    runBallHitAction(ball, contactPoint);
-//    sufferDamage(ball, contactPoint);
+    b2BodyDef def;
+    return def;
 }
 
+b2Filter Block::createPhysicsFilter() {
+    
+    b2Filter filter;
+    filter.maskBits = PHYSICS_MASK_BITS_BLOCK;
+    return filter;
+}
+
+/**
+ * 볼 & 블록 충돌
+ */
+void Block::onContactBlock(Ball *ball, GameTile *block, Vec2 contactPoint, PhysicsCategory category) {
+}
+
+
+/**
+ * 블록 & 블록 충돌
+ */
+void Block::onContactBlockAndBlock(GameTile *block1, GameTile *block2,
+                                   Vec2 contactPoint,
+                                   PhysicsCategory category1, PhysicsCategory category2) {
+}
