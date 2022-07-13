@@ -261,6 +261,7 @@ void GameScene::onStageClear(const StageData &stage) {
             }
             // 네크워크 오프라인 에러
             else {
+                SBAnalytics::logEvent(ANALYTICS_EVENT_SB_NETWORK_ERROR_POPUP);
                 SBPlatformHelper::showNetworkErrorPopup();
             }
         } else {
