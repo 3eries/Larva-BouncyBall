@@ -53,7 +53,7 @@ void StageManager::init() {
     
     // 스테이지 강제 오픈 코드
 //    {
-//        int topClear = 18 * 4;
+//        int topClear = 18 * 5;
 //        
 //        for( int i = 1; i <= topClear; ++i ) {
 //            StageManager::unlockStage(i);
