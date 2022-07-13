@@ -8,6 +8,7 @@
 #include "CharacterManager.hpp"
 
 #include "Define.h"
+#include "User.hpp"
 #include "StageManager.hpp"
 
 USING_NS_CC;
@@ -221,6 +222,7 @@ void CharacterManager::unlock(const string &charId, bool isRestored) {
  */
 void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
     
+    const auto isRemovedAds = User::isRemovedAds();
     CharacterDataList unlockList;
     
     for( auto chc : characters ) {
@@ -228,6 +230,13 @@ void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
             continue;
         }
         
+        // IAP 아이템 보유
+        if( isRemovedAds ) {
+            unlockList.push_back(chc);
+            continue;
+        }
+        
+        // 잠금 해제 조건 체크
         switch( chc.unlockType ) {
             case CharacterUnlockType::SAUSAGE: {
                 if( StageManager::getStageStarTotalCount() >= chc.unlockAmount ) {
