@@ -39,6 +39,8 @@ public:
     void init();
     
     CharacterData       getCharacter(const std::string &charId);
+    CharacterDataList   getWorldCharacters(int world);
+    
     CharacterData       getSelectedCharacter();
     bool                isSelectedCharacter(const std::string &charId);
     bool                isCharacterUnlocked(const std::string &charId);

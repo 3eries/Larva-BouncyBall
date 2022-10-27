@@ -19,19 +19,19 @@
         },
         {
             "world": 2,
-            "open_require_star": 3
+            "open_require_star": 18
         },
         {
             "world": 3,
-            "open_require_star": 3
+            "open_require_star": 18
         },
         {
             "world": 4,
-            "open_require_star": 3
+            "open_require_star": 18
         },
         {
             "world": 5,
-            "open_require_star": 3
+            "open_require_star": 18
         }
     ]
 }

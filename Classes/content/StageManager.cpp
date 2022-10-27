@@ -222,6 +222,35 @@ int StageManager::getWorld(int stage) {
 #pragma mark- UserData
 
 /**
+ * 해당 월드의 첫번째 스테이지를 반환합니다
+ */
+int StageManager::getWorldFirstStage(int world) {
+    return ((world-1) * GAME_CONFIG->getStagePerWorld()) + 1;
+}
+
+/**
+ * 해당 월드의 마지막 스테이지를 반환합니다
+ */
+int StageManager::getWorldLastStage(int world) {
+    return getWorldFirstStage(world) + GAME_CONFIG->getStagePerWorld() - 1;
+}
+
+/**
+ * 해당 월드의 별 개수를 반환합니다
+ */
+int StageManager::getWorldStarCount(int world) {
+    int first = getWorldFirstStage(world);
+    int last = getWorldLastStage(world);
+    int star = 0;
+    
+    for( int stage = first; stage <= last; ++stage ) {
+        star += MAX(getStageStarCount(stage), 0);
+    }
+    
+    return star;
+}
+
+/**
  * 스테이지 별 개수를 반환합니다
  */
 #define INVALID_STAR_COUNT      -1

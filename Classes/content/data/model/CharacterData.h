@@ -34,6 +34,8 @@ struct CharacterData {
     std::string              name;
     CharacterUnlockType      unlockType;
     int                      unlockAmount;
+    int                      openWorld;       // 캐릭터가 오픈되는 월드
+    int                      openRequireStar; // 오픈에 필요한 별 개수
     
     CharacterData(): charId("") {}
     

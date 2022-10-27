@@ -97,6 +97,8 @@ void CharacterManager::init() {
         character.name = charValue["name"].GetString();
         character.unlockType = (CharacterUnlockType)charValue["unlock_type"].GetInt();
         character.unlockAmount = charValue["unlock_amount"].GetInt();
+        character.openWorld = charValue["open_world"].GetInt();
+        character.openRequireStar = charValue["open_require_star"].GetInt();
         
         characters.push_back(character);
         
@@ -116,7 +118,7 @@ void CharacterManager::init() {
     }
 }
 /**
- * 캐릭터 반환
+ * 캐릭터 데이터를 반환합니다
  */
 CharacterData CharacterManager::getCharacter(const string &charId) {
     
@@ -127,6 +129,15 @@ CharacterData CharacterManager::getCharacter(const string &charId) {
     }
     
     return CharacterData();
+}
+
+/**
+ * 해당 월드에 오픈되는 캐릭터 데이터를 반환합니다
+ */
+CharacterDataList CharacterManager::getWorldCharacters(int world) {
+    return SBCollection::find(characters, [=](const CharacterData &chc) -> bool {
+        return chc.openWorld == world && chc.openRequireStar > 0/*레드 제외*/;
+    });
 }
 
 /**

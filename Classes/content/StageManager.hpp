@@ -42,6 +42,10 @@ private:
     
 #pragma mark- UserData
 public:
+    static int              getWorldFirstStage(int world);
+    static int              getWorldLastStage(int world);
+    static int              getWorldStarCount(int world);
+    
     static int              getStageStarCount(int stage);
     static int              getStageStarTotalCount();
     static bool             isStageCleared(int stage);

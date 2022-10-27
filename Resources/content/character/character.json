@@ -4,67 +4,89 @@
             "char_id": "char_0001",
             "name": "RED",
             "unlock_type": 0,
-            "unlock_amount": 0
+            "unlock_amount": 0,
+            "open_world": 1,
+            "open_require_star": 0
         },
         {
             "char_id": "char_0002",
             "name": "YELLOW",
             "unlock_type": 1,
-            "unlock_amount": 40
+            "unlock_amount": 40,
+            "open_world": 1,
+            "open_require_star": 36
         },
         {
             "char_id": "char_0003",
             "name": "BROWN",
             "unlock_type": 1,
-            "unlock_amount": 100
+            "unlock_amount": 100,
+            "open_world": 2,
+            "open_require_star": 36
         },
         {
             "char_id": "char_0004",
             "name": "PINK",
-            "unlock_type": 2,
-            "unlock_amount": 37
+            "unlock_type": 1,
+            "unlock_amount": 37,
+            "open_world": 3,
+            "open_require_star": 36
         },
         {
             "char_id": "char_0005",
             "name": "SWAGGER",
-            "unlock_type": 3,
-            "unlock_amount": 3
+            "unlock_type": 1,
+            "unlock_amount": 3,
+            "open_world": 1,
+            "open_require_star": 54
         },
         {
             "char_id": "char_0006",
             "name": "WRESTLER",
-            "unlock_type": 3,
-            "unlock_amount": 3
+            "unlock_type": 1,
+            "unlock_amount": 3,
+            "open_world": 4,
+            "open_require_star": 36
         },
         {
             "char_id": "char_0007",
             "name": "PINK SOLDIER",
-            "unlock_type": 3,
-            "unlock_amount": 3
+            "unlock_type": 1,
+            "unlock_amount": 3,
+            "open_world": 2,
+            "open_require_star": 54
         },
         {
             "char_id": "char_0008",
             "name": "BUNNY",
             "unlock_type": 1,
-            "unlock_amount": 216
+            "unlock_amount": 216,
+            "open_world": 3,
+            "open_require_star": 54
         },
         {
             "char_id": "char_0009",
             "name": "ALOHA",
-            "unlock_type": 3,
-            "unlock_amount": 3
+            "unlock_type": 1,
+            "unlock_amount": 3,
+            "open_world": 4,
+            "open_require_star": 54
         },
         {
             "char_id": "char_0010",
             "name": "MANGO",
-            "unlock_type": 2,
-            "unlock_amount": 73
+            "unlock_type": 1,
+            "unlock_amount": 73,
+            "open_world": 5,
+            "open_require_star": 36
         },
         {
             "char_id": "char_0011",
             "name": "CITY",
             "unlock_type": 1,
-            "unlock_amount": 270
+            "unlock_amount": 270,
+            "open_world": 5,
+            "open_require_star": 54
         }
     ]
 }
