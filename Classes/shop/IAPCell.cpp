@@ -13,7 +13,7 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace std;
 
-#define CELL_SIZE       Size(384, 736)
+#define CELL_SIZE               Size(384, 656)
 
 IAPCell* IAPCell::create() {
     
@@ -50,7 +50,7 @@ bool IAPCell::init() {
     
     auto tag = Sprite::create(DIR_IMG_SHOP + "shop_column_deal_tag.png");
     tag->setAnchorPoint(ANCHOR_M);
-    tag->setPosition(Vec2TC(getContentSize(), 0, 20));
+    tag->setPosition(Vec2TC(getContentSize(), 0, 10));
     addChild(tag, -1);
     
     // BUY 버튼

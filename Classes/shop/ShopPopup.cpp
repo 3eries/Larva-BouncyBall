@@ -20,15 +20,20 @@ USING_NS_SB;
 using namespace cocos2d::ui;
 using namespace std;
 
+// shop_column_deal.png Vec2MC(-676, -24) , Size(384, 656)
+// shop_column_bg.png Vec2MC(-260, -24) , Size(384, 656)
+// shop_column_bg.png Vec2MC(156, -24) , Size(384, 656)
+// mask Vec2MC(0, -24) , Size(1736, 656)
+////////////
 // shop_column_deal.png Vec2MC(-676, -48) , Size(384, 736)
 // shop_column_bg.png Vec2MC(-260, -48) , Size(384, 736)
 // shop_column_bg.png Vec2MC(156, -48) , Size(384, 736)
 // shop_column_bg.png Vec2MC(572, -48) , Size(384, 736)
 // mask Vec2MC(0, -48) , Size(1736, 736)
 
-#define CHARACTER_LIST_SIZE_1               Size(1736-384-32, 736)   // Cell 3개
-#define CHARACTER_LIST_SIZE_2               Size(1736, 736)          // Cell 4개
-#define CHARACTER_LIST_CELL_SIZE            Size(384, 736)
+#define CHARACTER_LIST_SIZE_1               Size(1736-384-32, 656)   // Cell 3개
+#define CHARACTER_LIST_SIZE_2               Size(1736, 656)          // Cell 4개
+#define CHARACTER_LIST_CELL_SIZE            Size(384, 656)
 #define CHARACTER_LIST_CELL_PADDING         32
 
 ShopPopup::ShopPopup(): BasePopup(PopupType::SHOP),
@@ -101,13 +106,13 @@ void ShopPopup::initContentView() {
     
     auto bg = Sprite::create(DIR_IMG_SHOP + "shop_bg.png");
     bg->setAnchorPoint(ANCHOR_M);
-    bg->setPosition(Vec2MC(0, -24));
+    bg->setPosition(Vec2MC(0, 10));
     addContentChild(bg);
     
     // 타이틀
     auto title = Sprite::create(DIR_IMG_SHOP + "shop_title_shop.png");
     title->setAnchorPoint(ANCHOR_M);
-    title->setPosition(Vec2TC(2, -128));
+    title->setPosition(Vec2TC(0, -128));
     addContentChild(title);
     
     // 닫기 버튼

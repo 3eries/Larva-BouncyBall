@@ -8,6 +8,7 @@
 #include "CharacterCell.hpp"
 
 #include "Define.h"
+#include "GameConfiguration.hpp"
 #include "ResourceHelper.hpp"
 #include "User.hpp"
 #include "StageManager.hpp"
@@ -16,7 +17,10 @@ USING_NS_CC;
 using namespace cocos2d::ui;
 using namespace std;
 
-#define CELL_SIZE       Size(384, 736)
+#define CELL_SIZE               Size(384, 656)
+
+#define TEXT_COLOR_LOCKED       Color4B(197,0,0,255)
+#define TEXT_COLOR_UNLOCKED     Color4B(0,255,0,255)
 
 CharacterCell* CharacterCell::create(const CharacterData &data) {
     
@@ -58,11 +62,11 @@ bool CharacterCell::init() {
     bg->setPosition(Vec2MC(getContentSize(), 0, 0));
     addChild(bg);
     
-    name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 65, Size::ZERO,
+    name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 80, Size::ZERO,
                                 TextHAlignment::CENTER, TextVAlignment::CENTER);
     name->setTextColor(Color4B(27,27,27,255));
     name->setAnchorPoint(ANCHOR_M);
-    name->setPosition(Vec2TC(getContentSize(), -1, -53) + Vec2(0, -2));
+    name->setPosition(Vec2TC(getContentSize(), -1, -55) + Vec2(0, -2));
     addChild(name);
     
     if( name->getContentSize().width > 350 ) {
@@ -70,10 +74,11 @@ bool CharacterCell::init() {
     }
     
     // 캐릭터 이미지
+    // character Vec2MC(0, -44) , Size(138, 162)
     image = superbomb::EffectSprite::create(ResourceHelper::getCharacterImage(data.charId));
     image->setAnchorPoint(ANCHOR_M);
-    image->setPosition(Vec2MC(getContentSize(), 0, 2));
-    image->setScale(1.5f);
+    image->setPosition(Vec2MC(getContentSize(), 0, -44));
+    // image->setScale(1.5f);
     addChild(image);
     
     // 잠금 해제 조건
@@ -96,8 +101,7 @@ bool CharacterCell::init() {
 void CharacterCell::initLockLayer() {
     
     // 이름
-    // YELLOW color:197,0,0 size:80 Vec2TC(-2, -53) , Size(230, 45)
-    name->setTextColor(Color4B(197,0,0,255));
+    name->setTextColor(TEXT_COLOR_LOCKED);
     image->setEffect(superbomb::Effect::create("shaders/example_GreyScale.fsh"));
     
     lockLayer = Widget::create();
@@ -143,8 +147,6 @@ void CharacterCell::initLockLayer() {
 
 void CharacterCell::initUnlockLayer() {
     
-    // 이름
-    // RED color:27,27,27 size:80 Vec2TC(-1, -53) , Size(115, 45)
     unlockLayer = Widget::create();
     unlockLayer->setAnchorPoint(Vec2::ZERO);
     unlockLayer->setPosition(Vec2::ZERO);
@@ -159,13 +161,11 @@ void CharacterCell::initUnlockLayer() {
         selectedLayer->setContentSize(getContentSize());
         unlockLayer->addChild(selectedLayer);
         
-        // shop_btn_selected.png Vec2BC(0, 100) , Size(320, 144)
         auto selected = Sprite::create(DIR_IMG_SHOP + "shop_btn_selected.png");
         selected->setAnchorPoint(ANCHOR_M);
         selected->setPosition(Vec2BC(getContentSize(), 0, 100));
         selectedLayer->addChild(selected);
         
-        // shop_icon_check.png Vec2BC(116, 180) , Size(104, 80)
         auto check = Sprite::create(DIR_IMG_SHOP + "shop_icon_check.png");
         check->setAnchorPoint(ANCHOR_M);
         check->setPosition(Vec2BC(getContentSize(), 116, 180));
@@ -250,64 +250,88 @@ void CharacterCell::updateUnlockAmount() {
         return;
     }
     
-    string unlockIconFile;
-    string unlockAmountStr;
+    // World 4-18 color:197,0,0 size:52 Vec2TC(-69, -136) , Size(170, 29)
+    auto openWorldLabel = Label::createWithTTF(STR_FORMAT("WORLD %d", data.openWorld),
+                                               FONT_SUPER_STAR, 52, Size::ZERO,
+                                               TextHAlignment::LEFT, TextVAlignment::CENTER);
+    openWorldLabel->setTextColor(isUnlocked ? TEXT_COLOR_UNLOCKED : TEXT_COLOR_LOCKED);
+    openWorldLabel->setAnchorPoint(ANCHOR_ML);
+    openWorldLabel->setPosition(Vec2TC(getContentSize(), -69, -136) + Vec2(-170/2, 0));
+    unlockAmountLayer->addChild(openWorldLabel);
     
-    auto getAmount = [=](int current) -> int {
-        return isUnlocked ? data.unlockAmount : current;
-    };
+    // shop_icon_star.png Vec2TC(84, -136) , Size(44, 40)
+    auto starIcon = Sprite::create(DIR_IMG_SHOP + "shop_icon_star.png");
+    starIcon->setAnchorPoint(ANCHOR_M);
+    starIcon->setPosition(Vec2TC(getContentSize(), 84, -136));
+    unlockAmountLayer->addChild(starIcon);
     
-    switch( data.unlockType ) {
-        case CharacterUnlockType::SAUSAGE: {
-            unlockIconFile = DIR_IMG_SHOP + "shop_icon_sausage.png";
-            unlockAmountStr = STR_FORMAT("%d/%d",
-                                         getAmount(StageManager::getStageStarTotalCount()),
-                                         data.unlockAmount);
-        } break;
-
-        case CharacterUnlockType::STAGE: {
-            // shop_icon_stage.png Vec2TC(-122, -136) , Size(60, 52)
-            // World 4-18 color:197,0,0 size:52 Vec2TC(36, -135) , Size(232, 29)
-            unlockIconFile = DIR_IMG_SHOP + "shop_icon_stage.png";
-            unlockAmountStr = STR_FORMAT("WORLD %d-%d",
-                                         StageManager::getWorld(data.unlockAmount),
-                                         data.unlockAmount);
-        } break;
-
-        case CharacterUnlockType::VIEW_ADS: {
-            // shop_icon_ad.png Vec2TC(-55, -136) , Size(64, 44)
-            // 3/10 color:197,0,0 size:52 Vec2TC(39, -135) , Size(96, 29)
-            unlockIconFile = DIR_IMG_SHOP + "shop_icon_ad.png";
-            unlockAmountStr = STR_FORMAT("%d/%d",
-                                         getAmount(CHARACTER_MANAGER->getViewAdsCount(data.charId)),
-                                         data.unlockAmount);
-        } break;
-            
-        default: break;
-    }
+    // World 4-18 color:0,255,0 size:52 Vec2TC(136, -136) , Size(49, 29)
+    auto requireStarLabel = Label::createWithTTF(TO_STRING(data.openRequireStar),
+                                                 FONT_SUPER_STAR, 52, Size::ZERO,
+                                                 TextHAlignment::CENTER, TextVAlignment::CENTER);
+    requireStarLabel->setTextColor(isUnlocked ? TEXT_COLOR_UNLOCKED : TEXT_COLOR_LOCKED);
+    requireStarLabel->setAnchorPoint(ANCHOR_M);
+    requireStarLabel->setPosition(Vec2TC(getContentSize(), 136, -136));
+    unlockAmountLayer->addChild(requireStarLabel);
     
-    // shop_icon_sausage.png Vec2TC(-88, -136) , Size(64, 52)
-    auto unlockIcon = Sprite::create(unlockIconFile);
-    unlockIcon->setAnchorPoint(ANCHOR_ML);
-    unlockIcon->setPosition(Vec2TL(getContentSize(), 0, -136));
-    unlockAmountLayer->addChild(unlockIcon);
-    
-    // 88/688 color:255,255,255 size:52 Vec2TC(39, -135) , Size(161, 29)
-    auto unlockAmount = Label::createWithTTF(unlockAmountStr, FONT_SUPER_STAR, 52, Size::ZERO,
-                                             TextHAlignment::LEFT, TextVAlignment::CENTER);
-    unlockAmount->setTextColor(isUnlocked ? Color4B(255,255,255,255) : Color4B(197,0,0,255));
-    unlockAmount->setAnchorPoint(ANCHOR_ML);
-    unlockAmount->setPosition(Vec2(unlockIcon->getPositionX() + unlockIcon->getContentSize().width + 14,
-                                   unlockIcon->getPositionY()) +
-                              Vec2(0, -2));
-    unlockAmountLayer->addChild(unlockAmount);
-    
-    // 가운데 정렬
-    float w = SB_BOUNDING_BOX_IN_WORLD(unlockAmount).getMaxX() - SB_BOUNDING_BOX_IN_WORLD(unlockIcon).getMinX();
-    float diff = (getContentSize().width - w) / 2;
-    
-    unlockIcon->setPositionX(unlockIcon->getPositionX() + diff);
-    unlockAmount->setPositionX(unlockAmount->getPositionX() + diff);
+//    string unlockIconFile;
+//    string unlockAmountStr;
+//
+//    auto getAmount = [=](int current) -> int {
+//        return isUnlocked ? data.unlockAmount : current;
+//    };
+//
+//    switch( data.unlockType ) {
+//        case CharacterUnlockType::SAUSAGE: {
+//            unlockIconFile = DIR_IMG_SHOP + "shop_icon_sausage.png";
+//            unlockAmountStr = STR_FORMAT("%d/%d",
+//                                         getAmount(StageManager::getStageStarTotalCount()),
+//                                         data.unlockAmount);
+//        } break;
+//
+//        case CharacterUnlockType::STAGE: {
+//            // shop_icon_stage.png Vec2TC(-122, -136) , Size(60, 52)
+//            // World 4-18 color:197,0,0 size:52 Vec2TC(36, -135) , Size(232, 29)
+//            unlockIconFile = DIR_IMG_SHOP + "shop_icon_stage.png";
+//            unlockAmountStr = STR_FORMAT("WORLD %d-%d",
+//                                         StageManager::getWorld(data.unlockAmount),
+//                                         data.unlockAmount);
+//        } break;
+//
+//        case CharacterUnlockType::VIEW_ADS: {
+//            // shop_icon_ad.png Vec2TC(-55, -136) , Size(64, 44)
+//            // 3/10 color:197,0,0 size:52 Vec2TC(39, -135) , Size(96, 29)
+//            unlockIconFile = DIR_IMG_SHOP + "shop_icon_ad.png";
+//            unlockAmountStr = STR_FORMAT("%d/%d",
+//                                         getAmount(CHARACTER_MANAGER->getViewAdsCount(data.charId)),
+//                                         data.unlockAmount);
+//        } break;
+//
+//        default: break;
+//    }
+//
+//    // shop_icon_sausage.png Vec2TC(-88, -136) , Size(64, 52)
+//    auto unlockIcon = Sprite::create(unlockIconFile);
+//    unlockIcon->setAnchorPoint(ANCHOR_ML);
+//    unlockIcon->setPosition(Vec2TL(getContentSize(), 0, -136));
+//    unlockAmountLayer->addChild(unlockIcon);
+//
+//    // 88/688 color:255,255,255 size:52 Vec2TC(39, -135) , Size(161, 29)
+//    auto unlockAmount = Label::createWithTTF(unlockAmountStr, FONT_SUPER_STAR, 52, Size::ZERO,
+//                                             TextHAlignment::LEFT, TextVAlignment::CENTER);
+//    unlockAmount->setTextColor(isUnlocked ? Color4B(255,255,255,255) : TEXT_COLOR_LOCKED);
+//    unlockAmount->setAnchorPoint(ANCHOR_ML);
+//    unlockAmount->setPosition(Vec2(unlockIcon->getPositionX() + unlockIcon->getContentSize().width + 14,
+//                                   unlockIcon->getPositionY()) +
+//                              Vec2(0, -2));
+//    unlockAmountLayer->addChild(unlockAmount);
+//
+//    // 가운데 정렬
+//    float w = SB_BOUNDING_BOX_IN_WORLD(unlockAmount).getMaxX() - SB_BOUNDING_BOX_IN_WORLD(unlockIcon).getMinX();
+//    float diff = (getContentSize().width - w) / 2;
+//
+//    unlockIcon->setPositionX(unlockIcon->getPositionX() + diff);
+//    unlockAmount->setPositionX(unlockAmount->getPositionX() + diff);
 }
 
 /**
