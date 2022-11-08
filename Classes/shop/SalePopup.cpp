@@ -13,7 +13,6 @@
 #include "GameConfiguration.hpp"
 #include "SceneManager.h"
 #include "CharacterManager.hpp"
-#include "GetCharacterPopup.hpp"
 
 USING_NS_CC;
 USING_NS_SB;
@@ -114,8 +113,7 @@ void SalePopup::onClickBuy() {
         // 통계 이벤트
         {
             SBAnalytics::EventParams params;
-            params[ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE] = SBAnalytics::EventParam(TO_STRING(StageManager::getTopUnlockedStage()));
-            params[ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT] = SBAnalytics::EventParam(TO_STRING(CHARACTER_MANAGER->getUnlockedCharacters().size()));
+            params[ANALYTICS_EVENT_PARAM_CLEARED_STAGE_COUNT] = SBAnalytics::EventParam(TO_STRING(StageManager::getClearedStageCount()));
             params[ANALYTICS_EVENT_PARAM_POPUP] = SBAnalytics::EventParam("sale");
 
             SBAnalytics::logEvent(ANALYTICS_EVENT_IAP_REMOVE_ADS, params);
@@ -123,12 +121,6 @@ void SalePopup::onClickBuy() {
         
         // 광고 제거
         User::removeAds();
-        
-        // 모든 캐릭터 획득
-        CHARACTER_MANAGER->unlockAll([=](CharacterDataList unlockCharacters) {
-            // 캐릭터 획득 팝업
-            GetCharacterPopup::show(unlockCharacters);
-        });
         
         this->dismissWithAction();
     };

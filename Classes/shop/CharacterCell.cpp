@@ -12,6 +12,7 @@
 #include "ResourceHelper.hpp"
 #include "User.hpp"
 #include "StageManager.hpp"
+#include "RewardManager.hpp"
 
 USING_NS_CC;
 using namespace cocos2d::ui;
@@ -54,7 +55,7 @@ bool CharacterCell::init() {
     
     setContentSize(CELL_SIZE);
     
-    const bool isUnlocked = CHARACTER_MANAGER->isCharacterUnlocked(data.charId);
+    const bool isUnlocked = RewardManager::isRewardedCharacter(data.charId);
     const bool isSelected = CHARACTER_MANAGER->isSelectedCharacter(data.charId);
     
     auto bg = Sprite::create(DIR_IMG_SHOP + "shop_column_bg.png");
@@ -224,7 +225,7 @@ void CharacterCell::unselect() {
  */
 void CharacterCell::updateUnlockAmount() {
 
-    const bool isUnlocked = CHARACTER_MANAGER->isCharacterUnlocked(data.charId);
+    const bool isUnlocked = RewardManager::isRewardedCharacter(data.charId);
     
     if( unlockAmountLayer ) {
         unlockAmountLayer->removeFromParent();
@@ -251,7 +252,9 @@ void CharacterCell::updateUnlockAmount() {
     }
     
     // World 4-18 color:197,0,0 size:52 Vec2TC(-69, -136) , Size(170, 29)
-    auto openWorldLabel = Label::createWithTTF(STR_FORMAT("WORLD %d", data.openWorld),
+    auto rewardData = RewardManager::getCharacterItem(data.charId);
+    
+    auto openWorldLabel = Label::createWithTTF(STR_FORMAT("WORLD %d", rewardData.world),
                                                FONT_SUPER_STAR, 52, Size::ZERO,
                                                TextHAlignment::LEFT, TextVAlignment::CENTER);
     openWorldLabel->setTextColor(isUnlocked ? TEXT_COLOR_UNLOCKED : TEXT_COLOR_LOCKED);
@@ -266,7 +269,7 @@ void CharacterCell::updateUnlockAmount() {
     unlockAmountLayer->addChild(starIcon);
     
     // World 4-18 color:0,255,0 size:52 Vec2TC(136, -136) , Size(49, 29)
-    auto requireStarLabel = Label::createWithTTF(TO_STRING(data.openRequireStar),
+    auto requireStarLabel = Label::createWithTTF(TO_STRING(rewardData.requireStar),
                                                  FONT_SUPER_STAR, 52, Size::ZERO,
                                                  TextHAlignment::CENTER, TextVAlignment::CENTER);
     requireStarLabel->setTextColor(isUnlocked ? TEXT_COLOR_UNLOCKED : TEXT_COLOR_LOCKED);
@@ -339,16 +342,16 @@ void CharacterCell::updateUnlockAmount() {
  */
 void CharacterCell::updateViewAdsButton() {
 
-    if( !data.isViewAdsType() ) {
-        return;
-    }
-    
-    if( CHARACTER_MANAGER->isCharacterUnlocked(data.charId) ) {
-        return;
-    }
-    
-    const bool isAdLoaded = superbomb::AdsHelper::isRewardedVideoLoaded();
-    
-    viewAdsButton->setVisible(isAdLoaded);
-    viewAdsDisabledImage->setVisible(!isAdLoaded);
+//    if( !data.isViewAdsType() ) {
+//        return;
+//    }
+//    
+//    if( CHARACTER_MANAGER->isCharacterUnlocked(data.charId) ) {
+//        return;
+//    }
+//
+//    const bool isAdLoaded = superbomb::AdsHelper::isRewardedVideoLoaded();
+//
+//    viewAdsButton->setVisible(isAdLoaded);
+//    viewAdsDisabledImage->setVisible(!isAdLoaded);
 }

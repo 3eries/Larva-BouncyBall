@@ -33,28 +33,25 @@ public:
 private:
     CharacterManager();
     
-    void initIAPListener();
-    
 public:
     void init();
     
     CharacterData       getCharacter(const std::string &charId);
-    CharacterDataList   getWorldCharacters(int world);
     
     CharacterData       getSelectedCharacter();
     bool                isSelectedCharacter(const std::string &charId);
-    bool                isCharacterUnlocked(const std::string &charId);
+    bool                isCharacterUnlocked_deprecated(const std::string &charId);
     
     void                setSelected(const std::string &charId);
     
-    CharacterDataList   getUnlockedCharacters();
-    void                unlockAll(OnCharacterListListener onUnlocked = nullptr);
-    void                unlock(const std::string &charId, bool isRestored = false);
+    CharacterDataList   getUnlockedCharacters_deprecated();
+    void                unlockAll_deprecated(OnCharacterListListener onUnlocked = nullptr);
+    void                unlock_deprecated(const std::string &charId, bool isRestored = false);
     
-    void                checkUnlock(OnCharacterListListener onUnlocked);
+    void                checkUnlock_deprecated(OnCharacterListListener onUnlocked);
     
-    int                 getViewAdsCount(const std::string &charId);
-    void                increaseViewAdsCount(const std::string &charId);
+    int                 getViewAdsCount_deprecated(const std::string &charId);
+    void                increaseViewAdsCount_deprecated(const std::string &charId);
     
 private:
     CC_SYNTHESIZE_READONLY(StringList, characterOrder, CharacterOrder);

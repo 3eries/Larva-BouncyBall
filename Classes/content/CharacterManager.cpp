@@ -40,8 +40,6 @@ void CharacterManager::destroyInstance() {
 }
 
 CharacterManager::CharacterManager() {
-    
-    initIAPListener();
 }
 
 CharacterManager::~CharacterManager() {
@@ -49,19 +47,6 @@ CharacterManager::~CharacterManager() {
     removeListener(this);
     
     listeners.clear();
-}
-
-/**
- * 인앱 결제 리스너 초기화
- */
-void CharacterManager::initIAPListener() {
-    
-    auto restoreListener = iap::RestoreListener::create();
-    restoreListener->setForever(true);
-    restoreListener->onRemoveAds = [=]() {
-        this->unlockAll();
-    };
-    iap::IAPHelper::getInstance()->addListener(this, restoreListener);
 }
 
 void CharacterManager::init() {
@@ -97,8 +82,6 @@ void CharacterManager::init() {
         character.name = charValue["name"].GetString();
         character.unlockType = (CharacterUnlockType)charValue["unlock_type"].GetInt();
         character.unlockAmount = charValue["unlock_amount"].GetInt();
-        character.openWorld = charValue["open_world"].GetInt();
-        character.openRequireStar = charValue["open_require_star"].GetInt();
         
         characters.push_back(character);
         
@@ -106,9 +89,6 @@ void CharacterManager::init() {
     }
     
     CCLOG("========== PARSE END (character.json)  ==========");
-    
-    // 첫번째 캐릭터 잠금 해제
-    unlock(characters[0].charId);
     
     // 기본 캐릭터 설정
     string charId = USER_DEFAULT->getStringForKey(USER_DEFAULT_KEY_SELECTED_CHARACTER, "");
@@ -132,15 +112,6 @@ CharacterData CharacterManager::getCharacter(const string &charId) {
 }
 
 /**
- * 해당 월드에 오픈되는 캐릭터 데이터를 반환합니다
- */
-CharacterDataList CharacterManager::getWorldCharacters(int world) {
-    return SBCollection::find(characters, [=](const CharacterData &chc) -> bool {
-        return chc.openWorld == world && chc.openRequireStar > 0/*레드 제외*/;
-    });
-}
-
-/**
  * 선택된 캐릭터를 반환합니다
  */
 CharacterData CharacterManager::getSelectedCharacter() {
@@ -161,7 +132,7 @@ bool CharacterManager::isSelectedCharacter(const string &charId) {
 /**
  * 캐릭터 잠금 해제 여부를 반환 합니다
  */
-bool CharacterManager::isCharacterUnlocked(const string &charId) {
+bool CharacterManager::isCharacterUnlocked_deprecated(const string &charId) {
     
     return USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_UNLOCKED_CHARACTER(charId), false);
 }
@@ -182,22 +153,22 @@ void CharacterManager::setSelected(const string &charId) {
 /**
  * 잠금 해제된 캐릭터 리스트를 반환합니다
  */
-CharacterDataList CharacterManager::getUnlockedCharacters() {
+CharacterDataList CharacterManager::getUnlockedCharacters_deprecated() {
     return SBCollection::find(characters, [=](const CharacterData &chc) -> bool {
-        return this->isCharacterUnlocked(chc.charId);
+        return this->isCharacterUnlocked_deprecated(chc.charId);
     });
 }
 
-void CharacterManager::unlockAll(OnCharacterListListener onUnlocked) {
+void CharacterManager::unlockAll_deprecated(OnCharacterListListener onUnlocked) {
  
     CharacterDataList newUnlockList;
     
     for( auto charId : characterOrder ) {
-        if( isCharacterUnlocked(charId) ) {
+        if( isCharacterUnlocked_deprecated(charId) ) {
             continue;
         }
         
-        unlock(charId);
+        unlock_deprecated(charId);
         newUnlockList.push_back(getCharacter(charId));
     }
     
@@ -209,9 +180,9 @@ void CharacterManager::unlockAll(OnCharacterListListener onUnlocked) {
 /**
  * 캐릭터 잠금 해제
  */
-void CharacterManager::unlock(const string &charId, bool isRestored) {
+void CharacterManager::unlock_deprecated(const string &charId, bool isRestored) {
     
-    if( isCharacterUnlocked(charId) ) {
+    if( isCharacterUnlocked_deprecated(charId) ) {
         // 이미 잠금 해제됨
         return;
     }
@@ -231,13 +202,13 @@ void CharacterManager::unlock(const string &charId, bool isRestored) {
 /**
  * 캐릭터 잠금 해제 여부를 확인합니다
  */
-void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
+void CharacterManager::checkUnlock_deprecated(OnCharacterListListener onUnlocked) {
     
     const auto isRemovedAds = User::isRemovedAds();
     CharacterDataList unlockList;
     
     for( auto chc : characters ) {
-        if( isCharacterUnlocked(chc.charId) ) {
+        if( isCharacterUnlocked_deprecated(chc.charId) ) {
             continue;
         }
         
@@ -262,7 +233,7 @@ void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
             } break;
                 
             case CharacterUnlockType::VIEW_ADS: {
-                if( getViewAdsCount(chc.charId) >= chc.unlockAmount ) {
+                if( getViewAdsCount_deprecated(chc.charId) >= chc.unlockAmount ) {
                     unlockList.push_back(chc);
                 }
             } break;
@@ -273,7 +244,7 @@ void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
     
     if( unlockList.size() > 0 ) {
         for( auto chc : unlockList ) {
-            unlock(chc.charId);
+            unlock_deprecated(chc.charId);
         }
         
         onUnlocked(unlockList);
@@ -283,7 +254,7 @@ void CharacterManager::checkUnlock(OnCharacterListListener onUnlocked) {
 /**
  * 캐릭터 VIEW_ADS 카운트를 반환합니다
  */
-int CharacterManager::getViewAdsCount(const string &charId) {
+int CharacterManager::getViewAdsCount_deprecated(const string &charId) {
  
     return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_CHARACTER_VIEW_ADS_COUNT(charId), 0);
 }
@@ -291,9 +262,9 @@ int CharacterManager::getViewAdsCount(const string &charId) {
 /**
  * 캐릭터 VIEW_ADS 카운트를 1증가시킵니다
  */
-void CharacterManager::increaseViewAdsCount(const string &charId) {
+void CharacterManager::increaseViewAdsCount_deprecated(const string &charId) {
     
-    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_CHARACTER_VIEW_ADS_COUNT(charId), getViewAdsCount(charId)+1);
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_CHARACTER_VIEW_ADS_COUNT(charId), getViewAdsCount_deprecated(charId)+1);
     USER_DEFAULT->flush();
 }
 

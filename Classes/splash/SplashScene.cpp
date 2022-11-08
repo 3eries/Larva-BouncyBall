@@ -18,6 +18,7 @@
 #include "FunnyHelper.hpp"
 #include "StageManager.hpp"
 #include "CharacterManager.hpp"
+#include "RewardManager.hpp"
 
 #include "LogoView.hpp"
 
@@ -150,6 +151,7 @@ void SplashScene::loginCompleted() {
     
     StageManager::getInstance()->init();
     CharacterManager::getInstance()->init();
+    RewardManager::getInstance()->init();
     User::getInstance()->init();
 }
 

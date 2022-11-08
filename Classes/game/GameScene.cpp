@@ -217,16 +217,8 @@ void GameScene::onStageClear(const StageData &stage) {
     auto popup = ClearPopup::create();
     popup->setOnStarEffectFinishedListener([=]() {
         
-        auto characters = GAME_MANAGER->getUnlockCharacters();
-        
-        // 캐릭터 획득 팝업
-        if( characters.size() > 0 ) {
-            SBDirector::getInstance()->postDelayed(this, [=]() {
-                GetCharacterPopup::show(characters);
-            }, 0.5f, true);
-        }
         // 세일 팝업, 월드의 마지막 스테이지 클리어
-        else if( !User::isRemovedAds() && stage.stage % GAME_CONFIG->getStagePerWorld() == 0 ) {
+        if( !User::isRemovedAds() && stage.stage % GAME_CONFIG->getStagePerWorld() == 0 ) {
             SBDirector::getInstance()->postDelayed(this, [=]() {
                 auto popup = SalePopup::create();
                 SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);

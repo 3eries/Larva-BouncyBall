@@ -1,30 +1,23 @@
 //
-//  GetCharacterPopup.cpp
+//  RewardPopup.cpp
 //  LarvaBouncyBall-mobile
 //
 //  Created by seongmin hwang on 2022/01/25.
 //
 
-#include "GetCharacterPopup.hpp"
+#include "RewardPopup.hpp"
 
 #include "Define.h"
 #include "ResourceHelper.hpp"
 #include "SceneManager.h"
+#include "CharacterManager.hpp"
 
 USING_NS_CC;
 using namespace std;
 
 #define SLIDE_DURATION   EffectDuration::POPUP_SLIDE_FAST
 
-void GetCharacterPopup::show(const CharacterDataList &characters) {
-    
-    // 통계 이벤트
-    for( auto chc : characters ) {
-        SBAnalytics::EventParams params;
-        params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(chc.charId);
-
-        SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_GET, params);
-    }
+RewardPopup* RewardPopup::show(const RewardItemDataList &characters) {
     
     // bg
     const int POPUP_ZORDER = ZOrder::POPUP_TOP;
@@ -40,35 +33,14 @@ void GetCharacterPopup::show(const CharacterDataList &characters) {
     shine->setPosition(Vec2MC(0, -20));
     SceneManager::getScene()->addChild(shine, POPUP_ZORDER);
     
-    // powder
-//    auto powder = SBSkeletonAnimation::create(DIR_IMG_COMMON + "get_powder.json");
-//    powder->setAnchorPoint(Vec2::ZERO);
-//    powder->setPosition(Vec2MC(0,0));
-//    powder->setVisible(false);
-//    SceneManager::getScene()->addChild(powder, POPUP_ZORDER);
-    
     // 팝업 생성
-    vector<GetCharacterPopup*> popups;
+    vector<RewardPopup*> popups;
     
     for( auto chc : characters ) {
-        auto popup = GetCharacterPopup::create(chc);
+        auto popup = RewardPopup::create(chc);
         popup->setVisible(false);
         popup->setIgnoreDismissAction(true); // 퇴장 연출 OFF
         popup->setOnDismissListener([=](Node*) {
-    
-//            // 노출된 팝업 제거
-//            auto &getCharacterPopups = instance->getCharacterPopups;
-//            getCharacterPopups.erase(getCharacterPopups.begin());
-//
-//            if( getCharacterPopups.size() == 0 ) {
-//                // 마지막 팝업 퇴장 완료
-//                return;
-//            }
-//
-//            // 다음 팝업 노출
-//            auto nextPopup = getCharacterPopups[0];
-//            nextPopup->setVisible(true);
-//            nextPopup->onEnterActionFinished();
         });
         SceneManager::getScene()->addChild(popup, POPUP_ZORDER);
         
@@ -96,10 +68,6 @@ void GetCharacterPopup::show(const CharacterDataList &characters) {
         // shine effect - rotate
         shine->runAction(RepeatForever::create(RotateBy::create(4.0f, 360)));
         
-        // powder
-//        powder->setVisible(true);
-//        powder->setAnimation(0, ANIM_NAME_RUN, true);
-        
         // 효과음
         SBAudioEngine::playEffect(SOUND_GET_CHARACTER);
     });
@@ -121,9 +89,6 @@ void GetCharacterPopup::show(const CharacterDataList &characters) {
                 // shine
                 shine->stopAllActions();
                 shine->runAction(Sequence::create(FadeOut::create(0.06f), RemoveSelf::create(), nullptr));
-                
-                // powder
-                // powder->runAction(Sequence::create(FadeOut::create(0.06f), RemoveSelf::create(), nullptr));
             } break;
                 
             case PopupEventType::EXIT_ACTION_FINISHED: {
@@ -133,11 +98,13 @@ void GetCharacterPopup::show(const CharacterDataList &characters) {
             default: break;
         }
     });
+    
+    return firstPopup;
 }
 
-GetCharacterPopup* GetCharacterPopup::create(const CharacterData &data) {
+RewardPopup* RewardPopup::create(const RewardItemData &data) {
     
-    auto popup = new GetCharacterPopup(data);
+    auto popup = new RewardPopup(data);
     
     if( popup && popup->init() ) {
         popup->autorelease();
@@ -148,16 +115,16 @@ GetCharacterPopup* GetCharacterPopup::create(const CharacterData &data) {
     return nullptr;
 }
 
-GetCharacterPopup::GetCharacterPopup(const CharacterData &data): BasePopup(PopupType::GET_CHARACTER),
+RewardPopup::RewardPopup(const RewardItemData &data): BasePopup(PopupType::REWARD),
 data(data),
 onConfirmListener(nullptr) {
 }
 
-GetCharacterPopup::~GetCharacterPopup() {
+RewardPopup::~RewardPopup() {
     
 }
 
-bool GetCharacterPopup::init() {
+bool RewardPopup::init() {
     
     if( !BasePopup::init() ) {
         return false;
@@ -166,12 +133,12 @@ bool GetCharacterPopup::init() {
     return true;
 }
 
-void GetCharacterPopup::onEnter() {
+void RewardPopup::onEnter() {
     
     BasePopup::onEnter();
 }
 
-bool GetCharacterPopup::onBackKeyReleased() {
+bool RewardPopup::onBackKeyReleased() {
     
     if( !BasePopup::onBackKeyReleased() ) {
         return false;
@@ -182,14 +149,16 @@ bool GetCharacterPopup::onBackKeyReleased() {
     return true;
 }
 
-void GetCharacterPopup::initBackgroundView() {
+void RewardPopup::initBackgroundView() {
     
     BasePopup::initBackgroundView();
 }
 
-void GetCharacterPopup::initContentView() {
+void RewardPopup::initContentView() {
     
     BasePopup::initContentView();
+    
+    const bool isCharacter = data.isCharacter();
     
     // get_it_box_bg.png Vec2MC(0, -76) , Size(440, 752)
     auto bg = Sprite::create(DIR_IMG_GET_IT + "get_it_box_bg.png");
@@ -206,7 +175,15 @@ void GetCharacterPopup::initContentView() {
     
     // 캐릭터 이름 효과
     // text size:72 color:197,0,0 stroke size:8px stroke color:91,0,155 Vec2MC(0, 188) , Size(394, 61)
-    auto nameEffect = Label::createWithTTF(data.name, FONT_SUPER_STAR, 72, Size::ZERO,
+    string rewardName = [=]() -> string {
+        if( isCharacter ) {
+            return CHARACTER_MANAGER->getCharacter(data.charId).name;
+        } else {
+            return STR_FORMAT("WORLD %d KEY", data.world);
+        }
+    }();
+    
+    auto nameEffect = Label::createWithTTF(rewardName, FONT_SUPER_STAR, 72, Size::ZERO,
                                            TextHAlignment::CENTER, TextVAlignment::CENTER);
     nameEffect->setTextColor(Color4B(197,0,0,255));
     nameEffect->enableOutline(Color4B(91,0,155,255), 8);
@@ -216,7 +193,7 @@ void GetCharacterPopup::initContentView() {
     
     // text size:72 color:255,255,0 Vec2MC(0, 192) , Size(374, 41)
     // 캐릭터 이름
-    auto name = Label::createWithTTF(data.name, FONT_SUPER_STAR, 72, Size::ZERO,
+    auto name = Label::createWithTTF(rewardName, FONT_SUPER_STAR, 72, Size::ZERO,
                                      TextHAlignment::CENTER, TextVAlignment::CENTER);
     name->setTextColor(Color4B(255,255,0,255));
     name->setAnchorPoint(ANCHOR_M);
@@ -231,8 +208,8 @@ void GetCharacterPopup::initContentView() {
     schedule([=](float dt) {
         this->unschedule("NAME_EFFECT");
     
-        auto nameEffect2 = Label::createWithTTF(data.name, FONT_SUPER_STAR, 72, Size::ZERO,
-                                               TextHAlignment::CENTER, TextVAlignment::CENTER);
+        auto nameEffect2 = Label::createWithTTF(rewardName, FONT_SUPER_STAR, 72, Size::ZERO,
+                                                TextHAlignment::CENTER, TextVAlignment::CENTER);
         nameEffect2->setScale(name->getScale());
         nameEffect2->setTextColor(nameEffect->getTextColor());
         nameEffect2->enableOutline(Color4B(91,0,155,255), 8);
@@ -246,11 +223,25 @@ void GetCharacterPopup::initContentView() {
     
     // red Vec2MC(0, -100) , Size(184, 216)
     // main_icon_key.png 200% size Vec2MC(0, -76) , Size(104, 160)
-    auto image = Sprite::create(ResourceHelper::getCharacterImage(data.charId));
-    image->setAnchorPoint(ANCHOR_MB);
-    image->setPosition(Vec2MC(0, -100) + Vec2(0, -216 * 0.5f));
+    auto imageFile = [=]() -> string {
+        if( isCharacter ) {
+            return ResourceHelper::getCharacterImage(data.charId);
+        } else {
+            return DIR_IMG_MAIN + "main_icon_key.png";
+        }
+    }();
+    
+    auto image = Sprite::create(imageFile);
     image->setScale(2.0f);
     addContentChild(image);
+    
+    if( isCharacter ) {
+        image->setAnchorPoint(ANCHOR_MB);
+        image->setPosition(Vec2MC(0, -100) + Vec2(0, -216 * 0.5f));
+    } else {
+        image->setAnchorPoint(ANCHOR_M);
+        image->setPosition(Vec2MC(0, -76));
+    }
     
     // badge
     // get_it_badge_new.png Vec2MC(184, 54) , Size(208, 204)
@@ -278,7 +269,7 @@ void GetCharacterPopup::initContentView() {
 /**
  * 등장 연출
  */
-void GetCharacterPopup::runEnterAction(SBCallback onFinished) {
+void RewardPopup::runEnterAction(SBCallback onFinished) {
     
     BasePopup::runEnterAction(SLIDE_DURATION, onFinished);
     
@@ -294,7 +285,7 @@ void GetCharacterPopup::runEnterAction(SBCallback onFinished) {
 /**
  * 퇴장 연출
  */
-void GetCharacterPopup::runExitAction(SBCallback onFinished) {
+void RewardPopup::runExitAction(SBCallback onFinished) {
     
     BasePopup::runExitAction(SLIDE_DURATION, onFinished);
     

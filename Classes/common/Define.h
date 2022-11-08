@@ -25,6 +25,7 @@ static const std::string SERVER_GAME_CONFIG_FILE                = "http://superb
 static const std::string GAME_CONFIG_FILE                       = "game_config.json";
 static const std::string PLUGIN_CONFIG_FILE                     = "config/plugin_config.json";
 static const std::string CHARACTER_CONFIG_FILE                  = "content/character/character.json";
+static const std::string REWARD_CONFIG_FILE                     = "content/reward.json";
 
 static const std::string INTERNAL_GAME_CONFIG_FILE              = "config/" + GAME_CONFIG_FILE;
 #define                  EXTERNAL_GAME_CONFIG_FILE                 std::string(cocos2d::FileUtils::getInstance()->getWritablePath() + GAME_CONFIG_FILE)
@@ -34,6 +35,7 @@ static const std::string INTERNAL_GAME_CONFIG_FILE_VERSION      = "1.0.0";
 #define                  ENCRYPT_GAME_CONFIG_FILE                 0
 #define                  ENCRYPT_PLUGIN_CONFIG_FILE               1
 #define                  ENCRYPT_CHARACTER_CONFIG_FILE            0
+#define                  ENCRYPT_REWARD_CONFIG_FILE               0
 
 // Analytics
 static const std::string ANALYTICS_SCREEN_SPLASH                    = "splash";
@@ -62,11 +64,13 @@ static const std::string ANALYTICS_EVENT_GAME_OVER                  = "game_over
 static const std::string ANALYTICS_EVENT_CHARACTER_GET              = "character_get";              // 캐릭터 획득
 static const std::string ANALYTICS_EVENT_CHARACTER_SELECT           = "character_select";           // 캐릭터 선택
 static const std::string ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK   = "character_view_ads_click";   // 캐릭터 광고 보기 클릭
+static const std::string ANALYTICS_EVENT_REWARD                     = "reward";                     // 보상 획득
 
 static const std::string ANALYTICS_EVENT_PARAM_SUMMARY              = "summary";                    // 요약
 static const std::string ANALYTICS_EVENT_PARAM_TYPE                 = "type";
 static const std::string ANALYTICS_EVENT_PARAM_STATUS               = "status";
 static const std::string ANALYTICS_EVENT_PARAM_CHAR_ID              = "char_id";                    // 캐릭터 아이디
+static const std::string ANALYTICS_EVENT_PARAM_REWARD_ID            = "reward_id";
 static const std::string ANALYTICS_EVENT_PARAM_STAGE                = "stage";
 static const std::string ANALYTICS_EVENT_PARAM_STAGE_RANGE          = "stage_range";
 static const std::string ANALYTICS_EVENT_PARAM_STAR                 = "star";
@@ -74,6 +78,7 @@ static const std::string ANALYTICS_EVENT_PARAM_POPUP                = "popup";
 static const std::string ANALYTICS_EVENT_PARAM_TILE_POSITION        = "tile_position";
 static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE       = "unlocked_stage";
 static const std::string ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT   = "unlocked_character_count";
+static const std::string ANALYTICS_EVENT_PARAM_CLEARED_STAGE_COUNT  = "cleared_stage_count";
 
 // Leaderboard
 static const std::string LEADER_BOARD_TOP_LEVEL                     = "CgkI3oP_ia0VEAIQAQ";
@@ -146,7 +151,8 @@ static const std::string SOUND_GAME_OVER_DEATH_BLOCK = DIR_SOUND + "effect_12.mp
 static const std::string SOUND_CLEAR_PORTAL          = DIR_SOUND + "effect_13.mp3";
 
 // 좌표 및 크기
-#define BANNER_HEIGHT           superbomb::AdsHelper::getBannerHeight()
+#define BANNER_HEIGHT               (SB_WIN_SIZE.height*0.1f)
+#define BANNER_HALF_HEIGHT          (BANNER_HEIGHT*0.5f)
 
 // Color
 namespace Color {

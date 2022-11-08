@@ -65,21 +65,6 @@ void GameConfiguration::parse(const string &json) {
     adRewardHint         = doc["ad_reward_hint"].GetInt();
     maxScore             = doc["max_score"].GetInt();
     
-    // world_open_requirements
-    {
-        auto list = doc["world_open_requirements"].GetArray();
-
-        for( auto it = list.begin(); it != list.end(); it++ ) {
-            auto obj = (*it).GetObject();
-            
-            WorldOpenRequirements requirements;
-            requirements.world = obj["world"].GetInt();
-            requirements.requireStar = obj["open_require_star"].GetInt();
-            
-            worldOpenRequirementsList.push_back(requirements);
-        }
-    }
-    
     CCLOG("\tstoreUrl: %s", storeUrl.c_str());
     CCLOG("\tmoreGamesUrl: %s", moreGamesUrl.c_str());
     CCLOG("\tworldCount: %d", worldCount);
@@ -87,13 +72,3 @@ void GameConfiguration::parse(const string &json) {
     CCLOG("========== PARSE END (game_config.json)  ==========");
 }
 
-/**
- * 해당 월드의 오픈 조건을 반환합니다
- */
-WorldOpenRequirements GameConfiguration::getWorldOpenRequirements(int world) {
-    
-    if( world <= worldOpenRequirementsList.size() ) {
-        return worldOpenRequirementsList[world-1];
-    }
-    return WorldOpenRequirements();
-}

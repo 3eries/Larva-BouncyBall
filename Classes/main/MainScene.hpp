@@ -14,14 +14,19 @@
 #include "superbomb.h"
 
 #include "BaseScene.hpp"
+#include "RewardManager.hpp"
 
 class MainScene : public BaseScene {
 private:
     enum Tag {
         BG               = 10,
         WORLD_TITLE,
+        WORLD_PAGE,
+        
         BTN_SHOP         = 100,
         BTN_SETTING,
+        
+        BANNER           = 1000,
     };
     
 public:
@@ -42,6 +47,8 @@ private:
     void initWorlds(int selectedWorld);
     
 private:
+    void onPageChanged(size_t page);
+    void onClickRewardItem(const RewardItemData &data);
     void onClick(cocos2d::Node *sender) override;
     
     void replaceGameScene(int stage);

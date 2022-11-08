@@ -11,7 +11,6 @@
 #include "User.hpp"
 #include "GameUIHelper.hpp"
 
-#include "GetCharacterPopup.hpp"
 #include "IAPCell.hpp"
 #include "CharacterCell.hpp"
 
@@ -187,9 +186,6 @@ void ShopPopup::initCharacterList() {
         cell->setOnSelectListener([=](CharacterCell *cell) {
             this->onCharacterSelect(characterListView, cell);
         });
-        cell->setOnViewAdsListener([=](CharacterCell *cell) {
-            this->onCharacterViewAds(cell);
-        });
     }
     
     // 리스트 영역 확인용
@@ -228,59 +224,6 @@ void ShopPopup::onCharacterSelect(ListView *listView, CharacterCell *cell) {
 }
 
 /**
- * 광고 보기
- */
-void ShopPopup::onCharacterViewAds(CharacterCell *cell) {
-    
-    if( !superbomb::AdsHelper::isRewardedVideoLoaded() ) {
-        return;
-    }
-    
-    SBDirector::getInstance()->setScreenTouchLocked(true);
-    
-    auto listener = superbomb::RewardedVideoAdListener::create();
-    listener->setTarget(this);
-    listener->onAdOpened = [=]() {
-        SBDirector::getInstance()->setScreenTouchLocked(false);
-    };
-    listener->onAdClosed = [=]() {
-        if( listener->isRewarded() ) {
-            CHARACTER_MANAGER->increaseViewAdsCount(cell->getData().charId);
-            cell->updateUnlockAmount();
-            
-            // 잠금 해제 체크
-            CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-                
-                cell->unlock();
-                
-                // 캐릭터 획득 팝업
-                GetCharacterPopup::show(unlockCharacters);
-            });
-            
-            // 통계 이벤트
-            {
-                SBAnalytics::EventParams params;
-                params[ANALYTICS_EVENT_PARAM_TYPE] = SBAnalytics::EventParam("character");
-                
-                SBAnalytics::logEvent(ANALYTICS_EVENT_SB_AD_REWARD, params);
-            }
-        }
-        
-        cell->updateViewAdsButton();
-    };
-    
-    superbomb::AdsHelper::getInstance()->showRewardedVideo(listener);
-    
-    // 통계 이벤트
-    {
-        SBAnalytics::EventParams params;
-        params[ANALYTICS_EVENT_PARAM_CHAR_ID] = SBAnalytics::EventParam(cell->getData().charId);
-
-        SBAnalytics::logEvent(ANALYTICS_EVENT_CHARACTER_VIEW_ADS_CLICK, params);
-    }
-}
-
-/**
  * IAP 아이템 클릭
  */
 void ShopPopup::onClickIAP() {
@@ -294,8 +237,7 @@ void ShopPopup::onClickIAP() {
         // 통계 이벤트
         {
             SBAnalytics::EventParams params;
-            params[ANALYTICS_EVENT_PARAM_UNLOCKED_STAGE] = SBAnalytics::EventParam(TO_STRING(StageManager::getTopUnlockedStage()));
-            params[ANALYTICS_EVENT_PARAM_UNLOCKED_CHC_COUNT] = SBAnalytics::EventParam(TO_STRING(CHARACTER_MANAGER->getUnlockedCharacters().size()));
+            params[ANALYTICS_EVENT_PARAM_CLEARED_STAGE_COUNT] = SBAnalytics::EventParam(TO_STRING(StageManager::getClearedStageCount()));
             params[ANALYTICS_EVENT_PARAM_POPUP] = SBAnalytics::EventParam("shop");
 
             SBAnalytics::logEvent(ANALYTICS_EVENT_IAP_REMOVE_ADS, params);
@@ -303,12 +245,6 @@ void ShopPopup::onClickIAP() {
         
         // 광고 제거
         User::removeAds();
-        
-        // 모든 캐릭터 획득
-        CHARACTER_MANAGER->unlockAll([=](CharacterDataList unlockCharacters) {
-            // 캐릭터 획득 팝업
-            GetCharacterPopup::show(unlockCharacters);
-        });
         
         // UI 업데이트
         initCharacterList();

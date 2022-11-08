@@ -137,6 +137,36 @@ bool EffectOutline2::init(const string &fragmentFilename,
 
 #pragma mark- EffectSprite
 
+EffectSprite* EffectSprite::createOutline(Sprite *src, int pixel, Vec3 color) {
+    
+    auto createTexture = [=]() -> cocos2d::Texture2D* {
+      
+        auto img = Sprite::createWithTexture(src->getTexture());
+        img->setAnchorPoint(ANCHOR_MB);
+        img->setPosition(Vec2BC(img->getContentSize(), 0, pixel));
+        
+        auto rt = RenderTexture::create(img->getContentSize().width,
+                                        img->getContentSize().height + pixel);
+        rt->begin();
+        img->visit();
+        rt->end();
+        
+        return rt->getSprite()->getTexture();
+    };
+    
+    auto outlineImage = superbomb::EffectSprite::create(createTexture());
+    outlineImage->setFlippedY(true); // for RenderTexture
+
+    color = color / 255.0f;
+
+    GLfloat radius = pixel / 255.0f;
+    GLfloat threshold = 1;
+
+    outlineImage->setEffect(EffectOutline::create("shaders/example_Outline.fsh", color, radius, threshold));
+    
+    return outlineImage;
+}
+
 EffectSprite* EffectSprite::create(const string &filename) {
     
     auto spr = new (nothrow)EffectSprite();

@@ -9,6 +9,7 @@
 #include "UserDefaultKey.h"
 #include "User.hpp"
 #include "TestHelper.hpp"
+#include "RewardManager.hpp"
 #include "CharacterManager.hpp"
 
 #include "GameView.hpp"
@@ -419,12 +420,12 @@ void GameManager::onStageClear() {
     StageManager::setStageStarCount(stage.stage, star);
     
     // 다음 스테이지 해제
-    StageManager::unlockStage(stage.stage+1);
+    if( stage.stage < StageManager::getWorldLastStage(stage.world) ) {
+        StageManager::unlockStage(stage.stage+1);
+    }
     
-    // 캐릭터 잠금해제 체크
-    CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-        instance->unlockCharacters = unlockCharacters;
-    });
+    // 보상 체크
+    RewardManager::checkUnlock();
     
     // 게임 오버 횟수 리셋
     User::setGameOverCountForSkipStage(0);

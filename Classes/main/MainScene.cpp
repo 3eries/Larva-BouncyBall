@@ -20,7 +20,7 @@
 #include "WorldPage.hpp"
 #include "CommonLoadingBar.hpp"
 #include "ExitAlertPopup.hpp"
-#include "GetCharacterPopup.hpp"
+#include "RewardPopup.hpp"
 #include "ShopPopup.hpp"
 #include "SettingPopup.hpp"
 #include "SalePopup.hpp"
@@ -91,17 +91,11 @@ void MainScene::onEnterTransitionDidFinish() {
     
     BaseScene::onEnterTransitionDidFinish();
     
-    // 캐릭터 잠금 해제 체크
-    CHARACTER_MANAGER->checkUnlock([=](CharacterDataList unlockCharacters) {
-        // 캐릭터 획득 팝업
-        GetCharacterPopup::show(unlockCharacters);
-    });
-    
     // 세일 팝업
     if( !User::isRemovedAds() /* 아이템 없음 */ &&
         !SalePopup::isTodayOpened() /* 하루 1회 */ &&
         SceneManager::getPreviousSceneType() == SceneType::GAME /* 이전 씬이 게임 */ &&
-        StageManager::getTopUnlockedStage() >= 11 /* 10스테이지까지 클리어됨 */ ) {
+        StageManager::getClearedStageCount() >= 10 /* 10개 이상 클리어함 */ ) {
         
         auto popup = SalePopup::create();
         addChild(popup, ZOrder::POPUP_MIDDLE);
@@ -144,6 +138,71 @@ bool MainScene::onBackKeyReleased() {
     }
     
     return false;
+}
+
+/**
+ * 페이지 변경됨
+ */
+void MainScene::onPageChanged(size_t page) {
+    
+    this->pageIndex = page;
+    int world = (int)page + 1;
+    
+    auto bg = getChildByTag<Sprite*>(Tag::BG);
+    bg->setTexture(ResourceHelper::getWorldBackgroundImage(world));
+    
+    auto title = getChildByTag<Sprite*>(Tag::WORLD_TITLE);
+    title->setTexture(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png", world));
+}
+
+/**
+ * 보상 아이템 클릭됨
+ */
+void MainScene::onClickRewardItem(const RewardItemData &data) {
+    
+    CCASSERT(RewardManager::getStatus(data) == RewardItemStatus::UNLOCKED, "MainScene::onClickRewardItem error.");
+    
+    // 월드 키 획득
+    if( !data.isCharacter() ) {
+        RewardManager::setWorldStatus(data.world, RewardItemStatus::REWARDED);
+        StageManager::unlockStage(StageManager::getWorldFirstStage(data.world));
+        
+        auto popup = RewardPopup::show(data);
+        popup->setOnDismissListener([=](Node*) {
+            
+            // 1. 오픈된 월드로 페이지 이동
+            auto PAGE_MOVE_DURATION = 0.5f;
+            auto pageIndex = data.world - 1;
+            
+            auto pageView = this->getChildByTag<PageView*>(Tag::WORLD_PAGE);
+            pageView->scrollToItem(pageIndex, PAGE_MOVE_DURATION);
+            // pageView->setCurrentPageIndex(data.world-1);
+            
+            // 2. 페이지 이동 후 월드 오픈 연출
+            SBDirector::postDelayed(this, [=]() {
+                this->onPageChanged(pageIndex);
+                
+                auto page = (WorldPage*)pageView->getItem((ssize_t)pageIndex);
+                page->unlock();
+                
+            }, PAGE_MOVE_DURATION, true);
+        });
+    }
+    // 캐릭터 획득
+    else {
+        RewardManager::setCharacterStatus(data.charId, RewardItemStatus::REWARDED);
+        RewardPopup::show(data);
+    }
+    
+    // 트래킹 이벤트
+    {
+        string rewardId = data.isCharacter() ? data.charId : STR_FORMAT("world_key_%02d", data.world);
+        
+        SBAnalytics::EventParams params;
+        params[ANALYTICS_EVENT_PARAM_REWARD_ID] = SBAnalytics::EventParam(rewardId);
+
+        SBAnalytics::logEvent(ANALYTICS_EVENT_REWARD, params);
+    }
 }
 
 /**
@@ -225,6 +284,11 @@ void MainScene::initBg(int selectedWorld) {
     cover->setAnchorPoint(ANCHOR_M);
     cover->setPosition(Vec2MC(0,0));
     addChild(cover);
+    
+    // 배너
+    auto banner = BannerView::create();
+    banner->setTag(Tag::BANNER);
+    addChild(banner, INT_MAX);
 }
 
 /**
@@ -277,10 +341,11 @@ void MainScene::initWorlds(int selectedWorld) {
                                                                selectedWorld));
     worldTitle->setTag(Tag::WORLD_TITLE);
     worldTitle->setAnchorPoint(ANCHOR_M);
-    worldTitle->setPosition(Vec2TC(0, -124));
+    worldTitle->setPosition(Vec2TC(0, -112));
     addChild(worldTitle);
     
     auto pageView = PageView::create();
+    pageView->setTag(Tag::WORLD_PAGE);
     pageView->setDirection(PageView::Direction::HORIZONTAL);
     pageView->setBounceEnabled(true);
     pageView->setAnchorPoint(ANCHOR_M);
@@ -289,10 +354,11 @@ void MainScene::initWorlds(int selectedWorld) {
     addChild(pageView);
     
     // 인디게이터
+    // main_indicator_off.png Vec2BC(-12t0, 164) , Size(32, 32)
     pageView->setIndicatorEnabled(false);
     pageView->setIndicatorEnabled(true);
     pageView->setIndicatorIndexNodesTexture(DIR_IMG_MAIN + "main_indicator_dot.png");
-    pageView->setIndicatorPosition(Vec2TC(0, -248) + Vec2(0, -32 / 2));
+    pageView->setIndicatorPosition(Vec2BC(0, 164) + Vec2(0, -32 / 2));
     // pageView->setIndicatorIndexNodesScale(0.55f);
     pageView->setIndicatorIndexNodesColor(Color3B(0, 0, 0));
     pageView->setIndicatorIndexNodesOpacity(255*0.5f);
@@ -308,23 +374,12 @@ void MainScene::initWorlds(int selectedWorld) {
         page->setOnClickListener([=](StageCell *cell) {
             this->replaceGameScene(cell->getStage());
         });
+        page->setOnClickRewardItemListener(CC_CALLBACK_1(MainScene::onClickRewardItem, this));
         pageView->insertCustomItem(page, i);
     }
     
     // 마지막으로 플레이한 월드로 포커스
     pageView->setCurrentPageIndex(selectedWorld-1);
-    
-    // 페이지 전환 시 타이틀 업데이트
-    auto onPageChanged = [=](size_t page) {
-        
-        this->pageIndex = page;
-        int world = (int)page + 1;
-        
-        worldTitle->setTexture(DIR_IMG_MAIN + STR_FORMAT("main_title_world_%02d.png", world));
-        
-        auto bg = getChildByTag<Sprite*>(Tag::BG);
-        bg->setTexture(ResourceHelper::getWorldBackgroundImage(world));
-    };
     
 //    pageView->addEventListener([=](Ref*, PageView::EventType eventType) {
 //        if( eventType == PageView::EventType::TURNING ) {
@@ -351,7 +406,7 @@ void MainScene::initWorlds(int selectedWorld) {
                 // 페이지 전환
                 if( pageDiffCount == 3 ) {
                     pageDiffCount = 0;
-                    onPageChanged(i);
+                    this->onPageChanged(i);
                 }
             } break;
                 
@@ -360,7 +415,7 @@ void MainScene::initWorlds(int selectedWorld) {
                 pageDiffCount = 0;
                 
                 if( pageIndex != pageView->getCurrentPageIndex() ) {
-                    onPageChanged(pageView->getCurrentPageIndex());
+                    this->onPageChanged(pageView->getCurrentPageIndex());
                 }
             } break;
                 

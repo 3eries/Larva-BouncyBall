@@ -35,7 +35,6 @@ private:
     
 private:
     void onCharacterSelect(cocos2d::ui::ListView *listView, CharacterCell *cell);
-    void onCharacterViewAds(CharacterCell *cell);
     void onClickIAP();
     
 private:

@@ -1,0 +1,92 @@
+[{
+        "type": 1,
+        "world": 1,
+        "require_star": 0
+    },
+    {
+        "type": 1,
+        "world": 2,
+        "require_star": 3
+    },
+    {
+        "type": 1,
+        "world": 3,
+        "require_star": 18
+    },
+    {
+        "type": 1,
+        "world": 4,
+        "require_star": 18
+    },
+    {
+        "type": 1,
+        "world": 5,
+        "require_star": 18
+    },
+    {
+        "type": 2,
+        "char_id": "char_0001",
+        "world": 1,
+        "require_star": 0
+    },
+    {
+        "type": 2,
+        "char_id": "char_0002",
+        "world": 1,
+        "require_star": 15
+    },
+    {
+        "type": 2,
+        "char_id": "char_0003",
+        "world": 2,
+        "require_star": 36
+    },
+    {
+        "type": 2,
+        "char_id": "char_0004",
+        "world": 3,
+        "require_star": 36
+    },
+    {
+        "type": 2,
+        "char_id": "char_0005",
+        "world": 1,
+        "require_star": 54
+    },
+    {
+        "type": 2,
+        "char_id": "char_0006",
+        "world": 4,
+        "require_star": 36
+    },
+    {
+        "type": 2,
+        "char_id": "char_0007",
+        "world": 2,
+        "require_star": 54
+    },
+    {
+        "type": 2,
+        "char_id": "char_0008",
+        "world": 3,
+        "require_star": 54
+    },
+    {
+        "type": 2,
+        "char_id": "char_0009",
+        "world": 4,
+        "require_star": 54
+    },
+    {
+        "type": 2,
+        "char_id": "char_0010",
+        "world": 5,
+        "require_star": 36
+    },
+    {
+        "type": 2,
+        "char_id": "char_0011",
+        "world": 5,
+        "require_star": 54
+    }
+]

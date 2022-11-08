@@ -12,18 +12,6 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 
-#define INVALID_WORLD       -1
-
-/**
- * 월드 오픈 조건
- */
-struct WorldOpenRequirements {
-    int world;
-    int requireStar;
-    
-    WorldOpenRequirements(): world(INVALID_WORLD) {}
-};
-
 #define GAME_CONFIG              GameConfiguration::getInstance()
 #define MAX_STAR_COUNT_PER_WORLD (GAME_CONFIG->getStagePerWorld()*3)
 
@@ -40,15 +28,12 @@ public:
     void init();
     void parse(const std::string &json);
     
-    WorldOpenRequirements getWorldOpenRequirements(int world);
-    
 private:
     CC_SYNTHESIZE_READONLY(std::string, storeUrl, StoreUrl);
     CC_SYNTHESIZE_READONLY(std::string, moreGamesUrl, MoreGamesUrl);
     
     CC_SYNTHESIZE_READONLY(int, worldCount, WorldCount);                // 월드 개수
     CC_SYNTHESIZE_READONLY(int, stagePerWorld, StagePerWorld);          // 월드 당 스테이지 개수
-    CC_SYNTHESIZE_READONLY(std::vector<WorldOpenRequirements>, worldOpenRequirementsList, WorldOpenRequirementsList);
     
     CC_SYNTHESIZE_READONLY(int, firstCoin, FirstCoin);                  // 최초 코인
     CC_SYNTHESIZE_READONLY(int, firstHint, FirstHint);                  // 최초 힌트

@@ -65,8 +65,6 @@ private:
     CC_SYNTHESIZE_READONLY(float, mapScaleFactor, MapScaleFactor); //
     
     CC_SYNTHESIZE_READONLY(int, star, Star);                       // 획득한 별 개수
-    CC_SYNTHESIZE_READONLY(CharacterDataList,
-                           unlockCharacters, UnlockCharacters);    // 잠금 해제된 캐릭터 리스트
     CC_SYNTHESIZE_READONLY(int, continueCount, ContinueCount);     // 이어하기한 횟수
     
 // Physics

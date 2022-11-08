@@ -1,31 +1,31 @@
 //
-//  GetCharacterPopup.hpp
+//  RewardPopup.hpp
 //  LarvaBouncyBall-mobile
 //
 //  Created by seongmin hwang on 2022/01/25.
 //
 
-#ifndef GetCharacterPopup_hpp
-#define GetCharacterPopup_hpp
+#ifndef RewardPopup_hpp
+#define RewardPopup_hpp
 
 #include <stdio.h>
 
 #include "cocos2d.h"
 #include "superbomb.h"
 #include "PopupManager.hpp"
-#include "CharacterManager.hpp"
+#include "RewardManager.hpp"
 
-class GetCharacterPopup: public BasePopup {
+class RewardPopup: public BasePopup {
 public:
-    static void show(const CharacterDataList &characters);
-    static void show(const CharacterData &data) { show(CharacterDataList({data})); }
+    static RewardPopup* show(const RewardItemDataList &characters);
+    static RewardPopup* show(const RewardItemData &data) { return show(RewardItemDataList({data})); }
     
 public:
-    static GetCharacterPopup* create(const CharacterData &data);
-    ~GetCharacterPopup();
+    static RewardPopup* create(const RewardItemData &data);
+    ~RewardPopup();
     
 private:
-    GetCharacterPopup(const CharacterData &data);
+    RewardPopup(const RewardItemData &data);
     
     bool init() override;
     void onEnter() override;
@@ -38,9 +38,9 @@ private:
     void runExitAction(SBCallback onFinished = nullptr) override;
     
 private:
-    CharacterData data;
+    RewardItemData data;
     CC_SYNTHESIZE(SBCallback, onConfirmListener, OnConfirmListener);
 };
 
 
-#endif /* GetCharacterPopup_hpp */
+#endif /* RewardPopup_hpp */

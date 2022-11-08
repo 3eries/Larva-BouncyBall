@@ -12,6 +12,7 @@
 
 #include "cocos2d.h"
 #include "superbomb.h"
+#include "RewardManager.hpp"
 
 class StageCell;
 
@@ -26,11 +27,27 @@ private:
     WorldPage(int world);
     
     bool init() override;
+    void initLockedUI();
+    void initStageUI();
+    
+public:
+    void unlock();
     
 private:
+    enum Tag {
+        LOCKED_LAYER = 100,
+        LOCKED_DESCRIPTION,
+        LOCKED_NEED_KEY,
+        LOCKED,             // 자물쇠
+        
+        PROGRESS_BAR,
+    };
+    
     CC_SYNTHESIZE_READONLY(int, world, World);
     CC_SYNTHESIZE(std::function<void(StageCell*)>,
                   onClickListener, OnClickListener);
+    CC_SYNTHESIZE(OnRewardItemDataListener,
+                  onClickRewardItemListener, OnClickRewardItemListener);
 };
 
 #pragma mark- StageCell

@@ -15,11 +15,16 @@ USING_NS_SB;
 using namespace std;
 
 #define USER_DEFAULT_KEY_LATEST_PLAY_STAGE              "USER_LATEST_PLAY_STAGE"
-#define USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE             "USER_TOP_UNLOCKED_STAGE"
+
+#define USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE(__WORLD__) \
+STR_FORMAT("USER_TOP_UNLOCKED_STAGE_WORLD_%d", __WORLD__).c_str()
 
 // #define USER_DEFAULT_KEY_STAGE_STAR                     "USER_STAGE_STAR"
 #define USER_DEFAULT_KEY_STAGE_STAR(__STAGE__) \
 STR_FORMAT("USER_STAGE_%d_STAR", __STAGE__).c_str()
+
+#define USER_DEFAULT_KEY_LATEST_MAIN_WORLD_STAR(__WORLD__) \
+STR_FORMAT("USER_LATEST_MAIN_WORLD_%d_STAR", __WORLD__).c_str()
 
 static StageManager *instance = nullptr;
 StageManager* StageManager::getInstance() {
@@ -66,7 +71,6 @@ void StageManager::init() {
     
     CCLOG("StageManager {");
     CCLOG("\t latest play stage: %d", getLatestPlayStage());
-    CCLOG("\t top unlocked stage: %d", getTopUnlockedStage());
     CCLOG("}");
 }
 
@@ -278,14 +282,22 @@ int StageManager::getStageStarCount(int stage) {
 }
 
 /**
+ * 스테이지 별 개수를 설정합니다
+ */
+void StageManager::setStageStarCount(int stage, int star) {
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), star);
+    USER_DEFAULT->flush();
+}
+
+/**
  * 합산된 별 개수를 반환합니다
  */
 int StageManager::getStageStarTotalCount() {
     
-    int topStage = getTopUnlockedStage();
+    int lastStage = getLastStage().stage;
     int total = 0;
     
-    for( int stage = 1; stage <= topStage; ++stage ) {
+    for( int stage = 1; stage <= lastStage; ++stage ) {
         int star = getStageStarCount(stage);
         
         if( star != INVALID_STAR_COUNT ) {
@@ -304,11 +316,12 @@ bool StageManager::isStageCleared(int stage) {
 }
 
 /**
- * 스테이지 별 개수를 설정합니다
+ * 클리어한 스테이지 개수를 반환합니다
  */
-void StageManager::setStageStarCount(int stage, int star) {
-    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_STAGE_STAR(stage), star);
-    USER_DEFAULT->flush();
+int StageManager::getClearedStageCount() {
+    return (int)SBCollection::find(instance->stages, [=](const StageData &data) -> bool {
+        return isStageCleared(data.stage);
+    }).size();
 }
 
 /**
@@ -316,7 +329,7 @@ void StageManager::setStageStarCount(int stage, int star) {
  */
 void StageManager::unlockStage(int stage) {
     setStageStarCount(stage, MAX(0, getStageStarCount(stage)));
-    setTopUnlockedStage(stage);
+    setTopUnlockedStage(getStage(stage).world, stage);
 }
 
 bool StageManager::isStageLocked(int stage) {
@@ -334,7 +347,7 @@ int StageManager::getLatestPlayWorld() {
  * 마지막으로 플레이한 스테이지를 반환합니다.
  */
 int StageManager::getLatestPlayStage() {
-    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, getTopUnlockedStage());
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_PLAY_STAGE, 1);
 }
 
 void StageManager::setLatestPlayStage(int stage) {
@@ -345,14 +358,26 @@ void StageManager::setLatestPlayStage(int stage) {
 /**
  * 잠금 해제된 최고 스테이지를 반환합니다.
  */
-int StageManager::getTopUnlockedStage() {
-    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE, 1);
+int StageManager::getTopUnlockedStage(int world) {
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE(world), 1);
 }
 
-void StageManager::setTopUnlockedStage(int stage) {
-    stage = MAX(getTopUnlockedStage(), stage);
+void StageManager::setTopUnlockedStage(int world, int stage) {
+    stage = MAX(getTopUnlockedStage(world), stage);
     
-    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE, stage);
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_TOP_UNLOCKED_STAGE(world), stage);
     USER_DEFAULT->flush();
 }
 
+/**
+ * 메인 화면에 표시된 마지막 별 개수를 반환합니다.
+ */
+int StageManager::getLatestMainWorldStarCount(int world) {
+    return USER_DEFAULT->getIntegerForKey(USER_DEFAULT_KEY_LATEST_MAIN_WORLD_STAR(world),
+                                          getWorldStarCount(world));
+}
+
+void StageManager::setLatestMainWorldStarCount(int world, int star) {
+    USER_DEFAULT->setIntegerForKey(USER_DEFAULT_KEY_LATEST_MAIN_WORLD_STAR(world), star);
+    USER_DEFAULT->flush();
+}

@@ -69,6 +69,10 @@ protected:
 
 class EffectSprite : public cocos2d::Sprite {
 public:
+    static EffectSprite* createOutline(cocos2d::Sprite *src,
+                                       int pixel, cocos2d::Vec3 color);
+    
+public:
     CREATE_FUNC(EffectSprite);
     static EffectSprite* create(const std::string &filename);
     static EffectSprite* create(cocos2d::Texture2D *tex);

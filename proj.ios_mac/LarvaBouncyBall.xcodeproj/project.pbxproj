@@ -139,6 +139,8 @@
 		508F883028068D9E008469B9 /* StageSkipPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508F882E28068D9E008469B9 /* StageSkipPopup.cpp */; };
 		509465F327E2FF6500CFE6D4 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F227E2FF6500CFE6D4 /* AVKit.framework */; };
 		509465F527E2FFBE00CFE6D4 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */; };
+		50960568290AD3F5009A2B79 /* RewardManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50960566290AD3F5009A2B79 /* RewardManager.cpp */; };
+		50A1597628F8099300AE4126 /* MainStageProgressBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A1597428F8099300AE4126 /* MainStageProgressBar.cpp */; };
 		50A8E40C2701ECDC002732F8 /* Ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A8E40A2701ECDC002732F8 /* Ball.cpp */; };
 		50B4DDBF2816ACB000968AB4 /* SalePopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B4DDBD2816ACB000968AB4 /* SalePopup.cpp */; };
 		50B5735C27032C09009F3240 /* PhysicsManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5735A27032C09009F3240 /* PhysicsManager.cpp */; };
@@ -146,6 +148,7 @@
 		50B5736627033665009F3240 /* PhysicsListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5736427033665009F3240 /* PhysicsListener.cpp */; };
 		50B685A427BBD6790022C45D /* BlockDrop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B685A227BBD6790022C45D /* BlockDrop.cpp */; };
 		50B685A727BBDAC70022C45D /* PausePopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B685A527BBDAC70022C45D /* PausePopup.cpp */; };
+		50B6DA192913C6D700689DFD /* RewardPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B6DA172913C6D700689DFD /* RewardPopup.cpp */; };
 		50C1C48A26B8F725003BF8FD /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C1C48926B8F725003BF8FD /* MediaPlayer.framework */; };
 		50C1C48C26B8F72C003BF8FD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C1C48B26B8F72C003BF8FD /* WebKit.framework */; };
 		50C1C4A626B92745003BF8FD /* DebugDrawView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C1C4A326B92745003BF8FD /* DebugDrawView.cpp */; };
@@ -438,6 +441,10 @@
 		508F882F28068D9E008469B9 /* StageSkipPopup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StageSkipPopup.hpp; sourceTree = "<group>"; };
 		509465F227E2FF6500CFE6D4 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		509465F427E2FFBE00CFE6D4 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/CoreMedia.framework; sourceTree = DEVELOPER_DIR; };
+		50960566290AD3F5009A2B79 /* RewardManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RewardManager.cpp; sourceTree = "<group>"; };
+		50960567290AD3F5009A2B79 /* RewardManager.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = RewardManager.hpp; sourceTree = "<group>"; };
+		50A1597428F8099300AE4126 /* MainStageProgressBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainStageProgressBar.cpp; sourceTree = "<group>"; };
+		50A1597528F8099300AE4126 /* MainStageProgressBar.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MainStageProgressBar.hpp; sourceTree = "<group>"; };
 		50A8E40A2701ECDC002732F8 /* Ball.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Ball.cpp; sourceTree = "<group>"; };
 		50A8E40B2701ECDC002732F8 /* Ball.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ball.hpp; sourceTree = "<group>"; };
 		50B4DDBD2816ACB000968AB4 /* SalePopup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SalePopup.cpp; sourceTree = "<group>"; };
@@ -452,6 +459,8 @@
 		50B685A327BBD6790022C45D /* BlockDrop.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BlockDrop.hpp; sourceTree = "<group>"; };
 		50B685A527BBDAC70022C45D /* PausePopup.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PausePopup.cpp; sourceTree = "<group>"; };
 		50B685A627BBDAC70022C45D /* PausePopup.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = PausePopup.hpp; sourceTree = "<group>"; };
+		50B6DA172913C6D700689DFD /* RewardPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RewardPopup.cpp; sourceTree = "<group>"; };
+		50B6DA182913C6D700689DFD /* RewardPopup.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RewardPopup.hpp; sourceTree = "<group>"; };
 		50C1C48926B8F725003BF8FD /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/System/Library/Frameworks/MediaPlayer.framework; sourceTree = DEVELOPER_DIR; };
 		50C1C48B26B8F72C003BF8FD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		50C1C4A026B92745003BF8FD /* DebugDrawView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = DebugDrawView.hpp; sourceTree = "<group>"; };
@@ -1065,6 +1074,8 @@
 				507BF7AB26834EF30037F28C /* CreditPopup.hpp */,
 				507BF7A826834EF30037F28C /* MainScene.cpp */,
 				507BF7AA26834EF30037F28C /* MainScene.hpp */,
+				50A1597428F8099300AE4126 /* MainStageProgressBar.cpp */,
+				50A1597528F8099300AE4126 /* MainStageProgressBar.hpp */,
 				1D53A5C927857D0200A8B792 /* WelcomeScene.cpp */,
 				1D53A5CA27857D0200A8B792 /* WelcomeScene.hpp */,
 				1D803687278BCA260083E400 /* WorldPage.cpp */,
@@ -1081,6 +1092,8 @@
 				50861EBB27BE29B800181A3D /* CharacterManager.cpp */,
 				50861EBC27BE29B800181A3D /* CharacterManager.hpp */,
 				507BF7B126834EF30037F28C /* data */,
+				50960566290AD3F5009A2B79 /* RewardManager.cpp */,
+				50960567290AD3F5009A2B79 /* RewardManager.hpp */,
 				50861EBE27BE8A2B00181A3D /* StageManager.cpp */,
 				50861EBF27BE8A2B00181A3D /* StageManager.hpp */,
 			);
@@ -1121,6 +1134,8 @@
 				507BF7BD26834EF30037F28C /* PopupManager.hpp */,
 				507BF7BA26834EF30037F28C /* ReviewPopup.cpp */,
 				507BF7C226834EF30037F28C /* ReviewPopup.hpp */,
+				50B6DA172913C6D700689DFD /* RewardPopup.cpp */,
+				50B6DA182913C6D700689DFD /* RewardPopup.hpp */,
 				507BF7C326834EF30037F28C /* SettingPopup.cpp */,
 				507BF7BB26834EF30037F28C /* SettingPopup.hpp */,
 			);
@@ -1367,6 +1382,7 @@
 				507BF83026834EF30037F28C /* TutorialHelper.cpp in Sources */,
 				507BF82326834EF30037F28C /* GameView.cpp in Sources */,
 				50B5736327033346009F3240 /* GameTile.cpp in Sources */,
+				50960568290AD3F5009A2B79 /* RewardManager.cpp in Sources */,
 				507BF83226834EF30037F28C /* CommonLoadingBar.cpp in Sources */,
 				507BF80026834EF30037F28C /* PluginPlay.cpp in Sources */,
 				507BF81426834EF30037F28C /* ConsentForm-ios.mm in Sources */,
@@ -1378,6 +1394,7 @@
 				507BF7FD26834EF30037F28C /* FirebaseManager-ios.mm in Sources */,
 				1DEB5559279A7B3900699529 /* ClearPopup.cpp in Sources */,
 				507BF82E26834EF30037F28C /* SettingPopup.cpp in Sources */,
+				50A1597628F8099300AE4126 /* MainStageProgressBar.cpp in Sources */,
 				503A7945283B950A00D3AE9D /* SBPlatformHelper-android.cpp in Sources */,
 				508F883028068D9E008469B9 /* StageSkipPopup.cpp in Sources */,
 				507BF7FE26834EF30037F28C /* FirebaseAnalytics-android.cpp in Sources */,
@@ -1453,6 +1470,7 @@
 				507BF7FC26834EF30037F28C /* FirebaseAnalytics-ios.mm in Sources */,
 				1DEB5554279A732B00699529 /* Flag.cpp in Sources */,
 				507BF83726834EF30037F28C /* TestHelper.cpp in Sources */,
+				50B6DA192913C6D700689DFD /* RewardPopup.cpp in Sources */,
 				507BF83126834EF30037F28C /* TutorialView.cpp in Sources */,
 				507BF7F126834EF30037F28C /* AdsEventDispatcher.cpp in Sources */,
 				1AF87B8A1F6F7822007BE51C /* main.m in Sources */,

@@ -1,0 +1,20 @@
+
+need_key_balloon.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+main_icon_key
+  rotate: false
+  xy: 2, 2
+  size: 52, 80
+  orig: 52, 80
+  offset: 0, 0
+  index: -1
+main_need_key_balloon
+  rotate: false
+  xy: 2, 84
+  size: 196, 128
+  orig: 196, 128
+  offset: 0, 0
+  index: -1

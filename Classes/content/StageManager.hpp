@@ -47,9 +47,10 @@ public:
     static int              getWorldStarCount(int world);
     
     static int              getStageStarCount(int stage);
+    static void             setStageStarCount(int stage, int star);
     static int              getStageStarTotalCount();
     static bool             isStageCleared(int stage);
-    static void             setStageStarCount(int stage, int star);
+    static int              getClearedStageCount();
     
     static void             unlockStage(int stage);
     static bool             isStageLocked(int stage);
@@ -58,8 +59,11 @@ public:
     static int              getLatestPlayStage();
     static void             setLatestPlayStage(int stage);
     
-    static int              getTopUnlockedStage();
-    static void             setTopUnlockedStage(int stage);
+    static int              getTopUnlockedStage(int world);
+    static void             setTopUnlockedStage(int world, int stage);
+    
+    static int              getLatestMainWorldStarCount(int world);
+    static void             setLatestMainWorldStarCount(int world, int star);
 };
 
 #endif /* StageManager_hpp */
