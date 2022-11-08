@@ -10,6 +10,7 @@
 #include "Define.h"
 #include "GameUIHelper.hpp"
 #include "ResourceHelper.hpp"
+#include "User.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -19,7 +20,8 @@ onStarEffectFinishedListener(nullptr),
 onShopListener(nullptr),
 onHomeListener(nullptr),
 onRetryListener(nullptr),
-onNextListener(nullptr) {
+onNextListener(nullptr),
+onStarRewardedListener(nullptr) {
 }
 
 ClearPopup::~ClearPopup() {
@@ -65,23 +67,35 @@ void ClearPopup::initContentView() {
     
     BasePopup::initContentView();
     
+    auto stage = GAME_MANAGER->getStage();
+    
+    // 현재 스테이지
+    // world/stage info size:70 Vec2TC(-2, -102) , Size(450, 39)
+    auto stageLabel = Label::createWithTTF(STR_FORMAT("WORLD %d - %d", stage.world, stage.stage),
+                                           FONT_SUPER_STAR, 70, Size::ZERO,
+                                           TextHAlignment::CENTER, TextVAlignment::CENTER);
+    stageLabel->setTextColor(Color4B::WHITE);
+    stageLabel->setAnchorPoint(ANCHOR_M);
+    stageLabel->setPosition(WITH_BANNER_SIZE(Vec2TC(0, -102)));
+    addContentChild(stageLabel);
+    
     // 타이틀
     auto title = Sprite::create(DIR_IMG_RESULT + "result_text_title.png");
     title->setAnchorPoint(ANCHOR_M);
-    title->setPosition(Vec2TC(-2, -248));
+    title->setPosition(WITH_BANNER_SIZE(Vec2TC(-2, -248)));
     addContentChild(title);
     
     // 별
     Vec2 pos[] = {
-        Vec2MC(-360, -22),
-        Vec2MC(0, 14),
-        Vec2MC(360, -22),
+        Vec2MC(-360, -6),
+        Vec2MC(0, 30),
+        Vec2MC(360, -6),
     };
     
     for( int i = 0; i < 3; ++i ) {
         auto starBg = Sprite::create(DIR_IMG_RESULT + "result_star_grey.png");
         starBg->setAnchorPoint(ANCHOR_M);
-        starBg->setPosition(pos[i]);
+        starBg->setPosition(WITH_BANNER_SIZE(pos[i]));
         addContentChild(starBg);
         
         starBgs.push_back(starBg);
@@ -126,8 +140,8 @@ void ClearPopup::initContentView() {
     auto homeBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_home.png");
     homeBtn->setZoomScale(ButtonZoomScale::NORMAL);
     homeBtn->setAnchorPoint(ANCHOR_M);
-    homeBtn->setPosition(Vec2BC(-444, 192));
-    addChild(homeBtn);
+    homeBtn->setPosition(WITH_BANNER_SIZE(Vec2BC(-444, 232)));
+    addContentChild(homeBtn);
     
     homeBtn->setOnClickListener([=](Node*) {
         SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
@@ -138,8 +152,8 @@ void ClearPopup::initContentView() {
     auto retryBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_retry.png");
     retryBtn->setZoomScale(ButtonZoomScale::NORMAL);
     retryBtn->setAnchorPoint(ANCHOR_M);
-    retryBtn->setPosition(Vec2BC(-92, 192));
-    addChild(retryBtn);
+    retryBtn->setPosition(WITH_BANNER_SIZE(Vec2BC(-92, 232)));
+    addContentChild(retryBtn);
     
     retryBtn->setOnClickListener([=](Node*) {
         SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
@@ -150,13 +164,64 @@ void ClearPopup::initContentView() {
     auto nextBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_next_stage.png");
     nextBtn->setZoomScale(ButtonZoomScale::NORMAL);
     nextBtn->setAnchorPoint(ANCHOR_M);
-    nextBtn->setPosition(Vec2BC(352, 192));
-    addChild(nextBtn);
+    nextBtn->setPosition(WITH_BANNER_SIZE(Vec2BC(352, 232)));
+    addContentChild(nextBtn);
     
     nextBtn->setOnClickListener([=](Node*) {
         SBAudioEngine::playEffect(SOUND_BUTTON_CLICK);
         SB_SAFE_PERFORM_LISTENER(this, onNextListener);
     });
+    
+    // 광고로 별 3개 얻기
+    if( StageManager::getStageStarCount(stage.stage) < 3 &&
+        superbomb::AdsHelper::isRewardedVideoLoaded() ) {
+        auto bg = Sprite::create(DIR_IMG_RESULT + "result_bg_all_star.png");
+        bg->setAnchorPoint(ANCHOR_M);
+        bg->setPosition(WITH_BANNER_SIZE(Vec2TR(-204, -382)));
+        addContentChild(bg);
+        
+        auto adBtn = SBButton::create(DIR_IMG_RESULT + "result_btn_all_star_ad.png");
+        adBtn->setZoomScale(0);
+        adBtn->setAnchorPoint(ANCHOR_M);
+        adBtn->setPosition(WITH_BANNER_SIZE(Vec2TR(-204, -512)));
+        addContentChild(adBtn);
+        
+        adBtn->setOnClickListener([=](Node*) {
+            // 광고 노출
+            SBDirector::getInstance()->setScreenTouchLocked(true);
+            
+            auto listener = superbomb::RewardedVideoAdListener::create();
+            listener->setTarget(this);
+            listener->onAdOpened = [=]() {
+                SBDirector::getInstance()->setScreenTouchLocked(false);
+            };
+            listener->onAdClosed = [=]() {
+                if( !listener->isRewarded() ) {
+                    return;
+                }
+                
+                // 통계 이벤트
+                {
+                    // sb_ad_reward
+                    SBAnalytics::EventParams params;
+                    params[ANALYTICS_EVENT_PARAM_TYPE] = SBAnalytics::EventParam("game_result");
+                    
+                    SBAnalytics::logEvent(ANALYTICS_EVENT_SB_AD_REWARD, params);
+                    
+                    // game_result_get_star
+                    params.clear();
+                    
+                    params[ANALYTICS_EVENT_PARAM_STAGE] = SBAnalytics::EventParam(TO_STRING(stage.stage));
+                    params[ANALYTICS_EVENT_PARAM_STAGE_RANGE] = SBAnalytics::EventParam(SBAnalytics::getNumberRange(stage.stage, 1, 5, 5));
+                    
+                    SBAnalytics::logEvent(ANALYTICS_EVENT_GAME_RESULT_GET_STAR, params);
+                }
+                
+                SB_SAFE_PERFORM_LISTENER(this, onStarRewardedListener);
+            };
+            superbomb::AdsHelper::getInstance()->showRewardedVideo(listener);
+        });
+    }
 }
 
 void ClearPopup::runStarAnimation(int i) {

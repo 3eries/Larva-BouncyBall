@@ -58,6 +58,7 @@ static const std::string ANALYTICS_EVENT_STAGE_CLEAR                = "stage_cle
 static const std::string ANALYTICS_EVENT_STAGE_PLAY_RE              = "stage_play_re";
 static const std::string ANALYTICS_EVENT_STAGE_CLEAR_RE             = "stage_clear_re";
 static const std::string ANALYTICS_EVENT_STAGE_SKIP                 = "stage_skip";
+static const std::string ANALYTICS_EVENT_GAME_RESULT_GET_STAR       = "game_result_get_star";
 
 static const std::string ANALYTICS_EVENT_GAME_OVER                  = "game_over";
 
@@ -153,6 +154,8 @@ static const std::string SOUND_CLEAR_PORTAL          = DIR_SOUND + "effect_13.mp
 // 좌표 및 크기
 #define BANNER_HEIGHT               (SB_WIN_SIZE.height*0.1f)
 #define BANNER_HALF_HEIGHT          (BANNER_HEIGHT*0.5f)
+#define WITH_BANNER_SIZE(__P__) \
+(__P__ + Vec2(0, User::isRemovedAds() ? -BANNER_HALF_HEIGHT : 0))
 
 // Color
 namespace Color {

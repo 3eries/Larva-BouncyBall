@@ -43,6 +43,7 @@ private:
     CC_SYNTHESIZE(SBCallback, onHomeListener, OnHomeListener);
     CC_SYNTHESIZE(SBCallback, onRetryListener, OnRetryListener);
     CC_SYNTHESIZE(SBCallback, onNextListener, OnNextListener);
+    CC_SYNTHESIZE(SBCallback, onStarRewardedListener, OnStarRewardedListener);
 };
 
 #endif /* ClearPopup_hpp */

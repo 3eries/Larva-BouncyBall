@@ -260,6 +260,12 @@ void GameScene::onStageClear(const StageData &stage) {
             onAdClosed();
         }
     });
+    popup->setOnStarRewardedListener([=]() {
+        popup->dismiss();
+        
+        GAME_MANAGER->setStar(3);
+        GameManager::onStageClear();
+    });
     popup->setOnShopListener([=]() {
         auto shopPopup = ShopPopup::create();
         SceneManager::getScene()->addChild(shopPopup, ZOrder::POPUP_MIDDLE);
