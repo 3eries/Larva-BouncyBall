@@ -82,16 +82,17 @@ void SalePopup::initContentView() {
     
     BasePopup::initContentView();
     
-    // common_bg_super_sale.png Vec2MC(-24, 24) , Size(1168, 640)
+    // common_bg_super_sale.png Vec2MC(0, 26) , Size(960, 644)
     popupBg = Sprite::create(DIR_IMG_COMMON + "common_bg_super_sale.png");
     popupBg->setAnchorPoint(ANCHOR_M);
-    popupBg->setPosition(Vec2MC(-24, 24));
+    popupBg->setPosition(Vec2MC(0, 26));
     addContentChild(popupBg);
     
+    // common_btn_super_sale.png Vec2MC(0, -276) , Size(456, 144)
     auto buyBtn = SBButton::create(DIR_IMG_COMMON + "common_btn_super_sale.png");
     buyBtn->setZoomScale(ButtonZoomScale::NORMAL);
     buyBtn->setAnchorPoint(ANCHOR_M);
-    buyBtn->setPosition(Vec2MC(0, -272));
+    buyBtn->setPosition(Vec2MC(0, -276));
     addContentChild(buyBtn);
     
     buyBtn->setOnClickListener([=](Node*) {
