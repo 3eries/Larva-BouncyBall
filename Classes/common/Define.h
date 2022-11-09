@@ -157,6 +157,20 @@ static const std::string SOUND_CLEAR_PORTAL          = DIR_SOUND + "effect_13.mp
 #define WITH_BANNER_SIZE(__P__) \
 (__P__ + Vec2(0, User::isRemovedAds() ? -BANNER_HALF_HEIGHT : 0))
 
+struct NodeAndPosition {
+    cocos2d::Node *node;
+    cocos2d::Vec2 originPos;
+    
+    NodeAndPosition(cocos2d::Node *_node, const cocos2d::Vec2 &_originPos):
+    node(_node), originPos(_originPos) {}
+    
+    NodeAndPosition(cocos2d::Node *_node): NodeAndPosition(_node, _node->getPosition()) {}
+};
+
+typedef std::vector<NodeAndPosition> NodeAndPositionList;
+
+void updatePositionForBanner(NodeAndPositionList list);
+
 // Color
 namespace Color {
     static const cocos2d::Color4B POPUP_BG          = cocos2d::Color4B(0,0,0,255*0.5f);

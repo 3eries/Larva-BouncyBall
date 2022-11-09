@@ -84,6 +84,9 @@ void SceneManager::replace(SceneType type, function<Scene*()> createSceneFunc) {
     isRunningReplaceScene = true;
     sceneType = type;
     
+    // 배너 숨김
+    superbomb::AdsHelper::hideBanner();
+    
     // Scene 생성
     scene = createSceneFunc();
     auto trans = (Scene*)scene;

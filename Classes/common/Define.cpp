@@ -9,6 +9,7 @@
 #include "SceneManager.h"
 #include "PopupManager.hpp"
 #include "CharacterManager.hpp"
+#include "User.hpp"
 #include "../game/GameManager.hpp"
 
 USING_NS_CC;
@@ -29,5 +30,14 @@ void removeListeners(Ref *target) {
     
     if( !GameManager::isNullInstance() ) {
         PHYSICS_MANAGER->removeListener(target);
+    }
+}
+
+/**
+ * 배너 유무에 따른 좌표 업데이트
+ */
+void updatePositionForBanner(NodeAndPositionList list) {
+    for( auto n : list ) {
+        n.node->setPosition(WITH_BANNER_SIZE(n.originPos));
     }
 }

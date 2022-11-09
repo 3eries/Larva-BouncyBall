@@ -57,7 +57,7 @@ bool WorldPage::init() {
     if( world > GAME_CONFIG->getWorldCount() ) {
         auto comingsoon = Sprite::create(DIR_IMG_MAIN + "main_coming_soon.png");
         comingsoon->setAnchorPoint(ANCHOR_M);
-        comingsoon->setPosition(Vec2MC(0, -8));
+        comingsoon->setPosition(WITH_BANNER_SIZE(Vec2MC(0, -8)));
         addChild(comingsoon);
         return true;
     }
@@ -86,7 +86,7 @@ void WorldPage::initLockedUI() {
     // main_bg_lock.png Vec2MC(0, -9) , Size(1320, 612)
     auto bg = Sprite::create(DIR_IMG_MAIN + "main_bg_lock.png");
     bg->setAnchorPoint(ANCHOR_M);
-    bg->setPosition(Vec2MC(0, -9));
+    bg->setPosition(WITH_BANNER_SIZE(Vec2MC(0, -9)));
     lockedLayer->addChild(bg);
     
     // 문구
@@ -103,14 +103,14 @@ void WorldPage::initLockedUI() {
         desc->enableOutline(Color4B::WHITE, 8);
         desc->enableShadow(Color4B::BLACK, Size(0, -8));
         desc->setAnchorPoint(ANCHOR_M);
-        desc->setPosition(Vec2MC(0, -84));
+        desc->setPosition(WITH_BANNER_SIZE(Vec2MC(0, -84)));
         lockedLayer->addChild(desc);
     }
     
     // main_icon_lock_world04.png Vec2MC(0, 114) , Size(136, 152)
     auto lockedAnim = SBSkeletonAnimation::create(DIR_IMG_MAIN + "unlock_world.json");
     lockedAnim->setTag(Tag::LOCKED);
-    lockedAnim->setPosition(Vec2MC(0, 114));
+    lockedAnim->setPosition(WITH_BANNER_SIZE(Vec2MC(0, 114)));
     lockedLayer->addChild(lockedAnim);
 
     lockedAnim->setAnimation(0, STR_FORMAT("lock_world%02d", world), true);
@@ -119,7 +119,7 @@ void WorldPage::initLockedUI() {
     // idle, disappear, nope
     auto needKeyAnim = SBSkeletonAnimation::create(DIR_IMG_MAIN + "need_key_balloon.json");
     needKeyAnim->setTag(Tag::LOCKED_NEED_KEY);
-    needKeyAnim->setPosition(Vec2MC(190, 146));
+    needKeyAnim->setPosition(WITH_BANNER_SIZE(Vec2MC(190, 146)));
     lockedLayer->addChild(needKeyAnim);
 
     needKeyAnim->setAnimation(0, "idle", true);
@@ -171,7 +171,7 @@ void WorldPage::initStageUI() {
         
         auto cell = StageCell::create(stage);
         cell->setAnchorPoint(ANCHOR_M);
-        cell->setPosition(pos);
+        cell->setPosition(WITH_BANNER_SIZE(pos));
         cell->setOnClickListener([=](StageCell *cell) {
             if( onClickListener ) {
                 this->retain();

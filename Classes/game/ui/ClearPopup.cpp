@@ -10,7 +10,10 @@
 #include "Define.h"
 #include "GameUIHelper.hpp"
 #include "ResourceHelper.hpp"
+#include "SceneManager.h"
 #include "User.hpp"
+
+#include "BannerView.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -61,6 +64,12 @@ void ClearPopup::initBackgroundView() {
     BasePopup::initBackgroundView();
     
     setBackgroundColor(Color4B(0,0,0,255*0.9f));
+    
+    // 배너
+    if( !User::isRemovedAds() ) {
+        auto banner = BannerView::create();
+        SceneManager::getScene()->addChild(banner, INT_MAX);
+    }
 }
 
 void ClearPopup::initContentView() {

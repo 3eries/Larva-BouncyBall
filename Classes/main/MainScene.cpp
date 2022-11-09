@@ -6,7 +6,6 @@
 
 #include "MainScene.hpp"
 
-#include "Define.h"
 #include "ResourceHelper.hpp"
 #include "User.hpp"
 #include "SceneManager.h"
@@ -30,6 +29,8 @@ USING_NS_CC;
 USING_NS_SB;
 using namespace cocos2d::ui;
 using namespace std;
+
+#define PAGE_INDICATOR_ORIGIN_POS       (Vec2BC(0, 164) + Vec2(0, -32 / 2))
 
 MainScene* MainScene::create(int selectedWorld) {
     
@@ -73,6 +74,16 @@ bool MainScene::init(int selectedWorld) {
     
     // 게임 오버 횟수 리셋
     User::setGameOverCountForSkipStage(0);
+    
+    // 광고 제거 이벤트
+    auto listener = EventListenerCustom::create(DIRECTOR_EVENT_REMOVE_ADS, [=](EventCustom *event) {
+        
+        // 페이지 재생성
+        this->removeChildByTag(Tag::WORLD_TITLE);
+        this->removeChildByTag(Tag::WORLD_PAGE);
+        this->initWorlds((int)this->pageIndex+1);
+    });
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
@@ -176,7 +187,7 @@ void MainScene::onClickRewardItem(const RewardItemData &data) {
             
             auto pageView = this->getChildByTag<PageView*>(Tag::WORLD_PAGE);
             pageView->scrollToItem(pageIndex, PAGE_MOVE_DURATION);
-            // pageView->setCurrentPageIndex(data.world-1);
+            // pageView->setCurrentPageIndex(pageIndex);
             
             // 2. 페이지 이동 후 월드 오픈 연출
             SBDirector::postDelayed(this, [=]() {
@@ -286,9 +297,10 @@ void MainScene::initBg(int selectedWorld) {
     addChild(cover);
     
     // 배너
-    auto banner = BannerView::create();
-    banner->setTag(Tag::BANNER);
-    addChild(banner, INT_MAX);
+    if( !User::isRemovedAds() ) {
+        auto banner = BannerView::create();
+        addChild(banner, INT_MAX);
+    }
 }
 
 /**
@@ -341,7 +353,7 @@ void MainScene::initWorlds(int selectedWorld) {
                                                                selectedWorld));
     worldTitle->setTag(Tag::WORLD_TITLE);
     worldTitle->setAnchorPoint(ANCHOR_M);
-    worldTitle->setPosition(Vec2TC(0, -112));
+    worldTitle->setPosition(WITH_BANNER_SIZE(Vec2TC(0, -112)));
     addChild(worldTitle);
     
     auto pageView = PageView::create();
@@ -358,7 +370,7 @@ void MainScene::initWorlds(int selectedWorld) {
     pageView->setIndicatorEnabled(false);
     pageView->setIndicatorEnabled(true);
     pageView->setIndicatorIndexNodesTexture(DIR_IMG_MAIN + "main_indicator_dot.png");
-    pageView->setIndicatorPosition(Vec2BC(0, 164) + Vec2(0, -32 / 2));
+    pageView->setIndicatorPosition(WITH_BANNER_SIZE(PAGE_INDICATOR_ORIGIN_POS));
     // pageView->setIndicatorIndexNodesScale(0.55f);
     pageView->setIndicatorIndexNodesColor(Color3B(0, 0, 0));
     pageView->setIndicatorIndexNodesOpacity(255*0.5f);

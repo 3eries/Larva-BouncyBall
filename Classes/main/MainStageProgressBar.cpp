@@ -39,7 +39,7 @@ bool MainStageProgressBar::init() {
     // main_bg_progress_bar.png Vec2TC(0, -280) , Size(960, 56)
     auto bg = Sprite::create(DIR_IMG_MAIN + "main_bg_progress_bar.png");
     bg->setAnchorPoint(ANCHOR_M);
-    bg->setPosition(Vec2TC(0, -280));
+    bg->setPosition(WITH_BANNER_SIZE(Vec2TC(0, -280)));
     addChild(bg);
     
     // 진행도
@@ -49,7 +49,7 @@ bool MainStageProgressBar::init() {
     progressBar->setMidpoint(ANCHOR_ML);
     progressBar->setBarChangeRate(Vec2(1, 0));
     progressBar->setAnchorPoint(ANCHOR_M);
-    progressBar->setPosition(Vec2TC(108, -280));
+    progressBar->setPosition(WITH_BANNER_SIZE(Vec2TC(108, -280)));
     addChild(progressBar);
     
     progressBar->setPercentage(0);
@@ -60,14 +60,14 @@ bool MainStageProgressBar::init() {
                                      TextHAlignment::CENTER, TextVAlignment::CENTER);
     starLabel->setTextColor(Color4B::WHITE);
     starLabel->setAnchorPoint(ANCHOR_M);
-    starLabel->setPosition(Vec2TC(-346, -281) + Vec2(-45, 0));
+    starLabel->setPosition(WITH_BANNER_SIZE(Vec2TC(-346, -281) + Vec2(-45, 0)));
     addChild(starLabel);
     
     auto divider = Label::createWithTTF("/", FONT_SUPER_STAR, 56, Size::ZERO,
                                         TextHAlignment::CENTER, TextVAlignment::CENTER);
     divider->setTextColor(Color4B::WHITE);
     divider->setAnchorPoint(ANCHOR_M);
-    divider->setPosition(Vec2TC(-346, -281));
+    divider->setPosition(WITH_BANNER_SIZE(Vec2TC(-346, -281)));
     addChild(divider);
     
     auto maxStarLabel = Label::createWithTTF(TO_STRING(MAX_STAR_COUNT_PER_WORLD),
@@ -75,7 +75,7 @@ bool MainStageProgressBar::init() {
                                              TextHAlignment::CENTER, TextVAlignment::CENTER);
     maxStarLabel->setTextColor(Color4B::WHITE);
     maxStarLabel->setAnchorPoint(ANCHOR_M);
-    maxStarLabel->setPosition(Vec2TC(-346, -281) + Vec2(45, 0));
+    maxStarLabel->setPosition(WITH_BANNER_SIZE(Vec2TC(-346, -281) + Vec2(45, 0)));
     addChild(maxStarLabel);
     
     // 보상 레이어

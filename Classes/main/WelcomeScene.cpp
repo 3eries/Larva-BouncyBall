@@ -16,6 +16,7 @@
 #include "../test/TestHelper.hpp"
 #include "../game/GameDefine.h"
 
+#include "BannerView.hpp"
 #include "CommonLoadingBar.hpp"
 #include "ExitAlertPopup.hpp"
 #include "SettingPopup.hpp"
@@ -41,9 +42,7 @@ bool WelcomeScene::init() {
     
     SBAnalytics::setCurrentScreen(ANALYTICS_SCREEN_WELCOME);
     
-    initBg();
-    initTitle();
-    initMenu();
+    initUI();
     
     return true;
 }
@@ -159,7 +158,7 @@ void WelcomeScene::showSettingPopup() {
     SceneManager::getScene()->addChild(popup, ZOrder::POPUP_MIDDLE);
 }
 
-void WelcomeScene::initBg() {
+void WelcomeScene::initUI() {
     
     int latestPlayWorld = StageManager::getLatestPlayWorld();
     
@@ -174,14 +173,14 @@ void WelcomeScene::initBg() {
     // 타이틀
     auto title = Sprite::create(DIR_IMG_MAIN + "lobby_game_title.png");
     title->setAnchorPoint(ANCHOR_M);
-    title->setPosition(Vec2MC(0, 62));
+    title->setPosition(WITH_BANNER_SIZE(Vec2MC(0, 62) + Vec2(0, BANNER_HALF_HEIGHT)));
     addChild(title);
     
     // 크레딧
     auto creditBtn = SBNodeUtils::createTouchNode();
     creditBtn->setTag(Tag::BTN_CREDIT);
     creditBtn->setAnchorPoint(ANCHOR_M);
-    creditBtn->setPosition(Vec2MC(0, 30));
+    creditBtn->setPosition(WITH_BANNER_SIZE(Vec2MC(0, 30) + Vec2(0, BANNER_HALF_HEIGHT)));
     creditBtn->setContentSize(Size(title->getContentSize().width*0.5f, 180));
     addChild(creditBtn, SBZOrder::MIDDLE);
     
@@ -191,29 +190,20 @@ void WelcomeScene::initBg() {
     
     // 크레딧 영역 확인용
     // creditBtn->addChild(SBNodeUtils::createBackgroundNode(creditBtn, Color4B(255,0,0,255*0.5f)));
-}
-
-void WelcomeScene::initTitle() {
-}
-
-/**
- * 메뉴 초기화
- */
-void WelcomeScene::initMenu() {
     
     // 탭하여 시작
     auto tapToStart = Sprite::create(DIR_IMG_MAIN + "lobby_touch_to_start.png");
     tapToStart->setAnchorPoint(ANCHOR_M);
-    tapToStart->setPosition(Vec2MC(0, -328));
+    tapToStart->setPosition(WITH_BANNER_SIZE(Vec2MC(0, -328) + Vec2(0, BANNER_HALF_HEIGHT)));
     addChild(tapToStart);
     
-    auto btn = SBNodeUtils::createTouchNode();
-    btn->setTag(Tag::BTN_START);
-    btn->setContentSize(Size(SB_WIN_SIZE.width*0.9f, SB_WIN_SIZE.height*0.85f));
-    addChild(btn);
+    auto tapToStartBtn = SBNodeUtils::createTouchNode();
+    tapToStartBtn->setTag(Tag::BTN_START);
+    tapToStartBtn->setContentSize(Size(SB_WIN_SIZE.width*0.9f, SB_WIN_SIZE.height*0.85f));
+    addChild(tapToStartBtn);
     
-    btn->addClickEventListener([=](Ref*) {
-        this->onClick(btn);
+    tapToStartBtn->addClickEventListener([=](Ref*) {
+        this->onClick(tapToStartBtn);
     });
     
     // blink
@@ -224,5 +214,11 @@ void WelcomeScene::initMenu() {
             tapToStart->runAction(blink);
         });
         tapToStart->runAction(Sequence::create(delay, callFunc, nullptr));
+    }
+    
+    // 배너
+    if( !User::isRemovedAds() ) {
+        auto banner = BannerView::create();
+        addChild(banner, INT_MAX);
     }
 }

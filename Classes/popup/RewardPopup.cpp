@@ -11,6 +11,7 @@
 #include "ResourceHelper.hpp"
 #include "SceneManager.h"
 #include "CharacterManager.hpp"
+#include "User.hpp"
 
 USING_NS_CC;
 using namespace std;
@@ -32,6 +33,10 @@ RewardPopup* RewardPopup::show(const RewardItemDataList &characters) {
     shine->setAnchorPoint(ANCHOR_M);
     shine->setPosition(Vec2MC(0, -20));
     SceneManager::getScene()->addChild(shine, POPUP_ZORDER);
+    
+    if( superbomb::AdsHelper::isBannerVisible() ) {
+        shine->setPositionY(shine->getPositionY() + BANNER_HALF_HEIGHT);
+    }
     
     // 팝업 생성
     vector<RewardPopup*> popups;
@@ -128,6 +133,11 @@ bool RewardPopup::init() {
     
     if( !BasePopup::init() ) {
         return false;
+    }
+    
+    // 배너를 고려한 컨텐츠뷰 좌표 수정
+    if( superbomb::AdsHelper::isBannerVisible() ) {
+        setPositionY(getPositionY() + BANNER_HALF_HEIGHT);
     }
     
     return true;

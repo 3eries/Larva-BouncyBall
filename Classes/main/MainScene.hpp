@@ -15,6 +15,7 @@
 
 #include "BaseScene.hpp"
 #include "RewardManager.hpp"
+#include "Define.h"
 
 class MainScene : public BaseScene {
 private:
@@ -25,8 +26,6 @@ private:
         
         BTN_SHOP         = 100,
         BTN_SETTING,
-        
-        BANNER           = 1000,
     };
     
 public:

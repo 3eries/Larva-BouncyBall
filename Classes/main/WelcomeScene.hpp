@@ -36,9 +36,7 @@ private:
     void onExit() override;
     bool onBackKeyReleased() override;
     
-    void initBg();
-    void initTitle();
-    void initMenu();
+    void initUI();
     
 private:
     void onClick(cocos2d::Node *sender) override;

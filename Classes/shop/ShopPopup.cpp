@@ -7,7 +7,6 @@
 
 #include "ShopPopup.hpp"
 
-#include "Define.h"
 #include "User.hpp"
 #include "GameUIHelper.hpp"
 
@@ -51,14 +50,14 @@ bool ShopPopup::init() {
     }
     
     initCharacterList();
+    updatePositionForBanner(nodeListForBanner);
     
-    // IAP 복원 리스너 등록
-    auto restoreListener = iap::RestoreListener::create();
-    restoreListener->setForever(true);
-    restoreListener->onRemoveAds = [=]() {
+    // 광고 제거 이벤트
+    auto listener = EventListenerCustom::create(DIRECTOR_EVENT_REMOVE_ADS, [=](EventCustom *event) {
         this->initCharacterList();
-    };
-    iap::IAPHelper::getInstance()->addListener(this, restoreListener);
+        updatePositionForBanner(nodeListForBanner);
+    });
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
     
     return true;
 }
@@ -108,11 +107,15 @@ void ShopPopup::initContentView() {
     bg->setPosition(Vec2MC(0, 10));
     addContentChild(bg);
     
+    nodeListForBanner.push_back(NodeAndPosition(bg));
+    
     // 타이틀
     auto title = Sprite::create(DIR_IMG_SHOP + "shop_title_shop.png");
     title->setAnchorPoint(ANCHOR_M);
     title->setPosition(Vec2TC(0, -128));
     addContentChild(title);
+    
+    nodeListForBanner.push_back(NodeAndPosition(title));
     
     // 닫기 버튼
     auto closeBtn = SBButton::create(DIR_IMG_SHOP + "shop_btn_close.png");
@@ -163,7 +166,7 @@ void ShopPopup::initCharacterList() {
     characterListView->setBounceEnabled(true);
     characterListView->setScrollBarEnabled(false);
     characterListView->setAnchorPoint(ANCHOR_ML);
-    characterListView->setPosition(characterListPos);
+    characterListView->setPosition(WITH_BANNER_SIZE(characterListPos));
     characterListView->setContentSize(characterListSize);
     characterListView->addEventListener([=](Ref*, ScrollView::EventType eventType) {
       
@@ -245,9 +248,6 @@ void ShopPopup::onClickIAP() {
         
         // 광고 제거
         User::removeAds();
-        
-        // UI 업데이트
-        initCharacterList();
     };
 
     listener->onFinished = [=](bool result) {

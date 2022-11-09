@@ -13,6 +13,7 @@
 #include "cocos2d.h"
 #include "superbomb.h"
 #include "PopupManager.hpp"
+#include "Define.h"
 
 class IAPCell;
 class CharacterCell;
@@ -40,6 +41,8 @@ private:
 private:
     IAPCell *iapCell;
     cocos2d::ui::ListView *characterListView;
+    
+    NodeAndPositionList nodeListForBanner;
 };
 
 #endif /* ShopPopup_hpp */
