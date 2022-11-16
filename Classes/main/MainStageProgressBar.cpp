@@ -189,6 +189,9 @@ void MainStageProgressBar::setWorld(int world) {
 
 #pragma mark- RewardItem
 
+#define WORLD_KEY_SCALE         1.0f
+#define CHARACTER_SCALE         0.8f
+
 RewardItem* RewardItem::create(const RewardItemData &data) {
     
     auto item = new RewardItem(data);
@@ -254,7 +257,7 @@ bool RewardItem::init() {
         icon->setAnchorPoint(ANCHOR_MB);
         icon->setPosition(Vec2MC(ITEM_SIZE, -2, 1) + Vec2(0, -102/2) + Vec2(0, 0));
         
-        float scale = 0.8f;
+        float scale = CHARACTER_SCALE;
         icon->setScale(scale);
         outlinePixel *= scale;
     }
@@ -291,6 +294,8 @@ void RewardItem::updateUI(int userStar) {
     this->userStar = userStar;
     
     // 초기화
+    icon->stopAllActions();
+    icon->setScale(data.isCharacter() ? CHARACTER_SCALE : WORLD_KEY_SCALE);
     icon->setEffect(nullptr);
     iconOutline->setVisible(false);
     
@@ -302,6 +307,11 @@ void RewardItem::updateUI(int userStar) {
         // 조건 충족
         else {
             iconOutline->setVisible(true);
+            
+            auto scale = Sequence::create(ScaleTo::create(0.8f, icon->getScale()*1.15f),
+                                          ScaleTo::create(0.7f, icon->getScale()),
+                                          nullptr);
+            icon->runAction(RepeatForever::create(scale));
         }
     }
 }
