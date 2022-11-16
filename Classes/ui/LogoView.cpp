@@ -59,6 +59,12 @@ bool LogoView::init() {
     return true;
 }
 
+void LogoView::setVisible(bool isVisible) {
+    
+    Node::setVisible(isVisible);
+    if( videoPlayer ) videoPlayer->setVisible(isVisible);
+}
+
 #define SCHEDULER_VIDEO_PLAY            "SCHEDULER_VIDEO_PLAY"
 
 void LogoView::showVideo() {
@@ -112,7 +118,9 @@ void LogoView::removeVideo() {
 void LogoView::logoFinished() {
  
     if( onFinishedListener ) {
+        retain();
         onFinishedListener();
+        release();
     }
 }
 

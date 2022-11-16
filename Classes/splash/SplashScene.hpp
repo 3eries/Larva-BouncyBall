@@ -14,6 +14,8 @@
 
 #include "BaseScene.hpp"
 
+class LogoView;
+
 class SplashScene : public BaseScene {
 public:
     CREATE_FUNC(SplashScene);
@@ -32,13 +34,18 @@ private:
     void initLaunchImage();
     void launchImageFinished();
     
+    void runPrologue();
+    
     void login();
     void loginCompleted();
     
 private:
     bool isReplacedMainScene;
     bool isLaunchImageFinished;
+    bool isPrologueFinished;
     bool isLoginCompleted;
+    
+    LogoView *logoView;
 };
 
 #endif /* SplashScene_hpp */

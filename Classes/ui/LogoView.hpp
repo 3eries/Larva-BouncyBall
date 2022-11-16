@@ -28,6 +28,7 @@ private:
     void logoFinished();
     
 public:
+    void setVisible(bool isVisible) override;
     void run();
     
 private:

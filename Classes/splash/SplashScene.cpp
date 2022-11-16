@@ -30,13 +30,14 @@ using namespace std;
 static const float  CHECK_REPLACE_MAIN_SCENE_INTERVAL   = 0.05f;
 static const string CHECK_REPLACE_MAIN_SCENE_SCHEDULER  = "CHECK_REPLACE_MAIN_SCENE_SCHEDULER";
 
-static const float  LAUNCH_IMAGE_MIN_DURATION           = 4.0f;
-static const string LAUNCH_IMAGE_SCHEDULER              = "LAUNCH_IMAGE_SCHEDULER";
+#define USER_DEFAULT_KEY_PROLOGUE                         "PROLOGUE"
 
 SplashScene::SplashScene() :
 isReplacedMainScene(false),
 isLaunchImageFinished(false),
-isLoginCompleted(false) {
+isPrologueFinished(false),
+isLoginCompleted(false),
+logoView(nullptr) {
     
 }
 
@@ -57,7 +58,7 @@ bool SplashScene::init() {
     
     // 메인 화면 전환 체크 스케줄러 실행
     schedule([=](float dt) {
-        if( isLaunchImageFinished && isLoginCompleted ) {
+        if( isLaunchImageFinished && isPrologueFinished && isLoginCompleted ) {
             this->replaceMainScene();
         }
     }, CHECK_REPLACE_MAIN_SCENE_INTERVAL, CHECK_REPLACE_MAIN_SCENE_SCHEDULER);
@@ -100,7 +101,7 @@ void SplashScene::replaceMainScene() {
  */
 void SplashScene::initLaunchImage() {
 
-    auto logoView = LogoView::create();
+    logoView = LogoView::create();
     addChild(logoView);
     
     logoView->setOnFinishedListener([=]() {
@@ -119,6 +120,45 @@ void SplashScene::launchImageFinished() {
     if( !isLaunchImageFinished ) {
         isLaunchImageFinished = true;
     }
+    
+    runPrologue();
+}
+
+/**
+ * 프롤로그 재생
+ */
+void SplashScene::runPrologue() {
+    
+    if( USER_DEFAULT->getBoolForKey(USER_DEFAULT_KEY_PROLOGUE, false) ) {
+        isPrologueFinished = true;
+        return;
+    }
+    
+    USER_DEFAULT->setBoolForKey(USER_DEFAULT_KEY_PROLOGUE, true);
+    USER_DEFAULT->flush();
+
+    logoView->setVisible(false);
+    
+    auto anim = SBSkeletonAnimation::create(DIR_IMG_SPLASH + "prolog.json");
+    anim->setAnchorPoint(Vec2::ZERO);
+    anim->setPosition(Vec2MC(0,0));
+    addChild(anim, SBZOrder::BOTTOM);
+    
+    anim->runAnimation(ANIM_NAME_RUN, false, [=](spine::TrackEntry*) {
+        CCLOG("프롤로그 끝");
+        isPrologueFinished = true;
+    });
+    
+    anim->setEventListener([=](spine::TrackEntry *entry, spine::Event *event) {
+
+        string eventName = event->getData().getName().buffer();
+        CCLOG("프롤로그 이벤트 - %s", eventName.c_str());
+        
+        // cut_in / page
+        // 스코어 증가 시작
+        if( eventName == "score_start" ) {
+        }
+    });
 }
 
 /**
