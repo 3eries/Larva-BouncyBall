@@ -97,9 +97,37 @@ using namespace std;
         return;
     }
     
-//    GADAdSize bannerSize =
-//                    !SBDirector::isPadResolution() ? kGADAdSizeBanner : kGADAdSizeSmartBannerPortrait;
-    GADAdSize bannerSize = kGADAdSizeSmartBannerPortrait;
+    // 아이폰 11
+    {
+//        bannerSize w: 800.000000
+//        bannerSize h: 62.000000
+//        frame w: 896.000000
+//        frame h: 414.000000
+//        new frame w: 800.000000
+//        new frame h: 393.000000
+    }
+    // 아이폰 6
+    {
+//        bannerSize w: 667.000000
+//        bannerSize h: bannerSize h: 37.500001
+//        frame w: 667.000000
+//        frame h: 375.000000
+//        new frame w: 667.000000
+//        new frame h: 375.000000
+    }
+    
+    auto rootView = ROOT_VIEW_CONTROLLER.view;
+    auto frame = rootView.frame;
+    
+    if (@available(iOS 11.0, *)) {
+      frame = UIEdgeInsetsInsetRect(frame, rootView.safeAreaInsets);
+    }
+    
+    auto adaptiveSize = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(frame.size.width);
+    auto bannerSize = GADAdSizeFromCGSize(CGSizeMake(adaptiveSize.size.width, frame.size.height * 0.1f));
+    
+    NSLog(@"bannerSize w: %f", bannerSize.size.width);
+    NSLog(@"bannerSize h: %f", bannerSize.size.height);
     
     self.bannerView = [[GADBannerView alloc] initWithAdSize:bannerSize];
     self.bannerView.adUnitID = NS_STRING(unitId.c_str());
@@ -107,9 +135,7 @@ using namespace std;
     self.bannerView.translatesAutoresizingMaskIntoConstraints = NO; // example
     self.bannerView.delegate = self;
     self.bannerView.rootViewController = ROOT_VIEW_CONTROLLER;
-    
-    UIView *view = ROOT_VIEW_CONTROLLER.view;
-    [view addSubview:self.bannerView];
+    [rootView addSubview:self.bannerView];
     
     // set frame
     /*
@@ -125,7 +151,7 @@ using namespace std;
         // In iOS 11, we need to constrain the view to the safe area.
         // Position the banner. Stick it to the bottom of the Safe Area.
         // Make it constrained to the edges of the safe area.
-        UILayoutGuide *guide = view.safeAreaLayoutGuide;
+        UILayoutGuide *guide = rootView.safeAreaLayoutGuide;
         
         // align screen bottom
         [NSLayoutConstraint activateConstraints:@[
@@ -145,39 +171,35 @@ using namespace std;
     } else {
         // In lower iOS versions, safe area is not available so we use
         // bottom layout guide and view edges.
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
-                                                         attribute:NSLayoutAttributeLeading
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:view
-                                                         attribute:NSLayoutAttributeLeading
-                                                        multiplier:1
-                                                          constant:0]];
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
-                                                         attribute:NSLayoutAttributeTrailing
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:view
-                                                         attribute:NSLayoutAttributeTrailing
-                                                        multiplier:1
-                                                          constant:0]];
+        [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
+                                                             attribute:NSLayoutAttributeLeading
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:rootView
+                                                             attribute:NSLayoutAttributeLeading
+                                                            multiplier:1 constant:0]];
+        [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
+                                                             attribute:NSLayoutAttributeTrailing
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:rootView
+                                                             attribute:NSLayoutAttributeTrailing
+                                                            multiplier:1 constant:0]];
         // align screen bottom
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
-                                                         attribute:NSLayoutAttributeBottom
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:ROOT_VIEW_CONTROLLER.bottomLayoutGuide
-                                                         attribute:NSLayoutAttributeTop
-                                                        multiplier:1
-                                                          constant:0]];
+        [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
+                                                             attribute:NSLayoutAttributeBottom
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:ROOT_VIEW_CONTROLLER.bottomLayoutGuide
+                                                             attribute:NSLayoutAttributeTop
+                                                            multiplier:1 constant:0]];
         
         // align screen top
         /*
-        [view addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
-                                                         attribute:NSLayoutAttributeTop
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:ROOT_VIEW_CONTROLLER.topLayoutGuide
-                                                         attribute:NSLayoutAttributeBottom
-                                                        multiplier:1
-                                                          constant:0]];
-         */
+        [rootView addConstraint:[NSLayoutConstraint constraintWithItem:self.bannerView
+                                                             attribute:NSLayoutAttributeTop
+                                                             relatedBy:NSLayoutRelationEqual
+                                                                toItem:ROOT_VIEW_CONTROLLER.topLayoutGuide
+                                                             attribute:NSLayoutAttributeBottom
+                                                            multiplier:1 constant:0]];
+        */
     }
     
     /*

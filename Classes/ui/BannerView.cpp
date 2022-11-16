@@ -29,10 +29,11 @@ bool BannerView::init() {
     setContentSize(Size::ZERO);
     
     // more games 버튼
-    moreGames = SBButton::create(DIR_IMG_COMMON + "common_banner_more_games.png");
+    moreGames = SBButton::create(DIR_IMG_COMMON + "common_ad.png");
     moreGames->setZoomScale(0);
     moreGames->setAnchorPoint(ANCHOR_MB);
     moreGames->setPosition(Vec2BC(0,0));
+    moreGames->setScaleY(108 / moreGames->getContentSize().height);
     addChild(moreGames);
     
     moreGames->setOnClickListener([=](Node*) {

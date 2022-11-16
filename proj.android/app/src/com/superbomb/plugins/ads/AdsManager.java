@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -50,8 +52,6 @@ public class AdsManager implements PluginListener {
     }
 
     private static final String TAG = "AdsManager";
-
-    private static final AdSize BANNER_SIZE = new AdSize(AdSize.FULL_WIDTH, 50);
 
     private Activity context;
 
@@ -159,14 +159,33 @@ public class AdsManager implements PluginListener {
             return;
         }
 
+        // Get Banner Size
+        AdSize bannerSize;
+
+        {
+            Display display = context.getWindowManager().getDefaultDisplay();
+            DisplayMetrics outMetrics = new DisplayMetrics();
+            display.getMetrics(outMetrics);
+
+            float density = outMetrics.density;
+            int width = (int) (outMetrics.widthPixels / density);
+
+            AdSize adaptiveSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, width);
+            bannerSize = new AdSize(adaptiveSize.getWidth(), (int)((outMetrics.heightPixels / density) * 0.1f));
+
+//            Log.i("d1", "origin windowWidth: " + outMetrics.widthPixels + ", windowHeight: " + outMetrics.heightPixels);
+//            Log.i("d1", "adaptiveSize bannerWidth: " + adaptiveSize.getWidth() + ", bannerHeight: " + adaptiveSize.getHeight());
+//            Log.i("d1", "final bannerWidth: " + bannerSize.getWidth() + ", bannerHeight: " + bannerSize.getHeight());
+        }
+
         bannerView = new AdView(context);
         bannerView.setAdUnitId(unitId);
-        bannerView.setAdSize(BANNER_SIZE);
+        bannerView.setAdSize(bannerSize);
         bannerView.setVisibility(View.GONE);
 
         bannerSizeInPixels = new Size();
-        bannerSizeInPixels.setWidth(BANNER_SIZE.getWidthInPixels(context));
-        bannerSizeInPixels.setHeight(BANNER_SIZE.getHeightInPixels(context));
+        bannerSizeInPixels.setWidth(bannerSize.getWidthInPixels(context));
+        bannerSizeInPixels.setHeight(bannerSize.getHeightInPixels(context));
 
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
